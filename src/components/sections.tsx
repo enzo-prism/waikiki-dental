@@ -35,19 +35,23 @@ export function SectionHeader({
   eyebrow,
   title,
   body,
+  headingLevel = "h2",
   className = "",
 }: {
   eyebrow: string;
   title: string;
   body?: string;
+  headingLevel?: "h1" | "h2";
   className?: string;
 }) {
+  const Heading = headingLevel;
+
   return (
     <div className={`max-w-3xl ${className}`}>
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-3 text-balance text-3xl font-black tracking-normal text-slate-950 sm:text-4xl">
+      <Heading className="mt-3 text-balance text-3xl font-black tracking-normal text-slate-950 sm:text-4xl">
         {title}
-      </h2>
+      </Heading>
       {body ? (
         <p className="mt-4 text-pretty text-lg leading-8 text-slate-600">
           {body}
@@ -291,7 +295,11 @@ export function Reviews() {
   );
 }
 
-export function VisitPanel() {
+export function VisitPanel({
+  headingLevel = "h2",
+}: {
+  headingLevel?: "h1" | "h2";
+} = {}) {
   return (
     <section className="bg-white py-20 sm:py-24">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
@@ -300,6 +308,7 @@ export function VisitPanel() {
             eyebrow="Visit Waikiki Dental"
             title="A Roseville office designed for easier appointments."
             body="Book online, call or text the team, or use the contact form to start the conversation."
+            headingLevel={headingLevel}
           />
           <div className="mt-8 grid gap-4">
             <a

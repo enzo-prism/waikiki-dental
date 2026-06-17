@@ -113,6 +113,7 @@ export function ServicesHubPage() {
             eyebrow="Roseville dental care"
             title="A complete menu of modern family and cosmetic dentistry."
             body="From preventive cleanings to implants, orthodontics, smile makeovers, CEREC same-day crowns, and IV sedation, Waikiki Dental builds treatment around your needs."
+            headingLevel="h1"
           />
           <div className="mt-10">
             <ServicesGrid items={services} />
@@ -192,6 +193,7 @@ export function OfficePage() {
             eyebrow="Waikiki Dental Roseville"
             title="A conveniently located dental office with high standards of care."
             body="The Roseville practice is devoted to restoring and enhancing natural smiles with family dentistry, cosmetic dentistry, implant dentistry, and comfort-focused care."
+            headingLevel="h1"
           />
           <div className="mt-10 grid gap-4 lg:grid-cols-2">
             {[
@@ -299,6 +301,7 @@ export function TestimonialsPage() {
             eyebrow="Patient testimonials"
             title="Roseville patients describe a friendly, gentle, professional team."
             body="Waikiki Dental's current testimonials emphasize warmth, comfort, professionalism, and care for anxious patients."
+            headingLevel="h1"
           />
         </div>
       </section>
@@ -312,7 +315,7 @@ export function ContactPage() {
   return (
     <>
       <JsonLd />
-      <VisitPanel />
+      <VisitPanel headingLevel="h1" />
     </>
   );
 }
