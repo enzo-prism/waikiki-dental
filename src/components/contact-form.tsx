@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { site } from "@/lib/site";
 
 type FormState = {
@@ -10,6 +10,12 @@ type FormState = {
   phone: string;
   message: string;
 };
+
+type Status =
+  | { kind: "idle" }
+  | { kind: "submitting" }
+  | { kind: "success"; message: string }
+  | { kind: "error"; message: string };
 
 const initialState: FormState = {
   name: "",
@@ -20,7 +26,8 @@ const initialState: FormState = {
 
 export function ContactForm({ compact = false }: { compact?: boolean }) {
   const [form, setForm] = useState<FormState>(initialState);
-  const [status, setStatus] = useState("");
+  const [company, setCompany] = useState(""); // honeypot
+  const [status, setStatus] = useState<Status>({ kind: "idle" });
 
   const mailtoHref = useMemo(() => {
     const subject = encodeURIComponent("Appointment request from website");
@@ -33,7 +40,6 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         form.message,
       ].join("\n"),
     );
-
     return `${site.emailHref}?subject=${subject}&body=${body}`;
   }, [form]);
 
@@ -41,16 +47,64 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
     setForm((current) => ({ ...current, [field]: value }));
   }
 
-  function submitForm(event: React.FormEvent<HTMLFormElement>) {
+  async function submitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!form.name || !form.email || !form.message) {
-      setStatus("Please add your name, email, and message.");
+      setStatus({
+        kind: "error",
+        message: "Please add your name, email, and message.",
+      });
       return;
     }
 
-    setStatus("Opening your email app with the message ready to send.");
-    window.location.href = mailtoHref;
+    setStatus({ kind: "submitting" });
+
+    try {
+      const res = await fetch("/api/contact/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, company }),
+      });
+
+      if (res.ok) {
+        setForm(initialState);
+        setStatus({
+          kind: "success",
+          message: "Thanks! Your message is on its way — we'll be in touch shortly.",
+        });
+        return;
+      }
+
+      const data = (await res.json().catch(() => null)) as
+        | { error?: string; code?: string }
+        | null;
+
+      // Backend not configured yet → fall back to the visitor's email app.
+      if (res.status === 503 || data?.code === "unconfigured") {
+        setStatus({
+          kind: "success",
+          message: "Opening your email app with the message ready to send.",
+        });
+        window.location.href = mailtoHref;
+        return;
+      }
+
+      setStatus({
+        kind: "error",
+        message:
+          data?.error ?? "We couldn't send your message. Please call or email the office.",
+      });
+    } catch {
+      // Network failure — keep the visitor moving via email.
+      setStatus({
+        kind: "success",
+        message: "Opening your email app with the message ready to send.",
+      });
+      window.location.href = mailtoHref;
+    }
   }
+
+  const submitting = status.kind === "submitting";
 
   return (
     <form
@@ -59,57 +113,93 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       aria-label="Contact Waikiki Dental"
     >
       <div className={compact ? "grid gap-4" : "grid gap-4 sm:grid-cols-2"}>
-        <label className="grid gap-2 text-sm font-semibold text-slate-800">
+        <label className="grid gap-2 text-sm font-medium text-ink">
           Name
           <input
             required
             value={form.name}
             onChange={(event) => updateField("name", event.target.value)}
-            className="min-h-12 rounded-lg border border-slate-200 bg-white px-4 text-base text-slate-950 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-100"
+            className="field"
             name="name"
+            placeholder="Your name"
             autoComplete="name"
           />
         </label>
-        <label className="grid gap-2 text-sm font-semibold text-slate-800">
+        <label className="grid gap-2 text-sm font-medium text-ink">
           Email
           <input
             required
             type="email"
             value={form.email}
             onChange={(event) => updateField("email", event.target.value)}
-            className="min-h-12 rounded-lg border border-slate-200 bg-white px-4 text-base text-slate-950 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-100"
+            className="field"
             name="email"
+            placeholder="you@email.com"
             autoComplete="email"
           />
         </label>
       </div>
-      <label className="grid gap-2 text-sm font-semibold text-slate-800">
+      <label className="grid gap-2 text-sm font-medium text-ink">
         Phone
         <input
           value={form.phone}
           onChange={(event) => updateField("phone", event.target.value)}
-          className="min-h-12 rounded-lg border border-slate-200 bg-white px-4 text-base text-slate-950 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-100"
+          className="field"
           name="phone"
+          placeholder="(916) …"
           autoComplete="tel"
         />
       </label>
-      <label className="grid gap-2 text-sm font-semibold text-slate-800">
+      <label className="grid gap-2 text-sm font-medium text-ink">
         Message
         <textarea
           required
           value={form.message}
           onChange={(event) => updateField("message", event.target.value)}
-          className="min-h-32 resize-y rounded-lg border border-slate-200 bg-white px-4 py-3 text-base text-slate-950 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-100"
+          className="field min-h-32 resize-y"
           name="message"
+          placeholder="How can the team help?"
         />
       </label>
-      <button className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-slate-950 px-5 text-sm font-bold text-white transition hover:bg-teal-900 focus:outline-none focus:ring-4 focus:ring-teal-100">
-        <Send className="size-4" aria-hidden="true" />
-        Prepare Message
+
+      {/* Honeypot — hidden from users, catches bots. */}
+      <div aria-hidden="true" className="hidden">
+        <label>
+          Company
+          <input
+            tabIndex={-1}
+            autoComplete="off"
+            value={company}
+            onChange={(event) => setCompany(event.target.value)}
+            name="company"
+          />
+        </label>
+      </div>
+
+      <button className="btn btn-clay" type="submit" disabled={submitting}>
+        {submitting ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <Send className="size-4" aria-hidden="true" />
+        )}
+        {submitting ? "Sending…" : "Send Message"}
       </button>
-      {status ? (
-        <p className="text-sm font-medium text-slate-600" role="status">
-          {status}
+
+      {status.kind === "success" ? (
+        <p
+          className="text-sm font-medium text-sage-700"
+          role="status"
+        >
+          {status.message}
+        </p>
+      ) : null}
+      {status.kind === "error" ? (
+        <p className="text-sm font-medium text-clay-600" role="alert">
+          {status.message}{" "}
+          <a href={mailtoHref} className="underline underline-offset-2">
+            Email us directly
+          </a>
+          .
         </p>
       ) : null}
     </form>

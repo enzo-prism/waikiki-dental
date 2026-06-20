@@ -22,7 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description:
       "Learn how IV sedation can help anxious dental patients receive comfortable care at Waikiki Dental in Roseville.",
     alternates: {
-      canonical: absoluteUrl(`/dental-blog/${slug}/`),
+      // Canonicalize to the primary service page to avoid duplicate content.
+      canonical: absoluteUrl("/iv-sedation/"),
     },
   };
 }

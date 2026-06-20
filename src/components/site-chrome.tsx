@@ -1,236 +1,260 @@
 import Link from "next/link";
 import {
   CalendarCheck,
-  ChevronDown,
   Clock,
+  HeartPulse,
   Mail,
   MapPin,
-  Menu,
   Phone,
-  Waves,
 } from "lucide-react";
-import { hours, navItems, services, site } from "@/lib/site";
-
-const serviceLinks = services.slice(0, 9);
+import { emergency, hours, navItems, site } from "@/lib/site";
+import { Logomark } from "./brand";
+import { MobileMenu, ServicesDropdown } from "./site-nav";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/92 backdrop-blur-xl">
-      <div className="border-b border-slate-100 bg-slate-950 text-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2 text-xs font-medium sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <a href={site.mapsHref} className="inline-flex items-center gap-2">
-            <MapPin className="size-3.5 text-coral-200" aria-hidden="true" />
-            {site.shortAddress}
+    <header className="sticky top-0 z-50">
+      {/* Slim utility bar */}
+      <div className="bg-night text-cream/80">
+        <div className="wrap-wide flex h-9 items-center justify-between gap-4 text-[12px]">
+          <a
+            href={site.mapsHref}
+            className="inline-flex min-w-0 items-center gap-2 transition hover:text-cream"
+          >
+            <MapPin className="size-3.5 text-clay-300" aria-hidden="true" />
+            <span className="truncate">{site.shortAddress}</span>
           </a>
-          <div className="flex flex-wrap gap-x-5 gap-y-1">
-            <span className="inline-flex items-center gap-2">
-              <Clock className="size-3.5 text-teal-200" aria-hidden="true" />
-              Mon-Thu care, Friday appointments
+          <div className="flex items-center gap-5">
+            <Link
+              href={emergency.href}
+              className="inline-flex items-center gap-2 font-medium text-clay-200 transition hover:text-cream"
+            >
+              <HeartPulse className="size-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">{emergency.label}</span>
+              <span className="underline-offset-2 hover:underline">
+                {emergency.cta}
+              </span>
+            </Link>
+            <span className="hidden items-center gap-2 lg:inline-flex">
+              <Clock className="size-3.5 text-sage-300" aria-hidden="true" />
+              Open Mon–Fri
             </span>
-            <a href={site.phoneHref} className="inline-flex items-center gap-2">
-              <Phone className="size-3.5 text-coral-200" aria-hidden="true" />
-              Call or text {site.phone}
+            <a
+              href={site.phoneHref}
+              className="hidden items-center gap-2 transition hover:text-cream sm:inline-flex"
+            >
+              <Phone className="size-3.5 text-clay-300" aria-hidden="true" />
+              {site.phone}
             </a>
           </div>
         </div>
       </div>
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex min-w-0 items-center gap-3">
-          <span className="grid size-11 place-items-center rounded-lg bg-teal-700 text-white shadow-sm">
-            <Waves className="size-6" aria-hidden="true" />
-          </span>
-          <span className="min-w-0">
-            <span className="block truncate text-lg font-black tracking-normal text-slate-950">
-              Waikiki Dental
+
+      {/* Main bar */}
+      <div className="border-b border-line bg-cream/85 backdrop-blur-xl">
+        <nav className="wrap-wide flex items-center justify-between gap-6 py-3.5">
+          <Link href="/" className="flex min-w-0 items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-full border border-sage-600/25 bg-sage-50 text-sage-700">
+              <Logomark className="size-6" />
             </span>
-            <span className="block text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">
-              Roseville, CA
+            <span className="min-w-0">
+              <span className="block font-serif text-xl tracking-tight text-ink">
+                Waikiki Dental
+              </span>
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-sage-600">
+                Roseville · California
+              </span>
             </span>
-          </span>
-        </Link>
+          </Link>
 
-        <div className="hidden items-center gap-7 lg:flex">
-          <details className="group relative">
-            <summary className="flex cursor-pointer list-none items-center gap-1 text-sm font-bold text-slate-700 transition hover:text-teal-700">
-              Services
-              <ChevronDown
-                className="size-4 transition group-open:rotate-180"
-                aria-hidden="true"
-              />
-            </summary>
-            <div className="absolute left-1/2 top-8 grid w-[520px] -translate-x-1/2 grid-cols-2 gap-2 rounded-lg border border-slate-200 bg-white p-3 shadow-2xl shadow-slate-950/10">
-              {serviceLinks.map((service) => (
-                <Link
-                  key={service.slug}
-                  href={`/${service.slug}/`}
-                  className="rounded-lg p-3 transition hover:bg-teal-50"
-                >
-                  <span className="block text-sm font-bold text-slate-950">
-                    {service.title}
-                  </span>
-                  <span className="mt-1 block text-xs leading-5 text-slate-600">
-                    {service.summary}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </details>
-          {navItems.slice(1).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-bold text-slate-700 transition hover:text-teal-700"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-
-        <div className="hidden items-center gap-2 sm:flex">
-          <a
-            href={site.phoneHref}
-            className="grid size-11 place-items-center rounded-lg border border-slate-200 text-slate-800 transition hover:border-teal-600 hover:text-teal-700"
-            aria-label={`Call Waikiki Dental at ${site.phone}`}
-          >
-            <Phone className="size-5" aria-hidden="true" />
-          </a>
-          <a
-            href={site.bookingHref}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-coral-500 px-4 text-sm font-black text-white shadow-sm transition hover:bg-coral-600 focus:outline-none focus:ring-4 focus:ring-coral-100"
-          >
-            <CalendarCheck className="size-4" aria-hidden="true" />
-            Book Online
-          </a>
-        </div>
-
-        <details className="group relative lg:hidden">
-          <summary
-            className="grid size-11 cursor-pointer list-none place-items-center rounded-lg border border-slate-200 text-slate-800"
-            aria-label="Open navigation"
-          >
-            <Menu className="size-5" aria-hidden="true" />
-          </summary>
-          <div className="absolute right-0 top-13 w-[min(88vw,360px)] rounded-lg border border-slate-200 bg-white p-3 shadow-2xl shadow-slate-950/10">
-            {[{ label: "Home", href: "/" }, ...navItems].map((item) => (
+          {/* Desktop nav */}
+          <div className="hidden items-center gap-7 lg:flex">
+            <ServicesDropdown />
+            {navItems.slice(1).map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="block rounded-lg px-3 py-2 text-sm font-bold text-slate-800 transition hover:bg-teal-50"
+                className="text-sm font-medium text-ink/80 transition hover:text-ink"
               >
                 {item.label}
               </Link>
             ))}
-            <div className="mt-2 grid gap-2 border-t border-slate-100 pt-3">
-              <a
-                href={site.bookingHref}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-coral-500 px-4 text-sm font-black text-white"
-              >
-                <CalendarCheck className="size-4" aria-hidden="true" />
-                Book Online
-              </a>
-              <a
-                href={site.phoneHref}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 text-sm font-black text-slate-900"
-              >
-                <Phone className="size-4" aria-hidden="true" />
-                {site.phone}
-              </a>
-            </div>
           </div>
-        </details>
-      </nav>
+
+          <div className="flex items-center gap-2">
+            <a
+              href={site.phoneHref}
+              className="hidden size-11 place-items-center rounded-full border border-line text-ink transition hover:border-ink hover:bg-background sm:grid lg:hidden xl:grid"
+              aria-label={`Call Waikiki Dental at ${site.phone}`}
+            >
+              <Phone className="size-5" aria-hidden="true" />
+            </a>
+            <a
+              href={site.bookingHref}
+              className="hidden btn btn-clay btn-sm sm:inline-flex"
+            >
+              <CalendarCheck className="size-4" aria-hidden="true" />
+              Book Online
+            </a>
+            <MobileMenu />
+          </div>
+        </nav>
+      </div>
     </header>
+  );
+}
+
+/** Sticky Book / Call bar for mobile — primary actions always reachable. */
+export function MobileCtaBar() {
+  return (
+    <div
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-cream/95 backdrop-blur-xl lg:hidden"
+      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+    >
+      <div className="grid grid-cols-2 gap-2 px-4 py-3">
+        <a href={site.bookingHref} className="btn btn-clay btn-sm">
+          <CalendarCheck className="size-4" aria-hidden="true" />
+          Book Online
+        </a>
+        <a href={site.phoneHref} className="btn btn-outline btn-sm bg-cream">
+          <Phone className="size-4" aria-hidden="true" />
+          Call or Text
+        </a>
+      </div>
+    </div>
   );
 }
 
 export function SiteFooter() {
   return (
-    <footer className="bg-slate-950 text-white">
-      <section className="border-b border-white/10">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr] lg:px-8">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="grid size-11 place-items-center rounded-lg bg-teal-500 text-white">
-                <Waves className="size-6" aria-hidden="true" />
-              </span>
-              <div>
-                <p className="text-lg font-black">Waikiki Dental</p>
-                <p className="text-sm font-medium text-slate-300">
-                  Family & cosmetic dentistry in Roseville
-                </p>
-              </div>
-            </div>
-            <p className="mt-5 max-w-xl text-sm leading-7 text-slate-300">
-              Dr. Michael Narodovich and the Waikiki Dental team provide modern,
-              comfort-focused care for preventive visits, cosmetic dentistry,
-              implants, orthodontics, same-day crowns, and sedation dentistry.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={site.bookingHref}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-coral-500 px-4 text-sm font-black text-white transition hover:bg-coral-600"
-              >
-                <CalendarCheck className="size-4" aria-hidden="true" />
-                Book Online
-              </a>
-              <a
-                href={site.phoneHref}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white/20 px-4 text-sm font-black text-white transition hover:bg-white/10"
-              >
-                <Phone className="size-4" aria-hidden="true" />
-                {site.phone}
-              </a>
+    <footer className="bg-night text-cream/75">
+      <div className="border-t-4 border-sage-700" />
+      <section className="wrap-wide grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.9fr_0.9fr]">
+        <div>
+          <div className="flex items-center gap-3">
+            <span className="grid size-11 place-items-center rounded-full bg-sage-600 text-cream">
+              <Logomark className="size-6" />
+            </span>
+            <div>
+              <p className="font-serif text-xl text-cream">Waikiki Dental</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-sage-300">
+                Family &amp; Cosmetic Dentistry
+              </p>
             </div>
           </div>
-
-          <div>
-            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-teal-200">
-              Visit
-            </h2>
-            <address className="mt-4 not-italic text-sm leading-7 text-slate-300">
-              <a href={site.mapsHref}>{site.address}</a>
-              <br />
-              <a href={site.emailHref}>{site.email}</a>
-            </address>
-            <div className="mt-5 grid gap-2">
-              <a
-                href={site.mapsHref}
-                className="inline-flex items-center gap-2 text-sm font-bold text-white"
-              >
-                <MapPin className="size-4 text-coral-300" aria-hidden="true" />
-                Directions
-              </a>
-              <a
-                href={site.emailHref}
-                className="inline-flex items-center gap-2 text-sm font-bold text-white"
-              >
-                <Mail className="size-4 text-teal-300" aria-hidden="true" />
-                Email the office
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-teal-200">
-              Hours
-            </h2>
-            <dl className="mt-4 grid gap-2 text-sm">
-              {hours.map(([day, time]) => (
-                <div key={day} className="flex justify-between gap-4">
-                  <dt className="text-slate-400">{day}</dt>
-                  <dd className="font-semibold text-slate-100">{time}</dd>
-                </div>
-              ))}
-            </dl>
+          <p className="mt-5 max-w-md text-sm leading-7 text-cream/70">
+            Dr. Michael Narodovich and our team provide modern, comfort-focused
+            care — preventive visits, cosmetic dentistry, implants,
+            orthodontics, same-day crowns, and sedation dentistry in Roseville.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a href={site.bookingHref} className="btn btn-light btn-sm">
+              <CalendarCheck className="size-4" aria-hidden="true" />
+              Book Online
+            </a>
+            <a href={site.phoneHref} className="btn btn-ghost-light btn-sm">
+              <Phone className="size-4" aria-hidden="true" />
+              {site.phone}
+            </a>
           </div>
         </div>
+
+        <div>
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sage-300">
+            Explore
+          </h2>
+          <ul className="mt-5 grid gap-2.5 text-sm">
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="text-cream/75 transition hover:text-cream"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sage-300">
+            Visit
+          </h2>
+          <address className="mt-5 not-italic text-sm leading-7 text-cream/75">
+            <a href={site.mapsHref} className="transition hover:text-cream">
+              {site.address}
+            </a>
+            <br />
+            <a href={site.emailHref} className="transition hover:text-cream">
+              {site.email}
+            </a>
+          </address>
+          <div className="mt-5 grid gap-2 text-sm">
+            <a
+              href={site.mapsHref}
+              className="inline-flex items-center gap-2 text-cream/75 transition hover:text-cream"
+            >
+              <MapPin className="size-4 text-clay-300" aria-hidden="true" />
+              Directions
+            </a>
+            <a
+              href={site.emailHref}
+              className="inline-flex items-center gap-2 text-cream/75 transition hover:text-cream"
+            >
+              <Mail className="size-4 text-sage-300" aria-hidden="true" />
+              Email the office
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sage-300">
+            Hours
+          </h2>
+          <dl className="mt-5 grid gap-2 text-sm">
+            {hours.map(([day, time]) => {
+              const closed = time === "Closed";
+              return (
+                <div key={day} className="flex justify-between gap-4">
+                  <dt className="text-cream/60">{day}</dt>
+                  <dd
+                    className={
+                      closed ? "text-cream/55" : "font-medium text-cream/90"
+                    }
+                  >
+                    {time}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </div>
       </section>
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-6 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-        <p>© {new Date().getFullYear()} Waikiki Dental. All rights reserved.</p>
-        <div className="flex flex-wrap gap-4">
-          <Link href="/contact-waikiki-dental/">Contact</Link>
-          <Link href="/new-patients/">New Patients</Link>
-          <a href="https://waikikidental.com/privacy-policy/">Privacy Policy</a>
+
+      <div className="border-t border-cream/10">
+        <div className="wrap-wide flex flex-col gap-3 py-6 text-xs text-cream/65 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Waikiki Dental. All rights reserved.</p>
+          <div className="flex flex-wrap gap-5">
+            <Link
+              href="/contact-waikiki-dental/"
+              className="transition hover:text-cream"
+            >
+              Contact
+            </Link>
+            <Link
+              href="/new-patients/"
+              className="transition hover:text-cream"
+            >
+              New Patients
+            </Link>
+            <a
+              href="https://waikikidental.com/privacy-policy/"
+              className="transition hover:text-cream"
+            >
+              Privacy Policy
+            </a>
+          </div>
         </div>
       </div>
     </footer>

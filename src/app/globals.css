@@ -1,49 +1,241 @@
 @import "tailwindcss";
 
-:root {
-  --background: #f7fbfa;
-  --foreground: #102a33;
-}
+/* ------------------------------------------------------------------ *
+ * Waikiki Dental — “Editorial Spa-Luxe” design system
+ * Warm ivory canvas · espresso ink · sage + clay accents
+ * Fraunces (display serif) · Manrope (sans)
+ * ------------------------------------------------------------------ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
-  --color-mist-50: #f1faf8;
-  --color-mist-100: #dff4ef;
-  --color-coral-50: #fff3ed;
-  --color-coral-100: #ffe2d3;
-  --color-coral-200: #ffc4a6;
-  --color-coral-300: #ff9f70;
-  --color-coral-400: #fb7d46;
-  --color-coral-500: #ef5f2a;
-  --color-coral-600: #d84916;
+  /* Surfaces */
+  --color-background: #f4eee3;
+  --color-cream: #fbf8f2;
+  --color-surface-alt: #ede4d4;
+
+  /* Ink */
+  --color-ink: #2a2520;
+  --color-ink-muted: #6e655a;
+  /* Darkened from #8d8377 to clear WCAG AA (≈4.5:1) on cream for small text. */
+  --color-ink-soft: #7a7064;
+  --color-line: #e3dac9;
+  --color-line-strong: #d2c5af;
+
+  /* Warm dark (replaces cold slate) */
+  --color-night: #201b17;
+  --color-night-800: #2a2420;
+  --color-night-700: #352e28;
+
+  /* Sage — primary */
+  --color-sage-50: #eff3ea;
+  --color-sage-100: #dce6d0;
+  --color-sage-200: #bbcda6;
+  --color-sage-300: #9bb47e;
+  --color-sage-400: #7e9a5c;
+  --color-sage-500: #647f46;
+  --color-sage-600: #4f6536;
+  --color-sage-700: #3f512b;
+  --color-sage-800: #323f23;
+  --color-sage-900: #262f1a;
+
+  /* Clay — warm accent (replaces coral) */
+  --color-clay-50: #fbf1eb;
+  --color-clay-100: #f5dac8;
+  --color-clay-200: #ebb89c;
+  --color-clay-300: #dd9470;
+  --color-clay-400: #ce7350;
+  --color-clay-500: #b85c36;
+  --color-clay-600: #97492b;
+  --color-clay-700: #763822;
+
+  /* Gold — quiet accent */
+  --color-gold: #b0894c;
+  --color-gold-soft: #c9a86a;
+
+  /* Fonts */
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: var(--font-fraunces), "Iowan Old Style", "Apple Garamond",
+    Georgia, Cambria, "Times New Roman", serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), "Geist", ui-sans-serif, system-ui,
-    sans-serif;
-  text-rendering: optimizeLegibility;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-sage-200);
+    color: var(--color-ink);
+  }
+
+  :where(a, button, summary, input, textarea, select):focus-visible {
+    outline: 2px solid var(--color-sage-500);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  button,
+  a,
+  summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+  .wrap-wide {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-sans text-[11px] font-semibold
+      uppercase tracking-[0.24em] text-sage-600;
+  }
+
+  /* Buttons — soft pills */
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full
+      px-6 text-sm font-semibold tracking-wide transition-all duration-200
+      focus:outline-none focus-visible:ring-4 active:translate-y-px;
+  }
+  .btn-primary {
+    @apply bg-sage-600 text-cream shadow-soft hover:bg-sage-700
+      focus-visible:ring-sage-200;
+  }
+  .btn-clay {
+    @apply bg-clay-500 text-cream shadow-soft hover:bg-clay-600
+      focus-visible:ring-clay-100;
+  }
+  .btn-outline {
+    @apply border border-line-strong bg-transparent text-ink hover:border-ink
+      hover:bg-cream focus-visible:ring-sage-200;
+  }
+  .btn-dark {
+    @apply bg-night text-cream hover:bg-night-700 focus-visible:ring-night/30;
+  }
+  .btn-light {
+    @apply bg-cream text-night hover:bg-white focus-visible:ring-cream/40;
+  }
+  .btn-ghost-light {
+    @apply border border-cream/40 text-cream hover:bg-cream/10
+      focus-visible:ring-cream/30;
+  }
+  .btn-sm {
+    @apply min-h-10 px-4 text-[13px];
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line
+      bg-cream/70 px-3 py-1 text-xs font-medium text-ink-muted;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-cream;
+  }
+
+  .field {
+    @apply min-h-12 w-full rounded-xl border border-line bg-background/50 px-4
+      text-base text-ink outline-none transition
+      placeholder:text-ink-soft focus:border-sage-500 focus:bg-cream
+      focus:ring-4 focus:ring-sage-100;
+  }
 }
 
-::selection {
-  background: #c7f0e7;
-  color: #102a33;
+/* Custom utilities (variant-aware) */
+@utility shadow-soft {
+  box-shadow: 0 16px 40px -18px rgb(32 27 23 / 0.18);
+}
+@utility shadow-soft-lg {
+  box-shadow: 0 32px 80px -32px rgb(32 27 23 / 0.24);
+}
+/* Clean, modern color — clinical photos should read crisp, not filtered.
+   (Replaces the previous sepia wash that fought the "modern/high-tech" message.) */
+@utility img-warm {
+  filter: saturate(1.03) contrast(1.02);
 }
 
-button,
-a,
-summary {
-  -webkit-tap-highlight-color: transparent;
+/* Paper grain overlay — render as an absolutely-positioned child */
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-summary::-webkit-details-marker {
-  display: none;
+/* Scroll-reveal — progressive enhancement only.
+   Browsers without scroll-driven animations render content normally. */
+@keyframes hf-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: hf-reveal both;
+      animation-timeline: view();
+      animation-range: entry 6% cover 22%;
+    }
+  }
+}
+
+/* Reserve space for the fixed mobile Book/Call bar so it never covers
+   footer content. The bar itself is hidden at lg and up. */
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.5rem);
+  }
+}
+
+/* Appointment scheduler — gentle step transition (neutralized by the
+   reduced-motion rule above). */
+@keyframes wd-step {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.step-pane {
+  animation: wd-step 0.28s ease both;
 }

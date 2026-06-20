@@ -54,8 +54,14 @@ const staticPages: Record<
   },
 };
 
+// Routes that have their own dedicated folder (e.g. /request-appointment/)
+// must be excluded here so the catch-all doesn't claim the same path.
+const reservedRoutes = new Set(["request-appointment"]);
+
 export function generateStaticParams() {
-  return pageRoutes.filter(Boolean).map((slug) => ({ slug }));
+  return pageRoutes
+    .filter((slug) => slug && !reservedRoutes.has(slug))
+    .map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
