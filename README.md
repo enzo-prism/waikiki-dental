@@ -5,18 +5,18 @@ cosmetic, implant, and sedation practice in Roseville, CA.
 
 ## Stack
 
-- Next.js App Router (statically generated marketing pages + a couple of API routes)
+- Next.js App Router with statically generated marketing pages
 - TypeScript
 - Tailwind CSS v4 (design tokens in `src/app/globals.css`)
 - lucide-react icons
-- Resend for transactional email (contact + appointment requests)
+- Custom accessible contact and appointment-request forms
 - Vercel deployment
 
 ## Local development
 
 ```bash
 npm install
-cp .env.example .env.local   # optional — forms work without it (email fallback)
+cp .env.example .env.local   # optional until Formspree is connected
 npm run dev
 ```
 
@@ -48,30 +48,34 @@ the appointment-scheduler options, and image paths. Edit content there.
 2. **Verified reviews.** Set `reviewStats.count` (and confirm `reviewStats.href`)
    in `site.ts` to your real Google review count. It's intentionally `null` so
    no fabricated number ships.
-3. **Form delivery.** Add the environment variables below so the contact form
-   and scheduler send email (otherwise they fall back to the visitor's email app).
+3. **Form delivery.** Connect the two finished frontend forms to Formspree and
+   test delivery before launch. They intentionally do not claim to send while
+   no endpoint is configured.
 
-## Environment variables
+## Formspree integration (required before launch)
 
-See `.env.example`. Powers `/api/contact` and `/api/schedule`:
+The contact form and guided appointment request are frontend-only today. Create
+separate Formspree forms, then connect their public endpoints with environment
+variables such as `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` and
+`NEXT_PUBLIC_FORMSPREE_APPOINTMENT_ENDPOINT`. Never commit Formspree account
+tokens or private credentials.
 
-| Variable | Purpose |
-| --- | --- |
-| `RESEND_API_KEY` | Resend API key (server-only) |
-| `CONTACT_TO_EMAIL` | Inbox for messages & appointment requests |
-| `CONTACT_FROM_EMAIL` | Optional verified sender |
+Until that work is complete, both forms provide an honest review state and
+direct visitors to call or email; they never report that an online submission
+was delivered.
 
-Set them locally in `.env.local`, or for deployments via the Vercel dashboard /
-`vercel env add`.
+Before launch, test successful delivery, validation errors, spam protection,
+reply routing, accessibility, and the unavailable-service fallback. Keep both
+forms limited to non-sensitive information unless the practice has explicitly
+approved a compliant data-handling setup and vendor agreement.
 
 ## Key features
 
 - **Appointment scheduler** (`/request-appointment/`) — a guided, accessible,
   mobile-first multi-step request form (`src/components/appointment-scheduler.tsx`).
-  Backend posts to `/api/schedule`; swap the email send for a real scheduling
-  integration (e.g. Dentrix Ascend) when ready.
-- **Contact form** — posts to `/api/contact`, with loading/success/error states
-  and an email fallback.
+  Frontend-only today and ready for a Formspree endpoint.
+- **Contact form** — custom topic, reply preference, privacy confirmation, and
+  an honest pre-delivery review state.
 - **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD, `sitemap.ts`,
   `robots.ts`, trailing-slash URLs.
 - **Design system** — warm "Editorial Spa-Luxe" palette (sage = brand,
@@ -80,13 +84,13 @@ Set them locally in `.env.local`, or for deployments via the Vercel dashboard /
 
 ## Deployment
 
-Hosted on Vercel. Pushing to `main` triggers a production deployment via the
-Vercel Git integration. `next build` runs type-checking and linting; a failed
-build is not promoted, so production stays on the last good deploy.
+Hosted on Vercel. The repository is intended to deploy from `main` through the
+Vercel Git integration. Run both `npm run lint` and `npm run build` before
+publishing, then verify the resulting production deployment and public URL.
 
 ## Notes
 
 The site preserves Waikiki Dental's public content facts: Roseville address,
-phone, Dentrix booking link, doctor bio, service menu, new-patient info, hours,
+phone, online booking link, doctor bio, service menu, new-patient info, hours,
 and testimonials. The live `waikikidental.com` domain is not yet connected;
 this deploy ships to a Vercel URL first (`site.baseUrl`).

@@ -50,7 +50,7 @@ export default function RequestAppointmentPage() {
             </h1>
             <p className="mt-5 max-w-md text-pretty text-lg leading-8 text-ink-muted">
               Tell us a little about your visit and the Waikiki Dental team will
-              confirm your appointment — often the same day.
+              follow up to confirm an available appointment time.
             </p>
 
             <ul className="mt-8 grid gap-4">
@@ -90,6 +90,9 @@ export default function RequestAppointmentPage() {
           </div>
 
           <div>
+            <div className="mb-4 rounded-2xl border border-gold/30 bg-gold-pale p-4 text-sm leading-6 text-ink-muted">
+              <strong className="text-ink">Appointment request only.</strong> The office will confirm the final date and time. For pain or urgent dental needs, call {site.phone}.
+            </div>
             <AppointmentScheduler />
           </div>
         </div>

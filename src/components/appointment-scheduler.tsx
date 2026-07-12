@@ -65,8 +65,6 @@ const STEPS = [
   },
 ] as const;
 
-const STORAGE_KEY = "wd-appointment-v1";
-
 function isEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
@@ -76,34 +74,11 @@ export function AppointmentScheduler() {
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "done">("idle");
-  const [result, setResult] = useState<"sent" | "email">("sent");
-  const [today, setToday] = useState("");
+  const [today] = useState(() => new Date().toISOString().slice(0, 10));
   const [company, setCompany] = useState(""); // honeypot
-  const [hydrated, setHydrated] = useState(false);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const errorId = useId();
-
-  // Restore in-progress requests + set the date floor on the client only.
-  useEffect(() => {
-    setToday(new Date().toISOString().slice(0, 10));
-    try {
-      const saved = sessionStorage.getItem(STORAGE_KEY);
-      if (saved) setForm({ ...initialData, ...JSON.parse(saved) });
-    } catch {
-      /* ignore */
-    }
-    setHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(form));
-    } catch {
-      /* ignore */
-    }
-  }, [form, hydrated]);
 
   // Move focus to the step heading on each step change for screen readers.
   useEffect(() => {
@@ -179,7 +154,7 @@ export function AppointmentScheduler() {
     if (step < STEPS.length - 1) {
       setStep((s) => s + 1);
     } else {
-      void submit();
+      submit();
     }
   }
 
@@ -195,40 +170,10 @@ export function AppointmentScheduler() {
     }
   }
 
-  async function submit() {
+  function submit() {
     setStatus("submitting");
-    try {
-      const res = await fetch("/api/schedule/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, company }),
-      });
-      if (res.ok) {
-        setResult("sent");
-        setStatus("done");
-        try {
-          sessionStorage.removeItem(STORAGE_KEY);
-        } catch {
-          /* ignore */
-        }
-        return;
-      }
-      const data = (await res.json().catch(() => null)) as
-        | { error?: string; code?: string }
-        | null;
-      if (res.status === 503 || data?.code === "unconfigured") {
-        setResult("email");
-        setStatus("done");
-        window.location.href = mailtoHref;
-        return;
-      }
-      setStatus("idle");
-      setError(data?.error ?? "Something went wrong. Please call the office.");
-    } catch {
-      setResult("email");
-      setStatus("done");
-      window.location.href = mailtoHref;
-    }
+    // Frontend preview only. A Formspree endpoint will replace this before launch.
+    setStatus("done");
   }
 
   function reset() {
@@ -236,11 +181,6 @@ export function AppointmentScheduler() {
     setStep(0);
     setError("");
     setStatus("idle");
-    try {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } catch {
-      /* ignore */
-    }
   }
 
   if (status === "done") {
@@ -250,14 +190,10 @@ export function AppointmentScheduler() {
           <CheckCircle2 className="size-9" aria-hidden="true" />
         </span>
         <h2 className="mt-6 font-serif text-3xl font-medium tracking-tight text-ink">
-          {result === "sent"
-            ? "Request received!"
-            : "Almost there — send your request"}
+          Your request looks ready.
         </h2>
         <p className="mx-auto mt-3 max-w-md text-pretty leading-8 text-ink-muted">
-          {result === "sent"
-            ? "Thank you — our Roseville team will reach out shortly to confirm your appointment time."
-            : "We've opened your email app with the details filled in. Just hit send and we'll be in touch to confirm."}
+          Online delivery is being connected before launch, so this request has not been sent yet. You can email it or call the office now.
         </p>
 
         <dl className="mx-auto mt-8 max-w-md rounded-2xl border border-line bg-background/50 p-5 text-left text-sm">
@@ -278,9 +214,9 @@ export function AppointmentScheduler() {
         </dl>
 
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href={site.bookingHref} className="btn btn-clay">
+          <a href={mailtoHref} className="btn btn-clay">
             <CalendarCheck className="size-4" aria-hidden="true" />
-            Or book instantly online
+            Email this request
           </a>
           <a href={site.phoneHref} className="btn btn-outline">
             <Phone className="size-4" aria-hidden="true" />
@@ -302,7 +238,7 @@ export function AppointmentScheduler() {
   const isLast = step === STEPS.length - 1;
 
   return (
-    <div className="card overflow-hidden shadow-soft">
+    <form className="card overflow-hidden shadow-soft" onSubmit={(event) => { event.preventDefault(); goNext(); }} noValidate>
       {/* Progress */}
       <div className="border-b border-line bg-cream px-6 pt-6 sm:px-9">
         <div className="sm:hidden">
@@ -545,7 +481,10 @@ export function AppointmentScheduler() {
             ) : null}
 
             {step === 2 ? (
-              <div className="grid gap-4">
+                <div className="grid gap-4">
+                <div className="rounded-2xl border border-gold/30 bg-gold-pale p-4 text-sm leading-6 text-ink-muted">
+                  This form requests a preferred time; it does not confirm an appointment. Please do not include symptoms, medical history, insurance IDs, or payment details.
+                </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="grid gap-2 text-sm font-medium text-ink">
                     Full name
@@ -591,7 +530,7 @@ export function AppointmentScheduler() {
                     onChange={(event) => update("notes", event.target.value)}
                     className="field min-h-28 resize-y"
                     name="notes"
-                    placeholder="Insurance, accessibility needs, the best time to call…"
+                    placeholder="Best time to call or a non-medical accessibility request…"
                   />
                 </label>
 
@@ -655,8 +594,7 @@ export function AppointmentScheduler() {
           Back
         </button>
         <button
-          type="button"
-          onClick={goNext}
+          type="submit"
           disabled={status === "submitting"}
           aria-describedby={error ? errorId : undefined}
           className="btn btn-clay"
@@ -679,7 +617,7 @@ export function AppointmentScheduler() {
           )}
         </button>
       </div>
-    </div>
+    </form>
   );
 }
 

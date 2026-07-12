@@ -24,7 +24,7 @@ export const site = {
   mapsHref:
     "https://www.google.com/maps/search/?api=1&query=1271%20Pleasant%20Grove%20Blvd%20Suite%20100%20Roseville%20CA%2095747",
   bookingHref:
-    "https://bookit.dentrixascend.com/v1/view/organization/3061/index.html?mode=externalLink",
+    "https://schedule.jarvisanalytics.com/frame/drmike-dtxa?location_id=2721782163260582",
   baseUrl: "https://waikiki-dental.vercel.app",
   description:
     "Modern family, cosmetic, implant, and sedation dentistry in Roseville, CA with Dr. Michael Narodovich and the Waikiki Dental team.",
@@ -46,13 +46,13 @@ export const hours = [
  * ------------------------------------------------------------------ */
 export const doctor = {
   name: "Michael Narodovich, DMD",
-  role: "Founder · Lead Dentist",
+  role: "Owner · Dentist",
   initials: "MN",
   credentials: [
     "The Ohio State University",
     "Temple University",
     "Sedation dentistry",
-    "CEREC same-day crowns",
+    "Sedation-focused care",
   ],
   bio: [
     "Dr. Mike was born and raised in Cleveland, Ohio, earned his Bachelor of Science from The Ohio State University, and received his dental training from Temple University in Philadelphia before settling in Northern California.",
@@ -394,7 +394,7 @@ export const serviceAliases: Record<string, string> = {
  * never displays a fabricated number.
  * ------------------------------------------------------------------ */
 export const reviewStats = {
-  rating: 5.0,
+  rating: null as number | null,
   count: null as number | null,
   source: "Google",
   href: "https://www.google.com/maps/search/?api=1&query=Waikiki%20Dental%20Roseville%20CA",
@@ -436,27 +436,25 @@ export const trustPoints = [
   "Anxiety-friendly care",
 ];
 
-/* New-patient hook — built only on facts the practice already states
-   (accepting new patients, most PPO plans, CareCredit). No fabricated promos. */
+/* New-patient hook — built only on facts stated on the public practice site. */
 export const newPatientOffer = {
   eyebrow: "Now accepting new patients",
   title: "Your first visit, made easy.",
-  body: "Same-week appointments are often available. Most PPO dental insurance is welcome, and CareCredit financing helps make treatment plans manageable.",
+  body: "Most dental insurance plans are welcome, and CareCredit financing helps make treatment plans manageable. Contact the team to confirm your benefits before treatment.",
   points: [
-    "Most PPO dental insurance accepted",
+    "Most dental insurance plans accepted",
     "CareCredit financing available",
     "Online forms before you arrive",
   ],
 };
 
-/* Insurance & financing trust strip. Text-based by design — only
-   references the practice's stated options (CareCredit + most PPO plans). */
+/* Insurance & financing trust strip, based on the public new-patient page. */
 export const paymentOptions = {
-  insuranceNote: "Most PPO dental insurance welcome",
+  insuranceNote: "Most dental insurance plans welcome",
   items: [
-    "Most PPO plans",
+    "Most dental insurance plans",
     "CareCredit financing",
-    "Visa · Mastercard · Amex",
+    "Major credit & debit cards",
     "Cash & check",
   ],
 };
@@ -464,7 +462,7 @@ export const paymentOptions = {
 /* Emergency fast-path — surfaced in the header utility bar. */
 export const emergency = {
   label: "Dental emergency?",
-  cta: "Same-day care",
+  cta: "Call for urgent availability",
   href: "/dental-emergencies/",
 };
 

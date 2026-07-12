@@ -88,7 +88,7 @@ export function StarRow({
   return (
     <div
       className={`flex gap-1 ${color} ${className}`}
-      aria-label={`Rated ${reviewStats.rating} out of 5 stars`}
+      aria-label="Read patient reviews"
     >
       {Array.from({ length: 5 }).map((_, index) => (
         <Star key={index} className="size-4 fill-current" aria-hidden="true" />
@@ -109,9 +109,11 @@ export function AggregateRating({
   return (
     <div className={`flex flex-wrap items-center gap-x-3 gap-y-1 ${className}`}>
       <StarRow tone={tone} />
-      <span className={`font-serif text-lg ${onDark ? "text-cream" : "text-ink"}`}>
-        {reviewStats.rating.toFixed(1)}
-      </span>
+      {reviewStats.rating ? (
+        <span className={`font-serif text-lg ${onDark ? "text-cream" : "text-ink"}`}>
+          {reviewStats.rating.toFixed(1)}
+        </span>
+      ) : null}
       <a
         href={reviewStats.href}
         target="_blank"
@@ -496,8 +498,8 @@ export function VisitPanel({
         <div className="rounded-[1.75rem] border border-line bg-cream p-7 shadow-soft sm:p-9">
           <h3 className="font-serif text-2xl text-ink">Send a message</h3>
           <p className="mt-2 text-sm leading-7 text-ink-muted">
-            Send us a note and the team will reply by email or phone. No patient
-            details are stored on this website.
+            Send a general note and choose how the team should reply. Please do
+            not include medical, insurance, or other sensitive information.
           </p>
           <div className="mt-7">
             <ContactForm />
