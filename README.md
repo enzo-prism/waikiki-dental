@@ -16,11 +16,13 @@ cosmetic, implant, and sedation practice in Roseville, CA.
 
 ```bash
 npm install
-cp .env.example .env.local   # optional until Formspree is connected
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+The current app does not require local environment variables. `.env.example`
+reserves a future contact-form setting, but that variable is not consumed yet.
 
 ## Checks
 
@@ -31,6 +33,12 @@ npm run build
 
 > Run these on Node 24 (see `engines` in `package.json`) — they match the Vercel build.
 
+## Current environments
+
+- **Production:** [waikiki-dental.vercel.app](https://waikiki-dental.vercel.app/)
+- **Source of truth:** the `main` branch in GitHub
+- **Custom domain:** `waikikidental.com` is not connected to this deployment yet
+
 ## Content & configuration
 
 `src/lib/site.ts` is the single source of truth for site content: practice
@@ -38,7 +46,7 @@ details, hours, the service catalog (grouped by category), the doctor bio &
 credentials, testimonials/review stats, the new-patient offer, payment options,
 the appointment-scheduler options, and image paths. Edit content there.
 
-### Before launch — replace the placeholders
+### Before the public custom-domain launch
 
 1. **Real photos.** Imagery is self-hosted in `public/media/` as tasteful
    placeholders. Swap each file (same name) with real Roseville office/team
@@ -54,26 +62,43 @@ the appointment-scheduler options, and image paths. Edit content there.
 
 ## Formspree integration
 
-The guided appointment request submits to its public Formspree endpoint. The
-contact form is still frontend-only and needs a separate Formspree form before
-launch. Connect that public endpoint with an environment variable such as
-`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`. Never commit Formspree account tokens
-or private credentials.
+The guided appointment request is configured and deployed to submit JSON to the
+public Formspree endpoint `https://formspree.io/f/xojgjoqa`, configured in
+`src/components/appointment-scheduler.tsx`. A successful HTTP response means
+Formspree accepted the request for processing; it does not prove clinic inbox
+delivery or mean an appointment has been confirmed. The office confirms the
+final date and time by phone or text.
+
+The scheduler validates required fields, prevents duplicate submissions, uses
+Formspree's `_gotcha` honeypot, disables navigation while sending, and preserves
+entered data when a network or service error allows a retry.
+
+The contact form is still frontend-only and needs a separate Formspree form and
+submission implementation before the public custom-domain launch.
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` is reserved for that future work and is
+not currently read by the app. Never commit Formspree account tokens or private
+credentials.
 
 Until the contact form is connected, it provides an honest review state and
 directs visitors to call or email; it never reports that a submission was
 delivered.
 
-Before launch, test successful appointment delivery, validation errors, spam
-protection, reply routing, accessibility, and the unavailable-service fallback.
-Keep both forms limited to non-sensitive information unless the practice has
-explicitly approved a compliant data-handling setup and vendor agreement.
+Before the public custom-domain launch, use an approved synthetic request to
+verify Formspree inbox receipt, intended office notification, Reply-To behavior,
+phone-only requests, spam and domain controls, accessibility, and the
+unavailable-service fallback. Keep both forms limited to non-sensitive
+information unless the practice has explicitly approved a compliant
+data-handling setup and vendor agreement.
+
+See [Forms and release operations](docs/OPERATIONS.md) for payload details,
+privacy boundaries, the delivery checklist, and the production release process.
 
 ## Key features
 
 - **Appointment scheduler** (`/request-appointment/`) — a guided, accessible,
   mobile-first multi-step request form (`src/components/appointment-scheduler.tsx`)
-  that submits appointment requests to Formspree.
+  that is deployed to post appointment requests to Formspree. Inbox delivery
+  remains pending a clinic-approved end-to-end test.
 - **Contact form** — custom topic, reply preference, privacy confirmation, and
   an honest pre-delivery review state.
 - **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD, `sitemap.ts`,
@@ -84,9 +109,23 @@ explicitly approved a compliant data-handling setup and vendor agreement.
 
 ## Deployment
 
-Hosted on Vercel. The repository is intended to deploy from `main` through the
-Vercel Git integration. Run both `npm run lint` and `npm run build` before
-publishing, then verify the resulting production deployment and public URL.
+Hosted on Vercel. `main` is the repository source of truth, but a push is not
+treated as a completed release until an explicit production deployment is
+`Ready` and the public alias has been verified.
+
+```bash
+npm run lint
+npm run build
+git push origin main
+vercel deploy --prod --yes
+vercel inspect <deployment-url>
+```
+
+After deployment, verify that
+`https://waikiki-dental.vercel.app/request-appointment/` returns HTTP 200 and
+that the production bundle contains the configured Formspree endpoint. Routine
+release verification must not create a real appointment request; inbox delivery
+testing requires a deliberate, clinic-approved test submission.
 
 ## Notes
 
