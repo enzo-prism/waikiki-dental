@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -37,6 +37,8 @@ const initialData: FormData = {
   email: "",
   notes: "",
 };
+
+const APPOINTMENT_FORM_ENDPOINT = "https://formspree.io/f/xojgjoqa";
 
 const STEPS = [
   {
@@ -75,9 +77,10 @@ export function AppointmentScheduler() {
   const [error, setError] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "done">("idle");
   const [today] = useState(() => new Date().toISOString().slice(0, 10));
-  const [company, setCompany] = useState(""); // honeypot
+  const [gotcha, setGotcha] = useState(""); // Formspree honeypot
 
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const isSubmittingRef = useRef(false);
   const errorId = useId();
 
   // Move focus to the step heading on each step change for screen readers.
@@ -102,25 +105,6 @@ export function AppointmentScheduler() {
       : "—";
   const timeWindowLabel =
     timeWindows.find((t) => t.key === form.timeOfDay)?.label ?? "Any time";
-
-  const mailtoHref = useMemo(() => {
-    const subject = encodeURIComponent("Appointment request from website");
-    const body = encodeURIComponent(
-      [
-        `Reason: ${reasonLabel ?? form.reason}`,
-        `Patient: ${form.patientType === "new" ? "New patient" : "Returning patient"}`,
-        `Preferred date: ${form.flexible ? "Soonest available" : form.date || "Not specified"}`,
-        `Time of day: ${timeWindowLabel}`,
-        "",
-        `Name: ${form.name}`,
-        `Phone: ${form.phone}`,
-        `Email: ${form.email || "Not provided"}`,
-        "",
-        `Notes: ${form.notes || "—"}`,
-      ].join("\n"),
-    );
-    return `${site.emailHref}?subject=${subject}&body=${body}`;
-  }, [form, reasonLabel, timeWindowLabel]);
 
   function validate(target: number): string {
     if (target === 0) {
@@ -154,29 +138,94 @@ export function AppointmentScheduler() {
     if (step < STEPS.length - 1) {
       setStep((s) => s + 1);
     } else {
-      submit();
+      void submit();
     }
   }
 
   function goBack() {
+    if (status === "submitting") return;
     setError("");
     setStep((s) => Math.max(0, s - 1));
   }
 
   function jumpTo(target: number) {
+    if (status === "submitting") return;
     if (target <= step) {
       setError("");
       setStep(target);
     }
   }
 
-  function submit() {
+  async function submit() {
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setStatus("submitting");
-    // Frontend preview only. A Formspree endpoint will replace this before launch.
-    setStatus("done");
+    setError("");
+
+    // Quietly accept honeypot submissions without sending them to Formspree.
+    if (gotcha.trim()) {
+      setStatus("done");
+      return;
+    }
+
+    try {
+      const response = await fetch(APPOINTMENT_FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subject: "New appointment request — Waikiki Dental",
+          source: "Waikiki Dental appointment scheduler",
+          appointment_reason: reasonLabel ?? form.reason,
+          patient_type:
+            form.patientType === "new" ? "New patient" : "Returning patient",
+          preferred_date: form.flexible
+            ? "Soonest available"
+            : form.date || "Not specified",
+          preferred_time: timeWindowLabel,
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          ...(form.email.trim() ? { email: form.email.trim() } : {}),
+          notes: form.notes.trim() || "None",
+          message: [
+            `Visit: ${reasonLabel ?? form.reason}`,
+            `Patient: ${form.patientType === "new" ? "New patient" : "Returning patient"}`,
+            `Preferred date: ${form.flexible ? "Soonest available" : form.date || "Not specified"}`,
+            `Preferred time: ${timeWindowLabel}`,
+            `Name: ${form.name.trim()}`,
+            `Phone: ${form.phone.trim()}`,
+            `Email: ${form.email.trim() || "Not provided"}`,
+            `Notes: ${form.notes.trim() || "None"}`,
+          ].join("\n"),
+          _gotcha: gotcha,
+        }),
+      });
+
+      if (!response.ok) {
+        isSubmittingRef.current = false;
+        setStatus("idle");
+        setError(
+          response.status === 429
+            ? "Too many requests were sent. Please wait a moment and try again, or call the office."
+            : "We couldn't send your request. Please try again, or call the office for help.",
+        );
+        return;
+      }
+
+      setStatus("done");
+    } catch {
+      isSubmittingRef.current = false;
+      setStatus("idle");
+      setError(
+        "We couldn't send your request. Check your connection and try again, or call the office for help.",
+      );
+    }
   }
 
   function reset() {
+    isSubmittingRef.current = false;
     setForm(initialData);
     setStep(0);
     setError("");
@@ -185,15 +234,20 @@ export function AppointmentScheduler() {
 
   if (status === "done") {
     return (
-      <div className="card p-8 text-center shadow-soft sm:p-12">
+      <div
+        className="card p-8 text-center shadow-soft sm:p-12"
+        role="status"
+        aria-live="polite"
+      >
         <span className="mx-auto grid size-16 place-items-center rounded-full bg-sage-50 text-sage-600">
           <CheckCircle2 className="size-9" aria-hidden="true" />
         </span>
         <h2 className="mt-6 font-serif text-3xl font-medium tracking-tight text-ink">
-          Your request looks ready.
+          Your appointment request was sent.
         </h2>
         <p className="mx-auto mt-3 max-w-md text-pretty leading-8 text-ink-muted">
-          Online delivery is being connected before launch, so this request has not been sent yet. You can email it or call the office now.
+          The Waikiki Dental team will follow up by phone or text to confirm the
+          final date and time.
         </p>
 
         <dl className="mx-auto mt-8 max-w-md rounded-2xl border border-line bg-background/50 p-5 text-left text-sm">
@@ -213,14 +267,10 @@ export function AppointmentScheduler() {
           </div>
         </dl>
 
-        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href={mailtoHref} className="btn btn-clay">
-            <CalendarCheck className="size-4" aria-hidden="true" />
-            Email this request
-          </a>
+        <div className="mt-8 flex justify-center">
           <a href={site.phoneHref} className="btn btn-outline">
             <Phone className="size-4" aria-hidden="true" />
-            Call {site.phone}
+            Need help? Call {site.phone}
           </a>
         </div>
         <button
@@ -238,7 +288,12 @@ export function AppointmentScheduler() {
   const isLast = step === STEPS.length - 1;
 
   return (
-    <form className="card overflow-hidden shadow-soft" onSubmit={(event) => { event.preventDefault(); goNext(); }} noValidate>
+    <form
+      aria-busy={status === "submitting"}
+      className="card overflow-hidden shadow-soft"
+      onSubmit={(event) => { event.preventDefault(); goNext(); }}
+      noValidate
+    >
       {/* Progress */}
       <div className="border-b border-line bg-cream px-6 pt-6 sm:px-9">
         <div className="sm:hidden">
@@ -266,7 +321,7 @@ export function AppointmentScheduler() {
                 <button
                   type="button"
                   onClick={() => jumpTo(index)}
-                  disabled={!reachable}
+                  disabled={!reachable || status === "submitting"}
                   aria-current={isCurrent ? "step" : undefined}
                   className={`flex items-center gap-2 rounded-full ${
                     reachable ? "cursor-pointer" : "cursor-default"
@@ -541,9 +596,9 @@ export function AppointmentScheduler() {
                     <input
                       tabIndex={-1}
                       autoComplete="off"
-                      value={company}
-                      onChange={(event) => setCompany(event.target.value)}
-                      name="company"
+                      value={gotcha}
+                      onChange={(event) => setGotcha(event.target.value)}
+                      name="_gotcha"
                     />
                   </label>
                 </div>
@@ -552,24 +607,51 @@ export function AppointmentScheduler() {
 
             {step === 3 ? (
               <dl className="rounded-2xl border border-line bg-background/40 px-5">
-                <ReviewRow label="Visit" value={reasonLabel} onEdit={() => jumpTo(0)} />
                 <ReviewRow
+                  disabled={status === "submitting"}
+                  label="Visit"
+                  value={reasonLabel}
+                  onEdit={() => jumpTo(0)}
+                />
+                <ReviewRow
+                  disabled={status === "submitting"}
                   label="Patient"
                   value={form.patientType === "new" ? "New patient" : "Returning patient"}
                   onEdit={() => jumpTo(1)}
                 />
                 <ReviewRow
+                  disabled={status === "submitting"}
                   label="Preferred time"
                   value={`${timingLabel} · ${timeWindowLabel}`}
                   onEdit={() => jumpTo(1)}
                 />
-                <ReviewRow label="Name" value={form.name} onEdit={() => jumpTo(2)} />
-                <ReviewRow label="Phone" value={form.phone} onEdit={() => jumpTo(2)} />
+                <ReviewRow
+                  disabled={status === "submitting"}
+                  label="Name"
+                  value={form.name}
+                  onEdit={() => jumpTo(2)}
+                />
+                <ReviewRow
+                  disabled={status === "submitting"}
+                  label="Phone"
+                  value={form.phone}
+                  onEdit={() => jumpTo(2)}
+                />
                 {form.email ? (
-                  <ReviewRow label="Email" value={form.email} onEdit={() => jumpTo(2)} />
+                  <ReviewRow
+                    disabled={status === "submitting"}
+                    label="Email"
+                    value={form.email}
+                    onEdit={() => jumpTo(2)}
+                  />
                 ) : null}
                 {form.notes ? (
-                  <ReviewRow label="Notes" value={form.notes} onEdit={() => jumpTo(2)} />
+                  <ReviewRow
+                    disabled={status === "submitting"}
+                    label="Notes"
+                    value={form.notes}
+                    onEdit={() => jumpTo(2)}
+                  />
                 ) : null}
               </dl>
             ) : null}
@@ -588,6 +670,7 @@ export function AppointmentScheduler() {
         <button
           type="button"
           onClick={goBack}
+          disabled={status === "submitting"}
           className={`btn btn-outline ${step === 0 ? "invisible" : ""}`}
         >
           <ArrowLeft className="size-4" aria-hidden="true" />
@@ -622,10 +705,12 @@ export function AppointmentScheduler() {
 }
 
 function ReviewRow({
+  disabled = false,
   label,
   value,
   onEdit,
 }: {
+  disabled?: boolean;
   label: string;
   value?: string;
   onEdit: () => void;
@@ -640,8 +725,9 @@ function ReviewRow({
       </div>
       <button
         type="button"
+        disabled={disabled}
         onClick={onEdit}
-        className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-sage-700 transition hover:text-sage-800"
+        className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-sage-700 transition hover:text-sage-800 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <Pencil className="size-3.5" aria-hidden="true" />
         Edit

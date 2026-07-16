@@ -48,32 +48,32 @@ the appointment-scheduler options, and image paths. Edit content there.
 2. **Verified reviews.** Set `reviewStats.count` (and confirm `reviewStats.href`)
    in `site.ts` to your real Google review count. It's intentionally `null` so
    no fabricated number ships.
-3. **Form delivery.** Connect the two finished frontend forms to Formspree and
-   test delivery before launch. They intentionally do not claim to send while
-   no endpoint is configured.
+3. **Contact form delivery.** Connect the finished contact form to Formspree and
+   test delivery before launch. It intentionally does not claim to send while
+   no endpoint is configured. The appointment form is already connected.
 
-## Formspree integration (required before launch)
+## Formspree integration
 
-The contact form and guided appointment request are frontend-only today. Create
-separate Formspree forms, then connect their public endpoints with environment
-variables such as `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` and
-`NEXT_PUBLIC_FORMSPREE_APPOINTMENT_ENDPOINT`. Never commit Formspree account
-tokens or private credentials.
+The guided appointment request submits to its public Formspree endpoint. The
+contact form is still frontend-only and needs a separate Formspree form before
+launch. Connect that public endpoint with an environment variable such as
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`. Never commit Formspree account tokens
+or private credentials.
 
-Until that work is complete, both forms provide an honest review state and
-direct visitors to call or email; they never report that an online submission
-was delivered.
+Until the contact form is connected, it provides an honest review state and
+directs visitors to call or email; it never reports that a submission was
+delivered.
 
-Before launch, test successful delivery, validation errors, spam protection,
-reply routing, accessibility, and the unavailable-service fallback. Keep both
-forms limited to non-sensitive information unless the practice has explicitly
-approved a compliant data-handling setup and vendor agreement.
+Before launch, test successful appointment delivery, validation errors, spam
+protection, reply routing, accessibility, and the unavailable-service fallback.
+Keep both forms limited to non-sensitive information unless the practice has
+explicitly approved a compliant data-handling setup and vendor agreement.
 
 ## Key features
 
 - **Appointment scheduler** (`/request-appointment/`) — a guided, accessible,
-  mobile-first multi-step request form (`src/components/appointment-scheduler.tsx`).
-  Frontend-only today and ready for a Formspree endpoint.
+  mobile-first multi-step request form (`src/components/appointment-scheduler.tsx`)
+  that submits appointment requests to Formspree.
 - **Contact form** — custom topic, reply preference, privacy confirmation, and
   an honest pre-delivery review state.
 - **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD, `sitemap.ts`,
