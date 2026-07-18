@@ -1,55 +1,56 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ *
- * Waikiki Dental — “Editorial Spa-Luxe” design system
- * Warm ivory canvas · espresso ink · sage + clay accents
+ * Waikiki Dental — “Coastal Editorial” design system
+ * Warm sand canvas · deep ocean ink + teal · sunset coral accents
+ * The logomark's wave is the signature graphic language.
  * Fraunces (display serif) · Manrope (sans)
  * ------------------------------------------------------------------ */
 
 @theme inline {
-  /* Surfaces */
-  --color-background: #f4eee3;
-  --color-cream: #fbf8f2;
-  --color-surface-alt: #ede4d4;
+  /* Surfaces — warm sand */
+  --color-background: #f5efe1;
+  --color-cream: #fcf9f0;
+  --color-surface-alt: #ece3cd;
 
-  /* Ink */
-  --color-ink: #2a2520;
-  --color-ink-muted: #6e655a;
-  /* Darkened from #8d8377 to clear WCAG AA (≈4.5:1) on cream for small text. */
-  --color-ink-soft: #7a7064;
-  --color-line: #e3dac9;
-  --color-line-strong: #d2c5af;
+  /* Ink — deep sea-ink */
+  --color-ink: #1e2a29;
+  --color-ink-muted: #55635f;
+  /* Clears WCAG AA (≥4.5:1) on both cream and sand for small text. */
+  --color-ink-soft: #5f6d67;
+  --color-line: #e0d7bf;
+  --color-line-strong: #cbbfa1;
 
-  /* Warm dark (replaces cold slate) */
-  --color-night: #201b17;
-  --color-night-800: #2a2420;
-  --color-night-700: #352e28;
+  /* Deep ocean (dark sections) */
+  --color-deep: #0b2e31;
+  --color-deep-800: #123c40;
+  --color-deep-700: #1a4a4e;
 
-  /* Sage — primary */
-  --color-sage-50: #eff3ea;
-  --color-sage-100: #dce6d0;
-  --color-sage-200: #bbcda6;
-  --color-sage-300: #9bb47e;
-  --color-sage-400: #7e9a5c;
-  --color-sage-500: #647f46;
-  --color-sage-600: #4f6536;
-  --color-sage-700: #3f512b;
-  --color-sage-800: #323f23;
-  --color-sage-900: #262f1a;
+  /* Ocean — primary teal */
+  --color-ocean-50: #edf5f3;
+  --color-ocean-100: #d6e9e5;
+  --color-ocean-200: #aed3cd;
+  --color-ocean-300: #7db5ae;
+  --color-ocean-400: #50948d;
+  --color-ocean-500: #377973;
+  --color-ocean-600: #27605c;
+  --color-ocean-700: #1f4d4a;
+  --color-ocean-800: #183d3b;
+  --color-ocean-900: #122e2d;
 
-  /* Clay — warm accent (replaces coral) */
-  --color-clay-50: #fbf1eb;
-  --color-clay-100: #f5dac8;
-  --color-clay-200: #ebb89c;
-  --color-clay-300: #dd9470;
-  --color-clay-400: #ce7350;
-  --color-clay-500: #b85c36;
-  --color-clay-600: #97492b;
-  --color-clay-700: #763822;
+  /* Sunset — CTA coral (500 is decorative; 600+ is safe behind cream text) */
+  --color-sunset-50: #fdf2ea;
+  --color-sunset-100: #f9e1cf;
+  --color-sunset-200: #f1bf9a;
+  --color-sunset-300: #e8985f;
+  --color-sunset-400: #de7743;
+  --color-sunset-500: #cf6132;
+  --color-sunset-600: #b04c2c;
+  --color-sunset-700: #8a3a22;
 
   /* Gold — quiet accent */
   --color-gold: #b0894c;
-  --color-gold-soft: #c9a86a;
+  --color-gold-soft: #d0ac6d;
 
   /* Fonts */
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
@@ -75,12 +76,12 @@
   }
 
   ::selection {
-    background: var(--color-sage-200);
+    background: var(--color-ocean-200);
     color: var(--color-ink);
   }
 
   :where(a, button, summary, input, textarea, select):focus-visible {
-    outline: 2px solid var(--color-sage-500);
+    outline: 2px solid var(--color-ocean-500);
     outline-offset: 2px;
     border-radius: 6px;
   }
@@ -119,7 +120,7 @@
 
   .eyebrow {
     @apply inline-flex items-center gap-2 font-sans text-[11px] font-semibold
-      uppercase tracking-[0.24em] text-sage-600;
+      uppercase tracking-[0.24em] text-ocean-600;
   }
 
   /* Buttons — soft pills */
@@ -129,22 +130,22 @@
       focus:outline-none focus-visible:ring-4 active:translate-y-px;
   }
   .btn-primary {
-    @apply bg-sage-600 text-cream shadow-soft hover:bg-sage-700
-      focus-visible:ring-sage-200;
+    @apply bg-ocean-600 text-cream shadow-soft hover:bg-ocean-700
+      focus-visible:ring-ocean-200;
   }
-  .btn-clay {
-    @apply bg-clay-500 text-cream shadow-soft hover:bg-clay-600
-      focus-visible:ring-clay-100;
+  .btn-sunset {
+    @apply bg-sunset-600 text-cream shadow-soft hover:bg-sunset-700
+      focus-visible:ring-sunset-100;
   }
   .btn-outline {
-    @apply border border-line-strong bg-transparent text-ink hover:border-ink
-      hover:bg-cream focus-visible:ring-sage-200;
+    @apply border border-line-strong bg-transparent text-ink hover:border-ocean-600
+      hover:bg-cream focus-visible:ring-ocean-200;
   }
   .btn-dark {
-    @apply bg-night text-cream hover:bg-night-700 focus-visible:ring-night/30;
+    @apply bg-deep text-cream hover:bg-deep-700 focus-visible:ring-deep/30;
   }
   .btn-light {
-    @apply bg-cream text-night hover:bg-white focus-visible:ring-cream/40;
+    @apply bg-cream text-deep hover:bg-white focus-visible:ring-cream/40;
   }
   .btn-ghost-light {
     @apply border border-cream/40 text-cream hover:bg-cream/10
@@ -166,20 +167,19 @@
   .field {
     @apply min-h-12 w-full rounded-xl border border-line bg-background/50 px-4
       text-base text-ink outline-none transition
-      placeholder:text-ink-soft focus:border-sage-500 focus:bg-cream
-      focus:ring-4 focus:ring-sage-100;
+      placeholder:text-ink-soft focus:border-ocean-500 focus:bg-cream
+      focus:ring-4 focus:ring-ocean-100;
   }
 }
 
 /* Custom utilities (variant-aware) */
 @utility shadow-soft {
-  box-shadow: 0 16px 40px -18px rgb(32 27 23 / 0.18);
+  box-shadow: 0 16px 40px -18px rgb(11 46 49 / 0.18);
 }
 @utility shadow-soft-lg {
-  box-shadow: 0 32px 80px -32px rgb(32 27 23 / 0.24);
+  box-shadow: 0 32px 80px -32px rgb(11 46 49 / 0.26);
 }
-/* Clean, modern color — clinical photos should read crisp, not filtered.
-   (Replaces the previous sepia wash that fought the "modern/high-tech" message.) */
+/* Clean, modern color — clinical photos should read crisp, not filtered. */
 @utility img-warm {
   filter: saturate(1.03) contrast(1.02);
 }
@@ -192,6 +192,20 @@
   opacity: 0.05;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Wave drift — loops a 200%-wide wave strip seamlessly.
+   Neutralized by the reduced-motion rule above. */
+@keyframes wd-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.wave-drift {
+  animation: wd-drift 26s linear infinite;
+}
+.wave-drift-slow {
+  animation: wd-drift 46s linear infinite;
 }
 
 /* Scroll-reveal — progressive enhancement only.
@@ -220,7 +234,7 @@
    footer content. The bar itself is hidden at lg and up. */
 @media (max-width: 1023px) {
   body {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.5rem);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.25rem);
   }
 }
 

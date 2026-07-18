@@ -44,7 +44,7 @@ export default function RequestAppointmentPage() {
       <section className="bg-surface-alt">
         <div className="wrap-wide grid gap-10 py-12 sm:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-14 lg:py-20">
           <div className="lg:sticky lg:top-28">
-            <Eyebrow className="text-clay-600">Request an appointment</Eyebrow>
+            <Eyebrow className="text-sunset-600">Request an appointment</Eyebrow>
             <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
               Let’s find a time that works for you.
             </h1>
@@ -58,7 +58,7 @@ export default function RequestAppointmentPage() {
                 const Icon = item.icon;
                 return (
                   <li key={item.title} className="flex gap-4">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-sage-50 text-sage-600">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-ocean-50 text-ocean-600">
                       <Icon className="size-5" aria-hidden="true" />
                     </span>
                     <div>
@@ -79,7 +79,7 @@ export default function RequestAppointmentPage() {
                 Prefer to talk now, or need urgent care?
               </p>
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-                <a href={site.bookingHref} className="btn btn-clay btn-sm">
+                <a href={site.bookingHref} className="btn btn-sunset btn-sm">
                   Book instantly online
                 </a>
                 <a href={site.phoneHref} className="btn btn-outline btn-sm">
@@ -90,7 +90,7 @@ export default function RequestAppointmentPage() {
           </div>
 
           <div>
-            <div className="mb-4 rounded-2xl border border-gold/30 bg-gold-pale p-4 text-sm leading-6 text-ink-muted">
+            <div className="mb-4 rounded-2xl border border-gold/40 bg-gold/10 p-4 text-sm leading-6 text-ink-muted">
               <strong className="text-ink">Appointment request only.</strong> The office will confirm the final date and time. For pain or urgent dental needs, call {site.phone}.
             </div>
             <AppointmentScheduler />

@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { doctor, doctorPortrait } from "@/lib/site";
+import { WaveLines, WaveUnderline } from "./waves";
 
 /**
  * Waikiki Dental logomark — a wave cresting over a smile.
  * "Waikiki" (the wave) + "Dental" (the smile), drawn in a single accent color.
- * Uses currentColor so it adapts to sage / cream / ink contexts.
+ * Uses currentColor so it adapts to ocean / cream / ink contexts.
  */
 export function Logomark({ className = "" }: { className?: string }) {
   return (
@@ -51,13 +52,15 @@ export function DoctorPortrait({ priority = false }: { priority?: boolean }) {
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-sage-600 to-sage-800 text-cream">
-      <Logomark className="size-9 text-cream/65" />
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-ocean-700 via-ocean-800 to-deep text-cream">
+      <WaveLines className="absolute inset-x-0 bottom-8 h-24 w-full text-cream/15" />
+      <Logomark className="size-9 text-gold-soft/80" />
       <span className="mt-5 font-serif text-7xl font-medium leading-none tracking-tight">
         {doctor.initials}
       </span>
-      <span className="mt-5 text-[11px] font-semibold uppercase tracking-[0.24em] text-cream/70">
-        Photo coming soon
+      <WaveUnderline className="mt-4 h-3 w-24 text-sunset-300" />
+      <span className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-cream/70">
+        Waikiki Dental · Roseville
       </span>
     </div>
   );

@@ -10,24 +10,25 @@ import {
 import { emergency, hours, navItems, site } from "@/lib/site";
 import { Logomark } from "./brand";
 import { MobileMenu, ServicesDropdown } from "./site-nav";
+import { WaveLines } from "./waves";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50">
       {/* Slim utility bar */}
-      <div className="bg-night text-cream/80">
+      <div className="bg-deep text-cream/80">
         <div className="wrap-wide flex h-9 items-center justify-between gap-4 text-[12px]">
           <a
             href={site.mapsHref}
             className="inline-flex min-w-0 items-center gap-2 transition hover:text-cream"
           >
-            <MapPin className="size-3.5 text-clay-300" aria-hidden="true" />
+            <MapPin className="size-3.5 text-sunset-300" aria-hidden="true" />
             <span className="truncate">{site.shortAddress}</span>
           </a>
           <div className="flex items-center gap-5">
             <Link
               href={emergency.href}
-              className="inline-flex items-center gap-2 font-medium text-clay-200 transition hover:text-cream"
+              className="inline-flex items-center gap-2 font-medium text-sunset-200 transition hover:text-cream"
             >
               <HeartPulse className="size-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">{emergency.label}</span>
@@ -36,14 +37,14 @@ export function SiteHeader() {
               </span>
             </Link>
             <span className="hidden items-center gap-2 lg:inline-flex">
-              <Clock className="size-3.5 text-sage-300" aria-hidden="true" />
+              <Clock className="size-3.5 text-ocean-300" aria-hidden="true" />
               Open Mon–Fri
             </span>
             <a
               href={site.phoneHref}
               className="hidden items-center gap-2 transition hover:text-cream sm:inline-flex"
             >
-              <Phone className="size-3.5 text-clay-300" aria-hidden="true" />
+              <Phone className="size-3.5 text-sunset-300" aria-hidden="true" />
               {site.phone}
             </a>
           </div>
@@ -54,14 +55,14 @@ export function SiteHeader() {
       <div className="border-b border-line bg-cream/85 backdrop-blur-xl">
         <nav className="wrap-wide flex items-center justify-between gap-6 py-3.5">
           <Link href="/" className="flex min-w-0 items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-full border border-sage-600/25 bg-sage-50 text-sage-700">
+            <span className="grid size-11 place-items-center rounded-full border border-ocean-600/25 bg-ocean-50 text-ocean-700">
               <Logomark className="size-6" />
             </span>
             <span className="min-w-0">
               <span className="block font-serif text-xl tracking-tight text-ink">
                 Waikiki Dental
               </span>
-              <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-sage-600">
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-ocean-600">
                 Roseville · California
               </span>
             </span>
@@ -84,14 +85,14 @@ export function SiteHeader() {
           <div className="flex items-center gap-2">
             <a
               href={site.phoneHref}
-              className="hidden size-11 place-items-center rounded-full border border-line text-ink transition hover:border-ink hover:bg-background sm:grid lg:hidden xl:grid"
+              className="hidden size-11 place-items-center rounded-full border border-line text-ink transition hover:border-ocean-600 hover:bg-background sm:grid lg:hidden xl:grid"
               aria-label={`Call Waikiki Dental at ${site.phone}`}
             >
               <Phone className="size-5" aria-hidden="true" />
             </a>
             <a
               href={site.bookingHref}
-              className="hidden btn btn-clay btn-sm sm:inline-flex"
+              className="hidden btn btn-sunset btn-sm sm:inline-flex"
             >
               <CalendarCheck className="size-4" aria-hidden="true" />
               Book Online
@@ -111,8 +112,8 @@ export function MobileCtaBar() {
       className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-cream/95 backdrop-blur-xl lg:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
-      <div className="grid grid-cols-2 gap-2 px-4 py-3">
-        <a href={site.bookingHref} className="btn btn-clay btn-sm">
+      <div className="grid grid-cols-2 gap-2 px-4 py-2.5">
+        <a href={site.bookingHref} className="btn btn-sunset btn-sm">
           <CalendarCheck className="size-4" aria-hidden="true" />
           Book Online
         </a>
@@ -127,17 +128,19 @@ export function MobileCtaBar() {
 
 export function SiteFooter() {
   return (
-    <footer className="bg-night text-cream/75">
-      <div className="border-t-4 border-sage-700" />
-      <section className="wrap-wide grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.9fr_0.9fr]">
+    <footer className="relative overflow-hidden bg-deep text-cream/75">
+      {/* Wave crest rolling into the footer */}
+      <WaveLines className="h-16 w-full text-ocean-300/25 sm:h-20" />
+
+      <section className="wrap-wide grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.9fr_0.9fr]">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-full bg-sage-600 text-cream">
+            <span className="grid size-11 place-items-center rounded-full bg-ocean-600 text-cream">
               <Logomark className="size-6" />
             </span>
             <div>
               <p className="font-serif text-xl text-cream">Waikiki Dental</p>
-              <p className="text-xs uppercase tracking-[0.24em] text-sage-300">
+              <p className="text-xs uppercase tracking-[0.24em] text-ocean-300">
                 Family &amp; Cosmetic Dentistry
               </p>
             </div>
@@ -148,7 +151,7 @@ export function SiteFooter() {
             orthodontics, same-day crowns, and sedation dentistry in Roseville.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href={site.bookingHref} className="btn btn-light btn-sm">
+            <a href={site.bookingHref} className="btn btn-sunset btn-sm">
               <CalendarCheck className="size-4" aria-hidden="true" />
               Book Online
             </a>
@@ -160,7 +163,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sage-300">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ocean-300">
             Explore
           </h2>
           <ul className="mt-5 grid gap-2.5 text-sm">
@@ -178,7 +181,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sage-300">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ocean-300">
             Visit
           </h2>
           <address className="mt-5 not-italic text-sm leading-7 text-cream/75">
@@ -195,21 +198,21 @@ export function SiteFooter() {
               href={site.mapsHref}
               className="inline-flex items-center gap-2 text-cream/75 transition hover:text-cream"
             >
-              <MapPin className="size-4 text-clay-300" aria-hidden="true" />
+              <MapPin className="size-4 text-sunset-300" aria-hidden="true" />
               Directions
             </a>
             <a
               href={site.emailHref}
               className="inline-flex items-center gap-2 text-cream/75 transition hover:text-cream"
             >
-              <Mail className="size-4 text-sage-300" aria-hidden="true" />
+              <Mail className="size-4 text-ocean-300" aria-hidden="true" />
               Email the office
             </a>
           </div>
         </div>
 
         <div>
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-sage-300">
+          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ocean-300">
             Hours
           </h2>
           <dl className="mt-5 grid gap-2 text-sm">
@@ -231,6 +234,16 @@ export function SiteFooter() {
           </dl>
         </div>
       </section>
+
+      {/* Oversized watermark wordmark */}
+      <div
+        aria-hidden="true"
+        className="wrap-wide select-none overflow-hidden border-t border-cream/10 pt-6"
+      >
+        <p className="whitespace-nowrap font-serif text-[13.5vw] leading-none tracking-tight text-cream/[0.06] lg:text-[10rem]">
+          Waikiki Dental
+        </p>
+      </div>
 
       <div className="border-t border-cream/10">
         <div className="wrap-wide flex flex-col gap-3 py-6 text-xs text-cream/65 sm:flex-row sm:items-center sm:justify-between">

@@ -52,8 +52,8 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
   if (previewed) {
     return (
-      <div className="rounded-3xl border border-sage-200 bg-sage-50 p-6 text-center sm:p-8" role="status">
-        <span className="mx-auto grid size-12 place-items-center rounded-full bg-sage-600 text-cream">
+      <div className="rounded-3xl border border-ocean-200 bg-ocean-50 p-6 text-center sm:p-8" role="status">
+        <span className="mx-auto grid size-12 place-items-center rounded-full bg-ocean-600 text-cream">
           <CheckCircle2 className="size-6" aria-hidden="true" />
         </span>
         <h3 className="mt-4 font-serif text-2xl text-ink">Your form looks ready.</h3>
@@ -61,14 +61,14 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
           Online delivery is being connected before launch, so this message has not been sent yet.
         </p>
         <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href={site.phoneHref} className="btn btn-clay btn-sm">
+          <a href={site.phoneHref} className="btn btn-sunset btn-sm">
             <Phone className="size-4" aria-hidden="true" /> Call {site.phone}
           </a>
           <a href={site.emailHref} className="btn btn-outline btn-sm">
             <Mail className="size-4" aria-hidden="true" /> Email the office
           </a>
         </div>
-        <button type="button" onClick={() => setPreviewed(false)} className="mt-5 text-sm font-semibold text-sage-700 hover:underline">
+        <button type="button" onClick={() => setPreviewed(false)} className="mt-5 text-sm font-semibold text-ocean-700 hover:underline">
           Edit message
         </button>
       </div>
@@ -77,8 +77,8 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
   return (
     <form onSubmit={submitForm} className="grid gap-5" aria-label="Contact Waikiki Dental">
-      <div className="flex gap-3 rounded-2xl border border-sage-100 bg-sage-50/70 p-4">
-        <MessageSquareText className="mt-0.5 size-5 shrink-0 text-sage-700" aria-hidden="true" />
+      <div className="flex gap-3 rounded-2xl border border-ocean-100 bg-ocean-50/70 p-4">
+        <MessageSquareText className="mt-0.5 size-5 shrink-0 text-ocean-700" aria-hidden="true" />
         <div>
           <p className="text-sm font-semibold text-ink">Send a general message</p>
           <p className="mt-0.5 text-xs leading-5 text-ink-muted">For urgent dental needs, please call the office.</p>
@@ -113,7 +113,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         <legend className="text-sm font-medium text-ink">How should we reply?</legend>
         <div className="mt-2 grid grid-cols-2 gap-2 rounded-full border border-line bg-background p-1">
           {(["email", "phone"] as const).map((method) => (
-            <label key={method} className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold capitalize transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-sage-300 ${form.replyBy === method ? "bg-sage-600 text-cream" : "text-ink-muted"}`}>
+            <label key={method} className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold capitalize transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ocean-300 ${form.replyBy === method ? "bg-ocean-600 text-cream" : "text-ink-muted"}`}>
               <input type="radio" name="replyBy" value={method} checked={form.replyBy === method} onChange={() => update("replyBy", method)} className="sr-only" />
               {method}
             </label>
@@ -126,14 +126,14 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       </FormField>
 
       <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-line bg-cream p-4 text-sm leading-6 text-ink-muted">
-        <input type="checkbox" checked={form.consent} onChange={(e) => update("consent", e.target.checked)} className="mt-1 size-4 shrink-0 accent-sage-600" />
+        <input type="checkbox" checked={form.consent} onChange={(e) => update("consent", e.target.checked)} className="mt-1 size-4 shrink-0 accent-ocean-600" />
         <span><strong className="text-ink">Privacy check:</strong> I have not included medical history, insurance IDs, payment details, or other sensitive information.</span>
       </label>
 
       <div aria-hidden="true" className="hidden"><label>Company<input tabIndex={-1} autoComplete="off" value={company} onChange={(e) => setCompany(e.target.value)} name="company" /></label></div>
 
-      {error ? <p id={errorId} className="text-sm font-medium text-clay-600" role="alert">{error}</p> : null}
-      <button className="btn btn-clay" type="submit" aria-describedby={error ? errorId : undefined}>
+      {error ? <p id={errorId} className="text-sm font-medium text-sunset-600" role="alert">{error}</p> : null}
+      <button className="btn btn-sunset" type="submit" aria-describedby={error ? errorId : undefined}>
         <ShieldCheck className="size-4" aria-hidden="true" /> Review message
       </button>
       <p className="text-center text-xs leading-5 text-ink-soft">Online delivery will be connected before public launch.</p>
@@ -142,5 +142,5 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 }
 
 function FormField({ label, hint, required = false, children }: { label: string; hint?: string; required?: boolean; children: React.ReactNode }) {
-  return <label className="grid gap-2 text-sm font-medium text-ink"><span>{label}{required ? <span className="text-clay-600"> *</span> : null}{hint ? <span className="ml-2 font-normal text-ink-soft">{hint}</span> : null}</span>{children}</label>;
+  return <label className="grid gap-2 text-sm font-medium text-ink"><span>{label}{required ? <span className="text-sunset-600"> *</span> : null}{hint ? <span className="ml-2 font-normal text-ink-soft">{hint}</span> : null}</span>{children}</label>;
 }

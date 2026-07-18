@@ -20,6 +20,7 @@ import {
 } from "./sections";
 import { DoctorPortrait } from "./brand";
 import { ContactForm } from "./contact-form";
+import { WaveLines, WaveUnderline } from "./waves";
 
 export function JsonLd() {
   return (
@@ -29,6 +30,16 @@ export function JsonLd() {
     />
   );
 }
+
+/** Decorative underline accent per service category (never the sole signal). */
+const categoryAccent: Record<string, string> = {
+  preventive: "text-ocean-500",
+  cosmetic: "text-sunset-500",
+  restorative: "text-ocean-600",
+  orthodontics: "text-gold",
+  sedation: "text-sunset-600",
+  emergency: "text-sunset-700",
+};
 
 function PageHeader({
   eyebrow,
@@ -42,19 +53,21 @@ function PageHeader({
   actions?: boolean;
 }) {
   return (
-    <div>
+    <div className="relative">
+      <WaveLines className="pointer-events-none absolute -right-24 -top-12 h-32 w-[26rem] text-ocean-200/40" />
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
+      <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
         {title}
       </h1>
+      <WaveUnderline className="mt-6 h-3 w-32 text-sunset-500" />
       {body ? (
-        <p className="mt-5 max-w-2xl text-pretty text-lg leading-8 text-ink-muted">
+        <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-ink-muted">
           {body}
         </p>
       ) : null}
       {actions ? (
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <a href={site.bookingHref} className="btn btn-clay">
+          <a href={site.bookingHref} className="btn btn-sunset">
             <CalendarCheck className="size-4" aria-hidden="true" />
             Book Online
           </a>
@@ -70,22 +83,25 @@ function PageHeader({
 
 export function ServicePage({ service }: { service: Service }) {
   const Icon = service.icon;
+  const accent = categoryAccent[service.category] ?? "text-sunset-500";
 
   return (
     <>
       <JsonLd />
-      <section className="bg-background">
-        <div className="wrap grid gap-12 py-16 sm:py-20 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+      <section className="relative overflow-hidden bg-background">
+        <WaveLines className="pointer-events-none absolute -left-24 bottom-0 h-36 w-[30rem] text-ocean-200/40" />
+        <div className="wrap relative grid gap-12 py-16 sm:py-20 lg:grid-cols-[1fr_0.9fr] lg:items-center">
           <div>
             <Eyebrow>{service.eyebrow}</Eyebrow>
-            <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
+            <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
               {service.title} in Roseville
             </h1>
-            <p className="mt-5 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
+            <WaveUnderline className={`mt-6 h-3 w-32 ${accent}`} />
+            <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
               {service.description}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={site.bookingHref} className="btn btn-clay">
+              <a href={site.bookingHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
                 Book Online
               </a>
@@ -96,18 +112,20 @@ export function ServicePage({ service }: { service: Service }) {
             </div>
           </div>
 
-          <div className="rounded-[1.75rem] border border-line bg-cream p-7 shadow-soft">
-            <span className="grid size-14 place-items-center rounded-full bg-sage-600 text-cream">
+          <div className="relative overflow-hidden rounded-[2rem] bg-deep p-7 text-cream shadow-soft-lg sm:p-8">
+            <div className="grain" aria-hidden="true" />
+            <WaveLines className="pointer-events-none absolute -right-12 -top-8 h-28 w-64 text-ocean-300/15" />
+            <span className="relative grid size-14 place-items-center rounded-full bg-sunset-600 text-cream">
               <Icon className="size-7" aria-hidden="true" />
             </span>
-            <h2 className="mt-6 font-serif text-2xl font-medium text-ink">
+            <h2 className="relative mt-6 font-serif text-2xl font-medium text-cream">
               What this visit can support
             </h2>
-            <ul className="mt-5 grid gap-3">
+            <ul className="relative mt-5 grid gap-3">
               {service.highlights.map((highlight) => (
-                <li key={highlight} className="flex gap-3 text-ink">
+                <li key={highlight} className="flex gap-3 text-cream/90">
                   <BadgeCheck
-                    className="mt-0.5 size-5 shrink-0 text-sage-600"
+                    className="mt-0.5 size-5 shrink-0 text-ocean-300"
                     aria-hidden="true"
                   />
                   <span className="leading-7">{highlight}</span>
@@ -154,14 +172,19 @@ export function ServicesHubPage() {
       </section>
 
       <section className="bg-background py-16 sm:py-20">
-        <div className="wrap grid gap-14">
+        <div className="wrap grid gap-16">
           {groups.map((group) => (
             <div key={group.key}>
-              <div className="border-b border-line pb-4">
-                <h2 className="font-serif text-2xl font-medium tracking-tight text-ink">
-                  {group.label}
-                </h2>
-                <p className="mt-1 text-sm text-ink-muted">{group.description}</p>
+              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4">
+                <div>
+                  <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
+                    {group.label}
+                  </h2>
+                  <p className="mt-1 text-sm text-ink-muted">{group.description}</p>
+                </div>
+                <WaveUnderline
+                  className={`h-2.5 w-24 ${categoryAccent[group.key] ?? "text-sunset-500"}`}
+                />
               </div>
               <div className="mt-6">
                 <ServicesGrid items={group.items} />
@@ -183,16 +206,17 @@ export function DoctorPage() {
         <div className="wrap grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div>
             <Eyebrow>{doctor.name}</Eyebrow>
-            <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
+            <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
               A Roseville dentist focused on trust, comfort, and clear choices.
             </h1>
+            <WaveUnderline className="mt-6 h-3 w-32 text-sunset-500" />
             <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
               {doctor.bio.map((paragraph) => (
                 <p key={paragraph.slice(0, 24)}>{paragraph}</p>
               ))}
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={site.bookingHref} className="btn btn-clay">
+              <a href={site.bookingHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
                 Book Online
               </a>
@@ -204,7 +228,7 @@ export function DoctorPage() {
             <div className="mt-8 flex flex-wrap gap-2">
               {doctor.credentials.map((credential) => (
                 <span key={credential} className="chip">
-                  <BadgeCheck className="size-3.5 text-sage-600" aria-hidden="true" />
+                  <BadgeCheck className="size-3.5 text-ocean-600" aria-hidden="true" />
                   {credential}
                 </span>
               ))}
@@ -217,7 +241,7 @@ export function DoctorPage() {
             </div>
             <div className="absolute -bottom-5 -left-4 rounded-2xl border border-line bg-cream px-5 py-4 shadow-soft-lg">
               <p className="font-serif text-lg text-ink">{doctor.name}</p>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage-600">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ocean-600">
                 {doctor.role}
               </p>
             </div>
@@ -259,13 +283,19 @@ export function OfficePage() {
             title="A conveniently located dental office with high standards of care."
             body="The Roseville practice is devoted to restoring and enhancing natural smiles with family dentistry, cosmetic dentistry, implant dentistry, and comfort-focused care."
           />
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {pillars.map(([title, body], index) => (
-              <article key={title} className="card p-7">
-                <span className="font-serif text-2xl text-sage-400">
+              <article
+                key={title}
+                className="rounded-2xl border border-line-strong/70 bg-cream/60 p-7 transition hover:border-ocean-300 hover:bg-cream"
+              >
+                <span
+                  aria-hidden="true"
+                  className="font-serif text-5xl leading-none text-ocean-200"
+                >
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                <h2 className="mt-3 font-serif text-2xl font-medium text-ink">
+                <h2 className="mt-4 font-serif text-2xl font-medium text-ink">
                   {title}
                 </h2>
                 <p className="mt-3 leading-7 text-ink-muted">{body}</p>
@@ -311,10 +341,21 @@ export function NewPatientsPage() {
               body="The team looks forward to meeting you and helping you prepare — with insurance, payment, financing, and patient form guidance."
             />
             <div className="grid gap-4">
-              {details.map(([title, body]) => (
-                <article key={title} className="card p-6">
-                  <h2 className="font-serif text-xl font-medium text-ink">{title}</h2>
-                  <p className="mt-3 leading-7 text-ink-muted">{body}</p>
+              {details.map(([title, body], index) => (
+                <article
+                  key={title}
+                  className="flex gap-5 rounded-2xl border border-line bg-cream p-6 transition hover:border-ocean-300"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="font-serif text-2xl leading-none text-ocean-300"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h2 className="font-serif text-xl font-medium text-ink">{title}</h2>
+                    <p className="mt-2 leading-7 text-ink-muted">{body}</p>
+                  </div>
                 </article>
               ))}
             </div>
@@ -367,12 +408,17 @@ export function SedationArticlePage() {
 
 export function NotFoundMarketing() {
   return (
-    <section className="bg-background py-28">
-      <div className="wrap max-w-2xl text-center">
+    <section className="relative overflow-hidden bg-background py-28">
+      <WaveLines
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 w-full text-ocean-200/40"
+        rows={3}
+      />
+      <div className="wrap relative max-w-2xl text-center">
         <Eyebrow className="justify-center">404 · Page not found</Eyebrow>
         <h1 className="mt-4 text-balance font-serif text-5xl font-medium tracking-tight text-ink">
           Let’s get you back to your smile.
         </h1>
+        <WaveUnderline className="mx-auto mt-6 h-3 w-32 text-sunset-500" />
         <p className="mt-5 text-lg leading-8 text-ink-muted">
           The page you’re looking for isn’t available on this preview site.
         </p>

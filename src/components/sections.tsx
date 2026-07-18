@@ -19,7 +19,6 @@ import {
   paymentOptions,
   reviewStats,
   scheduleHref,
-  services,
   site,
   testimonials,
   trustPoints,
@@ -27,6 +26,7 @@ import {
 } from "@/lib/site";
 import { DoctorPortrait } from "./brand";
 import { ContactForm } from "./contact-form";
+import { WaveDivider, WaveLines, WaveUnderline } from "./waves";
 
 export function Eyebrow({
   children,
@@ -58,7 +58,8 @@ export function SectionHeader({
   const Heading = headingLevel;
   const titleColor = tone === "dark" ? "text-cream" : "text-ink";
   const bodyColor = tone === "dark" ? "text-cream/75" : "text-ink-muted";
-  const eyebrowTone = tone === "dark" ? "text-gold-soft" : "text-sage-600";
+  const eyebrowTone = tone === "dark" ? "text-gold-soft" : "text-ocean-600";
+  const underlineTone = tone === "dark" ? "text-sunset-300" : "text-sunset-500";
 
   return (
     <div
@@ -66,12 +67,15 @@ export function SectionHeader({
     >
       <Eyebrow className={eyebrowTone}>{eyebrow}</Eyebrow>
       <Heading
-        className={`mt-4 text-balance font-serif text-3xl font-medium tracking-tight sm:text-[2.6rem] sm:leading-[1.1] ${titleColor}`}
+        className={`mt-4 text-balance font-serif text-[2.1rem] font-medium leading-[1.12] tracking-tight sm:text-[2.9rem] sm:leading-[1.08] ${titleColor}`}
       >
         {title}
       </Heading>
+      <WaveUnderline
+        className={`mt-5 h-3 w-28 ${underlineTone} ${align === "center" ? "mx-auto" : ""}`}
+      />
       {body ? (
-        <p className={`mt-4 text-pretty text-lg leading-8 ${bodyColor}`}>{body}</p>
+        <p className={`mt-5 text-pretty text-lg leading-8 ${bodyColor}`}>{body}</p>
       ) : null}
     </div>
   );
@@ -130,62 +134,151 @@ export function AggregateRating({
   );
 }
 
+/** Slow-drifting trust strip — duplicated for a seamless loop (copy is aria-hidden). */
 export function TrustBar() {
   return (
-    <section className="border-y border-line bg-cream">
-      <div className="wrap-wide grid grid-cols-2 gap-x-6 gap-y-4 py-5 lg:grid-cols-4">
-        {trustPoints.map((point, index) => (
-          <div
-            key={point}
-            className={`flex items-center gap-3 ${
-              index > 0 ? "lg:border-l lg:border-line lg:pl-6" : ""
-            }`}
+    <section
+      aria-label="Practice highlights"
+      className="overflow-hidden border-y border-line bg-cream py-4"
+    >
+      <div className="wave-drift-slow flex w-max hover:[animation-play-state:paused]">
+        {[0, 1].map((copy) => (
+          <ul
+            key={copy}
+            aria-hidden={copy === 1}
+            className="flex shrink-0 items-center gap-10 pr-10"
           >
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-sage-50 text-sage-600">
-              <BadgeCheck className="size-4" aria-hidden="true" />
-            </span>
-            <span className="text-sm font-medium leading-5 text-ink">{point}</span>
-          </div>
+            {trustPoints.map((point) => (
+              <li key={point} className="flex items-center gap-3 whitespace-nowrap">
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ocean-50 text-ocean-600">
+                  <BadgeCheck className="size-4" aria-hidden="true" />
+                </span>
+                <span className="text-sm font-medium text-ink">{point}</span>
+              </li>
+            ))}
+          </ul>
         ))}
       </div>
     </section>
   );
 }
 
+/** Three card treatments, assigned by service category, so grids never blur together. */
+const cardVariantByCategory: Record<string, "cream" | "line" | "deep"> = {
+  preventive: "cream",
+  cosmetic: "deep",
+  restorative: "line",
+  orthodontics: "cream",
+  sedation: "deep",
+  emergency: "line",
+};
+
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: Service;
+  index: number;
+}) {
+  const Icon = service.icon;
+  const variant = cardVariantByCategory[service.category] ?? "cream";
+  const number = String(index + 1).padStart(2, "0");
+
+  if (variant === "deep") {
+    return (
+      <Link
+        href={`/${service.slug}/`}
+        className="group relative flex flex-col overflow-hidden rounded-2xl bg-deep p-7 text-cream transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg"
+      >
+        <WaveLines className="pointer-events-none absolute -right-10 -top-6 h-24 w-56 text-ocean-300/15" />
+        <div className="flex items-center justify-between">
+          <span className="grid size-12 place-items-center rounded-full bg-cream/10 text-cream transition group-hover:bg-sunset-600">
+            <Icon className="size-5" aria-hidden="true" />
+          </span>
+          <span className="font-serif text-sm text-cream/40">{number}</span>
+        </div>
+        <p className="eyebrow mt-6 text-gold-soft">{service.eyebrow}</p>
+        <h3 className="mt-2 font-serif text-2xl font-medium tracking-tight text-cream">
+          {service.title}
+        </h3>
+        <p className="mt-3 text-sm leading-7 text-cream/70">{service.summary}</p>
+        <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-semibold text-sunset-300">
+          Learn more
+          <ArrowRight
+            className="size-4 transition group-hover:translate-x-1"
+            aria-hidden="true"
+          />
+        </span>
+      </Link>
+    );
+  }
+
+  if (variant === "line") {
+    return (
+      <Link
+        href={`/${service.slug}/`}
+        className="group flex flex-col rounded-2xl border border-line-strong/70 bg-transparent p-7 transition-all duration-300 hover:-translate-y-1 hover:border-ocean-400 hover:bg-cream/70"
+      >
+        <div className="flex items-start justify-between">
+          <span
+            aria-hidden="true"
+            className="font-serif text-5xl leading-none text-line-strong"
+          >
+            {number}
+          </span>
+          <span className="grid size-11 place-items-center rounded-full border border-line text-ocean-600 transition group-hover:border-ocean-500 group-hover:bg-ocean-50">
+            <Icon className="size-5" aria-hidden="true" />
+          </span>
+        </div>
+        <p className="eyebrow mt-5 text-sunset-600">{service.eyebrow}</p>
+        <h3 className="mt-2 font-serif text-2xl font-medium tracking-tight text-ink">
+          {service.title}
+        </h3>
+        <p className="mt-3 text-sm leading-7 text-ink-muted">{service.summary}</p>
+        <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-semibold text-ocean-700">
+          Learn more
+          <ArrowRight
+            className="size-4 transition group-hover:translate-x-1"
+            aria-hidden="true"
+          />
+        </span>
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      href={`/${service.slug}/`}
+      className="group card flex flex-col p-7 transition-all duration-300 hover:-translate-y-1 hover:border-ocean-300 hover:shadow-soft-lg"
+    >
+      <div className="flex items-center justify-between">
+        <span className="grid size-12 place-items-center rounded-full bg-ocean-50 text-ocean-600 transition group-hover:bg-ocean-600 group-hover:text-cream">
+          <Icon className="size-5" aria-hidden="true" />
+        </span>
+        <span className="font-serif text-sm text-ink-soft">{number}</span>
+      </div>
+      <p className="eyebrow mt-6 text-sunset-600">{service.eyebrow}</p>
+      <h3 className="mt-2 font-serif text-2xl font-medium tracking-tight text-ink">
+        {service.title}
+      </h3>
+      <p className="mt-3 text-sm leading-7 text-ink-muted">{service.summary}</p>
+      <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-semibold text-ocean-700">
+        Learn more
+        <ArrowRight
+          className="size-4 transition group-hover:translate-x-1"
+          aria-hidden="true"
+        />
+      </span>
+    </Link>
+  );
+}
+
 export function ServicesGrid({ items = featuredServices }: { items?: Service[] }) {
   return (
     <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((service, index) => {
-        const Icon = service.icon;
-        return (
-          <Link
-            key={service.slug}
-            href={`/${service.slug}/`}
-            className="group card flex flex-col p-7 transition-all duration-300 hover:-translate-y-1 hover:border-sage-300 hover:shadow-soft-lg"
-          >
-            <div className="flex items-center justify-between">
-              <span className="grid size-12 place-items-center rounded-full bg-sage-50 text-sage-600 transition group-hover:bg-sage-600 group-hover:text-cream">
-                <Icon className="size-5" aria-hidden="true" />
-              </span>
-              <span className="font-serif text-sm text-ink-soft">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-            </div>
-            <p className="eyebrow mt-6 text-clay-600">{service.eyebrow}</p>
-            <h3 className="mt-2 font-serif text-2xl font-medium tracking-tight text-ink">
-              {service.title}
-            </h3>
-            <p className="mt-3 text-sm leading-7 text-ink-muted">{service.summary}</p>
-            <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-sage-700">
-              Learn more
-              <ArrowRight
-                className="size-4 transition group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </span>
-          </Link>
-        );
-      })}
+      {items.map((service, index) => (
+        <ServiceCard key={service.slug} service={service} index={index} />
+      ))}
     </div>
   );
 }
@@ -195,7 +288,7 @@ export function PaymentStrip({ className = "" }: { className?: string }) {
   return (
     <div className={`flex flex-wrap items-center gap-x-6 gap-y-3 ${className}`}>
       <span className="inline-flex items-center gap-2 text-sm font-semibold text-ink">
-        <ShieldCheck className="size-4 text-sage-600" aria-hidden="true" />
+        <ShieldCheck className="size-4 text-ocean-600" aria-hidden="true" />
         {paymentOptions.insuranceNote}
       </span>
       <div className="flex flex-wrap gap-2">
@@ -213,33 +306,35 @@ export function NewPatientOffer() {
   return (
     <section className="bg-surface-alt">
       <div className="wrap py-14 sm:py-16">
-        <div className="grid items-center gap-8 rounded-[1.75rem] border border-line bg-cream p-8 shadow-soft sm:p-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <Eyebrow className="text-clay-600">{newPatientOffer.eyebrow}</Eyebrow>
-            <h2 className="mt-4 text-balance font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl sm:leading-[1.1]">
+        <div className="relative grid items-center gap-8 overflow-hidden rounded-[2rem] bg-deep p-8 text-cream shadow-soft-lg sm:p-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="grain" aria-hidden="true" />
+          <WaveLines className="pointer-events-none absolute -right-16 -top-10 h-40 w-[26rem] text-ocean-300/15" />
+          <div className="relative">
+            <Eyebrow className="text-gold-soft">{newPatientOffer.eyebrow}</Eyebrow>
+            <h2 className="mt-4 text-balance font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl sm:leading-[1.1]">
               {newPatientOffer.title}
             </h2>
-            <p className="mt-4 max-w-xl text-pretty leading-8 text-ink-muted">
+            <p className="mt-4 max-w-xl text-pretty leading-8 text-cream/75">
               {newPatientOffer.body}
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link href={scheduleHref} className="btn btn-clay">
+              <Link href={scheduleHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
                 Request an appointment
               </Link>
-              <a href={site.phoneHref} className="btn btn-outline">
+              <a href={site.phoneHref} className="btn btn-ghost-light">
                 <Phone className="size-4" aria-hidden="true" />
                 Call or Text {site.phone}
               </a>
             </div>
           </div>
-          <ul className="grid gap-3">
+          <ul className="relative grid gap-3">
             {newPatientOffer.points.map((point) => (
               <li
                 key={point}
-                className="flex items-center gap-3 rounded-xl border border-line bg-background/40 px-4 py-3.5 text-sm font-medium text-ink"
+                className="flex items-center gap-3 rounded-xl border border-cream/10 bg-cream/[0.05] px-4 py-3.5 text-sm font-medium text-cream"
               >
-                <BadgeCheck className="size-5 shrink-0 text-sage-600" aria-hidden="true" />
+                <BadgeCheck className="size-5 shrink-0 text-ocean-300" aria-hidden="true" />
                 {point}
               </li>
             ))}
@@ -273,7 +368,11 @@ export function CareApproach() {
     <section className="reveal bg-background py-24 sm:py-28">
       <div className="wrap grid gap-14 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
         <div className="relative">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line shadow-soft">
+          <div
+            aria-hidden="true"
+            className="absolute -left-4 -top-4 h-full w-full rounded-b-[2rem] rounded-t-[10rem] border border-ocean-200"
+          />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-b-[2rem] rounded-t-[10rem] border border-line shadow-soft">
             <Image
               src={careImage}
               alt="Dentist gently examining a patient in a bright, calm clinical room"
@@ -281,7 +380,7 @@ export function CareApproach() {
               sizes="(max-width: 1024px) 100vw, 45vw"
               className="img-warm object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-tr from-night/30 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-tr from-deep/30 via-transparent to-transparent" />
           </div>
         </div>
 
@@ -291,21 +390,24 @@ export function CareApproach() {
             title="Clinical skill, delivered with a calmer rhythm."
             body="Advanced dentistry, clear communication, and genuinely gentle care — brought forward without ever feeling cold or corporate."
           />
-          <div className="mt-9 grid gap-3">
+          <div className="mt-9">
             {points.map((point, index) => {
               const Icon = point.icon;
               return (
                 <div
                   key={point.title}
-                  className="flex gap-5 rounded-2xl border border-line bg-cream p-5 transition hover:border-sage-200"
+                  className="flex gap-6 border-t border-line py-6 transition first:border-t-0 first:pt-0 hover:bg-cream/50"
                 >
-                  <span className="font-serif text-2xl leading-none text-sage-400">
+                  <span
+                    aria-hidden="true"
+                    className="font-serif text-3xl leading-none text-ocean-300"
+                  >
                     0{index + 1}
                   </span>
                   <div>
                     <div className="flex items-center gap-2">
-                      <Icon className="size-4 text-sage-600" aria-hidden="true" />
-                      <h3 className="font-serif text-lg font-medium text-ink">
+                      <Icon className="size-4 text-ocean-600" aria-hidden="true" />
+                      <h3 className="font-serif text-xl font-medium text-ink">
                         {point.title}
                       </h3>
                     </div>
@@ -332,6 +434,7 @@ export function DoctorSpotlight() {
           <h2 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-[2.75rem] sm:leading-[1.08]">
             Dr. Michael Narodovich brings calm, considered care to Roseville.
           </h2>
+          <WaveUnderline className="mt-5 h-3 w-28 text-sunset-500" />
           <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
             {doctor.bio.map((paragraph) => (
               <p key={paragraph.slice(0, 24)}>{paragraph}</p>
@@ -346,7 +449,7 @@ export function DoctorSpotlight() {
           <div className="mt-8 flex flex-wrap gap-2">
             {doctor.credentials.map((credential) => (
               <span key={credential} className="chip">
-                <BadgeCheck className="size-3.5 text-sage-600" aria-hidden="true" />
+                <BadgeCheck className="size-3.5 text-ocean-600" aria-hidden="true" />
                 {credential}
               </span>
             ))}
@@ -359,7 +462,7 @@ export function DoctorSpotlight() {
           </div>
           <div className="absolute -bottom-5 -left-4 rounded-2xl border border-line bg-cream px-5 py-4 shadow-soft-lg">
             <p className="font-serif text-lg text-ink">{doctor.name}</p>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sage-600">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ocean-600">
               {doctor.role}
             </p>
           </div>
@@ -373,11 +476,15 @@ export function Reviews() {
   const [featured, ...rest] = testimonials;
 
   return (
-    <section className="reveal relative overflow-hidden bg-night text-cream">
+    <section className="reveal relative overflow-hidden bg-deep text-cream">
       <div className="grain" aria-hidden="true" />
+      <WaveLines
+        className="pointer-events-none absolute -right-24 -top-10 h-44 w-[36rem] text-ocean-300/15"
+        rows={4}
+      />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-32 -top-24 size-[34rem] rounded-full bg-sage-700/30 blur-3xl"
+        className="pointer-events-none absolute -left-32 -bottom-24 size-[34rem] rounded-full bg-ocean-700/30 blur-3xl"
       />
       <div className="wrap relative py-24 sm:py-28">
         <SectionHeader
@@ -438,10 +545,10 @@ export function VisitPanel({
           <div className="mt-8 grid gap-3">
             <a
               href={site.mapsHref}
-              className="group flex gap-4 rounded-2xl border border-line bg-cream p-5 transition hover:border-sage-300"
+              className="group flex gap-4 rounded-2xl border border-line bg-cream p-5 transition hover:border-ocean-300"
             >
               <MapPin
-                className="mt-0.5 size-5 shrink-0 text-sage-600"
+                className="mt-0.5 size-5 shrink-0 text-ocean-600"
                 aria-hidden="true"
               />
               <span>
@@ -455,10 +562,10 @@ export function VisitPanel({
             </a>
             <a
               href={site.phoneHref}
-              className="group flex gap-4 rounded-2xl border border-line bg-cream p-5 transition hover:border-sage-300"
+              className="group flex gap-4 rounded-2xl border border-line bg-cream p-5 transition hover:border-ocean-300"
             >
               <Phone
-                className="mt-0.5 size-5 shrink-0 text-clay-600"
+                className="mt-0.5 size-5 shrink-0 text-sunset-600"
                 aria-hidden="true"
               />
               <span>
@@ -512,28 +619,32 @@ export function VisitPanel({
 
 export function FinalCta() {
   return (
-    <section className="relative overflow-hidden bg-sage-700 text-cream">
+    <section className="relative overflow-hidden bg-gradient-to-br from-sunset-600 via-sunset-600 to-sunset-700 text-cream">
       <div className="grain" aria-hidden="true" />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-24 -bottom-24 size-[30rem] rounded-full bg-sage-800/50 blur-3xl"
+      <WaveDivider
+        flip
+        className="pointer-events-none absolute inset-x-0 top-0 h-12 w-full text-sunset-700/30 sm:h-16"
       />
-      <div className="wrap-wide relative grid gap-8 py-16 lg:grid-cols-[1fr_auto] lg:items-center">
+      <WaveLines
+        className="pointer-events-none absolute -left-20 bottom-0 h-32 w-[30rem] text-cream/15"
+        rows={3}
+      />
+      <div className="wrap-wide relative grid gap-8 py-20 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
-          <Eyebrow className="text-gold-soft">
+          <Eyebrow className="text-cream/85">
             Experience dental care as it should be
           </Eyebrow>
           <h2 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight sm:text-[2.75rem] sm:leading-[1.08]">
             Ready for a calmer, clearer dental visit?
           </h2>
-          <p className="mt-4 max-w-2xl leading-8 text-cream/85">
+          <p className="mt-4 max-w-2xl leading-8 text-cream/90">
             Schedule online or call the Roseville team. Waikiki Dental is
             accepting new patients.
           </p>
         </div>
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-3 sm:flex-row">
-            <a href={site.bookingHref} className="btn btn-light">
+            <a href={site.bookingHref} className="btn btn-dark">
               <CalendarCheck className="size-4" aria-hidden="true" />
               Book Online
             </a>
@@ -554,5 +665,3 @@ export function FinalCta() {
     </section>
   );
 }
-
-export { services };

@@ -239,7 +239,7 @@ export function AppointmentScheduler() {
         role="status"
         aria-live="polite"
       >
-        <span className="mx-auto grid size-16 place-items-center rounded-full bg-sage-50 text-sage-600">
+        <span className="mx-auto grid size-16 place-items-center rounded-full bg-ocean-50 text-ocean-600">
           <CheckCircle2 className="size-9" aria-hidden="true" />
         </span>
         <h2 className="mt-6 font-serif text-3xl font-medium tracking-tight text-ink">
@@ -276,7 +276,7 @@ export function AppointmentScheduler() {
         <button
           type="button"
           onClick={reset}
-          className="mt-6 text-sm font-semibold text-sage-700 underline-offset-2 hover:underline"
+          className="mt-6 text-sm font-semibold text-ocean-700 underline-offset-2 hover:underline"
         >
           Start a new request
         </button>
@@ -305,7 +305,7 @@ export function AppointmentScheduler() {
           </div>
           <div className="mt-2 mb-5 h-1.5 w-full overflow-hidden rounded-full bg-line">
             <div
-              className="h-full rounded-full bg-sage-600 transition-all duration-300"
+              className="h-full rounded-full bg-ocean-600 transition-all duration-300"
               style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
             />
           </div>
@@ -330,9 +330,9 @@ export function AppointmentScheduler() {
                   <span
                     className={`grid size-8 shrink-0 place-items-center rounded-full border text-sm font-semibold transition ${
                       done
-                        ? "border-sage-600 bg-sage-600 text-cream"
+                        ? "border-ocean-600 bg-ocean-600 text-cream"
                         : isCurrent
-                          ? "border-sage-600 text-sage-700"
+                          ? "border-ocean-600 text-ocean-700"
                           : "border-line text-ink-soft"
                     }`}
                   >
@@ -349,7 +349,7 @@ export function AppointmentScheduler() {
                 {index < STEPS.length - 1 ? (
                   <span
                     aria-hidden="true"
-                    className={`h-px flex-1 ${done ? "bg-sage-600" : "bg-line"}`}
+                    className={`h-px flex-1 ${done ? "bg-ocean-600" : "bg-line"}`}
                   />
                 ) : null}
               </li>
@@ -385,10 +385,10 @@ export function AppointmentScheduler() {
                     return (
                       <label
                         key={reason.key}
-                        className={`relative flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-sage-100 ${
+                        className={`relative flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
                           selected
-                            ? "border-sage-500 bg-sage-50"
-                            : "border-line bg-cream hover:border-sage-300"
+                            ? "border-ocean-500 bg-ocean-50"
+                            : "border-line bg-cream hover:border-ocean-300"
                         }`}
                       >
                         <input
@@ -402,8 +402,8 @@ export function AppointmentScheduler() {
                         <span
                           className={`grid size-11 shrink-0 place-items-center rounded-full transition ${
                             selected
-                              ? "bg-sage-600 text-cream"
-                              : "bg-sage-50 text-sage-600"
+                              ? "bg-ocean-600 text-cream"
+                              : "bg-ocean-50 text-ocean-600"
                           }`}
                         >
                           <Icon className="size-5" aria-hidden="true" />
@@ -418,7 +418,7 @@ export function AppointmentScheduler() {
                         </span>
                         {selected ? (
                           <Check
-                            className="absolute right-4 top-4 size-5 text-sage-600"
+                            className="absolute right-4 top-4 size-5 text-ocean-600"
                             aria-hidden="true"
                           />
                         ) : null}
@@ -444,9 +444,9 @@ export function AppointmentScheduler() {
                       return (
                         <label
                           key={option.key}
-                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-sage-300 ${
+                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ocean-300 ${
                             selected
-                              ? "bg-sage-600 text-cream shadow-soft"
+                              ? "bg-ocean-600 text-cream shadow-soft"
                               : "text-ink-muted hover:text-ink"
                           }`}
                         >
@@ -485,7 +485,7 @@ export function AppointmentScheduler() {
                         onChange={(event) =>
                           update("flexible", event.target.checked)
                         }
-                        className="size-4 accent-sage-600"
+                        className="size-4 accent-ocean-600"
                       />
                       Soonest available
                     </label>
@@ -511,9 +511,9 @@ export function AppointmentScheduler() {
                       return (
                         <label
                           key={slot.key}
-                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-3 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-sage-300 ${
+                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-3 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ocean-300 ${
                             selected
-                              ? "bg-sage-600 text-cream shadow-soft"
+                              ? "bg-ocean-600 text-cream shadow-soft"
                               : "text-ink-muted hover:text-ink"
                           }`}
                         >
@@ -537,7 +537,7 @@ export function AppointmentScheduler() {
 
             {step === 2 ? (
                 <div className="grid gap-4">
-                <div className="rounded-2xl border border-gold/30 bg-gold-pale p-4 text-sm leading-6 text-ink-muted">
+                <div className="rounded-2xl border border-gold/40 bg-gold/10 p-4 text-sm leading-6 text-ink-muted">
                   This form requests a preferred time; it does not confirm an appointment. Please do not include symptoms, medical history, insurance IDs, or payment details.
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -658,7 +658,7 @@ export function AppointmentScheduler() {
           </div>
 
           {error ? (
-            <p id={errorId} role="alert" className="mt-5 text-sm font-medium text-clay-600">
+            <p id={errorId} role="alert" className="mt-5 text-sm font-medium text-sunset-600">
               {error}
             </p>
           ) : null}
@@ -680,7 +680,7 @@ export function AppointmentScheduler() {
           type="submit"
           disabled={status === "submitting"}
           aria-describedby={error ? errorId : undefined}
-          className="btn btn-clay"
+          className="btn btn-sunset"
         >
           {status === "submitting" ? (
             <>
@@ -727,7 +727,7 @@ function ReviewRow({
         type="button"
         disabled={disabled}
         onClick={onEdit}
-        className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-sage-700 transition hover:text-sage-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-ocean-700 transition hover:text-ocean-800 disabled:cursor-not-allowed disabled:opacity-60"
       >
         <Pencil className="size-3.5" aria-hidden="true" />
         Edit
