@@ -1,11 +1,54 @@
 import Image from "next/image";
-import { doctor, doctorPortrait } from "@/lib/site";
-import { WaveLines, WaveUnderline } from "./waves";
+import { brandAssets, doctor, doctorPortrait } from "@/lib/site";
 
 /**
- * Waikiki Dental logomark — a wave cresting over a smile.
- * "Waikiki" (the wave) + "Dental" (the smile), drawn in a single accent color.
- * Uses currentColor so it adapts to ocean / cream / ink contexts.
+ * The practice's real logo — hibiscus + "Waikiki DENTAL" wordmark,
+ * the same artwork used on the current public waikikidental.com site.
+ * Transparent PNG, so it sits directly on light surfaces.
+ */
+export function BrandLogo({
+  className = "",
+  priority = false,
+}: {
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <Image
+      src={brandAssets.logo}
+      alt="Waikiki Dental"
+      width={brandAssets.logoWidth}
+      height={brandAssets.logoHeight}
+      priority={priority}
+      className={className}
+    />
+  );
+}
+
+/** The hibiscus flower from the logo — the practice's brand mark. */
+export function Hibiscus({
+  className = "",
+  size = 44,
+}: {
+  className?: string;
+  size?: number;
+}) {
+  return (
+    <Image
+      src={brandAssets.icon}
+      alt=""
+      aria-hidden="true"
+      width={size}
+      height={Math.round(size * (73 / 75))}
+      className={className}
+    />
+  );
+}
+
+/**
+ * Wave logomark — decorative "Waikiki wave over a smile" glyph used as
+ * a supporting motif (footer chips, dark surfaces) where the full-color
+ * logo would not read. Uses currentColor so it adapts to its context.
  */
 export function Logomark({ className = "" }: { className?: string }) {
   return (
@@ -33,35 +76,20 @@ export function Logomark({ className = "" }: { className?: string }) {
 }
 
 /**
- * Inner fill for the doctor portrait frame.
- * Renders the real headshot when `doctorPortrait` is set; otherwise a
- * branded monogram — so we never pass a stock face off as Dr. Narodovich.
+ * Dr. Narodovich's real headshot, from the current public practice site.
+ * `sizes` stays modest — the source photo is 275×412, so the frame that
+ * renders it should stay near that size for crisp results.
  */
 export function DoctorPortrait({ priority = false }: { priority?: boolean }) {
-  if (doctorPortrait) {
-    return (
-      <Image
-        src={doctorPortrait}
-        alt={`${doctor.name}, dentist at Waikiki Dental in Roseville`}
-        fill
-        sizes="(max-width: 1024px) 100vw, 42vw"
-        className="img-warm object-cover"
-        priority={priority}
-      />
-    );
-  }
-
+  if (!doctorPortrait) return null;
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-ocean-700 via-ocean-800 to-deep text-cream">
-      <WaveLines className="absolute inset-x-0 bottom-8 h-24 w-full text-cream/15" />
-      <Logomark className="size-9 text-gold-soft/80" />
-      <span className="mt-5 font-serif text-7xl font-medium leading-none tracking-tight">
-        {doctor.initials}
-      </span>
-      <WaveUnderline className="mt-4 h-3 w-24 text-sunset-300" />
-      <span className="mt-4 text-[11px] font-semibold uppercase tracking-[0.24em] text-cream/70">
-        Waikiki Dental · Roseville
-      </span>
-    </div>
+    <Image
+      src={doctorPortrait}
+      alt={`${doctor.name}, dentist at Waikiki Dental in Roseville`}
+      fill
+      sizes="(max-width: 640px) 84vw, 320px"
+      className="img-warm object-cover object-top"
+      priority={priority}
+    />
   );
 }

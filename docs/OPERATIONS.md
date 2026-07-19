@@ -9,7 +9,13 @@ the site.
 | Form | Current state | Delivery path |
 | --- | --- | --- |
 | Appointment request | Deployed; inbox delivery unverified | Browser JSON `POST` to `https://formspree.io/f/xojgjoqa` |
-| General contact | Frontend review only | No request is sent; visitors are directed to call or email |
+| General contact | Deployed; shares the appointment form's endpoint | Browser JSON `POST` to `https://formspree.io/f/xojgjoqa` (override with `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`) |
+
+Contact submissions are labeled with `_subject: "New contact message — Waikiki
+Dental website"` and `source: "Waikiki Dental contact form"` so the office can
+tell them apart from appointment requests in the shared inbox. To split them
+into separate Formspree forms later, create a new form and set
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` in the Vercel project.
 
 An appointment request is not a confirmed appointment. The success screen only
 says the request was sent and explains that the office will confirm the final
@@ -34,6 +40,17 @@ received it. A 429 response gets a wait-and-retry message; other service and
 network failures keep the entered data available for another attempt. A
 synchronous ref guard and the disabled sending state prevent duplicate
 requests.
+
+## Contact form contract
+
+The implementation is in `src/components/contact-form.tsx`. It sends
+`_subject`, `source`, `topic`, `name`, optional `email`/`phone`,
+`reply_preference`, a readable `message`, and the `_gotcha` honeypot. The email
+or phone field becomes required to match the visitor's chosen reply
+preference, and a privacy-check consent box gates submission. Error handling
+mirrors the appointment form: 429 gets a wait-and-retry message, other
+failures preserve entered data, and success renders only after an HTTP
+success response.
 
 ## Privacy boundary
 

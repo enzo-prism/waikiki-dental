@@ -536,16 +536,27 @@ export const pageRoutes = [
 
 /* ------------------------------------------------------------------ *
  * Imagery — self-hosted in /public/media for fast, reliable LCP.
- * These are tasteful placeholders; swap each file with a real photo
- * of the Roseville office/team (same filename) when available.
- * `doctorPortrait` is intentionally null until a real headshot of
- * Dr. Narodovich exists — the UI shows a branded monogram instead of
- * passing a stock face off as the doctor.
+ * `logo`, `logoIcon`, `doctorPortrait`, and `doctorCandid` are the
+ * practice's real brand assets and photos, sourced from the current
+ * public waikikidental.com site. `careImage` remains a tasteful
+ * placeholder until a real Roseville office photo is available.
  * ------------------------------------------------------------------ */
-export const heroImage = "/media/office-hero.jpg";
-export const careImage = "/media/care-room.jpg";
-export const consultImage = "/media/consult.jpg";
-export const doctorPortrait: string | null = null;
+export const brandAssets = {
+  /** Full "Waikiki DENTAL" wordmark with hibiscus — transparent PNG, 511×73. */
+  logo: "/media/logo.png",
+  logoWidth: 511,
+  logoHeight: 73,
+  /** The hibiscus flower alone — transparent PNG, 75×73. */
+  icon: "/media/hibiscus.png",
+};
+export const heroImage = "/media/dr-narodovich-patient.jpg";
+export const heroImageAlt =
+  "Dr. Michael Narodovich talking with a smiling patient in a treatment room at Waikiki Dental";
+export const careImage = "/media/office-hero.jpg";
+export const doctorPortrait: string | null = "/media/dr-narodovich.jpg";
+export const doctorCandid = "/media/dr-narodovich-patient.jpg";
+export const doctorCandidAlt =
+  "Dr. Michael Narodovich chatting with a patient at the Roseville office";
 
 export const dentistJsonLd = {
   "@context": "https://schema.org",

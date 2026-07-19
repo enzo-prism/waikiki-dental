@@ -10,12 +10,14 @@ import {
   Reviews,
   SectionHeader,
   ServicesGrid,
+  StarRow,
   TrustBar,
   VisitPanel,
 } from "@/components/sections";
 import { JsonLd } from "@/components/page-templates";
+import { Hibiscus } from "@/components/brand";
 import { DriftWaves, WaveLines, WaveUnderline } from "@/components/waves";
-import { heroImage, scheduleHref, site } from "@/lib/site";
+import { heroImage, heroImageAlt, scheduleHref, site } from "@/lib/site";
 
 const heroStats: Array<{ label: string; value: string }> = [
   { label: "Care for", value: "All ages" },
@@ -41,7 +43,7 @@ export default function Home() {
         <div className="wrap-wide relative grid items-center gap-12 pb-24 pt-14 sm:pt-20 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:pb-28 lg:pt-24">
           <div>
             <span className="eyebrow">
-              <span className="size-1.5 rounded-full bg-sunset-500" />
+              <Hibiscus size={16} className="shrink-0" />
               Roseville · Family &amp; Cosmetic Dentistry
             </span>
             <h1 className="mt-6 text-balance font-serif text-[2.9rem] font-medium leading-[1.02] tracking-tight text-ink sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
@@ -95,18 +97,18 @@ export default function Home() {
           <div className="relative">
             <div
               aria-hidden="true"
-              className="absolute -right-4 -top-4 h-full w-full rounded-b-[2rem] rounded-t-[10rem] border border-ocean-200"
+              className="absolute -right-4 -top-4 h-full w-full rounded-b-[2rem] rounded-t-[8rem] border border-ocean-200"
             />
-            <div className="relative aspect-[4/5] overflow-hidden rounded-b-[2rem] rounded-t-[10rem] border border-line shadow-soft-lg">
+            <div className="relative aspect-square overflow-hidden rounded-b-[2rem] rounded-t-[8rem] border border-line shadow-soft-lg">
               <Image
                 src={heroImage}
-                alt="Bright, modern dental treatment room at Waikiki Dental in Roseville"
+                alt={heroImageAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 46vw"
                 className="img-warm object-cover"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-deep/35 via-transparent to-ocean-700/10" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-deep/25 via-transparent to-transparent" />
             </div>
 
             <span className="absolute -right-2 -top-3 inline-flex items-center gap-2 rounded-full bg-deep px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-cream shadow-soft">
@@ -115,7 +117,7 @@ export default function Home() {
             </span>
 
             <figure className="absolute -bottom-6 -left-4 hidden w-64 rounded-2xl border border-line bg-cream/95 p-5 shadow-soft-lg backdrop-blur sm:block">
-              <AggregateRating />
+              <StarRow />
               <figcaption className="mt-3 font-serif text-base leading-snug text-ink">
                 Trusted by Roseville families
               </figcaption>

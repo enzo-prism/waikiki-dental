@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import { MobileCtaBar, SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { site } from "@/lib/site";
@@ -15,6 +15,10 @@ const manrope = Manrope({
   subsets: ["latin"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  themeColor: "#0b2140",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.baseUrl),

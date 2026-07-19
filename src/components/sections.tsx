@@ -13,6 +13,9 @@ import {
 import {
   careImage,
   doctor,
+  doctorCandid,
+  doctorCandidAlt,
+  doctorPortrait,
   featuredServices,
   hours,
   newPatientOffer,
@@ -24,7 +27,6 @@ import {
   trustPoints,
   type Service,
 } from "@/lib/site";
-import { DoctorPortrait } from "./brand";
 import { ContactForm } from "./contact-form";
 import { WaveDivider, WaveLines, WaveUnderline } from "./waves";
 
@@ -375,7 +377,7 @@ export function CareApproach() {
           <div className="relative aspect-[4/5] overflow-hidden rounded-b-[2rem] rounded-t-[10rem] border border-line shadow-soft">
             <Image
               src={careImage}
-              alt="Dentist gently examining a patient in a bright, calm clinical room"
+              alt="Bright, calm, modern dental treatment room"
               fill
               sizes="(max-width: 1024px) 100vw, 45vw"
               className="img-warm object-cover"
@@ -457,14 +459,34 @@ export function DoctorSpotlight() {
         </div>
 
         <div className="order-1 lg:order-2 relative">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line shadow-soft">
-            <DoctorPortrait />
+          <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-line shadow-soft">
+            <Image
+              src={doctorCandid}
+              alt={doctorCandidAlt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 45vw"
+              className="img-warm object-cover"
+            />
           </div>
-          <div className="absolute -bottom-5 -left-4 rounded-2xl border border-line bg-cream px-5 py-4 shadow-soft-lg">
-            <p className="font-serif text-lg text-ink">{doctor.name}</p>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ocean-600">
-              {doctor.role}
-            </p>
+          <div className="absolute -bottom-5 -left-4 flex items-center gap-3.5 rounded-2xl border border-line bg-cream py-3.5 pl-3.5 pr-5 shadow-soft-lg">
+            {doctorPortrait ? (
+              <span className="relative size-12 shrink-0 overflow-hidden rounded-full border border-line">
+                <Image
+                  src={doctorPortrait}
+                  alt=""
+                  fill
+                  sizes="48px"
+                  loading="eager"
+                  className="object-cover object-[50%_22%]"
+                />
+              </span>
+            ) : null}
+            <span>
+              <p className="font-serif text-lg text-ink">{doctor.name}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ocean-600">
+                {doctor.role}
+              </p>
+            </span>
           </div>
         </div>
       </div>

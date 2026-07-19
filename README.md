@@ -46,19 +46,26 @@ details, hours, the service catalog (grouped by category), the doctor bio &
 credentials, testimonials/review stats, the new-patient offer, payment options,
 the appointment-scheduler options, and image paths. Edit content there.
 
+### Brand assets & imagery
+
+The site uses the practice's real brand assets, sourced from the current
+public waikikidental.com site and self-hosted in `public/media/`:
+
+- `logo.png` — the real hibiscus + "Waikiki DENTAL" wordmark (header, footer)
+- `hibiscus.png` — the flower alone (favicon/app icons, accents)
+- `dr-narodovich.jpg` — Dr. Narodovich's real headshot (doctor page, avatar)
+- `dr-narodovich-patient.jpg` — real in-office photo of Dr. Narodovich with a
+  patient (home hero, doctor spotlight)
+- `office-hero.jpg` — a tasteful treatment-room placeholder; swap with a real
+  Roseville office photo when available (same filename)
+
 ### Before the public custom-domain launch
 
-1. **Real photos.** Imagery is self-hosted in `public/media/` as tasteful
-   placeholders. Swap each file (same name) with real Roseville office/team
-   photos. For the dentist, add a headshot and set `doctorPortrait` in
-   `site.ts` — until then the UI shows a branded monogram instead of a stock
-   face.
-2. **Verified reviews.** Set `reviewStats.count` (and confirm `reviewStats.href`)
+1. **Verified reviews.** Set `reviewStats.count` (and confirm `reviewStats.href`)
    in `site.ts` to your real Google review count. It's intentionally `null` so
    no fabricated number ships.
-3. **Contact form delivery.** Connect the finished contact form to Formspree and
-   test delivery before launch. It intentionally does not claim to send while
-   no endpoint is configured. The appointment form is already connected.
+2. **Form inbox verification.** Both forms are connected to Formspree; run the
+   clinic-approved inbox delivery checklist in `docs/OPERATIONS.md`.
 
 ## Formspree integration
 
@@ -73,15 +80,11 @@ The scheduler validates required fields, prevents duplicate submissions, uses
 Formspree's `_gotcha` honeypot, disables navigation while sending, and preserves
 entered data when a network or service error allows a retry.
 
-The contact form is still frontend-only and needs a separate Formspree form and
-submission implementation before the public custom-domain launch.
-`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` is reserved for that future work and is
-not currently read by the app. Never commit Formspree account tokens or private
-credentials.
-
-Until the contact form is connected, it provides an honest review state and
-directs visitors to call or email; it never reports that a submission was
-delivered.
+The contact form (`src/components/contact-form.tsx`) submits to the same
+Formspree form by default, labeled via `_subject`/`source` so the office can
+tell contact messages from appointment requests. Set
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` to a dedicated Formspree form to
+separate them. Never commit Formspree account tokens or private credentials.
 
 Before the public custom-domain launch, use an approved synthetic request to
 verify Formspree inbox receipt, intended office notification, Reply-To behavior,
@@ -99,13 +102,15 @@ privacy boundaries, the delivery checklist, and the production release process.
   mobile-first multi-step request form (`src/components/appointment-scheduler.tsx`)
   that is deployed to post appointment requests to Formspree. Inbox delivery
   remains pending a clinic-approved end-to-end test.
-- **Contact form** — custom topic, reply preference, privacy confirmation, and
-  an honest pre-delivery review state.
+- **Contact form** — custom topic, reply preference, privacy confirmation,
+  honeypot, and live Formspree delivery with honest success/error states.
 - **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD, `sitemap.ts`,
   `robots.ts`, trailing-slash URLs.
-- **Design system** — warm "Editorial Spa-Luxe" palette (sage = brand,
-  clay = primary action, gold = ratings), Fraunces + Manrope, custom logomark,
-  reduced-motion-aware scroll reveals, and a sticky mobile Book/Call bar.
+- **Design system** — "Pacific Premium" palette anchored to the real brand
+  (royal Pacific blue `#0051ae` from the logo, hibiscus coral CTAs, porcelain
+  canvas, navy dark sections, gold ratings), Fraunces + Manrope, the practice's
+  real logo and photos, reduced-motion-aware scroll reveals, and a sticky
+  mobile Book/Call bar.
 
 ## Deployment
 

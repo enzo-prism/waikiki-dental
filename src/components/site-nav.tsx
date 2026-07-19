@@ -11,7 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { navItems, servicesByCategory, site } from "@/lib/site";
-import { Logomark } from "./brand";
+import { Hibiscus } from "./brand";
 import { WaveLines } from "./waves";
 
 /**
@@ -184,8 +184,8 @@ export function MobileMenu() {
       />
       <div className="wrap-wide flex items-center justify-between py-4">
         <span className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-full bg-ocean-600 text-cream">
-            <Logomark className="size-5" />
+          <span className="grid size-10 place-items-center rounded-full bg-cream">
+            <Hibiscus size={26} />
           </span>
           <span className="font-serif text-lg tracking-tight">
             Waikiki Dental

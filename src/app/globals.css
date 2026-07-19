@@ -1,56 +1,57 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ *
- * Waikiki Dental — “Coastal Editorial” design system
- * Warm sand canvas · deep ocean ink + teal · sunset coral accents
- * The logomark's wave is the signature graphic language.
+ * Waikiki Dental — "Pacific Premium" design system
+ * Anchored to the practice's real brand: royal Pacific blue (#0051ae
+ * from the logo wordmark) · hibiscus coral (the logo flower) · warm
+ * porcelain canvas · deep navy for dark sections · quiet gold ratings.
  * Fraunces (display serif) · Manrope (sans)
  * ------------------------------------------------------------------ */
 
 @theme inline {
-  /* Surfaces — warm sand */
-  --color-background: #f5efe1;
-  --color-cream: #fcf9f0;
-  --color-surface-alt: #ece3cd;
+  /* Surfaces — warm porcelain canvas, near-white cards, lagoon-mist alt */
+  --color-background: #f7f5f1;
+  --color-cream: #fdfcfa;
+  --color-surface-alt: #edf2f9;
 
-  /* Ink — deep sea-ink */
-  --color-ink: #1e2a29;
-  --color-ink-muted: #55635f;
-  /* Clears WCAG AA (≥4.5:1) on both cream and sand for small text. */
-  --color-ink-soft: #5f6d67;
-  --color-line: #e0d7bf;
-  --color-line-strong: #cbbfa1;
+  /* Ink — deep navy-slate */
+  --color-ink: #14243d;
+  --color-ink-muted: #44556e;
+  /* Clears WCAG AA (≥4.5:1) on background, cream, and surface-alt. */
+  --color-ink-soft: #5a6a80;
+  --color-line: #e4e3dc;
+  --color-line-strong: #c9c8c0;
 
-  /* Deep ocean (dark sections) */
-  --color-deep: #0b2e31;
-  --color-deep-800: #123c40;
-  --color-deep-700: #1a4a4e;
+  /* Deep navy (dark sections) */
+  --color-deep: #0b2140;
+  --color-deep-800: #122c52;
+  --color-deep-700: #1a3763;
 
-  /* Ocean — primary teal */
-  --color-ocean-50: #edf5f3;
-  --color-ocean-100: #d6e9e5;
-  --color-ocean-200: #aed3cd;
-  --color-ocean-300: #7db5ae;
-  --color-ocean-400: #50948d;
-  --color-ocean-500: #377973;
-  --color-ocean-600: #27605c;
-  --color-ocean-700: #1f4d4a;
-  --color-ocean-800: #183d3b;
-  --color-ocean-900: #122e2d;
+  /* Ocean — the logo's royal Pacific blue */
+  --color-ocean-50: #eff4fb;
+  --color-ocean-100: #dce7f7;
+  --color-ocean-200: #b9cfee;
+  --color-ocean-300: #8badde;
+  --color-ocean-400: #5b86cb;
+  --color-ocean-500: #2e66b8;
+  --color-ocean-600: #0051ae;
+  --color-ocean-700: #06438c;
+  --color-ocean-800: #0a366d;
+  --color-ocean-900: #0d2b53;
 
-  /* Sunset — CTA coral (500 is decorative; 600+ is safe behind cream text) */
-  --color-sunset-50: #fdf2ea;
-  --color-sunset-100: #f9e1cf;
-  --color-sunset-200: #f1bf9a;
-  --color-sunset-300: #e8985f;
-  --color-sunset-400: #de7743;
-  --color-sunset-500: #cf6132;
-  --color-sunset-600: #b04c2c;
-  --color-sunset-700: #8a3a22;
+  /* Sunset — hibiscus coral CTA (500 is decorative; 600+ carries cream text) */
+  --color-sunset-50: #fcf1ee;
+  --color-sunset-100: #f8ded7;
+  --color-sunset-200: #efb9ab;
+  --color-sunset-300: #e39179;
+  --color-sunset-400: #d76f57;
+  --color-sunset-500: #c9563f;
+  --color-sunset-600: #b23e2d;
+  --color-sunset-700: #8e2f23;
 
-  /* Gold — quiet accent */
-  --color-gold: #b0894c;
-  --color-gold-soft: #d0ac6d;
+  /* Gold — quiet accent for ratings */
+  --color-gold: #a9834a;
+  --color-gold-soft: #d6b271;
 
   /* Fonts */
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, -apple-system,
@@ -174,10 +175,10 @@
 
 /* Custom utilities (variant-aware) */
 @utility shadow-soft {
-  box-shadow: 0 16px 40px -18px rgb(11 46 49 / 0.18);
+  box-shadow: 0 16px 40px -18px rgb(11 33 64 / 0.18);
 }
 @utility shadow-soft-lg {
-  box-shadow: 0 32px 80px -32px rgb(11 46 49 / 0.26);
+  box-shadow: 0 32px 80px -32px rgb(11 33 64 / 0.28);
 }
 /* Clean, modern color — clinical photos should read crisp, not filtered. */
 @utility img-warm {

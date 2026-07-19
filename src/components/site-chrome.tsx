@@ -8,7 +8,7 @@ import {
   Phone,
 } from "lucide-react";
 import { emergency, hours, navItems, site } from "@/lib/site";
-import { Logomark } from "./brand";
+import { BrandLogo, Hibiscus } from "./brand";
 import { MobileMenu, ServicesDropdown } from "./site-nav";
 import { WaveLines } from "./waves";
 
@@ -31,8 +31,10 @@ export function SiteHeader() {
               className="inline-flex items-center gap-2 font-medium text-sunset-200 transition hover:text-cream"
             >
               <HeartPulse className="size-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">{emergency.label}</span>
               <span className="underline-offset-2 hover:underline">
+                {emergency.label}
+              </span>
+              <span className="hidden underline-offset-2 hover:underline md:inline">
                 {emergency.cta}
               </span>
             </Link>
@@ -51,21 +53,18 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Main bar */}
-      <div className="border-b border-line bg-cream/85 backdrop-blur-xl">
-        <nav className="wrap-wide flex items-center justify-between gap-6 py-3.5">
-          <Link href="/" className="flex min-w-0 items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-full border border-ocean-600/25 bg-ocean-50 text-ocean-700">
-              <Logomark className="size-6" />
-            </span>
-            <span className="min-w-0">
-              <span className="block font-serif text-xl tracking-tight text-ink">
-                Waikiki Dental
-              </span>
-              <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-ocean-600">
-                Roseville · California
-              </span>
-            </span>
+      {/* Main bar — the practice's real logo on a clean light surface */}
+      <div className="border-b border-line bg-cream/90 backdrop-blur-xl">
+        <nav className="wrap-wide flex items-center justify-between gap-6 py-4">
+          <Link
+            href="/"
+            className="flex min-w-0 shrink-0 items-center"
+            aria-label="Waikiki Dental — home"
+          >
+            <BrandLogo
+              priority
+              className="h-8 w-auto sm:h-9 lg:h-10"
+            />
           </Link>
 
           {/* Desktop nav */}
@@ -134,17 +133,13 @@ export function SiteFooter() {
 
       <section className="wrap-wide grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.9fr_0.9fr]">
         <div>
-          <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-full bg-ocean-600 text-cream">
-              <Logomark className="size-6" />
-            </span>
-            <div>
-              <p className="font-serif text-xl text-cream">Waikiki Dental</p>
-              <p className="text-xs uppercase tracking-[0.24em] text-ocean-300">
-                Family &amp; Cosmetic Dentistry
-              </p>
-            </div>
+          {/* Real logo on a light plate so the blue wordmark stays legible */}
+          <div className="inline-flex items-center rounded-2xl bg-cream px-5 py-3.5 shadow-soft">
+            <BrandLogo className="h-8 w-auto sm:h-9" />
           </div>
+          <p className="mt-2 text-xs uppercase tracking-[0.24em] text-ocean-300">
+            Family &amp; Cosmetic Dentistry · Roseville, CA
+          </p>
           <p className="mt-5 max-w-md text-sm leading-7 text-cream/70">
             Dr. Michael Narodovich and our team provide modern, comfort-focused
             care — preventive visits, cosmetic dentistry, implants,
@@ -235,11 +230,12 @@ export function SiteFooter() {
         </div>
       </section>
 
-      {/* Oversized watermark wordmark */}
+      {/* Oversized watermark wordmark with the hibiscus */}
       <div
         aria-hidden="true"
-        className="wrap-wide select-none overflow-hidden border-t border-cream/10 pt-6"
+        className="wrap-wide flex select-none items-end gap-6 overflow-hidden border-t border-cream/10 pt-6"
       >
+        <Hibiscus className="mb-4 hidden size-16 opacity-40 sm:block" size={64} />
         <p className="whitespace-nowrap font-serif text-[13.5vw] leading-none tracking-tight text-cream/[0.06] lg:text-[10rem]">
           Waikiki Dental
         </p>

@@ -1,8 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, CalendarCheck, Phone } from "lucide-react";
 import {
   dentistJsonLd,
   doctor,
+  doctorCandid,
+  doctorCandidAlt,
   featuredServices,
   findService,
   servicesByCategory,
@@ -235,8 +238,12 @@ export function DoctorPage() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line shadow-soft">
+          <div className="relative mx-auto w-full max-w-sm lg:mx-0 lg:justify-self-end">
+            <div
+              aria-hidden="true"
+              className="absolute -right-4 -top-4 h-full w-full rounded-b-[2rem] rounded-t-[7rem] border border-ocean-200"
+            />
+            <div className="relative aspect-[2/3] overflow-hidden rounded-b-[2rem] rounded-t-[7rem] border border-line shadow-soft">
               <DoctorPortrait priority />
             </div>
             <div className="absolute -bottom-5 -left-4 rounded-2xl border border-line bg-cream px-5 py-4 shadow-soft-lg">
@@ -245,6 +252,30 @@ export function DoctorPage() {
                 {doctor.role}
               </p>
             </div>
+          </div>
+        </div>
+
+        <div className="wrap mt-20 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+          <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-line shadow-soft">
+            <Image
+              src={doctorCandid}
+              alt={doctorCandidAlt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="img-warm object-cover"
+            />
+          </div>
+          <div>
+            <Eyebrow>In the office</Eyebrow>
+            <h2 className="mt-4 text-balance font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+              Care that starts with a real conversation.
+            </h2>
+            <p className="mt-4 text-pretty text-lg leading-8 text-ink-muted">
+              Every visit begins with listening. Dr. Narodovich walks patients
+              through what he sees, what the options are, and what he
+              recommends — so decisions about your smile always feel informed
+              and unhurried.
+            </p>
           </div>
         </div>
       </section>
