@@ -122,7 +122,7 @@ export function ServicePage({ service }: { service: Service }) {
               <Icon className="size-7" aria-hidden="true" />
             </span>
             <h2 className="relative mt-6 font-serif text-2xl font-medium text-cream">
-              What this visit can support
+              What this visit can do for you
             </h2>
             <ul className="relative mt-5 grid gap-3">
               {service.highlights.map((highlight) => (
@@ -142,9 +142,9 @@ export function ServicePage({ service }: { service: Service }) {
       <section className="bg-surface-alt py-20 sm:py-24">
         <div className="wrap">
           <SectionHeader
-            eyebrow="More dental care options"
-            title="Care that connects prevention, confidence, and comfort."
-            body="Explore related services from the Waikiki Dental team."
+            eyebrow="Keep exploring"
+            title="Everything else under one roof."
+            body="Related care from the same Roseville team — no referral chase required."
           />
           <div className="mt-10">
             <ServicesGrid
@@ -168,8 +168,8 @@ export function ServicesHubPage() {
         <div className="wrap">
           <PageHeader
             eyebrow="Roseville dental care"
-            title="A complete menu of modern family and cosmetic dentistry."
-            body="From preventive cleanings to implants, orthodontics, smile makeovers, CEREC same-day crowns, and IV sedation, Waikiki Dental builds treatment around your needs."
+            title="One office for every stage of your smile."
+            body="Preventive cleanings, cosmetic refinements, implants, orthodontics, CEREC same-day crowns, and IV sedation — a complete menu of care, delivered at a calmer pace."
           />
         </div>
       </section>
@@ -210,7 +210,7 @@ export function DoctorPage() {
           <div>
             <Eyebrow>{doctor.name}</Eyebrow>
             <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
-              A Roseville dentist focused on trust, comfort, and clear choices.
+              A Roseville dentist who leads with listening.
             </h1>
             <WaveUnderline className="mt-6 h-3 w-32 text-sunset-500" />
             <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
@@ -288,19 +288,19 @@ export function OfficePage() {
   const pillars: Array<[string, string]> = [
     [
       "High standards",
-      "Comprehensive treatment planning and restorative and cosmetic dentistry support the quality care patients deserve.",
+      "Comprehensive treatment planning, restorative care, and cosmetic dentistry — held to the standard we'd want for our own families.",
     ],
     [
       "Education & prevention",
-      "The practice emphasizes exams, oral cancer screenings, x-rays, cleanings, sealants, fluoride, and practical patient education.",
+      "Exams, oral cancer screenings, X-rays, cleanings, sealants, fluoride, and practical coaching — because the easiest dental problem is the one that never happens.",
     ],
     [
       "Uncompromising safety",
-      "Infection control and sterilization processes help protect patients and the team.",
+      "Sterilization and infection-control protocols that protect every patient and every team member, at every visit.",
     ],
     [
       "A positive experience",
-      "The team builds trust by treating patients as individuals and creating a relaxing, respectful visit.",
+      "You're a person here, not a chart number. Expect a relaxed, respectful visit that earns trust the old-fashioned way.",
     ],
   ];
 
@@ -311,8 +311,8 @@ export function OfficePage() {
         <div className="wrap">
           <PageHeader
             eyebrow="Waikiki Dental Roseville"
-            title="A conveniently located dental office with high standards of care."
-            body="The Roseville practice is devoted to restoring and enhancing natural smiles with family dentistry, cosmetic dentistry, implant dentistry, and comfort-focused care."
+            title="High standards of care, with a genuinely lighter touch."
+            body="The Roseville practice is devoted to restoring and enhancing natural smiles — family, cosmetic, and implant dentistry with prevention, safety, and hospitality at the center."
           />
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {pillars.map(([title, body], index) => (
@@ -344,19 +344,19 @@ export function NewPatientsPage() {
   const details: Array<[string, string]> = [
     [
       "Insurance support",
-      "Waikiki Dental accepts most dental insurance plans and can help you understand benefits and estimated costs.",
+      "Most dental insurance plans are accepted, and the team will help you understand your benefits and estimated costs before treatment begins.",
     ],
     [
       "Flexible payment options",
-      "Cash, checks, debit cards, and major credit cards are accepted, with payment expected at the time of treatment.",
+      "Cash, checks, debit, and major credit cards are all welcome; payment is due at the time of treatment.",
     ],
     [
       "CareCredit financing",
-      "CareCredit can help make out-of-pocket healthcare expenses more manageable with flexible financing options.",
+      "CareCredit spreads out-of-pocket costs into manageable payments, so needed treatment doesn't have to wait.",
     ],
     [
       "Patient forms",
-      "Registration paperwork can be completed in advance through the office's secure email or text platform.",
+      "Registration paperwork arrives through the office's secure email or text platform — finish it from your couch before you arrive.",
     ],
   ];
 
@@ -368,8 +368,8 @@ export function NewPatientsPage() {
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <PageHeader
               eyebrow="New patients"
-              title="Everything you need before your first Waikiki Dental visit."
-              body="The team looks forward to meeting you and helping you prepare — with insurance, payment, financing, and patient form guidance."
+              title="Everything sorted before your first visit."
+              body="Insurance, payment, financing, forms — here's how the team makes the practical part painless, so your first appointment is just about you."
             />
             <div className="grid gap-4">
               {details.map(([title, body], index) => (
@@ -411,8 +411,8 @@ export function TestimonialsPage() {
         <div className="wrap">
           <PageHeader
             eyebrow="Patient testimonials"
-            title="Roseville patients describe a friendly, gentle, professional team."
-            body="Waikiki Dental's patients consistently mention warmth, comfort, professionalism, and genuine care for anxious visitors."
+            title="Don't take our word for it."
+            body="Roseville patients describe the same practice again and again: friendly, gentle, professional — and unusually good with nerves."
             actions={false}
           />
         </div>
@@ -451,7 +451,8 @@ export function NotFoundMarketing() {
         </h1>
         <WaveUnderline className="mx-auto mt-6 h-3 w-32 text-sunset-500" />
         <p className="mt-5 text-lg leading-8 text-ink-muted">
-          The page you’re looking for isn’t available on this preview site.
+          The page you’re looking for has moved or never existed — but
+          everything else is right where it should be.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Link href="/" className="btn btn-dark">

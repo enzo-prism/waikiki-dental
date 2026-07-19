@@ -25,32 +25,32 @@ const staticPages: Record<
   "michael-narodovich-dmd": {
     title: "Michael Narodovich, DMD",
     description:
-      "Meet Dr. Michael Narodovich, Roseville dentist focused on safe, comfortable, patient-first dental care.",
+      "Meet Dr. Michael Narodovich, DMD — a Roseville dentist who leads with listening, with focused training in sedation dentistry for anxious patients.",
   },
   "roseville-dental-care": {
     title: "Roseville Dental Care",
     description:
-      "Explore Waikiki Dental services including family dentistry, cosmetic dentistry, orthodontics, implants, same-day crowns, and sedation.",
+      "Explore Waikiki Dental's full menu of Roseville dental care: cleanings, cosmetic dentistry, Invisalign, implants, CEREC same-day crowns, and IV sedation.",
   },
   "waikiki-dental-roseville": {
     title: "Waikiki Dental Roseville Office",
     description:
-      "Learn about Waikiki Dental's Roseville office, standards of care, prevention focus, safety, and patient experience.",
+      "Get to know Waikiki Dental's Roseville office — high standards, prevention-first care, uncompromising safety, and a genuinely relaxed patient experience.",
   },
   "new-patients": {
     title: "New Patients",
     description:
-      "New patient information for Waikiki Dental in Roseville, including insurance, payment options, CareCredit, and forms.",
+      "New to Waikiki Dental? Insurance, payment options, CareCredit financing, and online forms — everything sorted before your first Roseville visit.",
   },
   "patient-testimonials": {
     title: "Patient Testimonials",
     description:
-      "Read patient testimonials for Waikiki Dental, a warm and welcoming Roseville dental office.",
+      "What Roseville patients say about Waikiki Dental: a friendly, gentle, professional team that's unusually good with dental anxiety.",
   },
   "contact-waikiki-dental": {
     title: "Contact Waikiki Dental",
     description:
-      "Contact Waikiki Dental in Roseville, CA. Book online, call or text, view hours, and get directions.",
+      "Contact Waikiki Dental in Roseville, CA — book online, call or text (916) 772-6248, send a message, or stop by 1271 Pleasant Grove Blvd.",
   },
 };
 

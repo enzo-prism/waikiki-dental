@@ -6,7 +6,7 @@ import { Eyebrow } from "@/components/sections";
 import { absoluteUrl, site } from "@/lib/site";
 
 const description =
-  "Request a dental appointment at Waikiki Dental in Roseville, CA in a few quick steps. Choose your visit, pick a time, and our team confirms by phone or text.";
+  "Request an appointment at Waikiki Dental in Roseville in a few quick steps — choose your visit, pick a time, and the team confirms by phone or text.";
 
 export const metadata: Metadata = {
   title: "Request an Appointment",
@@ -23,17 +23,17 @@ const reassurance = [
   {
     icon: ShieldCheck,
     title: "No account needed",
-    body: "Just a few quick steps — your progress is saved as you go.",
+    body: "A few quick steps, and your progress is saved as you go.",
   },
   {
     icon: Clock,
     title: "Flexible timing",
-    body: "Pick a date that suits you, or simply choose “soonest available.”",
+    body: "Pick a date that suits you, or choose “soonest available” and let the team do the finding.",
   },
   {
     icon: MessageSquare,
     title: "A real person follows up",
-    body: "The Roseville team confirms your exact time by phone or text.",
+    body: "The Roseville team confirms your exact time by phone or text — no robo-scheduling.",
   },
 ];
 
@@ -49,8 +49,8 @@ export default function RequestAppointmentPage() {
               Let’s find a time that works for you.
             </h1>
             <p className="mt-5 max-w-md text-pretty text-lg leading-8 text-ink-muted">
-              Tell us a little about your visit and the Waikiki Dental team will
-              follow up to confirm an available appointment time.
+              Tell us a little about your visit, and the Waikiki Dental team
+              will follow up to confirm a time that fits your life.
             </p>
 
             <ul className="mt-8 grid gap-4">

@@ -27,7 +27,7 @@ export const site = {
     "https://schedule.jarvisanalytics.com/frame/drmike-dtxa?location_id=2721782163260582",
   baseUrl: "https://waikiki-dental.vercel.app",
   description:
-    "Modern family, cosmetic, implant, and sedation dentistry in Roseville, CA with Dr. Michael Narodovich and the Waikiki Dental team.",
+    "Waikiki Dental is Dr. Michael Narodovich's Roseville, CA practice — family, cosmetic, implant, and sedation dentistry with CEREC same-day crowns and genuinely gentle care.",
 };
 
 export const hours = [
@@ -49,14 +49,13 @@ export const doctor = {
   role: "Owner · Dentist",
   initials: "MN",
   credentials: [
-    "The Ohio State University",
-    "Temple University",
-    "Sedation dentistry",
-    "Sedation-focused care",
+    "The Ohio State University, BS",
+    "Temple University, DMD",
+    "Sedation-focused training",
   ],
   bio: [
-    "Dr. Mike was born and raised in Cleveland, Ohio, earned his Bachelor of Science from The Ohio State University, and received his dental training from Temple University in Philadelphia before settling in Northern California.",
-    "His passion for safe, comfortable treatment for even the most fearful patients led him to sedation dentistry — helping people receive the care they need with less stress and more confidence. Outside the office, he loves the beauty of Northern California and Lake Tahoe snowfall.",
+    "Dr. Mike grew up in Cleveland, Ohio, earned his Bachelor of Science at The Ohio State University, and trained in dentistry at Temple University in Philadelphia before making Northern California home.",
+    "Watching fearful patients put off care for years drew him to sedation dentistry — and shaped a practice built around helping people get the treatment they need with less stress and more confidence. Away from the office, you'll find him out enjoying Northern California, happiest when fresh snow lands on Lake Tahoe.",
   ],
 };
 
@@ -77,27 +76,27 @@ export const serviceCategories: {
   {
     key: "preventive",
     label: "Preventive & Family",
-    description: "Cleanings, exams, and gentle care for every age.",
+    description: "Exams, cleanings, and healthy habits for every age in the house.",
   },
   {
     key: "cosmetic",
     label: "Cosmetic",
-    description: "Whitening, bonding, veneers, and full smile makeovers.",
+    description: "Small refinements or a whole new smile — your call.",
   },
   {
     key: "restorative",
     label: "Restorative & Implants",
-    description: "Fillings, same-day crowns, and tooth replacement.",
+    description: "Repair, rebuild, replace — often in a single visit.",
   },
   {
     key: "orthodontics",
     label: "Orthodontics",
-    description: "Invisalign clear aligners and traditional braces.",
+    description: "Straighter teeth, with or without the brackets.",
   },
   {
     key: "sedation",
     label: "Sedation & Comfort",
-    description: "Anxiety-friendly options for relaxed visits.",
+    description: "Real relaxation for people who dread the chair.",
   },
   {
     key: "emergency",
@@ -125,65 +124,65 @@ export const services: Service[] = [
     eyebrow: "Preventive care",
     category: "preventive",
     summary:
-      "Thorough dental exams, cleanings, x-rays, and oral health guidance for lasting wellness.",
+      "The unhurried checkup: a careful cleaning, a thorough exam, and straight answers about what we see.",
     description:
-      "Waikiki Dental is proud to provide dental examinations and cleanings in Roseville with a prevention-first approach. Routine care helps preserve natural teeth, monitor gum health, screen for oral cancer, and catch problems early.",
+      "Great dentistry is mostly quiet maintenance. Routine exams and cleanings at the Roseville office help you keep your natural teeth, watch gum health closely, screen for oral cancer, and catch small problems while they're still small.",
     highlights: [
-      "Comprehensive dental exams",
-      "Diagnostic x-rays when needed",
+      "Comprehensive exams with honest findings",
+      "Diagnostic X-rays only when needed",
       "Oral cancer and gum health screenings",
-      "Cleanings designed around your smile",
+      "Cleanings paced around your comfort",
     ],
     icon: Stethoscope,
   },
   {
     title: "Composite Fillings",
     slug: "composite-fillings",
-    eyebrow: "Natural restorations",
+    eyebrow: "Natural-looking repair",
     category: "restorative",
     summary:
-      "Tooth-colored fillings that repair decay while blending naturally with your smile.",
+      "Tooth-colored fillings that erase decay and blend in so well you'll forget which tooth it was.",
     description:
-      "Composite fillings restore strength and appearance after tooth decay or small fractures. The material is shaded to your tooth color for a clean, natural-looking result.",
+      "When decay or a small fracture needs repair, a composite filling restores the tooth's strength with material shaded to match your enamel — conservative, comfortable, and invisible in a smile.",
     highlights: [
-      "Tooth-colored repair",
-      "Conservative treatment planning",
-      "Comfort-focused visits",
-      "Long-term oral health support",
+      "Shaded to match your natural teeth",
+      "Conservative, tooth-preserving repair",
+      "Comfort-first visits",
+      "Durable protection for everyday chewing",
     ],
     icon: SmilePlus,
   },
   {
     title: "Digital X-Ray",
     slug: "digital-x-ray",
-    eyebrow: "Advanced diagnostics",
+    eyebrow: "Sharper diagnostics",
     category: "preventive",
     summary:
-      "Modern imaging helps the team evaluate teeth, roots, bone, and restorations clearly.",
+      "Clear digital imaging that shows what a visual exam can't — roots, bone, and problems still hiding.",
     description:
-      "Digital x-rays support accurate diagnosis by helping identify decay, bone loss, root position, cysts, and other concerns that may not be visible during a visual exam.",
+      "Digital X-rays let the team see below the surface: early decay between teeth, bone changes, root position, cysts, and trouble brewing under older dental work. Better images mean earlier, simpler treatment.",
     highlights: [
-      "Clear diagnostic images",
-      "Helps catch hidden concerns",
+      "Finds decay before it hurts",
+      "Reveals root and bone health",
       "Supports precise treatment planning",
-      "Part of comprehensive care",
+      "A cornerstone of every thorough exam",
     ],
     icon: BadgeCheck,
   },
   {
     title: "Early Dental Care",
     slug: "early-dental-care",
-    eyebrow: "Family dentistry",
+    eyebrow: "Kids & first visits",
     category: "preventive",
     summary:
-      "Gentle early visits help children build comfort, confidence, and healthy habits.",
+      "First visits that feel like a win — so kids grow up thinking the dentist is no big deal.",
     description:
-      "Early dental care gives families a foundation for prevention, education, and confidence. Waikiki Dental supports patients with gentle guidance and age-appropriate care.",
+      "The best gift you can give a young smile is a calm start. Early visits at Waikiki Dental stay gentle and pressure-free, teaching habits that stick while confidence builds one easy appointment at a time.",
     highlights: [
-      "Friendly first visits",
-      "Prevention and education",
+      "Gentle, unrushed first appointments",
+      "Prevention and brushing coaching",
       "Family-centered communication",
-      "Healthy habits from the start",
+      "Healthy habits that last a lifetime",
     ],
     icon: HeartPulse,
   },
@@ -193,31 +192,31 @@ export const services: Service[] = [
     eyebrow: "Cosmetic planning",
     category: "cosmetic",
     summary:
-      "A custom blend of cosmetic options designed to refresh your smile and confidence.",
+      "Whitening, veneers, bonding, alignment — combined into one plan built around the smile you actually want.",
     description:
-      "A smile makeover can combine whitening, bonding, veneers, crowns, orthodontic care, or implant dentistry into one personalized plan based on your goals.",
+      "A smile makeover isn't one procedure; it's a plan. Dr. Narodovich blends whitening, bonding, veneers, crowns, orthodontics, or implants into a sequence designed around your goals and your timeline.",
     highlights: [
-      "Personalized cosmetic roadmap",
-      "Options for color, shape, and alignment",
-      "Designed around your goals",
-      "Confidence-focused outcomes",
+      "One roadmap, tailored to you",
+      "Addresses color, shape, and alignment",
+      "Sequenced at your pace",
+      "Designed for a natural result",
     ],
     icon: Sparkles,
   },
   {
     title: "Dental Bonding",
     slug: "dental-bonding",
-    eyebrow: "Cosmetic dentistry",
+    eyebrow: "Small fixes, big difference",
     category: "cosmetic",
     summary:
-      "A conservative way to refine chips, small gaps, discoloration, and uneven edges.",
+      "A chip, a small gap, a rough edge — often refined in a single conservative visit.",
     description:
-      "Dental bonding uses tooth-colored material to make targeted cosmetic improvements, often with a conservative and efficient visit.",
+      "Dental bonding uses tooth-colored material to smooth chips, close small gaps, and even out worn edges — usually while preserving healthy enamel. It's cosmetic dentistry's quickest win.",
     highlights: [
-      "Repairs small chips",
-      "Improves uneven edges",
-      "Tooth-colored finish",
-      "Conservative cosmetic option",
+      "Repairs chips and worn edges",
+      "Closes small gaps",
+      "Blends invisibly with your enamel",
+      "Often complete in one visit",
     ],
     icon: WandSparkles,
   },
@@ -227,48 +226,48 @@ export const services: Service[] = [
     eyebrow: "CEREC technology",
     category: "restorative",
     summary:
-      "CEREC same-day crowns use digital scanning and in-office milling for efficient restorations.",
+      "A porcelain crown designed, milled, and placed before you leave — one visit, no temporaries.",
     description:
-      "With CEREC, Dr. Narodovich uses CAD/CAM tools and an in-house milling machine to plan, prepare, and place a strong porcelain crown in a single visit to the Roseville office.",
+      "With CEREC, Dr. Narodovich scans your tooth digitally, designs the crown with CAD/CAM tools, and mills it from strong porcelain right in the Roseville office. You walk out with the finished crown the same day.",
     highlights: [
-      "Digital scanning instead of goopy impressions",
-      "Porcelain crowns made in office",
-      "Useful for broken, weak, or worn teeth",
-      "Designed for strength and aesthetics",
+      "Digital scans, no goopy impressions",
+      "No temporary crown, no second visit",
+      "Milled in-office from strong porcelain",
+      "Built for strength and a natural look",
     ],
     icon: CalendarCheck,
   },
   {
     title: "Teeth Whitening",
     slug: "teeth-whitening",
-    eyebrow: "Brighter smile",
+    eyebrow: "Brighter, evenly",
     category: "cosmetic",
     summary:
-      "Professional whitening options designed to lift stains and refresh your smile.",
+      "Professional whitening that lifts years of coffee, tea, and time — safely and evenly.",
     description:
-      "Professional teeth whitening can brighten years of discoloration and help you feel more confident in everyday photos, work, and social moments.",
+      "Professional whitening reaches the deeper discoloration that drugstore strips leave behind, brightening your smile evenly with a plan matched to your teeth and your timeline.",
     highlights: [
-      "Professional guidance",
-      "Stain and discoloration support",
-      "Cosmetic boost with simple planning",
-      "Pairs well with smile makeovers",
+      "Lifts deep, set-in stains",
+      "Even, natural-looking brightness",
+      "Professional guidance start to finish",
+      "Pairs well with a smile makeover",
     ],
     icon: Sparkles,
   },
   {
     title: "Veneers",
     slug: "veneers",
-    eyebrow: "Porcelain cosmetics",
+    eyebrow: "Porcelain veneers",
     category: "cosmetic",
     summary:
-      "Natural-looking veneers can refine chipped, stained, worn, or uneven teeth.",
+      "Fine porcelain shells that redesign the shape, color, and balance of your smile — tooth by tooth.",
     description:
-      "Porcelain veneers are designed to enhance the visible shape, color, and balance of your smile while keeping results polished and natural-looking.",
+      "Veneers dress the visible surface of a tooth in polished porcelain, correcting chips, stains, wear, and unevenness in one elegant move. Done well, nobody can tell — they just notice the smile.",
     highlights: [
-      "Improves smile shape and color",
-      "Natural-looking porcelain finish",
-      "Useful for chips and uneven teeth",
-      "Personalized cosmetic design",
+      "Corrects chips, stains, and wear",
+      "Custom shape and shade per tooth",
+      "Polished, natural-looking porcelain",
+      "A long-term cosmetic upgrade",
     ],
     icon: WandSparkles,
   },
@@ -278,14 +277,14 @@ export const services: Service[] = [
     eyebrow: "Clear aligners",
     category: "orthodontics",
     summary:
-      "Straighten teeth discreetly with removable clear aligners customized for your smile.",
+      "Straighter teeth with clear, removable aligners — no brackets, no wires, no obvious “braces phase.”",
     description:
-      "Invisalign clear aligners apply carefully controlled forces to move teeth into a better position while remaining removable for meals, brushing, and flossing.",
+      "Invisalign moves teeth with a series of nearly invisible aligners you can remove for meals, brushing, and big moments. Digital treatment planning shows where your smile is headed before you begin.",
     highlights: [
-      "Clear, removable aligners",
-      "Comfortable alternative to braces",
-      "Supports easier brushing and flossing",
-      "Customized digital treatment planning",
+      "Nearly invisible in daily life",
+      "Removable for eating and brushing",
+      "Digitally planned tooth movement",
+      "A comfortable alternative to braces",
     ],
     icon: ShieldCheck,
   },
@@ -295,14 +294,14 @@ export const services: Service[] = [
     eyebrow: "Orthodontics",
     category: "orthodontics",
     summary:
-      "Reliable orthodontic care for alignment, bite function, and confident smiles.",
+      "The workhorse of orthodontics — precise, dependable alignment for bites that need real control.",
     description:
-      "Traditional braces remain a trusted option for many orthodontic needs, especially when careful control is needed to improve alignment and bite function.",
+      "Some smiles need the control only brackets and wires provide. Traditional braces remain the most dependable way to correct complex alignment and bite issues, with predictable, lasting results.",
     highlights: [
-      "Time-tested orthodontic option",
-      "Supports complex alignment needs",
-      "Improves bite function",
-      "Personalized treatment planning",
+      "Handles complex alignment needs",
+      "Precise control of tooth movement",
+      "Improves bite function and comfort",
+      "Proven, time-tested results",
     ],
     icon: ShieldCheck,
   },
@@ -312,14 +311,14 @@ export const services: Service[] = [
     eyebrow: "Tooth replacement",
     category: "restorative",
     summary:
-      "Durable, natural-looking tooth replacement designed to restore comfort and function.",
+      "The closest thing to a new tooth: a titanium root and custom crown that look, feel, and chew like the real thing.",
     description:
-      "Dental implants replace missing teeth with a titanium post, abutment, and custom crown. They can support a single tooth, multiple teeth, or more extensive restorations.",
+      "An implant replaces the whole tooth, root included — a titanium post, an abutment, and a custom crown that behaves like it grew there. One tooth, several, or a more extensive restoration: the plan is built around you.",
     highlights: [
-      "Permanent tooth replacement option",
-      "Restores chewing confidence",
-      "Designed to look and feel natural",
+      "Looks and chews like a natural tooth",
       "Helps protect jawbone health",
+      "Supports one tooth or several",
+      "A permanent, confident fix",
     ],
     icon: SmilePlus,
   },
@@ -329,30 +328,30 @@ export const services: Service[] = [
     eyebrow: "Anxiety-friendly care",
     category: "sedation",
     summary:
-      "Sedation dentistry helps anxious patients receive care in a calm, comfortable setting.",
+      "Deep, monitored relaxation — so years of put-off dentistry can be finished in calm, comfortable visits.",
     description:
-      "Dr. Narodovich has focused training in sedation dentistry for patients who feel fearful, have sensitive gag reflexes, or need longer treatment completed with more comfort.",
+      "This is the heart of the practice: patients who've avoided the dentist for years — fearful, or fighting a strong gag reflex — finally getting healthy in comfort. Dr. Narodovich's focused sedation training lets you rest, monitored throughout, while the work gets done.",
     highlights: [
-      "Helpful for dental anxiety",
-      "Deep relaxation while monitored",
-      "Can support longer treatment visits",
-      "Designed around patient comfort",
+      "Designed for dental fear and anxiety",
+      "Helpful for strong gag reflexes",
+      "More treatment in fewer visits",
+      "Monitored continuously throughout",
     ],
     icon: Syringe,
   },
   {
     title: "Dental Emergencies",
     slug: "dental-emergencies",
-    eyebrow: "Urgent dental care",
+    eyebrow: "Urgent care",
     category: "emergency",
     summary:
-      "Prompt support for dental pain, broken teeth, injuries, and urgent concerns.",
+      "Tooth pain, a break, a lost crown — call now, and the team will make every effort to see you fast.",
     description:
-      "When a dental emergency occurs, Waikiki Dental makes every effort to see and care for patients as quickly as possible.",
+      "Dental emergencies don't check your calendar first. If you're in pain or something broke, call the Roseville office — Waikiki Dental makes every effort to see and care for urgent cases as quickly as possible.",
     highlights: [
       "Tooth pain and swelling",
-      "Broken or fractured teeth",
-      "Lost or damaged restorations",
+      "Chipped, cracked, or broken teeth",
+      "Lost fillings, crowns, or restorations",
       "Call the office for urgent guidance",
     ],
     icon: HeartPulse,
@@ -430,17 +429,17 @@ export const navItems = [
 ];
 
 export const trustPoints = [
-  "Accepting new patients",
-  "Family, cosmetic, implant, and sedation dentistry",
-  "CEREC same-day crowns",
-  "Anxiety-friendly care",
+  "Now welcoming new patients",
+  "Family, cosmetic, implant & sedation dentistry",
+  "CEREC crowns in a single visit",
+  "Gentle with anxious patients",
 ];
 
 /* New-patient hook — built only on facts stated on the public practice site. */
 export const newPatientOffer = {
   eyebrow: "Now accepting new patients",
-  title: "Your first visit, made easy.",
-  body: "Most dental insurance plans are welcome, and CareCredit financing helps make treatment plans manageable. Contact the team to confirm your benefits before treatment.",
+  title: "Your first visit, made simple.",
+  body: "Most dental insurance plans are welcome, CareCredit financing keeps bigger treatment plans manageable, and your paperwork is handled online before you arrive. The team will help you confirm your benefits before any treatment begins.",
   points: [
     "Most dental insurance plans accepted",
     "CareCredit financing available",

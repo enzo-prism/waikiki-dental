@@ -21,7 +21,7 @@ import { heroImage, heroImageAlt, scheduleHref, site } from "@/lib/site";
 
 const heroStats: Array<{ label: string; value: string }> = [
   { label: "Care for", value: "All ages" },
-  { label: "CEREC", value: "Same-day crowns" },
+  { label: "CEREC crowns", value: "One visit" },
   { label: "Sedation", value: "Anxiety-friendly" },
 ];
 
@@ -47,16 +47,17 @@ export default function Home() {
               Roseville · Family &amp; Cosmetic Dentistry
             </span>
             <h1 className="mt-6 text-balance font-serif text-[2.9rem] font-medium leading-[1.02] tracking-tight text-ink sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
-              A calmer, more beautiful way to{" "}
+              Dentistry that feels like{" "}
               <span className="italic text-ocean-700 sm:relative sm:inline-block">
-                care for your smile.
+                a deep breath.
                 <WaveUnderline className="absolute -bottom-2 left-0 hidden h-3 w-full text-sunset-500 sm:-bottom-3 sm:block" />
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
-              Dr. Michael Narodovich and our team provide gentle, personalized
-              care — from preventive visits and cleanings to cosmetic dentistry,
-              implants, same-day crowns, Invisalign, and sedation.
+              Gentle, unhurried care from Dr. Michael Narodovich and the
+              Waikiki Dental team — cleanings and checkups, cosmetic dentistry,
+              implants, same-day crowns, Invisalign, and sedation for the
+              nervous among us.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a href={site.bookingHref} className="btn btn-sunset">
@@ -141,9 +142,9 @@ export default function Home() {
         <div className="wrap">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <SectionHeader
-              eyebrow="Dental care options"
-              title="Everything from routine cleanings to confident smile transformations."
-              body="The most important patient pathways — made easy to scan and act on."
+              eyebrow="What we do"
+              title="From six-month cleanings to whole-smile transformations."
+              body="The care patients come in for most — easy to scan, easy to book."
             />
             <div className="flex lg:justify-end">
               <Link href="/roseville-dental-care/" className="btn btn-outline">

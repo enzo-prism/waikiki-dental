@@ -31,7 +31,7 @@ export function SiteHeader() {
               className="inline-flex items-center gap-2 font-medium text-sunset-200 transition hover:text-cream"
             >
               <HeartPulse className="size-3.5" aria-hidden="true" />
-              <span className="underline-offset-2 hover:underline">
+              <span className="whitespace-nowrap underline-offset-2 hover:underline">
                 {emergency.label}
               </span>
               <span className="hidden underline-offset-2 hover:underline md:inline">
@@ -141,9 +141,10 @@ export function SiteFooter() {
             Family &amp; Cosmetic Dentistry · Roseville, CA
           </p>
           <p className="mt-5 max-w-md text-sm leading-7 text-cream/70">
-            Dr. Michael Narodovich and our team provide modern, comfort-focused
-            care — preventive visits, cosmetic dentistry, implants,
-            orthodontics, same-day crowns, and sedation dentistry in Roseville.
+            Modern, comfort-first dentistry in Roseville — preventive care,
+            cosmetic dentistry, implants, orthodontics, CEREC same-day crowns,
+            and sedation for anxious patients, from Dr. Michael Narodovich and
+            team.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a href={site.bookingHref} className="btn btn-sunset btn-sm">

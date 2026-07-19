@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(site.baseUrl),
   title: {
-    default: "Waikiki Dental | Roseville, CA Dentist",
+    default: "Waikiki Dental | Dentist in Roseville, CA",
     template: "%s | Waikiki Dental",
   },
   description: site.description,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Waikiki Dental | Roseville, CA Dentist",
+    title: "Waikiki Dental | Dentist in Roseville, CA",
     description: site.description,
     url: site.baseUrl,
     siteName: "Waikiki Dental",

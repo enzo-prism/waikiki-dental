@@ -350,18 +350,18 @@ export function NewPatientOffer() {
 export function CareApproach() {
   const points = [
     {
-      title: "Personalized recommendations",
-      body: "The team explains options clearly so patients can make confident, informed decisions about their care.",
+      title: "Plans you can actually follow",
+      body: "Dr. Narodovich shows you what he sees and lays out your options plainly — so every decision is made with you, never at you.",
       icon: ShieldCheck,
     },
     {
-      title: "Comfort for anxious patients",
-      body: "Sedation options and a calm setting help make longer or more sensitive visits feel manageable.",
+      title: "Built for nervous patients",
+      body: "A calm room, a patient team, and sedation options for when nerves run deeper. Fear shouldn't cost anyone their health.",
       icon: HeartPulse,
     },
     {
-      title: "Modern restorative technology",
-      body: "Digital tools and CEREC same-day crowns support efficient, natural-looking dentistry.",
+      title: "Technology that saves you visits",
+      body: "Digital X-rays sharpen the diagnosis, and in-office CEREC milling turns a crown into a single appointment.",
       icon: BadgeCheck,
     },
   ];
@@ -389,8 +389,8 @@ export function CareApproach() {
         <div>
           <SectionHeader
             eyebrow="Why Waikiki Dental"
-            title="Clinical skill, delivered with a calmer rhythm."
-            body="Advanced dentistry, clear communication, and genuinely gentle care — brought forward without ever feeling cold or corporate."
+            title="The aloha spirit, applied to dentistry."
+            body="Advanced care doesn't have to feel clinical. Expect clear explanations, honest recommendations, and a team that never makes you feel rushed — or judged."
           />
           <div className="mt-9">
             {points.map((point, index) => {
@@ -434,7 +434,7 @@ export function DoctorSpotlight() {
         <div className="order-2 lg:order-1">
           <Eyebrow>Meet the dentist</Eyebrow>
           <h2 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-[2.75rem] sm:leading-[1.08]">
-            Dr. Michael Narodovich brings calm, considered care to Roseville.
+            The dentist people send their nervous friends to.
           </h2>
           <WaveUnderline className="mt-5 h-3 w-28 text-sunset-500" />
           <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
@@ -512,8 +512,8 @@ export function Reviews() {
         <SectionHeader
           tone="dark"
           eyebrow="Patient reviews"
-          title="Warm, welcoming, and genuinely reassuring."
-          body="Real Roseville patients describe a friendly, gentle, and professional team — especially the care they show anxious patients."
+          title="What Roseville patients keep saying."
+          body="Every word below comes from a real patient of the practice. The pattern is hard to miss: a warm welcome, gentle care, and nerves put to rest."
         />
         <AggregateRating tone="dark" className="mt-8" />
 
@@ -559,8 +559,8 @@ export function VisitPanel({
         <div>
           <SectionHeader
             eyebrow="Visit Waikiki Dental"
-            title="A Roseville office designed for easier visits."
-            body="Book online, call or text the team, or send a quick message to start the conversation."
+            title="Getting started is the easy part."
+            body="Book online, call or text the front desk, or send a quick note — whichever feels easiest. You'll find the office on Pleasant Grove Boulevard in Roseville."
             headingLevel={headingLevel}
           />
 
@@ -627,8 +627,9 @@ export function VisitPanel({
         <div className="rounded-[1.75rem] border border-line bg-cream p-7 shadow-soft sm:p-9">
           <h3 className="font-serif text-2xl text-ink">Send a message</h3>
           <p className="mt-2 text-sm leading-7 text-ink-muted">
-            Send a general note and choose how the team should reply. Please do
-            not include medical, insurance, or other sensitive information.
+            Have a general question? Write to the team and choose how you&rsquo;d
+            like to hear back. Please don&rsquo;t include medical, insurance, or
+            other sensitive details.
           </p>
           <div className="mt-7">
             <ContactForm />
@@ -654,14 +655,14 @@ export function FinalCta() {
       <div className="wrap-wide relative grid gap-8 py-20 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
           <Eyebrow className="text-cream/85">
-            Experience dental care as it should be
+            Now accepting new patients
           </Eyebrow>
           <h2 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight sm:text-[2.75rem] sm:leading-[1.08]">
-            Ready for a calmer, clearer dental visit?
+            Come see what a calm dental visit feels like.
           </h2>
           <p className="mt-4 max-w-2xl leading-8 text-cream/90">
-            Schedule online or call the Roseville team. Waikiki Dental is
-            accepting new patients.
+            Book online in a couple of minutes, or call and talk to a real
+            person at the Roseville office.
           </p>
         </div>
         <div className="flex flex-col gap-3">
