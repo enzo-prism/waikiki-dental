@@ -1,0 +1,14 @@
+---
+description: Waikiki Dental content and launch guardrails
+alwaysApply: true
+---
+
+# Waikiki Dental content
+
+- Edit practice facts, services, hours, bios, and CTAs in `src/lib/site.ts`, not by scattering copy through components.
+- Keep brand tokens in `src/app/globals.css` (Pacific blue `#0051ae`, hibiscus coral). Do not invent a second palette.
+- Never fabricate review counts, credentials, insurance, or clinical outcomes. Leave `reviewStats.count` null until a real Google count is confirmed.
+- Do not submit the live Formspree appointment form unless the user explicitly requests a clinic-approved test.
+- Do not connect or cut over `waikikidental.com`.
+- Aim copy at IV sedation and higher-ticket care, not general-dentistry volume.
+- This repo is Waikiki Dental only. Sacramento Dental Medicine lives in `enzo-prism/sacramento-dental-medicine-redesign`.
