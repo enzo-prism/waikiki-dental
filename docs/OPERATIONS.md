@@ -76,12 +76,46 @@ Before treating inbox delivery as verified:
    duplicate/spam handling.
 6. Record the result without storing the submitted contact details in this repo.
 
+## Conversion chrome
+
+Keep these paths intact when changing pages or CTAs. Coral is reserved for
+Book Online (Jarvis). Do not add a third solid button.
+
+| Intent | Control | Surfaces |
+| --- | --- | --- |
+| Book a visit now | Coral **Book Online** | Header (`lg+`), sticky mobile bar, navy homepage book card, `BookStrip` |
+| Talk to the office | Outline **Call or text** | Hero (`lg+`), mobile bar, interiors |
+| Office picks a time | Text **Request an appointment** | Hero (`lg+`), visit panel, footer, mobile menu |
+| General question | Contact form | Contact and office pages only |
+
+Homepage `VisitPanel` uses `showForm={false}`. Do not stack `BookStrip` on
+home. PNG wordmark is cream-only; navy uses `WordmarkLockup`.
+
+## Production topology
+
+GitHub `main` is the source of truth. **Vercel Git integration is not
+connected to this repository.** `git push origin main` does not update
+https://waikiki-dental.vercel.app/. Production requires an authenticated
+CLI or MCP deploy:
+
+```bash
+npx vercel deploy --prod --yes
+```
+
+Cloud agents: authenticate the Vercel MCP server in Cursor, or put
+`VERCEL_TOKEN` in Cloud Agent secrets (never in the repo). Do not attach
+`waikikidental.com`.
+
+Connecting the GitHub repo in the Vercel project would make `main` pushes
+create production deployments automatically. Until that is done, treat every
+release as an explicit `vercel deploy --prod`.
+
 ## Production release
 
 Requirements:
 
 - Node 24, matching `package.json` and Vercel
-- Authenticated GitHub CLI and Vercel CLI
+- Authenticated Vercel CLI (`npx vercel whoami`) or authenticated Vercel MCP
 - A reviewed worktree with unrelated files excluded from the commit
 
 Run the relevant local checks, push the intended commit to `main`, then deploy
@@ -93,17 +127,20 @@ npm run lint
 npm run build
 git status -sb
 git push origin main
-vercel deploy --prod --yes
+npx vercel deploy --prod --yes
 ```
 
 The release is complete only when all of the following are true:
 
 1. `origin/main` points to the intended commit.
-2. `vercel inspect <deployment-url>` reports `target: production` and `Ready`.
+2. `npx vercel inspect <deployment-url>` reports `target: production` and
+   `Ready`.
 3. `https://waikiki-dental.vercel.app/` is listed as an alias.
-4. The appointment page returns HTTP 200.
+4. The homepage is the current Pacific design (navy book card, not a stacked
+   contact form + coral closer) and `/request-appointment/` returns HTTP 200.
 5. The production JavaScript contains `https://formspree.io/f/xojgjoqa` and the
    sent-state copy.
 
-Do not describe a preview, successful local build, pushed commit, queued build,
-or unverified alias as a completed production release.
+Do not describe a preview, successful local build, pushed commit, queued
+build, or unverified alias as a completed production release. A GitHub push
+alone is not a production release.

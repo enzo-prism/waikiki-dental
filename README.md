@@ -15,14 +15,15 @@ cosmetic, implant, and sedation practice in Roseville, CA.
 ## Local development
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-The current app does not require local environment variables. `.env.example`
-reserves a future contact-form setting, but that variable is not consumed yet.
+No local env is required. `.env.example` documents
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`, which the contact form reads when you
+want a dedicated Formspree form instead of sharing the appointment endpoint.
 
 ## Checks
 
@@ -51,13 +52,15 @@ the appointment-scheduler options, and image paths. Edit content there.
 The site uses the practice's real brand assets, sourced from the current
 public waikikidental.com site and self-hosted in `public/media/`:
 
-- `logo.png` — the real hibiscus + "Waikiki DENTAL" wordmark (header, footer)
-- `hibiscus.png` — the flower alone (favicon/app icons, accents)
-- `dr-narodovich.jpg` — Dr. Narodovich's real headshot (doctor page, avatar)
-- `dr-narodovich-patient.jpg` — real in-office photo of Dr. Narodovich with a
-  patient (home hero, doctor spotlight)
-- `office-hero.jpg` — a tasteful treatment-room placeholder; swap with a real
-  Roseville office photo when available (same filename)
+- `logo.png` — full-color hibiscus + "Waikiki DENTAL" wordmark. Cream surfaces
+  only (`BrandLogo` in the header). Navy uses `WordmarkLockup` (SVG hibiscus +
+  type), never this PNG.
+- `hibiscus.png` — the flower alone (legacy asset; UI hibiscus is the SVG in
+  `src/components/brand.tsx`)
+- `dr-narodovich.jpg` — studio portrait (275×412). Keep frames near that size.
+- `dr-narodovich-patient.jpg` — in-office candid (home hero, doctor page)
+- `office-hero.jpg` — stock operatory placeholder. **Not rendered.** Replace
+  with a real Roseville office photo before using it.
 
 ### Before the public custom-domain launch
 
@@ -96,6 +99,20 @@ data-handling setup and vendor agreement.
 See [Forms and release operations](docs/OPERATIONS.md) for payload details,
 privacy boundaries, the delivery checklist, and the production release process.
 
+## Conversion chrome
+
+One coral verb. Do not add a third solid button.
+
+- **Book Online** (coral) → Jarvis scheduler. Header at `lg+`, sticky mobile
+  bar, navy homepage book card, interior `BookStrip`.
+- **Call or text** (outline) → `tel:` the Roseville office.
+- **Request an appointment** (text) → `/request-appointment/`.
+- **Contact form** → Contact and office pages only. Homepage uses
+  `VisitPanel showForm={false}`.
+
+Skip-to-content, current-page underline, and a discreet Emergency link (xl+)
+live in `src/components/site-chrome.tsx` and `src/components/site-nav.tsx`.
+
 ## Key features
 
 - **Appointment scheduler** (`/request-appointment/`) — a guided, accessible,
@@ -114,23 +131,26 @@ privacy boundaries, the delivery checklist, and the production release process.
 
 ## Deployment
 
-Hosted on Vercel. `main` is the repository source of truth, but a push is not
-treated as a completed release until an explicit production deployment is
-`Ready` and the public alias has been verified.
+Hosted on Vercel. `main` is the GitHub source of truth. **This repo is not
+wired to Vercel Git integration** — `git push origin main` does not update
+[waikiki-dental.vercel.app](https://waikiki-dental.vercel.app/). Production
+requires an authenticated `vercel deploy --prod --yes` (or Vercel MCP deploy).
+Do not attach `waikikidental.com` until the practice signs off.
 
 ```bash
+npm ci
 npm run lint
 npm run build
 git push origin main
-vercel deploy --prod --yes
-vercel inspect <deployment-url>
+npx vercel deploy --prod --yes
+npx vercel inspect <deployment-url>
 ```
 
-After deployment, verify that
-`https://waikiki-dental.vercel.app/request-appointment/` returns HTTP 200 and
-that the production bundle contains the configured Formspree endpoint. Routine
-release verification must not create a real appointment request; inbox delivery
-testing requires a deliberate, clinic-approved test submission.
+The release is complete only when `origin/main` is the intended commit, the
+deployment reports `target: production` and `Ready`, and
+`https://waikiki-dental.vercel.app/` is listed as an alias. Then confirm the
+appointment page returns HTTP 200. Routine verification must not submit the
+live Formspree form.
 
 ## Notes
 
