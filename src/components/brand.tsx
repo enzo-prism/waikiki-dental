@@ -2,9 +2,8 @@ import Image from "next/image";
 import { brandAssets, doctor, doctorPortrait } from "@/lib/site";
 
 /**
- * The practice's real logo — hibiscus + "Waikiki DENTAL" wordmark,
- * the same artwork used on the current public waikikidental.com site.
- * Transparent PNG, so it sits directly on light surfaces.
+ * The practice's real logo — hibiscus + "Waikiki DENTAL" wordmark.
+ * Use on light surfaces only; the blue/green/red mark does not read on navy.
  */
 export function BrandLogo({
   className = "",
@@ -25,7 +24,7 @@ export function BrandLogo({
   );
 }
 
-/** The hibiscus flower from the logo — the practice's brand mark. */
+/** Single-color hibiscus mark. Uses currentColor so it fits cream or navy. */
 export function Hibiscus({
   className = "",
   size = 44,
@@ -34,61 +33,93 @@ export function Hibiscus({
   size?: number;
 }) {
   return (
-    <Image
-      src={brandAssets.icon}
-      alt=""
-      aria-hidden="true"
-      width={size}
-      height={Math.round(size * (73 / 75))}
-      className={className}
-    />
-  );
-}
-
-/**
- * Wave logomark — decorative "Waikiki wave over a smile" glyph used as
- * a supporting motif (footer chips, dark surfaces) where the full-color
- * logo would not read. Uses currentColor so it adapts to its context.
- */
-export function Logomark({ className = "" }: { className?: string }) {
-  return (
     <svg
-      viewBox="0 0 32 32"
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
       fill="none"
       aria-hidden="true"
       className={className}
     >
       <path
-        d="M5 12.5q2.75 3 5.5 0t5.5 0t5.5 0"
-        stroke="currentColor"
-        strokeWidth="2.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fill="currentColor"
+        d="M18.5 42c-3.2-6.4 1.4-14.8 8.6-12.2-4.4 3.2-6.6 7.6-8.6 12.2Z"
+        opacity="0.7"
       />
       <path
-        d="M8 18q8 7.5 16 0"
+        fill="currentColor"
+        d="M32 10c5.2 3.4 7.4 10.4 5.2 16.2C35.4 20.8 32 16.8 32 10c0 6.8-3.4 10.8-5.2 16.2C24.6 20.4 26.8 13.4 32 10Z"
+      />
+      <path
+        fill="currentColor"
+        d="M50 22c.2 6.2-3.8 12.2-9.8 14.2 5.2-3.8 8.2-8.8 9.8-14.2Z"
+      />
+      <path
+        fill="currentColor"
+        d="M48.5 44c-5.4 3.2-12.4 2.2-16.6-2.2 6 1.4 11.4-.4 16.6 2.2Z"
+      />
+      <path
+        fill="currentColor"
+        d="M15.5 44c5.2 3.2 11.8 2.4 16.2-1.8-6 1.2-11.2-.6-16.2 1.8Z"
+      />
+      <path
+        fill="currentColor"
+        d="M14 22c1.4 5.4 4.6 10.4 9.8 14.2C17.8 34.2 13.8 28.2 14 22Z"
+      />
+      <circle cx="32" cy="34" r="5.2" fill="currentColor" />
+      <path
+        d="M32 34c-3.2-2.4-8.4-6.8-11.5-16"
         stroke="currentColor"
-        strokeWidth="2.2"
+        strokeWidth="1.6"
         strokeLinecap="round"
       />
+      <circle cx="20.2" cy="17.2" r="1.4" fill="currentColor" />
     </svg>
   );
 }
 
+/** Type lockup for navy surfaces — never the full-color PNG. */
+export function WordmarkLockup({
+  className = "",
+}: {
+  className?: string;
+}) {
+  return (
+    <span className={`inline-flex items-center gap-3 text-cream ${className}`}>
+      <span className="grid size-11 place-items-center rounded-full bg-cream text-sunset-600">
+        <Hibiscus size={26} />
+      </span>
+      <span className="leading-tight">
+        <span className="block font-serif text-xl tracking-tight text-cream">
+          Waikiki Dental
+        </span>
+        <span className="block text-[11px] font-semibold uppercase tracking-[0.18em] text-ocean-300">
+          Roseville, CA
+        </span>
+      </span>
+    </span>
+  );
+}
+
 /**
- * Dr. Narodovich's real headshot, from the current public practice site.
- * `sizes` stays modest — the source photo is 275×412, so the frame that
- * renders it should stay near that size for crisp results.
+ * Dr. Narodovich's real headshot. Keep the frame near the 275×412 source
+ * so the portrait stays sharp.
  */
-export function DoctorPortrait({ priority = false }: { priority?: boolean }) {
+export function DoctorPortrait({
+  priority = false,
+  className = "object-cover object-top",
+}: {
+  priority?: boolean;
+  className?: string;
+}) {
   if (!doctorPortrait) return null;
   return (
     <Image
       src={doctorPortrait}
       alt={`${doctor.name}, dentist at Waikiki Dental in Roseville`}
       fill
-      sizes="(max-width: 640px) 84vw, 320px"
-      className="img-warm object-cover object-top"
+      sizes="(max-width: 640px) 84vw, 360px"
+      className={className}
       priority={priority}
     />
   );

@@ -27,7 +27,7 @@ export const site = {
     "https://schedule.jarvisanalytics.com/frame/drmike-dtxa?location_id=2721782163260582",
   baseUrl: "https://waikiki-dental.vercel.app",
   description:
-    "Waikiki Dental is Dr. Michael Narodovich's Roseville, CA practice — family, cosmetic, implant, and sedation dentistry with CEREC same-day crowns and genuinely gentle care.",
+    "Waikiki Dental is Dr. Michael Narodovich's Roseville, CA practice — IV sedation, implants, CEREC same-day crowns, and unhurried family care for patients who want dentistry without the dread.",
 };
 
 export const hours = [
@@ -358,16 +358,56 @@ export const services: Service[] = [
   },
 ];
 
-export const featuredServices = services.filter((service) =>
-  [
-    "cleanings-exams",
-    "roseville-cerec-same-day-crowns",
-    "roseville-invisalign",
-    "roseville-dental-implants",
-    "iv-sedation",
-    "dental-emergencies",
-  ].includes(service.slug),
-);
+/** Home flagships — higher-ticket care, in visual priority order. */
+export const featuredServiceSlugs = [
+  "iv-sedation",
+  "roseville-dental-implants",
+  "roseville-cerec-same-day-crowns",
+] as const;
+
+export const featuredServices = featuredServiceSlugs
+  .map((slug) => services.find((service) => service.slug === slug))
+  .filter((service): service is Service => Boolean(service));
+
+export const heroFacts = [
+  "IV sedation for anxious patients",
+  "CEREC crowns in one visit",
+  "Now accepting new patients",
+];
+
+export const cerecProcess = [
+  {
+    title: "Scan",
+    body: "A digital scan of the tooth — no goopy impressions.",
+  },
+  {
+    title: "Design",
+    body: "The crown is designed in-office with CAD/CAM tools.",
+  },
+  {
+    title: "Mill",
+    body: "Porcelain is milled in the Roseville office the same day.",
+  },
+  {
+    title: "Place",
+    body: "You leave with the finished crown — no temporary, no second visit.",
+  },
+];
+
+export const implantProcess = [
+  {
+    title: "Plan",
+    body: "The restoration is planned around the tooth — or teeth — you’re replacing.",
+  },
+  {
+    title: "Root",
+    body: "A titanium post is placed as a new root, helping protect jawbone health.",
+  },
+  {
+    title: "Restore",
+    body: "An abutment and custom crown complete a tooth that looks and chews like the real thing.",
+  },
+];
 
 /** Services grouped by category, in `serviceCategories` order, skipping empties. */
 export function servicesByCategory() {

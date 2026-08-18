@@ -1,52 +1,30 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, CalendarCheck, Phone } from "lucide-react";
+import { CalendarCheck, Phone } from "lucide-react";
 import {
-  AggregateRating,
-  CareApproach,
+  BookStrip,
   DoctorSpotlight,
-  FinalCta,
-  NewPatientOffer,
-  Reviews,
-  SectionHeader,
-  ServicesGrid,
-  StarRow,
-  TrustBar,
+  FeaturedQuote,
+  FlagshipServices,
   VisitPanel,
 } from "@/components/sections";
 import { JsonLd } from "@/components/page-templates";
 import { Hibiscus } from "@/components/brand";
-import { DriftWaves, WaveLines, WaveUnderline } from "@/components/waves";
-import { heroImage, heroImageAlt, scheduleHref, site } from "@/lib/site";
-
-const heroStats: Array<{ label: string; value: string }> = [
-  { label: "Care for", value: "All ages" },
-  { label: "CEREC crowns", value: "One visit" },
-  { label: "Sedation", value: "Anxiety-friendly" },
-];
+import { WaveUnderline } from "@/components/waves";
+import { heroFacts, heroImage, heroImageAlt, site } from "@/lib/site";
 
 export default function Home() {
   return (
     <>
       <JsonLd />
 
-      {/* Hero — type-led coastal composition */}
       <section className="relative overflow-hidden bg-background">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-          <div className="absolute -right-24 -top-32 size-[42rem] rounded-full bg-ocean-100/60 blur-3xl" />
-          <WaveLines
-            className="absolute -left-28 top-24 h-44 w-[38rem] text-ocean-200/50"
-            rows={4}
-          />
-        </div>
-
-        <div className="wrap-wide relative grid items-center gap-12 pb-24 pt-14 sm:pt-20 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:pb-28 lg:pt-24">
+        <div className="wrap-wide relative grid items-center gap-12 pb-20 pt-14 sm:pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pb-24 lg:pt-20">
           <div>
             <span className="eyebrow">
-              <Hibiscus size={16} className="shrink-0" />
-              Roseville · Family &amp; Cosmetic Dentistry
+              <Hibiscus size={16} className="shrink-0 text-sunset-600" />
+              Roseville · IV sedation &amp; restorative care
             </span>
-            <h1 className="mt-6 text-balance font-serif text-[2.9rem] font-medium leading-[1.02] tracking-tight text-ink sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
+            <h1 className="mt-6 text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-ink sm:text-6xl lg:text-[4.25rem]">
               Dentistry that feels like{" "}
               <span className="italic text-ocean-700 sm:relative sm:inline-block">
                 a deep breath.
@@ -54,10 +32,9 @@ export default function Home() {
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
-              Gentle, unhurried care from Dr. Michael Narodovich and the
-              Waikiki Dental team — cleanings and checkups, cosmetic dentistry,
-              implants, same-day crowns, Invisalign, and sedation for the
-              nervous among us.
+              Dr. Michael Narodovich built this practice for people who have put
+              care off — monitored IV sedation, implants, and same-day crowns,
+              delivered without rush or judgment.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a href={site.bookingHref} className="btn btn-sunset">
@@ -66,105 +43,38 @@ export default function Home() {
               </a>
               <a href={site.phoneHref} className="btn btn-outline">
                 <Phone className="size-4" aria-hidden="true" />
-                Call or Text {site.phone}
+                Call {site.phone}
               </a>
             </div>
 
-            <p className="mt-4 text-sm text-ink-muted">
-              Prefer to pick a time?{" "}
-              <Link
-                href={scheduleHref}
-                className="inline-flex items-center gap-1 font-semibold text-ocean-700 underline-offset-4 transition hover:text-ocean-800 hover:underline"
-              >
-                Request an appointment
-                <ArrowRight className="size-3.5" aria-hidden="true" />
-              </Link>
-            </p>
-
-            <AggregateRating className="mt-8" />
-
-            <dl className="mt-8 grid max-w-lg grid-cols-3 gap-4 border-t border-line pt-6">
-              {heroStats.map((stat) => (
-                <div key={stat.label}>
-                  <dt className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ocean-600">
-                    {stat.label}
-                  </dt>
-                  <dd className="mt-1 font-serif text-lg text-ink">{stat.value}</dd>
-                </div>
+            <ul className="mt-10 flex flex-col gap-2 text-sm text-ink-muted sm:flex-row sm:flex-wrap sm:gap-x-6">
+              {heroFacts.map((fact) => (
+                <li key={fact} className="inline-flex items-center gap-2">
+                  <span className="size-1.5 rounded-full bg-sunset-500" aria-hidden="true" />
+                  {fact}
+                </li>
               ))}
-            </dl>
+            </ul>
           </div>
 
-          <div className="relative">
-            <div
-              aria-hidden="true"
-              className="absolute -right-4 -top-4 h-full w-full rounded-b-[2rem] rounded-t-[8rem] border border-ocean-200"
+          <div className="relative aspect-[5/4] overflow-hidden rounded-3xl border border-line shadow-soft">
+            <Image
+              src={heroImage}
+              alt={heroImageAlt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 46vw"
+              className="object-cover"
+              priority
             />
-            <div className="relative aspect-square overflow-hidden rounded-b-[2rem] rounded-t-[8rem] border border-line shadow-soft-lg">
-              <Image
-                src={heroImage}
-                alt={heroImageAlt}
-                fill
-                sizes="(max-width: 1024px) 100vw, 46vw"
-                className="img-warm object-cover"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-deep/25 via-transparent to-transparent" />
-            </div>
-
-            <span className="absolute -right-2 -top-3 inline-flex items-center gap-2 rounded-full bg-deep px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-cream shadow-soft">
-              <span className="size-1.5 rounded-full bg-sunset-300" />
-              Accepting new patients
-            </span>
-
-            <figure className="absolute -bottom-6 -left-4 hidden w-64 rounded-2xl border border-line bg-cream/95 p-5 shadow-soft-lg backdrop-blur sm:block">
-              <StarRow />
-              <figcaption className="mt-3 font-serif text-base leading-snug text-ink">
-                Trusted by Roseville families
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-
-        {/* Drifting shoreline at the hero's base */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 overflow-hidden text-ocean-100/70"
-        >
-          <DriftWaves className="h-10 sm:h-14" slow />
-        </div>
-      </section>
-
-      <TrustBar />
-
-      {/* Services */}
-      <section className="reveal bg-background py-20 sm:py-24">
-        <div className="wrap">
-          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-            <SectionHeader
-              eyebrow="What we do"
-              title="From six-month cleanings to whole-smile transformations."
-              body="The care patients come in for most — easy to scan, easy to book."
-            />
-            <div className="flex lg:justify-end">
-              <Link href="/roseville-dental-care/" className="btn btn-outline">
-                View All Services
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-          <div className="mt-10">
-            <ServicesGrid />
           </div>
         </div>
       </section>
 
-      <NewPatientOffer />
-      <CareApproach />
+      <FeaturedQuote />
+      <FlagshipServices />
       <DoctorSpotlight />
-      <Reviews />
       <VisitPanel />
-      <FinalCta />
+      <BookStrip />
     </>
   );
 }

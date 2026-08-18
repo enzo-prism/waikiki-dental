@@ -6,18 +6,17 @@ import Link from "next/link";
 import {
   CalendarCheck,
   ChevronDown,
+  HeartPulse,
   Menu,
   Phone,
   X,
 } from "lucide-react";
-import { navItems, servicesByCategory, site } from "@/lib/site";
+import { emergency, navItems, servicesByCategory, site } from "@/lib/site";
 import { Hibiscus } from "./brand";
-import { WaveLines } from "./waves";
 
 /**
- * Accessible services mega-menu (replaces the pure-CSS <details>):
- * opens on hover-intent and click, closes on outside-click, Escape,
- * and navigation, and exposes aria-expanded / aria-haspopup.
+ * Accessible services mega-menu: opens on hover-intent and click, closes on
+ * outside-click, Escape, and navigation.
  */
 export function ServicesDropdown() {
   const [open, setOpen] = useState(false);
@@ -114,9 +113,7 @@ export function ServicesDropdown() {
   );
 }
 
-/** Mobile navigation — full-screen ocean sheet, portaled to <body> so the
- *  header's backdrop-blur can't trap it (backdrop-filter creates a containing
- *  block for fixed descendants) and it always beats the sticky CTA bar. */
+/** Mobile navigation — cream sheet, portaled to body so sticky chrome cannot trap it. */
 export function MobileMenu() {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -128,7 +125,7 @@ export function MobileMenu() {
     const trigger = triggerRef.current;
     const sheet = sheetRef.current;
     const closeButton = sheet?.querySelector<HTMLButtonElement>(
-      "[data-close-menu]"
+      "[data-close-menu]",
     );
     closeButton?.focus();
 
@@ -139,7 +136,7 @@ export function MobileMenu() {
       }
       if (event.key === "Tab" && sheet) {
         const focusable = sheet.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled])'
+          "a[href], button:not([disabled])",
         );
         if (focusable.length === 0) return;
         const first = focusable[0];
@@ -176,27 +173,21 @@ export function MobileMenu() {
       role="dialog"
       aria-modal="true"
       aria-label="Site navigation"
-      className="fixed inset-0 z-[70] flex flex-col overflow-hidden bg-deep text-cream lg:hidden"
+      className="fixed inset-0 z-[70] flex flex-col overflow-hidden bg-cream text-ink lg:hidden"
     >
-      <WaveLines
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-40 w-full text-ocean-300/15"
-        rows={4}
-      />
       <div className="wrap-wide flex items-center justify-between py-4">
         <span className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-full bg-cream">
+          <span className="grid size-10 place-items-center rounded-full bg-ocean-50 text-sunset-600">
             <Hibiscus size={26} />
           </span>
-          <span className="font-serif text-lg tracking-tight">
-            Waikiki Dental
-          </span>
+          <span className="font-serif text-lg tracking-tight">Waikiki Dental</span>
         </span>
         <button
           type="button"
           data-close-menu
           aria-label="Close navigation"
           onClick={() => setOpen(false)}
-          className="grid size-11 place-items-center rounded-full border border-cream/25 text-cream transition hover:bg-cream/10"
+          className="grid size-11 place-items-center rounded-full border border-line text-ink transition hover:bg-background"
         >
           <X className="size-5" aria-hidden="true" />
         </button>
@@ -209,12 +200,22 @@ export function MobileMenu() {
               <Link
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="block border-b border-cream/10 py-4 font-serif text-3xl font-medium tracking-tight text-cream transition hover:pl-2 hover:text-gold-soft"
+                className="block border-b border-line py-4 font-serif text-3xl font-medium tracking-tight text-ink transition hover:pl-2 hover:text-ocean-700"
               >
                 {item.label}
               </Link>
             </li>
           ))}
+          <li>
+            <Link
+              href={emergency.href}
+              onClick={() => setOpen(false)}
+              className="mt-2 inline-flex items-center gap-2 py-4 text-sm font-semibold text-sunset-700"
+            >
+              <HeartPulse className="size-4" aria-hidden="true" />
+              {emergency.label}
+            </Link>
+          </li>
         </ul>
       </nav>
 
@@ -223,7 +224,7 @@ export function MobileMenu() {
           <CalendarCheck className="size-4" aria-hidden="true" />
           Book Online
         </a>
-        <a href={site.phoneHref} className="btn btn-ghost-light">
+        <a href={site.phoneHref} className="btn btn-outline">
           <Phone className="size-4" aria-hidden="true" />
           Call or Text {site.phone}
         </a>

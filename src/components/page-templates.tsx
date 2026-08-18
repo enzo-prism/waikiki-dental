@@ -2,19 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, CalendarCheck, Phone } from "lucide-react";
 import {
+  cerecProcess,
   dentistJsonLd,
   doctor,
   doctorCandid,
   doctorCandidAlt,
   featuredServices,
   findService,
+  implantProcess,
   servicesByCategory,
   site,
   type Service,
 } from "@/lib/site";
 import {
+  BookStrip,
   Eyebrow,
-  FinalCta,
   PaymentStrip,
   Reviews,
   SectionHeader,
@@ -22,8 +24,6 @@ import {
   VisitPanel,
 } from "./sections";
 import { DoctorPortrait } from "./brand";
-import { ContactForm } from "./contact-form";
-import { WaveLines, WaveUnderline } from "./waves";
 
 export function JsonLd() {
   return (
@@ -33,16 +33,6 @@ export function JsonLd() {
     />
   );
 }
-
-/** Decorative underline accent per service category (never the sole signal). */
-const categoryAccent: Record<string, string> = {
-  preventive: "text-ocean-500",
-  cosmetic: "text-sunset-500",
-  restorative: "text-ocean-600",
-  orthodontics: "text-gold",
-  sedation: "text-sunset-600",
-  emergency: "text-sunset-700",
-};
 
 function PageHeader({
   eyebrow,
@@ -56,13 +46,11 @@ function PageHeader({
   actions?: boolean;
 }) {
   return (
-    <div className="relative">
-      <WaveLines className="pointer-events-none absolute -right-24 -top-12 h-32 w-[26rem] text-ocean-200/40" />
+    <div>
       <Eyebrow>{eyebrow}</Eyebrow>
       <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
         {title}
       </h1>
-      <WaveUnderline className="mt-6 h-3 w-32 text-sunset-500" />
       {body ? (
         <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-ink-muted">
           {body}
@@ -84,22 +72,38 @@ function PageHeader({
   );
 }
 
-export function ServicePage({ service }: { service: Service }) {
+function RelatedCare({ excludeSlug }: { excludeSlug?: string }) {
+  const items = featuredServices.filter((item) => item.slug !== excludeSlug);
+  if (items.length === 0) return null;
+
+  return (
+    <section className="bg-background py-20 sm:py-24">
+      <div className="wrap">
+        <SectionHeader
+          eyebrow="Also in this office"
+          title="Related flagship care."
+        />
+        <div className="mt-10">
+          <ServicesGrid items={items} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function DefaultServicePage({ service }: { service: Service }) {
   const Icon = service.icon;
-  const accent = categoryAccent[service.category] ?? "text-sunset-500";
 
   return (
     <>
       <JsonLd />
-      <section className="relative overflow-hidden bg-background">
-        <WaveLines className="pointer-events-none absolute -left-24 bottom-0 h-36 w-[30rem] text-ocean-200/40" />
-        <div className="wrap relative grid gap-12 py-16 sm:py-20 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+      <section className="bg-background">
+        <div className="wrap grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
             <Eyebrow>{service.eyebrow}</Eyebrow>
             <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
               {service.title} in Roseville
             </h1>
-            <WaveUnderline className={`mt-6 h-3 w-32 ${accent}`} />
             <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
               {service.description}
             </p>
@@ -115,20 +119,18 @@ export function ServicePage({ service }: { service: Service }) {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[2rem] bg-deep p-7 text-cream shadow-soft-lg sm:p-8">
-            <div className="grain" aria-hidden="true" />
-            <WaveLines className="pointer-events-none absolute -right-12 -top-8 h-28 w-64 text-ocean-300/15" />
-            <span className="relative grid size-14 place-items-center rounded-full bg-sunset-600 text-cream">
-              <Icon className="size-7" aria-hidden="true" />
+          <div className="rounded-3xl border border-line bg-cream p-7 sm:p-8">
+            <span className="grid size-12 place-items-center rounded-full bg-ocean-50 text-ocean-600">
+              <Icon className="size-6" aria-hidden="true" />
             </span>
-            <h2 className="relative mt-6 font-serif text-2xl font-medium text-cream">
+            <h2 className="mt-6 font-serif text-2xl font-medium text-ink">
               What this visit can do for you
             </h2>
-            <ul className="relative mt-5 grid gap-3">
+            <ul className="mt-5 grid gap-3">
               {service.highlights.map((highlight) => (
-                <li key={highlight} className="flex gap-3 text-cream/90">
+                <li key={highlight} className="flex gap-3 text-ink-muted">
                   <BadgeCheck
-                    className="mt-0.5 size-5 shrink-0 text-ocean-300"
+                    className="mt-0.5 size-5 shrink-0 text-ocean-600"
                     aria-hidden="true"
                   />
                   <span className="leading-7">{highlight}</span>
@@ -138,24 +140,159 @@ export function ServicePage({ service }: { service: Service }) {
           </div>
         </div>
       </section>
+      <RelatedCare excludeSlug={service.slug} />
+      <BookStrip />
+    </>
+  );
+}
 
-      <section className="bg-surface-alt py-20 sm:py-24">
-        <div className="wrap">
-          <SectionHeader
-            eyebrow="Keep exploring"
-            title="Everything else under one roof."
-            body="Related care from the same Roseville team — no referral chase required."
-          />
-          <div className="mt-10">
-            <ServicesGrid
-              items={featuredServices.filter((item) => item.slug !== service.slug)}
-            />
+function SedationServicePage({ service }: { service: Service }) {
+  return (
+    <>
+      <JsonLd />
+      <section className="bg-deep text-cream">
+        <div className="wrap py-20 sm:py-28">
+          <Eyebrow className="text-gold-soft">{service.eyebrow}</Eyebrow>
+          <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-cream sm:text-6xl">
+            Years of put-off dentistry, finished in calm visits.
+          </h1>
+          <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
+            {service.description}
+          </p>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <a href={site.bookingHref} className="btn btn-sunset">
+              <CalendarCheck className="size-4" aria-hidden="true" />
+              Book a sedation consult
+            </a>
+            <a href={site.phoneHref} className="btn btn-ghost-light">
+              <Phone className="size-4" aria-hidden="true" />
+              {site.phone}
+            </a>
           </div>
         </div>
       </section>
-      <FinalCta />
+
+      <section className="bg-background py-20">
+        <div className="wrap grid gap-12 lg:grid-cols-2">
+          <div>
+            <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
+              Who this is for
+            </h2>
+            <p className="mt-4 text-lg leading-8 text-ink-muted">
+              IV sedation is the heart of the practice: patients who are fearful,
+              fighting a strong gag reflex, or who simply need more treatment
+              done with less stress.
+            </p>
+          </div>
+          <ul className="grid gap-4">
+            {service.highlights.map((highlight) => (
+              <li
+                key={highlight}
+                className="flex gap-3 border-t border-line pt-4 text-ink first:border-0 first:pt-0"
+              >
+                <BadgeCheck
+                  className="mt-0.5 size-5 shrink-0 text-ocean-600"
+                  aria-hidden="true"
+                />
+                <span className="leading-7">{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+      <BookStrip />
     </>
   );
+}
+
+function ProcessServicePage({
+  service,
+  steps,
+}: {
+  service: Service;
+  steps: { title: string; body: string }[];
+}) {
+  const columns =
+    steps.length === 4 ? "lg:grid-cols-4" : "lg:grid-cols-3";
+
+  return (
+    <>
+      <JsonLd />
+      <section className="bg-background">
+        <div className="wrap py-16 sm:py-20">
+          <Eyebrow>{service.eyebrow}</Eyebrow>
+          <h1 className="mt-4 max-w-3xl text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
+            {service.title} in Roseville
+          </h1>
+          <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-ink-muted">
+            {service.description}
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href={site.bookingHref} className="btn btn-sunset">
+              <CalendarCheck className="size-4" aria-hidden="true" />
+              Book Online
+            </a>
+            <a href={site.phoneHref} className="btn btn-outline">
+              <Phone className="size-4" aria-hidden="true" />
+              {site.phone}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-surface-alt py-20">
+        <div className="wrap">
+          <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
+            How a visit unfolds
+          </h2>
+          <ol className={`mt-10 grid gap-8 sm:grid-cols-2 ${columns}`}>
+            {steps.map((step, index) => (
+              <li key={step.title}>
+                <p className="font-serif text-sm text-ocean-600">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <h3 className="mt-3 font-serif text-2xl font-medium text-ink">
+                  {step.title}
+                </h3>
+                <p className="mt-2 leading-7 text-ink-muted">{step.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="bg-background py-16">
+        <div className="wrap max-w-3xl">
+          <ul className="grid gap-3">
+            {service.highlights.map((highlight) => (
+              <li key={highlight} className="flex gap-3 text-ink-muted">
+                <BadgeCheck
+                  className="mt-0.5 size-5 shrink-0 text-ocean-600"
+                  aria-hidden="true"
+                />
+                <span className="leading-7">{highlight}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+      <RelatedCare excludeSlug={service.slug} />
+      <BookStrip />
+    </>
+  );
+}
+
+export function ServicePage({ service }: { service: Service }) {
+  if (service.slug === "iv-sedation") {
+    return <SedationServicePage service={service} />;
+  }
+  if (service.slug === "roseville-cerec-same-day-crowns") {
+    return <ProcessServicePage service={service} steps={cerecProcess} />;
+  }
+  if (service.slug === "roseville-dental-implants") {
+    return <ProcessServicePage service={service} steps={implantProcess} />;
+  }
+  return <DefaultServicePage service={service} />;
 }
 
 export function ServicesHubPage() {
@@ -169,7 +306,7 @@ export function ServicesHubPage() {
           <PageHeader
             eyebrow="Roseville dental care"
             title="One office for every stage of your smile."
-            body="Preventive cleanings, cosmetic refinements, implants, orthodontics, CEREC same-day crowns, and IV sedation — a complete menu of care, delivered at a calmer pace."
+            body="Preventive cleanings, cosmetic refinements, implants, orthodontics, CEREC same-day crowns, and IV sedation — a complete menu, delivered at a calmer pace."
           />
         </div>
       </section>
@@ -178,16 +315,11 @@ export function ServicesHubPage() {
         <div className="wrap grid gap-16">
           {groups.map((group) => (
             <div key={group.key}>
-              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4">
-                <div>
-                  <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
-                    {group.label}
-                  </h2>
-                  <p className="mt-1 text-sm text-ink-muted">{group.description}</p>
-                </div>
-                <WaveUnderline
-                  className={`h-2.5 w-24 ${categoryAccent[group.key] ?? "text-sunset-500"}`}
-                />
+              <div className="border-b border-line pb-4">
+                <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
+                  {group.label}
+                </h2>
+                <p className="mt-1 text-sm text-ink-muted">{group.description}</p>
               </div>
               <div className="mt-6">
                 <ServicesGrid items={group.items} />
@@ -196,7 +328,7 @@ export function ServicesHubPage() {
           ))}
         </div>
       </section>
-      <FinalCta />
+      <BookStrip />
     </>
   );
 }
@@ -212,7 +344,6 @@ export function DoctorPage() {
             <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
               A Roseville dentist who leads with listening.
             </h1>
-            <WaveUnderline className="mt-6 h-3 w-32 text-sunset-500" />
             <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
               {doctor.bio.map((paragraph) => (
                 <p key={paragraph.slice(0, 24)}>{paragraph}</p>
@@ -224,7 +355,7 @@ export function DoctorPage() {
                 Book Online
               </a>
               <Link href="/iv-sedation/" className="btn btn-outline">
-                Sedation Dentistry
+                Sedation dentistry
                 <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
             </div>
@@ -239,30 +370,24 @@ export function DoctorPage() {
           </div>
 
           <div className="relative mx-auto w-full max-w-sm lg:mx-0 lg:justify-self-end">
-            <div
-              aria-hidden="true"
-              className="absolute -right-4 -top-4 h-full w-full rounded-b-[2rem] rounded-t-[7rem] border border-ocean-200"
-            />
-            <div className="relative aspect-[2/3] overflow-hidden rounded-b-[2rem] rounded-t-[7rem] border border-line shadow-soft">
+            <div className="relative aspect-[2/3] overflow-hidden rounded-3xl border border-line shadow-soft">
               <DoctorPortrait priority />
             </div>
-            <div className="absolute -bottom-5 -left-4 rounded-2xl border border-line bg-cream px-5 py-4 shadow-soft-lg">
-              <p className="font-serif text-lg text-ink">{doctor.name}</p>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ocean-600">
-                {doctor.role}
-              </p>
-            </div>
+            <p className="mt-4 font-serif text-lg text-ink">{doctor.name}</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ocean-600">
+              {doctor.role}
+            </p>
           </div>
         </div>
 
         <div className="wrap mt-20 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-          <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-line shadow-soft">
+          <div className="relative aspect-[5/4] overflow-hidden rounded-3xl border border-line shadow-soft">
             <Image
               src={doctorCandid}
               alt={doctorCandidAlt}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="img-warm object-cover"
+              className="object-cover"
             />
           </div>
           <div>
@@ -279,7 +404,7 @@ export function DoctorPage() {
           </div>
         </div>
       </section>
-      <FinalCta />
+      <BookStrip />
     </>
   );
 }
@@ -315,20 +440,12 @@ export function OfficePage() {
             body="The Roseville practice is devoted to restoring and enhancing natural smiles — family, cosmetic, and implant dentistry with prevention, safety, and hospitality at the center."
           />
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
-            {pillars.map(([title, body], index) => (
+            {pillars.map(([title, body]) => (
               <article
                 key={title}
-                className="rounded-2xl border border-line-strong/70 bg-cream/60 p-7 transition hover:border-ocean-300 hover:bg-cream"
+                className="rounded-2xl border border-line bg-cream p-7"
               >
-                <span
-                  aria-hidden="true"
-                  className="font-serif text-5xl leading-none text-ocean-200"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h2 className="mt-4 font-serif text-2xl font-medium text-ink">
-                  {title}
-                </h2>
+                <h2 className="font-serif text-2xl font-medium text-ink">{title}</h2>
                 <p className="mt-3 leading-7 text-ink-muted">{body}</p>
               </article>
             ))}
@@ -372,21 +489,13 @@ export function NewPatientsPage() {
               body="Insurance, payment, financing, forms — here's how the team makes the practical part painless, so your first appointment is just about you."
             />
             <div className="grid gap-4">
-              {details.map(([title, body], index) => (
+              {details.map(([title, body]) => (
                 <article
                   key={title}
-                  className="flex gap-5 rounded-2xl border border-line bg-cream p-6 transition hover:border-ocean-300"
+                  className="rounded-2xl border border-line bg-cream p-6"
                 >
-                  <span
-                    aria-hidden="true"
-                    className="font-serif text-2xl leading-none text-ocean-300"
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h2 className="font-serif text-xl font-medium text-ink">{title}</h2>
-                    <p className="mt-2 leading-7 text-ink-muted">{body}</p>
-                  </div>
+                  <h2 className="font-serif text-xl font-medium text-ink">{title}</h2>
+                  <p className="mt-2 leading-7 text-ink-muted">{body}</p>
                 </article>
               ))}
             </div>
@@ -398,7 +507,7 @@ export function NewPatientsPage() {
           </div>
         </div>
       </section>
-      <FinalCta />
+      <BookStrip />
     </>
   );
 }
@@ -418,7 +527,7 @@ export function TestimonialsPage() {
         </div>
       </section>
       <Reviews />
-      <FinalCta />
+      <BookStrip />
     </>
   );
 }
@@ -433,23 +542,19 @@ export function ContactPage() {
 }
 
 export function SedationArticlePage() {
-  const service = findService("iv-sedation")!;
+  const service = findService("iv-sedation");
+  if (!service) return null;
   return <ServicePage service={service} />;
 }
 
 export function NotFoundMarketing() {
   return (
-    <section className="relative overflow-hidden bg-background py-28">
-      <WaveLines
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-32 w-full text-ocean-200/40"
-        rows={3}
-      />
+    <section className="bg-background py-28">
       <div className="wrap relative max-w-2xl text-center">
         <Eyebrow className="justify-center">404 · Page not found</Eyebrow>
         <h1 className="mt-4 text-balance font-serif text-5xl font-medium tracking-tight text-ink">
           Let’s get you back to your smile.
         </h1>
-        <WaveUnderline className="mx-auto mt-6 h-3 w-32 text-sunset-500" />
         <p className="mt-5 text-lg leading-8 text-ink-muted">
           The page you’re looking for has moved or never existed — but
           everything else is right where it should be.
@@ -465,8 +570,4 @@ export function NotFoundMarketing() {
       </div>
     </section>
   );
-}
-
-export function ContactFormBlock() {
-  return <ContactForm />;
 }
