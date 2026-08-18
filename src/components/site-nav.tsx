@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   CalendarCheck,
   ChevronDown,
@@ -11,18 +12,46 @@ import {
   Phone,
   X,
 } from "lucide-react";
-import { emergency, navItems, servicesByCategory, site } from "@/lib/site";
+import {
+  emergency,
+  findService,
+  navItems,
+  scheduleHref,
+  servicesByCategory,
+  site,
+} from "@/lib/site";
 import { Hibiscus } from "./brand";
+
+function normalizePath(path: string) {
+  if (path.length > 1 && path.endsWith("/")) return path.slice(0, -1);
+  return path;
+}
+
+function isCurrent(href: string, pathname: string) {
+  return normalizePath(pathname) === normalizePath(href);
+}
+
+function isServicesCurrent(pathname: string) {
+  const slug = normalizePath(pathname).replace(/^\//, "");
+  if (!slug) return false;
+  return slug === "roseville-dental-care" || Boolean(findService(slug));
+}
+
+const navLinkClass =
+  "text-sm font-medium transition hover:text-ink";
 
 /**
  * Accessible services mega-menu: opens on hover-intent and click, closes on
- * outside-click, Escape, and navigation.
+ * outside-click, Escape, and navigation. The "Services" label goes to the hub;
+ * the chevron toggles the menu for keyboard users.
  */
 export function ServicesDropdown() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const groups = servicesByCategory();
+  const active = isServicesCurrent(pathname);
 
   function cancelClose() {
     if (closeTimer.current) {
@@ -62,22 +91,38 @@ export function ServicesDropdown() {
       }}
       onMouseLeave={scheduleClose}
     >
-      <button
-        type="button"
-        aria-expanded={open}
-        aria-haspopup="true"
-        onClick={() => setOpen((value) => !value)}
-        className="flex items-center gap-1.5 text-sm font-medium text-ink/80 transition hover:text-ink"
-      >
-        Services
-        <ChevronDown
-          className={`size-3.5 text-ink-soft transition ${open ? "rotate-180" : ""}`}
-          aria-hidden="true"
-        />
-      </button>
+      <div className="flex items-center gap-0.5">
+        <Link
+          href="/roseville-dental-care/"
+          aria-current={active ? "page" : undefined}
+          onClick={() => setOpen(false)}
+          className={`${navLinkClass} ${active ? "text-ink" : "text-ink/80"}`}
+        >
+          Services
+        </Link>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-haspopup="true"
+          aria-controls="services-menu"
+          aria-label="Browse services"
+          onClick={() => setOpen((value) => !value)}
+          className={`grid size-8 place-items-center rounded-full text-ink-soft transition hover:bg-ocean-50 hover:text-ink ${
+            open ? "bg-ocean-50 text-ink" : ""
+          }`}
+        >
+          <ChevronDown
+            className={`size-3.5 transition ${open ? "rotate-180" : ""}`}
+            aria-hidden="true"
+          />
+        </button>
+      </div>
 
       {open ? (
-        <div className="absolute left-0 top-[calc(100%+0.75rem)] w-[min(46rem,calc(100vw-2.5rem))] rounded-2xl border border-line bg-cream p-5 shadow-soft-lg">
+        <div
+          id="services-menu"
+          className="absolute left-0 top-[calc(100%+0.75rem)] w-[min(46rem,calc(100vw-2.5rem))] rounded-2xl border border-line bg-cream p-5 shadow-soft-lg"
+        >
           <div className="grid grid-cols-3 gap-x-6 gap-y-5">
             {groups.map((group) => (
               <div key={group.key}>
@@ -88,6 +133,11 @@ export function ServicesDropdown() {
                       <Link
                         href={`/${service.slug}/`}
                         onClick={() => setOpen(false)}
+                        aria-current={
+                          isCurrent(`/${service.slug}/`, pathname)
+                            ? "page"
+                            : undefined
+                        }
                         className="block rounded-lg px-2 py-1.5 text-sm text-ink-muted transition hover:bg-ocean-50 hover:text-ink"
                       >
                         {service.title}
@@ -113,8 +163,32 @@ export function ServicesDropdown() {
   );
 }
 
+export function DesktopNav() {
+  const pathname = usePathname();
+
+  return (
+    <div className="hidden items-center gap-7 lg:flex">
+      <ServicesDropdown />
+      {navItems.slice(1).map((item) => {
+        const active = isCurrent(item.href, pathname);
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={active ? "page" : undefined}
+            className={`${navLinkClass} ${active ? "text-ink" : "text-ink/80"}`}
+          >
+            {item.label}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
 /** Mobile navigation — cream sheet, portaled to body so sticky chrome cannot trap it. */
 export function MobileMenu() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
@@ -195,22 +269,41 @@ export function MobileMenu() {
 
       <nav className="wrap-wide relative flex-1 overflow-y-auto py-6">
         <ul className="grid gap-1">
-          {links.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="block border-b border-line py-4 font-serif text-3xl font-medium tracking-tight text-ink transition hover:pl-2 hover:text-ocean-700"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
+          {links.map((item) => {
+            const active = isCurrent(item.href, pathname);
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  aria-current={active ? "page" : undefined}
+                  className={`block border-b border-line py-4 font-serif text-3xl font-medium tracking-tight transition hover:pl-2 hover:text-ocean-700 ${
+                    active ? "text-ocean-700" : "text-ink"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <Link
+              href={scheduleHref}
+              onClick={() => setOpen(false)}
+              aria-current={
+                isCurrent(scheduleHref, pathname) ? "page" : undefined
+              }
+              className="mt-2 inline-flex items-center gap-2 py-4 text-sm font-semibold text-ocean-700"
+            >
+              <CalendarCheck className="size-4" aria-hidden="true" />
+              Request an appointment
+            </Link>
+          </li>
           <li>
             <Link
               href={emergency.href}
               onClick={() => setOpen(false)}
-              className="mt-2 inline-flex items-center gap-2 py-4 text-sm font-semibold text-sunset-700"
+              className="inline-flex items-center gap-2 py-2 text-sm font-semibold text-sunset-700"
             >
               <HeartPulse className="size-4" aria-hidden="true" />
               {emergency.label}
@@ -219,14 +312,14 @@ export function MobileMenu() {
         </ul>
       </nav>
 
-      <div className="wrap-wide relative grid gap-2 pb-8 pt-2">
+      <div className="wrap-wide relative grid gap-2 pb-[max(2rem,env(safe-area-inset-bottom,0px))] pt-2">
         <a href={site.bookingHref} className="btn btn-sunset">
           <CalendarCheck className="size-4" aria-hidden="true" />
           Book Online
         </a>
         <a href={site.phoneHref} className="btn btn-outline">
           <Phone className="size-4" aria-hidden="true" />
-          Call or Text {site.phone}
+          Call or text {site.phone}
         </a>
       </div>
     </div>

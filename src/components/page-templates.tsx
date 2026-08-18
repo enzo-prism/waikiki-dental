@@ -62,9 +62,9 @@ function PageHeader({
             <CalendarCheck className="size-4" aria-hidden="true" />
             Book Online
           </a>
-          <a href={site.phoneHref} className="btn btn-outline">
+          <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
             <Phone className="size-4" aria-hidden="true" />
-            Call or Text
+            Call or text
           </a>
         </div>
       ) : null}
@@ -112,9 +112,9 @@ function DefaultServicePage({ service }: { service: Service }) {
                 <CalendarCheck className="size-4" aria-hidden="true" />
                 Book Online
               </a>
-              <a href={site.phoneHref} className="btn btn-outline">
+              <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
                 <Phone className="size-4" aria-hidden="true" />
-                {site.phone}
+                Call or text
               </a>
             </div>
           </div>
@@ -162,11 +162,11 @@ function SedationServicePage({ service }: { service: Service }) {
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <a href={site.bookingHref} className="btn btn-sunset">
               <CalendarCheck className="size-4" aria-hidden="true" />
-              Book a sedation consult
+              Book Online
             </a>
-            <a href={site.phoneHref} className="btn btn-ghost-light">
+            <a href={site.phoneHref} className="btn btn-ghost-light" aria-label={`Call or text ${site.phone}`}>
               <Phone className="size-4" aria-hidden="true" />
-              {site.phone}
+              Call or text
             </a>
           </div>
         </div>
@@ -232,9 +232,9 @@ function ProcessServicePage({
               <CalendarCheck className="size-4" aria-hidden="true" />
               Book Online
             </a>
-            <a href={site.phoneHref} className="btn btn-outline">
+            <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
               <Phone className="size-4" aria-hidden="true" />
-              {site.phone}
+              Call or text
             </a>
           </div>
         </div>
@@ -369,8 +369,8 @@ export function DoctorPage() {
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-sm lg:mx-0 lg:justify-self-end">
-            <div className="relative aspect-[2/3] overflow-hidden rounded-3xl border border-line shadow-soft">
+          <div className="relative mx-auto w-full max-w-[275px] lg:mx-0 lg:justify-self-end">
+            <div className="relative aspect-[275/412] overflow-hidden rounded-3xl border border-line shadow-soft">
               <DoctorPortrait priority />
             </div>
             <p className="mt-4 font-serif text-lg text-ink">{doctor.name}</p>

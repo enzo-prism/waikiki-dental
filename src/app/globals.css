@@ -120,15 +120,16 @@
   }
 
   .eyebrow {
-    @apply inline-flex items-center gap-2 font-sans text-[11px] font-semibold
-      uppercase tracking-[0.24em] text-ocean-600;
+    @apply inline-flex flex-wrap items-center gap-2 font-sans text-[11px]
+      font-semibold uppercase tracking-[0.18em] text-ocean-600 sm:tracking-[0.24em];
   }
 
   /* Buttons — soft pills */
   .btn {
     @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full
       px-6 text-sm font-semibold tracking-wide transition-all duration-200
-      focus:outline-none focus-visible:ring-4 active:translate-y-px;
+      outline-none focus:outline-none focus-visible:outline-none
+      focus-visible:ring-4 active:translate-y-px;
   }
   .btn-primary {
     @apply bg-ocean-600 text-cream shadow-soft hover:bg-ocean-700

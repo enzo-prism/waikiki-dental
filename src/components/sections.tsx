@@ -185,15 +185,27 @@ function ServiceCard({
 }
 
 export function ServicesGrid({ items = featuredServices }: { items?: Service[] }) {
+  const featured = items.filter((service) => service.category === "sedation");
+  const rest = items.filter((service) => service.category !== "sedation");
+  const restCols =
+    rest.length <= 1
+      ? ""
+      : rest.length === 2
+        ? "sm:grid-cols-2"
+        : "sm:grid-cols-2 lg:grid-cols-3";
+
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((service) => (
-        <ServiceCard
-          key={service.slug}
-          service={service}
-          featured={service.category === "sedation"}
-        />
+    <div className="grid gap-5">
+      {featured.map((service) => (
+        <ServiceCard key={service.slug} service={service} featured />
       ))}
+      {rest.length > 0 ? (
+        <div className={`grid gap-5 ${restCols}`}>
+          {rest.map((service) => (
+            <ServiceCard key={service.slug} service={service} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -204,17 +216,18 @@ export function FlagshipServices() {
   return (
     <section className="reveal bg-background py-20 sm:py-24">
       <div className="wrap">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-          <SectionHeader
-            eyebrow="The work we are known for"
-            title="Sedation, implants, and same-day crowns."
-            body="Higher-stakes care, delivered at a calmer pace — with the rest of the menu under one roof."
-          />
-          <Link href="/roseville-dental-care/" className="btn btn-outline shrink-0">
-            All services
-            <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
-        </div>
+        <SectionHeader
+          eyebrow="The work we are known for"
+          title="Sedation, implants, and same-day crowns."
+          body="Higher-stakes care, delivered at a calmer pace — with the rest of the menu under one roof."
+        />
+        <Link
+          href="/roseville-dental-care/"
+          className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ocean-700 transition hover:text-ocean-800"
+        >
+          All services
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </Link>
 
         <div className="mt-10 grid gap-5 lg:grid-cols-2">
           {sedation ? <ServiceCard service={sedation} featured /> : null}
@@ -275,8 +288,8 @@ export function DoctorSpotlight() {
   return (
     <section className="reveal bg-surface-alt py-20 sm:py-24">
       <div className="wrap grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
-        <div className="relative mx-auto w-full max-w-sm lg:mx-0">
-          <div className="relative aspect-[3/4] overflow-hidden rounded-3xl border border-line shadow-soft">
+        <div className="relative mx-auto w-full max-w-[275px] lg:mx-0">
+          <div className="relative aspect-[275/412] overflow-hidden rounded-3xl border border-line shadow-soft">
             <DoctorPortrait priority={false} />
           </div>
           <p className="mt-4 font-serif text-lg text-ink">{doctor.name}</p>
@@ -347,9 +360,13 @@ export function Reviews() {
 
 export function VisitPanel({
   headingLevel = "h2",
+  showForm = true,
 }: {
   headingLevel?: "h1" | "h2";
+  showForm?: boolean;
 } = {}) {
+  const FormHeading = headingLevel === "h1" ? "h2" : "h3";
+
   return (
     <section className="reveal bg-background py-20 sm:py-24">
       <div className="wrap grid gap-12 lg:grid-cols-[0.95fr_1.05fr]">
@@ -357,7 +374,11 @@ export function VisitPanel({
           <SectionHeader
             eyebrow="Visit Waikiki Dental"
             title="Getting started is the easy part."
-            body="Book online, call or text the front desk, or send a quick note. The office is on Pleasant Grove Boulevard in Roseville."
+            body={
+              showForm
+                ? "Book online, call or text the front desk, or send a quick note. The office is on Pleasant Grove Boulevard in Roseville."
+                : "Book online, call or text the front desk, or request a time. The office is on Pleasant Grove Boulevard in Roseville."
+            }
             headingLevel={headingLevel}
           />
 
@@ -420,29 +441,65 @@ export function VisitPanel({
 
           <PaymentStrip className="mt-6" />
 
-          <p className="mt-6 text-sm text-ink-muted">
-            Prefer that the office pick a time?{" "}
-            <Link
-              href={scheduleHref}
-              className="font-semibold text-ocean-700 underline-offset-4 hover:underline"
-            >
-              Request an appointment
-            </Link>
-            .
-          </p>
+          {showForm ? (
+            <p className="mt-6 text-sm text-ink-muted">
+              Prefer that the office pick a time?{" "}
+              <Link
+                href={scheduleHref}
+                className="font-semibold text-ocean-700 underline-offset-4 hover:underline"
+              >
+                Request an appointment
+              </Link>
+              .
+            </p>
+          ) : null}
         </div>
 
-        <div className="rounded-[1.75rem] border border-line bg-cream p-7 shadow-soft sm:p-9">
-          <h3 className="font-serif text-2xl text-ink">Send a message</h3>
-          <p className="mt-2 text-sm leading-7 text-ink-muted">
-            Have a general question? Write to the team and choose how you’d like
-            to hear back. Please don’t include medical, insurance, or other
-            sensitive details.
-          </p>
-          <div className="mt-7">
-            <ContactForm />
+        {showForm ? (
+          <div className="rounded-[1.75rem] border border-line bg-cream p-7 shadow-soft sm:p-9">
+            <FormHeading className="font-serif text-2xl text-ink">
+              Send a message
+            </FormHeading>
+            <p className="mt-2 text-sm leading-7 text-ink-muted">
+              Have a general question? Write to the team and choose how you’d like
+              to hear back. Please don’t include medical, insurance, or other
+              sensitive details.
+            </p>
+            <div className="mt-7">
+              <ContactForm />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-col justify-between rounded-[1.75rem] bg-deep p-8 text-cream sm:p-10">
+            <div>
+              <p className="eyebrow text-gold-soft">Book a visit</p>
+              <h3 className="mt-4 font-serif text-3xl font-medium tracking-tight text-cream">
+                The next step is a conversation.
+              </h3>
+              <p className="mt-4 max-w-md text-pretty leading-8 text-cream/75">
+                Book online in a couple of minutes, or call or text the Roseville
+                office. Prefer the team to find a time? Request an appointment
+                instead.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-col gap-3">
+              <a href={site.bookingHref} className="btn btn-sunset">
+                <CalendarCheck className="size-4" aria-hidden="true" />
+                Book Online
+              </a>
+              <a href={site.phoneHref} className="btn btn-ghost-light">
+                <Phone className="size-4" aria-hidden="true" />
+                Call or text {site.phone}
+              </a>
+              <Link
+                href={scheduleHref}
+                className="text-center text-sm font-semibold text-cream/80 underline-offset-4 hover:text-cream hover:underline"
+              >
+                Request an appointment
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -458,7 +515,7 @@ export function BookStrip() {
             Ready when you are.
           </h2>
           <p className="mt-2 max-w-xl text-ink-muted">
-            Book online in a couple of minutes, or call the Roseville office.
+            Book online in a couple of minutes, or call or text the Roseville office.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -466,9 +523,9 @@ export function BookStrip() {
             <CalendarCheck className="size-4" aria-hidden="true" />
             Book Online
           </a>
-          <a href={site.phoneHref} className="btn btn-outline">
+          <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
             <Phone className="size-4" aria-hidden="true" />
-            {site.phone}
+            Call or text
           </a>
         </div>
       </div>

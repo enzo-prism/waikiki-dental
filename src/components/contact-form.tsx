@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Loader2,
   Mail,
-  MessageSquareText,
   Phone,
   Send,
 } from "lucide-react";
@@ -184,19 +183,6 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       aria-busy={status === "submitting"}
       noValidate
     >
-      <div className="flex gap-3 rounded-2xl border border-ocean-100 bg-ocean-50/70 p-4">
-        <MessageSquareText
-          className="mt-0.5 size-5 shrink-0 text-ocean-700"
-          aria-hidden="true"
-        />
-        <div>
-          <p className="text-sm font-semibold text-ink">Send a general message</p>
-          <p className="mt-0.5 text-xs leading-5 text-ink-muted">
-            For urgent dental needs, please call the office.
-          </p>
-        </div>
-      </div>
-
       <div className={compact ? "grid gap-4" : "grid gap-4 sm:grid-cols-2"}>
         <FormField label="Full name" required>
           <input

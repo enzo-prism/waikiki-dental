@@ -1,7 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { CalendarCheck, Phone } from "lucide-react";
 import {
-  BookStrip,
   DoctorSpotlight,
   FeaturedQuote,
   FlagshipServices,
@@ -10,7 +10,7 @@ import {
 import { JsonLd } from "@/components/page-templates";
 import { Hibiscus } from "@/components/brand";
 import { WaveUnderline } from "@/components/waves";
-import { heroFacts, heroImage, heroImageAlt, site } from "@/lib/site";
+import { heroFacts, heroImage, heroImageAlt, scheduleHref, site } from "@/lib/site";
 
 export default function Home() {
   return (
@@ -26,9 +26,9 @@ export default function Home() {
             </span>
             <h1 className="mt-6 text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-ink sm:text-6xl lg:text-[4.25rem]">
               Dentistry that feels like{" "}
-              <span className="italic text-ocean-700 sm:relative sm:inline-block">
+              <span className="relative inline-block italic text-ocean-700">
                 a deep breath.
-                <WaveUnderline className="absolute -bottom-2 left-0 hidden h-3 w-full text-sunset-500 sm:-bottom-3 sm:block" />
+                <WaveUnderline className="pointer-events-none absolute -bottom-1 left-0 h-2.5 w-full text-sunset-500 sm:-bottom-3 sm:h-3" />
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
@@ -36,15 +36,21 @@ export default function Home() {
               care off — monitored IV sedation, implants, and same-day crowns,
               delivered without rush or judgment.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-9 hidden flex-wrap items-center gap-3 lg:flex">
               <a href={site.bookingHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
                 Book Online
               </a>
-              <a href={site.phoneHref} className="btn btn-outline">
+              <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
                 <Phone className="size-4" aria-hidden="true" />
-                Call {site.phone}
+                Call or text
               </a>
+              <Link
+                href={scheduleHref}
+                className="text-sm font-medium text-ink-muted underline-offset-4 hover:text-ink hover:underline"
+              >
+                Request an appointment
+              </Link>
             </div>
 
             <ul className="mt-10 flex flex-col gap-2 text-sm text-ink-muted sm:flex-row sm:flex-wrap sm:gap-x-6">
@@ -73,8 +79,7 @@ export default function Home() {
       <FeaturedQuote />
       <FlagshipServices />
       <DoctorSpotlight />
-      <VisitPanel />
-      <BookStrip />
+      <VisitPanel showForm={false} />
     </>
   );
 }

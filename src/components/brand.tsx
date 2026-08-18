@@ -118,7 +118,7 @@ export function DoctorPortrait({
       src={doctorPortrait}
       alt={`${doctor.name}, dentist at Waikiki Dental in Roseville`}
       fill
-      sizes="(max-width: 640px) 84vw, 360px"
+      sizes="275px"
       className={className}
       priority={priority}
     />

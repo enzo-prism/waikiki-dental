@@ -491,7 +491,6 @@ export const newPatientOffer = {
 export const paymentOptions = {
   insuranceNote: "Most dental insurance plans welcome",
   items: [
-    "Most dental insurance plans",
     "CareCredit financing",
     "Major credit & debit cards",
     "Cash & check",

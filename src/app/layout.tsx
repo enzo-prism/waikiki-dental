@@ -55,8 +55,20 @@ export default function RootLayout({
       className={`${fraunces.variable} ${manrope.variable} h-full scroll-smooth antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-ink">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-deep focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-cream focus:outline-none focus-visible:ring-4 focus-visible:ring-ocean-200"
+        >
+          Skip to content
+        </a>
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main
+          id="main-content"
+          tabIndex={-1}
+          className="flex-1 scroll-mt-20 outline-none"
+        >
+          {children}
+        </main>
         <SiteFooter />
         <MobileCtaBar />
       </body>

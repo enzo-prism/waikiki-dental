@@ -43,7 +43,7 @@ export default function RequestAppointmentPage() {
       <JsonLd />
       <section className="bg-surface-alt">
         <div className="wrap-wide grid gap-10 py-12 sm:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-14 lg:py-20">
-          <div className="lg:sticky lg:top-28">
+          <div className="lg:sticky lg:top-20">
             <Eyebrow className="text-sunset-600">Request an appointment</Eyebrow>
             <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
               Let’s find a time that works for you.
@@ -80,10 +80,10 @@ export default function RequestAppointmentPage() {
               </p>
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
                 <a href={site.bookingHref} className="btn btn-sunset btn-sm">
-                  Book instantly online
+                  Book Online
                 </a>
-                <a href={site.phoneHref} className="btn btn-outline btn-sm">
-                  Call {site.phone}
+                <a href={site.phoneHref} className="btn btn-outline btn-sm" aria-label={`Call or text ${site.phone}`}>
+                  Call or text
                 </a>
               </div>
             </div>

@@ -6,9 +6,9 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import { emergency, hours, navItems, site } from "@/lib/site";
+import { emergency, hours, navItems, scheduleHref, site } from "@/lib/site";
 import { BrandLogo, Hibiscus, WordmarkLockup } from "./brand";
-import { MobileMenu, ServicesDropdown } from "./site-nav";
+import { DesktopNav, MobileMenu } from "./site-nav";
 
 export function SiteHeader() {
   return (
@@ -22,20 +22,16 @@ export function SiteHeader() {
           <BrandLogo priority className="h-8 w-auto sm:h-9" />
         </Link>
 
-        <div className="hidden items-center gap-7 lg:flex">
-          <ServicesDropdown />
-          {navItems.slice(1).map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-ink/80 transition hover:text-ink"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+        <DesktopNav />
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <Link
+            href={emergency.href}
+            className="hidden items-center gap-1.5 text-sm font-medium text-sunset-700 transition hover:text-sunset-600 xl:inline-flex"
+          >
+            <HeartPulse className="size-3.5" aria-hidden="true" />
+            Emergency
+          </Link>
           <a
             href={site.bookingHref}
             className="hidden btn btn-sunset btn-sm lg:inline-flex"
@@ -62,7 +58,7 @@ export function MobileCtaBar() {
           <CalendarCheck className="size-4" aria-hidden="true" />
           Book Online
         </a>
-        <a href={site.phoneHref} className="btn btn-outline btn-sm bg-cream">
+        <a href={site.phoneHref} className="btn btn-outline btn-sm bg-cream" aria-label={`Call or text ${site.phone}`}>
           <Phone className="size-4" aria-hidden="true" />
           Call
         </a>
@@ -108,6 +104,14 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href={scheduleHref}
+                className="text-cream/75 transition hover:text-cream"
+              >
+                Request an appointment
+              </Link>
+            </li>
             <li>
               <Link
                 href={emergency.href}
