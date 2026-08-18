@@ -37,8 +37,13 @@ function isServicesCurrent(pathname: string) {
   return slug === "roseville-dental-care" || Boolean(findService(slug));
 }
 
-const navLinkClass =
-  "text-sm font-medium transition hover:text-ink";
+function navClass(active: boolean) {
+  return `text-sm font-medium transition ${
+    active
+      ? "text-ink underline decoration-ocean-600 decoration-1 underline-offset-[10px]"
+      : "text-ink/80 hover:text-ink"
+  }`;
+}
 
 /**
  * Accessible services mega-menu: opens on hover-intent and click, closes on
@@ -96,7 +101,7 @@ export function ServicesDropdown() {
           href="/roseville-dental-care/"
           aria-current={active ? "page" : undefined}
           onClick={() => setOpen(false)}
-          className={`${navLinkClass} ${active ? "text-ink" : "text-ink/80"}`}
+          className={navClass(active)}
         >
           Services
         </Link>
@@ -176,7 +181,7 @@ export function DesktopNav() {
             key={item.href}
             href={item.href}
             aria-current={active ? "page" : undefined}
-            className={`${navLinkClass} ${active ? "text-ink" : "text-ink/80"}`}
+            className={navClass(active)}
           >
             {item.label}
           </Link>

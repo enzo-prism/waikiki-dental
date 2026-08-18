@@ -135,7 +135,7 @@ function ServiceCard({
     return (
       <Link
         href={`/${service.slug}/`}
-        className="group relative flex flex-col justify-between overflow-hidden rounded-3xl bg-deep p-8 text-cream transition hover:bg-deep-800 sm:p-10"
+        className="group relative flex w-full flex-col justify-between overflow-hidden rounded-3xl bg-deep p-8 text-cream transition hover:bg-deep-800 sm:p-10"
       >
         <div>
           <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-soft">
