@@ -1,22 +1,45 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import {
   ArrowLeft,
   ArrowRight,
-  CalendarCheck,
-  Check,
-  CheckCircle2,
-  Clock,
+  BadgeCheck,
+  HeartPulse,
   Loader2,
-  Pencil,
   Phone,
 } from "lucide-react";
-import { appointmentReasons, site, timeWindows } from "@/lib/site";
+import { Hibiscus } from "@/components/brand";
+import { ChoiceCard } from "@/components/forms/choice-card";
+import { ChoiceChip } from "@/components/forms/choice-chip";
+import { FormProgress } from "@/components/forms/form-progress";
+import { LiveRequestSummary, type SummaryRow } from "@/components/forms/live-summary";
+import { MonthCalendar } from "@/components/forms/month-calendar";
+import { Honeypot, PrivacyConsent, PrivacyNote } from "@/components/forms/privacy-note";
+import { RequestSuccess } from "@/components/forms/request-success";
+import {
+  clearAppointmentDraft,
+  formatLongDate,
+  formatShortDate,
+  formNetworkError,
+  isEmail,
+  phoneDigitCount,
+  readAppointmentDraft,
+  submitFormspree,
+  writeAppointmentDraft,
+} from "@/lib/forms";
+import {
+  appointmentReasons,
+  formPrivacy,
+  patientTypes,
+  site,
+  soonestOption,
+  timeWindows,
+} from "@/lib/site";
 
 type FormData = {
-  reason: string;
   patientType: "new" | "returning" | "";
+  reason: string;
   flexible: boolean;
   date: string;
   timeOfDay: string;
@@ -24,68 +47,102 @@ type FormData = {
   phone: string;
   email: string;
   notes: string;
+  consent: boolean;
 };
 
 const initialData: FormData = {
-  reason: "",
   patientType: "",
+  reason: "",
   flexible: false,
   date: "",
-  timeOfDay: "any",
+  timeOfDay: "",
   name: "",
   phone: "",
   email: "",
   notes: "",
+  consent: false,
 };
-
-const APPOINTMENT_FORM_ENDPOINT = "https://formspree.io/f/xojgjoqa";
 
 const STEPS = [
   {
-    key: "reason",
-    label: "Visit",
-    title: "What can we help with?",
-    subtitle: "Choose the reason for your visit.",
+    title: "Who’s visiting — and why?",
+    subtitle: "New or returning, then the reason for your visit.",
   },
   {
-    key: "timing",
-    label: "Timing",
-    title: "When works for you?",
-    subtitle: "Pick a day and time — we'll confirm the exact slot.",
+    title: "When works best?",
+    subtitle:
+      "Pick a preferred day, or ask for the soonest opening. We’ll confirm the exact time.",
   },
   {
-    key: "details",
-    label: "Details",
     title: "How can we reach you?",
-    subtitle: "We'll confirm your appointment by phone or text.",
-  },
-  {
-    key: "review",
-    label: "Review",
-    title: "Review your request",
-    subtitle: "Make sure everything looks right, then send it over.",
+    subtitle: "We’ll follow up by phone or text to confirm.",
   },
 ] as const;
 
-function isEmail(value: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+function isValidReason(key: string | undefined) {
+  return Boolean(key && appointmentReasons.some((reason) => reason.key === key));
 }
 
-export function AppointmentScheduler() {
-  const [form, setForm] = useState<FormData>(initialData);
+function isClientSnapshot() {
+  return true;
+}
+
+function isServerSnapshot() {
+  return false;
+}
+
+function subscribeNever() {
+  return () => {};
+}
+
+export function AppointmentScheduler({
+  initialReason,
+}: {
+  initialReason?: string;
+} = {}) {
+  const isClient = useSyncExternalStore(
+    subscribeNever,
+    isClientSnapshot,
+    isServerSnapshot,
+  );
+  const seeded = {
+    ...initialData,
+    reason: isValidReason(initialReason) ? initialReason! : "",
+  };
+  const [form, setForm] = useState<FormData>(seeded);
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "done">("idle");
-  const [today] = useState(() => new Date().toISOString().slice(0, 10));
-  const [gotcha, setGotcha] = useState(""); // Formspree honeypot
+  const [gotcha, setGotcha] = useState("");
+  const [ready, setReady] = useState(false);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
   const isSubmittingRef = useRef(false);
+  const skipInitialFocus = useRef(true);
   const errorId = useId();
 
-  // Move focus to the step heading on each step change for screen readers.
+  if (isClient && !ready) {
+    const draft = readAppointmentDraft({ step: 0, form: seeded });
+    setForm({
+      ...draft.form,
+      reason: seeded.reason || (isValidReason(draft.form.reason) ? draft.form.reason : ""),
+    });
+    setStep(draft.step);
+    setReady(true);
+  }
+
   useEffect(() => {
-    if (status === "idle") headingRef.current?.focus();
+    if (!ready || status === "done") return;
+    writeAppointmentDraft({ step, form });
+  }, [form, step, ready, status]);
+
+  useEffect(() => {
+    if (status !== "idle") return;
+    if (skipInitialFocus.current) {
+      skipInitialFocus.current = false;
+      return;
+    }
+    headingRef.current?.focus();
   }, [step, status]);
 
   function update<K extends keyof FormData>(key: K, value: FormData[K]) {
@@ -93,37 +150,70 @@ export function AppointmentScheduler() {
     setError("");
   }
 
-  const reasonLabel = appointmentReasons.find((r) => r.key === form.reason)?.label;
-  const timingLabel = form.flexible
+  const reason = appointmentReasons.find((item) => item.key === form.reason);
+  const patient = patientTypes.find((item) => item.key === form.patientType);
+  const time = timeWindows.find((item) => item.key === form.timeOfDay);
+  const whenLabel = form.flexible
     ? "Soonest available"
     : form.date
-      ? new Date(`${form.date}T00:00:00`).toLocaleDateString(undefined, {
-          weekday: "long",
-          month: "long",
-          day: "numeric",
-        })
-      : "—";
-  const timeWindowLabel =
-    timeWindows.find((t) => t.key === form.timeOfDay)?.label ?? "Any time";
+      ? formatLongDate(form.date)
+      : "";
+  const whenShort = form.flexible
+    ? "Soonest available"
+    : form.date
+      ? formatShortDate(form.date)
+      : "";
+
+  const summaryRows: SummaryRow[] = [
+    {
+      label: "Patient",
+      value: patient?.label ?? "",
+      empty: !patient,
+      step: 0,
+    },
+    {
+      label: "Visit",
+      value: reason?.label ?? "",
+      empty: !reason,
+      step: 0,
+    },
+    {
+      label: "When",
+      value: [whenShort, time?.label].filter(Boolean).join(" · "),
+      empty: !whenShort && !time,
+      step: 1,
+    },
+    {
+      label: "Reach",
+      value: [form.name, form.phone].filter(Boolean).join(" · "),
+      empty: !form.name && !form.phone,
+      step: 2,
+    },
+  ];
 
   function validate(target: number): string {
     if (target === 0) {
-      return form.reason ? "" : "Please choose a reason for your visit.";
+      if (!form.patientType) return "Please choose first visit or welcome back.";
+      if (!form.reason) return "Please choose a reason for your visit.";
+      return "";
     }
     if (target === 1) {
-      if (!form.patientType)
-        return "Let us know if you're a new or returning patient.";
       if (!form.flexible && !form.date)
-        return "Pick a preferred date, or choose “Soonest available”.";
+        return "Pick a preferred day, or choose soonest available.";
+      if (!form.timeOfDay)
+        return "Please choose morning, afternoon, or anytime.";
       return "";
     }
     if (target === 2) {
-      if (!form.name.trim()) return "Please enter your name.";
+      if (form.name.trim().length < 2) return "Please enter your name.";
       if (!form.phone.trim())
         return "Please add a phone number so we can confirm.";
+      if (phoneDigitCount(form.phone) < 10)
+        return "That phone number looks incomplete.";
       if (form.email && !isEmail(form.email))
-        return "That email address doesn't look right.";
-      return "";
+        return "That email address doesn’t look right.";
+      if (!form.consent)
+        return "Please confirm this request doesn’t include sensitive details.";
     }
     return "";
   }
@@ -135,25 +225,20 @@ export function AppointmentScheduler() {
       return;
     }
     setError("");
-    if (step < STEPS.length - 1) {
-      setStep((s) => s + 1);
-    } else {
-      void submit();
-    }
+    if (step < 2) setStep((value) => value + 1);
+    else void submit();
   }
 
   function goBack() {
     if (status === "submitting") return;
     setError("");
-    setStep((s) => Math.max(0, s - 1));
+    setStep((value) => Math.max(0, value - 1));
   }
 
   function jumpTo(target: number) {
-    if (status === "submitting") return;
-    if (target <= step) {
-      setError("");
-      setStep(target);
-    }
+    if (status === "submitting" || target > step) return;
+    setError("");
+    setStep(target);
   }
 
   async function submit() {
@@ -162,576 +247,483 @@ export function AppointmentScheduler() {
     setStatus("submitting");
     setError("");
 
-    // Quietly accept honeypot submissions without sending them to Formspree.
     if (gotcha.trim()) {
       setStatus("done");
+      clearAppointmentDraft();
       return;
     }
 
+    const patientLabel =
+      form.patientType === "new" ? "New patient" : "Returning patient";
+    const dateLabel = form.flexible
+      ? "Soonest available"
+      : formatLongDate(form.date);
+    const timeLabel = time?.label ?? "Anytime";
+
     try {
-      const response = await fetch(APPOINTMENT_FORM_ENDPOINT, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          subject: "New appointment request — Waikiki Dental",
-          source: "Waikiki Dental appointment scheduler",
-          appointment_reason: reasonLabel ?? form.reason,
-          patient_type:
-            form.patientType === "new" ? "New patient" : "Returning patient",
-          preferred_date: form.flexible
-            ? "Soonest available"
-            : form.date || "Not specified",
-          preferred_time: timeWindowLabel,
-          name: form.name.trim(),
-          phone: form.phone.trim(),
-          ...(form.email.trim() ? { email: form.email.trim() } : {}),
-          notes: form.notes.trim() || "None",
-          message: [
-            `Visit: ${reasonLabel ?? form.reason}`,
-            `Patient: ${form.patientType === "new" ? "New patient" : "Returning patient"}`,
-            `Preferred date: ${form.flexible ? "Soonest available" : form.date || "Not specified"}`,
-            `Preferred time: ${timeWindowLabel}`,
-            `Name: ${form.name.trim()}`,
-            `Phone: ${form.phone.trim()}`,
-            `Email: ${form.email.trim() || "Not provided"}`,
-            `Notes: ${form.notes.trim() || "None"}`,
-          ].join("\n"),
-          _gotcha: gotcha,
-        }),
+      const response = await submitFormspree({
+        _subject: "Appointment request — Waikiki Dental",
+        form_type: "appointment_request",
+        source: "Waikiki Dental appointment request",
+        patient_type: patientLabel,
+        appointment_reason: reason?.label ?? form.reason,
+        appointment_reason_key: form.reason,
+        preferred_date: form.flexible ? "Soonest available" : form.date,
+        preferred_date_label: dateLabel,
+        preferred_time: timeLabel,
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        ...(form.email.trim() ? { email: form.email.trim() } : {}),
+        notes: form.notes.trim() || "None",
+        message: [
+          "APPOINTMENT REQUEST (not confirmed)",
+          "",
+          `Patient: ${patientLabel}`,
+          `Visit: ${reason?.label ?? form.reason}`,
+          `Preferred date: ${dateLabel}`,
+          `Preferred time: ${timeLabel}`,
+          `Name: ${form.name.trim()}`,
+          `Phone: ${form.phone.trim()}`,
+          `Email: ${form.email.trim() || "Not provided"}`,
+          `Notes: ${form.notes.trim() || "None"}`,
+        ].join("\n"),
+        _gotcha: gotcha,
       });
 
       if (!response.ok) {
         isSubmittingRef.current = false;
         setStatus("idle");
-        setError(
-          response.status === 429
-            ? "Too many requests were sent. Please wait a moment and try again, or call the office."
-            : "We couldn't send your request. Please try again, or call the office for help.",
-        );
+        setError(formNetworkError(response.status, "appointment"));
         return;
       }
 
+      clearAppointmentDraft();
       setStatus("done");
     } catch {
       isSubmittingRef.current = false;
       setStatus("idle");
       setError(
-        "We couldn't send your request. Check your connection and try again, or call the office for help.",
+        "We couldn’t send your request. Check your connection and try again, or call the office.",
       );
     }
   }
 
   function reset() {
     isSubmittingRef.current = false;
-    setForm(initialData);
+    setForm({
+      ...initialData,
+      reason: isValidReason(initialReason) ? initialReason! : "",
+    });
     setStep(0);
     setError("");
+    setGotcha("");
     setStatus("idle");
-  }
-
-  if (status === "done") {
-    return (
-      <div
-        className="card p-8 text-center shadow-soft sm:p-12"
-        role="status"
-        aria-live="polite"
-      >
-        <span className="mx-auto grid size-16 place-items-center rounded-full bg-ocean-50 text-ocean-600">
-          <CheckCircle2 className="size-9" aria-hidden="true" />
-        </span>
-        <h2 className="mt-6 font-serif text-3xl font-medium tracking-tight text-ink">
-          Your appointment request was sent.
-        </h2>
-        <p className="mx-auto mt-3 max-w-md text-pretty leading-8 text-ink-muted">
-          The Waikiki Dental team will follow up by phone or text to confirm the
-          final date and time.
-        </p>
-
-        <dl className="mx-auto mt-8 max-w-md rounded-2xl border border-line bg-background/50 p-5 text-left text-sm">
-          <div className="flex justify-between gap-4 border-b border-line/70 pb-2">
-            <dt className="text-ink-muted">Visit</dt>
-            <dd className="font-medium text-ink">{reasonLabel}</dd>
-          </div>
-          <div className="flex justify-between gap-4 border-b border-line/70 py-2">
-            <dt className="text-ink-muted">When</dt>
-            <dd className="font-medium text-ink">
-              {timingLabel} · {timeWindowLabel}
-            </dd>
-          </div>
-          <div className="flex justify-between gap-4 pt-2">
-            <dt className="text-ink-muted">Name</dt>
-            <dd className="font-medium text-ink">{form.name}</dd>
-          </div>
-        </dl>
-
-        <div className="mt-8 flex justify-center">
-          <a href={site.phoneHref} className="btn btn-outline">
-            <Phone className="size-4" aria-hidden="true" />
-            Need help? Call {site.phone}
-          </a>
-        </div>
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-6 text-sm font-semibold text-ocean-700 underline-offset-2 hover:underline"
-        >
-          Start a new request
-        </button>
-      </div>
-    );
+    clearAppointmentDraft();
   }
 
   const current = STEPS[step];
-  const isLast = step === STEPS.length - 1;
+  const SoonestIcon = soonestOption.icon;
 
-  return (
-    <form
-      aria-busy={status === "submitting"}
-      className="card overflow-hidden shadow-soft"
-      onSubmit={(event) => { event.preventDefault(); goNext(); }}
-      noValidate
-    >
-      {/* Progress */}
-      <div className="border-b border-line bg-cream px-6 pt-6 sm:px-9">
-        <div className="sm:hidden">
-          <div className="flex items-center justify-between text-sm">
-            <span className="font-semibold text-ink">
-              Step {step + 1} of {STEPS.length}
-            </span>
-            <span className="text-ink-muted">{current.label}</span>
-          </div>
-          <div className="mt-2 mb-5 h-1.5 w-full overflow-hidden rounded-full bg-line">
-            <div
-              className="h-full rounded-full bg-ocean-600 transition-all duration-300"
-              style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
-            />
-          </div>
-        </div>
-
-        <ol className="hidden items-center gap-3 pb-5 sm:flex">
-          {STEPS.map((s, index) => {
-            const done = index < step;
-            const isCurrent = index === step;
-            const reachable = index <= step;
-            return (
-              <li key={s.key} className="flex flex-1 items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => jumpTo(index)}
-                  disabled={!reachable || status === "submitting"}
-                  aria-current={isCurrent ? "step" : undefined}
-                  className={`flex items-center gap-2 rounded-full ${
-                    reachable ? "cursor-pointer" : "cursor-default"
-                  }`}
-                >
-                  <span
-                    className={`grid size-8 shrink-0 place-items-center rounded-full border text-sm font-semibold transition ${
-                      done
-                        ? "border-ocean-600 bg-ocean-600 text-cream"
-                        : isCurrent
-                          ? "border-ocean-600 text-ocean-700"
-                          : "border-line text-ink-soft"
-                    }`}
-                  >
-                    {done ? <Check className="size-4" aria-hidden="true" /> : index + 1}
-                  </span>
-                  <span
-                    className={`text-sm font-medium ${
-                      isCurrent ? "text-ink" : "text-ink-muted"
-                    }`}
-                  >
-                    {s.label}
-                  </span>
-                </button>
-                {index < STEPS.length - 1 ? (
-                  <span
-                    aria-hidden="true"
-                    className={`h-px flex-1 ${done ? "bg-ocean-600" : "bg-line"}`}
-                  />
-                ) : null}
-              </li>
-            );
-          })}
-        </ol>
-      </div>
-
-      {/* Step content */}
-      <div className="p-6 sm:p-9">
-        <p aria-live="polite" className="sr-only">
-          Step {step + 1} of {STEPS.length}: {current.title}
-        </p>
-
-        <div key={step} className="step-pane">
-          <h2
-            ref={headingRef}
-            tabIndex={-1}
-            className="font-serif text-2xl font-medium tracking-tight text-ink outline-none sm:text-3xl"
-          >
-            {current.title}
-          </h2>
-          <p className="mt-2 text-ink-muted">{current.subtitle}</p>
-
-          <div className="mt-7">
-            {step === 0 ? (
-              <fieldset>
-                <legend className="sr-only">Reason for visit</legend>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {appointmentReasons.map((reason) => {
-                    const Icon = reason.icon;
-                    const selected = form.reason === reason.key;
-                    return (
-                      <label
-                        key={reason.key}
-                        className={`relative flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
-                          selected
-                            ? "border-ocean-500 bg-ocean-50"
-                            : "border-line bg-cream hover:border-ocean-300"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="reason"
-                          value={reason.key}
-                          checked={selected}
-                          onChange={() => update("reason", reason.key)}
-                          className="sr-only"
-                        />
-                        <span
-                          className={`grid size-11 shrink-0 place-items-center rounded-full transition ${
-                            selected
-                              ? "bg-ocean-600 text-cream"
-                              : "bg-ocean-50 text-ocean-600"
-                          }`}
-                        >
-                          <Icon className="size-5" aria-hidden="true" />
-                        </span>
-                        <span className="min-w-0">
-                          <span className="block font-serif text-lg text-ink">
-                            {reason.label}
-                          </span>
-                          <span className="mt-0.5 block text-sm text-ink-muted">
-                            {reason.hint}
-                          </span>
-                        </span>
-                        {selected ? (
-                          <Check
-                            className="absolute right-4 top-4 size-5 text-ocean-600"
-                            aria-hidden="true"
-                          />
-                        ) : null}
-                      </label>
-                    );
-                  })}
-                </div>
-              </fieldset>
-            ) : null}
-
-            {step === 1 ? (
-              <div className="grid gap-7">
-                <fieldset>
-                  <legend className="text-sm font-medium text-ink">
-                    Are you a new or returning patient?
-                  </legend>
-                  <div className="mt-2 grid grid-cols-2 gap-2 rounded-full border border-line bg-background p-1">
-                    {[
-                      { key: "new", label: "New patient" },
-                      { key: "returning", label: "Returning" },
-                    ].map((option) => {
-                      const selected = form.patientType === option.key;
-                      return (
-                        <label
-                          key={option.key}
-                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ocean-300 ${
-                            selected
-                              ? "bg-ocean-600 text-cream shadow-soft"
-                              : "text-ink-muted hover:text-ink"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="patientType"
-                            value={option.key}
-                            checked={selected}
-                            onChange={() =>
-                              update(
-                                "patientType",
-                                option.key as FormData["patientType"],
-                              )
-                            }
-                            className="sr-only"
-                          />
-                          {option.label}
-                        </label>
-                      );
-                    })}
-                  </div>
-                </fieldset>
-
-                <div className="grid gap-2">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <label
-                      htmlFor="appt-date"
-                      className="text-sm font-medium text-ink"
-                    >
-                      Preferred date
-                    </label>
-                    <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-ink-muted">
-                      <input
-                        type="checkbox"
-                        checked={form.flexible}
-                        onChange={(event) =>
-                          update("flexible", event.target.checked)
-                        }
-                        className="size-4 accent-ocean-600"
-                      />
-                      Soonest available
-                    </label>
-                  </div>
-                  <input
-                    id="appt-date"
-                    type="date"
-                    min={today || undefined}
-                    value={form.date}
-                    disabled={form.flexible}
-                    onChange={(event) => update("date", event.target.value)}
-                    className="field disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                </div>
-
-                <fieldset>
-                  <legend className="text-sm font-medium text-ink">
-                    Time of day
-                  </legend>
-                  <div className="mt-2 grid grid-cols-3 gap-2 rounded-full border border-line bg-background p-1">
-                    {timeWindows.map((slot) => {
-                      const selected = form.timeOfDay === slot.key;
-                      return (
-                        <label
-                          key={slot.key}
-                          className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-3 text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ocean-300 ${
-                            selected
-                              ? "bg-ocean-600 text-cream shadow-soft"
-                              : "text-ink-muted hover:text-ink"
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="timeOfDay"
-                            value={slot.key}
-                            checked={selected}
-                            onChange={() => update("timeOfDay", slot.key)}
-                            className="sr-only"
-                          />
-                          <Clock className="mr-1.5 size-3.5" aria-hidden="true" />
-                          {slot.label}
-                        </label>
-                      );
-                    })}
-                  </div>
-                </fieldset>
-              </div>
-            ) : null}
-
-            {step === 2 ? (
-                <div className="grid gap-4">
-                <div className="rounded-2xl border border-gold/40 bg-gold/10 p-4 text-sm leading-6 text-ink-muted">
-                  This form requests a preferred time; it does not confirm an appointment. Please do not include symptoms, medical history, insurance IDs, or payment details.
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <label className="grid gap-2 text-sm font-medium text-ink">
-                    Full name
-                    <input
-                      value={form.name}
-                      onChange={(event) => update("name", event.target.value)}
-                      className="field"
-                      name="name"
-                      placeholder="Your name"
-                      autoComplete="name"
-                    />
-                  </label>
-                  <label className="grid gap-2 text-sm font-medium text-ink">
-                    Phone
-                    <input
-                      value={form.phone}
-                      onChange={(event) => update("phone", event.target.value)}
-                      className="field"
-                      name="phone"
-                      type="tel"
-                      placeholder="(916) …"
-                      autoComplete="tel"
-                    />
-                  </label>
-                </div>
-                <label className="grid gap-2 text-sm font-medium text-ink">
-                  Email <span className="font-normal text-ink-soft">(optional)</span>
-                  <input
-                    value={form.email}
-                    onChange={(event) => update("email", event.target.value)}
-                    className="field"
-                    name="email"
-                    type="email"
-                    placeholder="you@email.com"
-                    autoComplete="email"
-                  />
-                </label>
-                <label className="grid gap-2 text-sm font-medium text-ink">
-                  Anything we should know?{" "}
-                  <span className="font-normal text-ink-soft">(optional)</span>
-                  <textarea
-                    value={form.notes}
-                    onChange={(event) => update("notes", event.target.value)}
-                    className="field min-h-28 resize-y"
-                    name="notes"
-                    placeholder="Best time to call or a non-medical accessibility request…"
-                  />
-                </label>
-
-                {/* Honeypot */}
-                <div aria-hidden="true" className="hidden">
-                  <label>
-                    Company
-                    <input
-                      tabIndex={-1}
-                      autoComplete="off"
-                      value={gotcha}
-                      onChange={(event) => setGotcha(event.target.value)}
-                      name="_gotcha"
-                    />
-                  </label>
-                </div>
-              </div>
-            ) : null}
-
-            {step === 3 ? (
-              <dl className="rounded-2xl border border-line bg-background/40 px-5">
-                <ReviewRow
-                  disabled={status === "submitting"}
-                  label="Visit"
-                  value={reasonLabel}
-                  onEdit={() => jumpTo(0)}
-                />
-                <ReviewRow
-                  disabled={status === "submitting"}
-                  label="Patient"
-                  value={form.patientType === "new" ? "New patient" : "Returning patient"}
-                  onEdit={() => jumpTo(1)}
-                />
-                <ReviewRow
-                  disabled={status === "submitting"}
-                  label="Preferred time"
-                  value={`${timingLabel} · ${timeWindowLabel}`}
-                  onEdit={() => jumpTo(1)}
-                />
-                <ReviewRow
-                  disabled={status === "submitting"}
-                  label="Name"
-                  value={form.name}
-                  onEdit={() => jumpTo(2)}
-                />
-                <ReviewRow
-                  disabled={status === "submitting"}
-                  label="Phone"
-                  value={form.phone}
-                  onEdit={() => jumpTo(2)}
-                />
-                {form.email ? (
-                  <ReviewRow
-                    disabled={status === "submitting"}
-                    label="Email"
-                    value={form.email}
-                    onEdit={() => jumpTo(2)}
-                  />
-                ) : null}
-                {form.notes ? (
-                  <ReviewRow
-                    disabled={status === "submitting"}
-                    label="Notes"
-                    value={form.notes}
-                    onEdit={() => jumpTo(2)}
-                  />
-                ) : null}
-              </dl>
-            ) : null}
-          </div>
-
-          {error ? (
-            <p id={errorId} role="alert" className="mt-5 text-sm font-medium text-sunset-600">
-              {error}
-            </p>
-          ) : null}
-        </div>
-      </div>
-
-      {/* Footer navigation */}
-      <div className="flex items-center justify-between gap-3 border-t border-line bg-cream px-6 py-4 sm:px-9">
-        <button
-          type="button"
-          onClick={goBack}
-          disabled={status === "submitting"}
-          className={`btn btn-outline ${step === 0 ? "invisible" : ""}`}
-        >
-          <ArrowLeft className="size-4" aria-hidden="true" />
-          Back
-        </button>
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          aria-describedby={error ? errorId : undefined}
-          className="btn btn-sunset"
-        >
-          {status === "submitting" ? (
-            <>
-              <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-              Sending…
-            </>
-          ) : isLast ? (
-            <>
-              <CalendarCheck className="size-4" aria-hidden="true" />
-              Request appointment
-            </>
-          ) : (
-            <>
-              Continue
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </>
-          )}
-        </button>
-      </div>
-    </form>
-  );
-}
-
-function ReviewRow({
-  disabled = false,
-  label,
-  value,
-  onEdit,
-}: {
-  disabled?: boolean;
-  label: string;
-  value?: string;
-  onEdit: () => void;
-}) {
-  return (
-    <div className="flex items-start justify-between gap-4 border-b border-line/70 py-3 last:border-0">
-      <div className="min-w-0">
-        <dt className="text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-soft">
-          {label}
-        </dt>
-        <dd className="mt-0.5 text-pretty text-ink">{value || "—"}</dd>
-      </div>
+  const actions = (
+    <div className="flex items-center justify-between gap-3">
       <button
         type="button"
-        disabled={disabled}
-        onClick={onEdit}
-        className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-ocean-700 transition hover:text-ocean-800 disabled:cursor-not-allowed disabled:opacity-60"
+        onClick={goBack}
+        disabled={status === "submitting"}
+        className={`btn btn-outline ${step === 0 ? "invisible" : ""}`}
       >
-        <Pencil className="size-3.5" aria-hidden="true" />
-        Edit
+        <ArrowLeft className="size-4" aria-hidden="true" />
+        Back
+      </button>
+      <button
+        type="submit"
+        disabled={status === "submitting"}
+        aria-describedby={error ? errorId : undefined}
+        className="btn btn-primary min-w-40"
+      >
+        {status === "submitting" ? (
+          <>
+            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+            Sending…
+          </>
+        ) : step === 2 ? (
+          "Send request"
+        ) : (
+          <>
+            Continue
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </>
+        )}
       </button>
     </div>
+  );
+
+  if (status === "done") {
+    return (
+      <section className="bg-surface-alt">
+        <div className="wrap-wide py-12 sm:py-20">
+          <RequestSuccess
+            title="Your request is on its way."
+            body="This isn’t a confirmed appointment yet. The Waikiki Dental team will follow up by phone or text to lock the time."
+            recap={[
+              { label: "Visit", value: reason?.label ?? "" },
+              {
+                label: "When",
+                value: `${whenLabel}${time ? ` · ${time.label}` : ""}`,
+              },
+              { label: "Name", value: form.name },
+            ]}
+            onReset={reset}
+            resetLabel="Start a new request"
+            jarvis
+          />
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="bg-surface-alt">
+      <div className="wrap-wide grid gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.15fr)] lg:items-start lg:gap-14 lg:py-20">
+        <div className="lg:sticky lg:top-20">
+          <p className="eyebrow text-ocean-600">Request an appointment</p>
+          <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
+            Request a time with the team.
+          </h1>
+          <p className="mt-5 max-w-md text-pretty text-lg leading-8 text-ink-muted">
+            Tell us who you are, a preferred day, and how to reach you. This is
+            a request — the Roseville office confirms the final time by phone or
+            text.
+          </p>
+
+          <div className="mt-8 hidden lg:block">
+            <LiveRequestSummary
+              rows={summaryRows}
+              currentStep={step}
+              onJump={jumpTo}
+            />
+          </div>
+
+          <div className="mt-8 hidden rounded-2xl border border-line bg-cream p-5 lg:block">
+            <p className="text-sm font-semibold text-ink">Want to choose a time now?</p>
+            <p className="mt-1 text-sm text-ink-muted">
+              Book Online opens the live scheduler. Or call the office.
+            </p>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+              <a href={site.bookingHref} className="btn btn-sunset btn-sm">
+                Book Online
+              </a>
+              <a
+                href={site.phoneHref}
+                className="btn btn-outline btn-sm"
+                aria-label={`Call or text ${site.phone}`}
+              >
+                Call or text
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <form
+          aria-label="Request an appointment"
+          aria-busy={status === "submitting"}
+          className="mb-32 lg:mb-0"
+          onSubmit={(event) => {
+            event.preventDefault();
+            goNext();
+          }}
+          noValidate
+        >
+          <div className="card shadow-soft">
+          <FormProgress step={step} onJump={jumpTo} />
+
+          <div className="border-b border-line px-6 py-3 lg:hidden">
+            <LiveRequestSummary
+              rows={summaryRows}
+              currentStep={step}
+              onJump={jumpTo}
+              variant="compact"
+            />
+          </div>
+
+          <div className="p-6 sm:p-8">
+            <p aria-live="polite" className="sr-only">
+              Step {step + 1} of 3: {current.title}
+            </p>
+            <div key={step} className="step-pane">
+              <h2
+                ref={headingRef}
+                tabIndex={-1}
+                className="font-serif text-2xl font-medium tracking-tight text-ink outline-none sm:text-3xl"
+              >
+                {current.title}
+              </h2>
+              <p className="mt-2 text-ink-muted">{current.subtitle}</p>
+
+              <div className="mt-7">
+                {step === 0 ? (
+                  <div className="grid gap-8">
+                    <fieldset>
+                      <legend className="text-sm font-medium text-ink">
+                        Are you new to Waikiki Dental?
+                      </legend>
+                      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                        {patientTypes.map((type) => (
+                          <ChoiceCard
+                            key={type.key}
+                            name="patientType"
+                            value={type.key}
+                            checked={form.patientType === type.key}
+                            onChange={() => update("patientType", type.key)}
+                            accent={type.key === "new" ? "sunset" : "ocean"}
+                            icon={
+                              type.key === "new" ? (
+                                <Hibiscus
+                                  size={20}
+                                  className={
+                                    form.patientType === "new"
+                                      ? "text-current"
+                                      : "text-sunset-600"
+                                  }
+                                />
+                              ) : (
+                                <BadgeCheck className="size-5" aria-hidden="true" />
+                              )
+                            }
+                            label={type.label}
+                            hint={type.hint}
+                          />
+                        ))}
+                      </div>
+                    </fieldset>
+
+                    <fieldset>
+                      <legend className="text-sm font-medium text-ink">
+                        What can we help with?
+                      </legend>
+                      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                        {appointmentReasons.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <ChoiceCard
+                              key={item.key}
+                              name="reason"
+                              value={item.key}
+                              checked={form.reason === item.key}
+                              onChange={() => update("reason", item.key)}
+                              icon={<Icon className="size-5" aria-hidden="true" />}
+                              label={item.label}
+                              hint={item.hint}
+                            />
+                          );
+                        })}
+                      </div>
+                    </fieldset>
+
+                    {form.reason === "emergency" ? (
+                      <div className="flex gap-3 rounded-2xl border border-ocean-200 bg-ocean-50/70 p-4">
+                        <HeartPulse
+                          className="mt-0.5 size-5 shrink-0 text-ocean-700"
+                          aria-hidden="true"
+                        />
+                        <div>
+                          <p className="text-sm font-semibold text-ink">
+                            Need to be seen today?
+                          </p>
+                          <p className="mt-1 text-sm leading-6 text-ink-muted">
+                            If you’re in pain, calling the office is the fastest
+                            path. You can still send a request.
+                          </p>
+                          <a
+                            href={site.phoneHref}
+                            className="btn btn-outline btn-sm mt-3"
+                            aria-label={`Call or text ${site.phone}`}
+                          >
+                            <Phone className="size-4" aria-hidden="true" />
+                            Call or text
+                          </a>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : null}
+
+                {step === 1 ? (
+                  <div className="grid gap-7">
+                    <fieldset>
+                      <legend className="text-sm font-medium text-ink">
+                        Preferred day
+                      </legend>
+                      <div className="mt-3">
+                        <label
+                          className={`relative flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
+                            form.flexible
+                              ? "border-ocean-500 bg-ocean-50"
+                              : "border-line bg-cream hover:border-ocean-300"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={form.flexible}
+                            onChange={(event) => {
+                              update("flexible", event.target.checked);
+                              if (event.target.checked) update("date", "");
+                            }}
+                            className="sr-only"
+                          />
+                          <span
+                            className={`grid size-11 shrink-0 place-items-center rounded-full ${
+                              form.flexible
+                                ? "bg-ocean-600 text-cream"
+                                : "bg-ocean-50 text-ocean-600"
+                            }`}
+                          >
+                            <SoonestIcon className="size-5" aria-hidden="true" />
+                          </span>
+                          <span>
+                            <span className="block font-serif text-lg text-ink">
+                              {soonestOption.label}
+                            </span>
+                            <span className="mt-0.5 block text-sm text-ink-muted">
+                              {soonestOption.hint}
+                            </span>
+                          </span>
+                        </label>
+                      </div>
+                      <div className="mt-4">
+                        <MonthCalendar
+                          value={form.date}
+                          disabled={form.flexible}
+                          onChange={(iso) => {
+                            update("date", iso);
+                            update("flexible", false);
+                          }}
+                        />
+                      </div>
+                    </fieldset>
+
+                    <fieldset>
+                      <legend className="text-sm font-medium text-ink">
+                        Time of day
+                      </legend>
+                      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                        {timeWindows.map((slot) => {
+                          const Icon = slot.icon;
+                          return (
+                            <ChoiceChip
+                              key={slot.key}
+                              name="timeOfDay"
+                              value={slot.key}
+                              checked={form.timeOfDay === slot.key}
+                              onChange={() => update("timeOfDay", slot.key)}
+                              icon={<Icon className="size-4" aria-hidden="true" />}
+                              label={slot.label}
+                              hint={slot.hint}
+                            />
+                          );
+                        })}
+                      </div>
+                    </fieldset>
+                  </div>
+                ) : null}
+
+                {step === 2 ? (
+                  <div className="grid gap-4">
+                    <PrivacyNote>{formPrivacy.requestLine}</PrivacyNote>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="grid gap-2 text-sm font-medium text-ink">
+                        Full name
+                        <input
+                          value={form.name}
+                          onChange={(event) => update("name", event.target.value)}
+                          className="field"
+                          name="name"
+                          placeholder="Your name"
+                          autoComplete="name"
+                          aria-invalid={
+                            error.toLowerCase().includes("name") || undefined
+                          }
+                        />
+                      </label>
+                      <label className="grid gap-2 text-sm font-medium text-ink">
+                        Phone
+                        <input
+                          value={form.phone}
+                          onChange={(event) => update("phone", event.target.value)}
+                          className="field"
+                          name="phone"
+                          type="tel"
+                          placeholder="(916) …"
+                          autoComplete="tel"
+                          aria-invalid={
+                            error.toLowerCase().includes("phone") || undefined
+                          }
+                        />
+                      </label>
+                    </div>
+                    <label className="grid gap-2 text-sm font-medium text-ink">
+                      Email{" "}
+                      <span className="font-normal text-ink-soft">(optional)</span>
+                      <input
+                        value={form.email}
+                        onChange={(event) => update("email", event.target.value)}
+                        className="field"
+                        name="email"
+                        type="email"
+                        placeholder="you@email.com"
+                        autoComplete="email"
+                        aria-invalid={
+                          error.toLowerCase().includes("email") || undefined
+                        }
+                      />
+                    </label>
+                    <label className="grid gap-2 text-sm font-medium text-ink">
+                      Anything the team should know?{" "}
+                      <span className="font-normal text-ink-soft">(optional)</span>
+                      <textarea
+                        value={form.notes}
+                        onChange={(event) =>
+                          update("notes", event.target.value.slice(0, 500))
+                        }
+                        className="field min-h-28 resize-y"
+                        name="notes"
+                        placeholder={formPrivacy.notesPlaceholder}
+                      />
+                    </label>
+                    <PrivacyConsent
+                      checked={form.consent}
+                      onChange={(value) => update("consent", value)}
+                    >
+                      {formPrivacy.requestConsent}
+                    </PrivacyConsent>
+                    <Honeypot value={gotcha} onChange={setGotcha} />
+                  </div>
+                ) : null}
+              </div>
+
+              {error ? (
+                <p
+                  id={errorId}
+                  role="alert"
+                  className="mt-5 text-sm font-medium text-sunset-600"
+                >
+                  {error}
+                </p>
+              ) : null}
+            </div>
+          </div>
+
+          <div
+            className="fixed inset-x-0 z-40 border-t border-line bg-cream/95 px-4 py-2.5 backdrop-blur-xl lg:static lg:z-auto lg:rounded-b-2xl lg:bg-cream lg:px-8 lg:py-4 lg:backdrop-blur-none"
+            style={{
+              bottom: "calc(4.25rem + env(safe-area-inset-bottom, 0px))",
+            }}
+          >
+            {actions}
+          </div>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 }

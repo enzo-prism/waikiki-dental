@@ -21,9 +21,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-No local env is required. `.env.example` documents
-`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`, which the contact form reads when you
-want a dedicated Formspree form instead of sharing the appointment endpoint.
+No local env is required. Both forms post to `https://formspree.io/f/xeajvpnb`
+via `src/lib/forms.ts`. `.env.example` documents
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` if you want a dedicated Formspree form
+for contact messages.
 
 ## Checks
 
@@ -72,15 +73,16 @@ public waikikidental.com site and self-hosted in `public/media/`:
 
 ## Formspree integration
 
-The guided appointment request is configured and deployed to submit JSON to the
-public Formspree endpoint `https://formspree.io/f/xojgjoqa`, configured in
-`src/components/appointment-scheduler.tsx`. A successful HTTP response means
-Formspree accepted the request for processing; it does not prove clinic inbox
-delivery or mean an appointment has been confirmed. The office confirms the
-final date and time by phone or text.
+The guided appointment request is a 3-step Visit / When / Reach flow with a
+custom weekday calendar, live summary, and hibiscus success state. It submits
+JSON to the public Formspree endpoint `https://formspree.io/f/xeajvpnb`,
+configured in `src/lib/forms.ts`. A successful HTTP response means Formspree
+accepted the request for processing; it does not prove clinic inbox delivery or
+mean an appointment has been confirmed. The office confirms the final date and
+time by phone or text.
 
 The scheduler validates required fields, prevents duplicate submissions, uses
-Formspree's `_gotcha` honeypot, disables navigation while sending, and preserves
+Formspree's `_gotcha` honeypot, keeps a session draft until send, and preserves
 entered data when a network or service error allows a retry.
 
 The contact form (`src/components/contact-form.tsx`) submits to the same
@@ -115,12 +117,12 @@ live in `src/components/site-chrome.tsx` and `src/components/site-nav.tsx`.
 
 ## Key features
 
-- **Appointment scheduler** (`/request-appointment/`) — a guided, accessible,
-  mobile-first multi-step request form (`src/components/appointment-scheduler.tsx`)
-  that is deployed to post appointment requests to Formspree. Inbox delivery
-  remains pending a clinic-approved end-to-end test.
-- **Contact form** — custom topic, reply preference, privacy confirmation,
-  honeypot, and live Formspree delivery with honest success/error states.
+- **Appointment scheduler** (`/request-appointment/`) — a guided 3-step request
+  (Visit / When / Reach) with a weekday calendar, live summary, and modern
+  choice cards (`src/components/appointment-scheduler.tsx`). Posts to Formspree.
+  Inbox delivery remains pending a clinic-approved end-to-end test.
+- **Contact form** — topic and reply chips, privacy confirmation, honeypot, and
+  live Formspree delivery with honest success/error states.
 - **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD, `sitemap.ts`,
   `robots.ts`, trailing-slash URLs.
 - **Design system** — "Pacific Premium" palette anchored to the real brand

@@ -1,21 +1,25 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
+import { Loader2, Mail, Phone, Send } from "lucide-react";
+import { ChoiceChip } from "@/components/forms/choice-chip";
+import { Honeypot, PrivacyConsent } from "@/components/forms/privacy-note";
+import { RequestSuccess } from "@/components/forms/request-success";
 import {
-  CheckCircle2,
-  Loader2,
-  Mail,
-  Phone,
-  Send,
-} from "lucide-react";
-import { site } from "@/lib/site";
+  FORMSPREE_ENDPOINT,
+  formNetworkError,
+  isEmail,
+  phoneDigitCount,
+  submitFormspree,
+} from "@/lib/forms";
+import { contactTopics, formPrivacy } from "@/lib/site";
 
 type FormState = {
   name: string;
   email: string;
   phone: string;
   topic: string;
-  replyBy: "email" | "phone";
+  replyBy: "email" | "phone" | "";
   message: string;
   consent: boolean;
 };
@@ -24,27 +28,21 @@ const initialState: FormState = {
   name: "",
   email: "",
   phone: "",
-  topic: "General question",
-  replyBy: "email",
+  topic: "",
+  replyBy: "",
   message: "",
   consent: false,
 };
 
-/**
- * Formspree endpoint for the contact form. Shares the practice's form
- * with the appointment scheduler by default (submissions are labeled by
- * `_subject`/`source`); override with a dedicated form via
- * NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT when one exists.
- */
 const CONTACT_FORM_ENDPOINT =
-  process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT ??
-  "https://formspree.io/f/xojgjoqa";
+  process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT ?? FORMSPREE_ENDPOINT;
 
 export function ContactForm({ compact = false }: { compact?: boolean }) {
   const [form, setForm] = useState<FormState>(initialState);
-  const [company, setCompany] = useState(""); // Formspree honeypot
+  const [company, setCompany] = useState("");
   const [error, setError] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
+  const isSubmittingRef = useRef(false);
   const errorId = useId();
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -54,18 +52,34 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
   async function submitForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status === "submitting") return;
+    if (isSubmittingRef.current || status === "submitting") return;
 
-    if (!form.name.trim() || !form.message.trim()) {
+    if (!form.topic) {
+      setError("Please choose what this is about.");
+      return;
+    }
+    if (!form.message.trim() || form.name.trim().length < 2) {
       setError("Please complete your name and message.");
       return;
     }
+    if (!form.replyBy) {
+      setError("Please choose email or phone so we know how to reply.");
+      return;
+    }
     if (form.replyBy === "email" && !form.email.trim()) {
-      setError("Please add your email, or switch the reply preference to phone.");
+      setError("Please add your email, or choose a phone reply.");
       return;
     }
     if (form.replyBy === "phone" && !form.phone.trim()) {
-      setError("Please add your phone number, or switch the reply preference to email.");
+      setError("Please add your phone number, or choose an email reply.");
+      return;
+    }
+    if (form.email && !isEmail(form.email)) {
+      setError("That email address doesn’t look right.");
+      return;
+    }
+    if (form.phone && phoneDigitCount(form.phone) < 10) {
+      setError("That phone number looks incomplete.");
       return;
     }
     if (!form.consent) {
@@ -75,32 +89,34 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       return;
     }
 
-    // Quietly accept honeypot submissions without sending them to Formspree.
     if (company.trim()) {
       setStatus("sent");
       return;
     }
 
+    isSubmittingRef.current = true;
     setStatus("submitting");
     setError("");
 
+    const topic = contactTopics.find((item) => item.key === form.topic);
+
     try {
-      const response = await fetch(CONTACT_FORM_ENDPOINT, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          _subject: "New contact message — Waikiki Dental website",
+      const response = await submitFormspree(
+        {
+          _subject: "Contact message — Waikiki Dental",
+          form_type: "contact_message",
           source: "Waikiki Dental contact form",
-          topic: form.topic,
+          topic: topic?.label ?? form.topic,
+          topic_key: form.topic,
           name: form.name.trim(),
           ...(form.email.trim() ? { email: form.email.trim() } : {}),
           ...(form.phone.trim() ? { phone: form.phone.trim() } : {}),
           reply_preference: form.replyBy === "email" ? "Email" : "Phone",
+          privacy_check: "Yes",
           message: [
-            `Topic: ${form.topic}`,
+            "CONTACT MESSAGE",
+            "",
+            `Topic: ${topic?.label ?? form.topic}`,
             `Name: ${form.name.trim()}`,
             `Email: ${form.email.trim() || "Not provided"}`,
             `Phone: ${form.phone.trim() || "Not provided"}`,
@@ -109,29 +125,29 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             form.message.trim(),
           ].join("\n"),
           _gotcha: company,
-        }),
-      });
+        },
+        CONTACT_FORM_ENDPOINT,
+      );
 
       if (!response.ok) {
+        isSubmittingRef.current = false;
         setStatus("idle");
-        setError(
-          response.status === 429
-            ? "Too many messages were sent just now. Please wait a moment and try again, or call the office."
-            : "We couldn't send your message. Please try again, or call or email the office directly.",
-        );
+        setError(formNetworkError(response.status, "contact"));
         return;
       }
 
       setStatus("sent");
     } catch {
+      isSubmittingRef.current = false;
       setStatus("idle");
       setError(
-        "We couldn't send your message. Check your connection and try again, or call the office.",
+        "We couldn’t send your message. Check your connection and try again, or call the office.",
       );
     }
   }
 
   function reset() {
+    isSubmittingRef.current = false;
     setForm(initialState);
     setCompany("");
     setError("");
@@ -140,38 +156,13 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
   if (status === "sent") {
     return (
-      <div
-        className="rounded-3xl border border-ocean-200 bg-ocean-50 p-6 text-center sm:p-8"
-        role="status"
-        aria-live="polite"
-      >
-        <span className="mx-auto grid size-12 place-items-center rounded-full bg-ocean-600 text-cream">
-          <CheckCircle2 className="size-6" aria-hidden="true" />
-        </span>
-        <h3 className="mt-4 font-serif text-2xl text-ink">
-          Your message was sent.
-        </h3>
-        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-muted">
-          Thanks, {form.name.trim() || "friend"} — the Waikiki Dental team will
-          reply by {form.replyBy === "email" ? "email" : "phone"} during office
-          hours. For anything urgent, please call.
-        </p>
-        <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href={site.phoneHref} className="btn btn-sunset btn-sm">
-            <Phone className="size-4" aria-hidden="true" /> Call {site.phone}
-          </a>
-          <a href={site.emailHref} className="btn btn-outline btn-sm">
-            <Mail className="size-4" aria-hidden="true" /> Email the office
-          </a>
-        </div>
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-5 text-sm font-semibold text-ocean-700 hover:underline"
-        >
-          Send another message
-        </button>
-      </div>
+      <RequestSuccess
+        title="Your message was sent."
+        body={`Thanks — the team will reply by ${form.replyBy === "email" ? "email" : "phone"} during office hours. For anything urgent, please call.`}
+        recap={[]}
+        onReset={reset}
+        resetLabel="Send another message"
+      />
     );
   }
 
@@ -183,136 +174,153 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       aria-busy={status === "submitting"}
       noValidate
     >
+      <fieldset>
+        <legend className="text-sm font-medium text-ink">What is this about?</legend>
+        <div
+          className={`mt-3 grid gap-3 ${compact ? "grid-cols-1" : "sm:grid-cols-2"}`}
+        >
+          {contactTopics.map((topic) => {
+            const Icon = topic.icon;
+            return (
+              <ChoiceChip
+                key={topic.key}
+                name="topic"
+                value={topic.key}
+                checked={form.topic === topic.key}
+                onChange={() => update("topic", topic.key)}
+                icon={<Icon className="size-4" aria-hidden="true" />}
+                label={topic.label}
+                hint={topic.hint}
+              />
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <label className="grid gap-2 text-sm font-medium text-ink">
+        Message
+        <textarea
+          value={form.message}
+          onChange={(event) => update("message", event.target.value)}
+          className="field min-h-36 resize-y"
+          name="message"
+          placeholder={formPrivacy.contactPlaceholder}
+          aria-invalid={error.toLowerCase().includes("message") || undefined}
+        />
+      </label>
+
+      <fieldset>
+        <legend className="text-sm font-medium text-ink">How should we reply?</legend>
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <ChoiceChip
+            name="replyBy"
+            value="email"
+            checked={form.replyBy === "email"}
+            onChange={() => update("replyBy", "email")}
+            icon={<Mail className="size-4" aria-hidden="true" />}
+            label="Email"
+          />
+          <ChoiceChip
+            name="replyBy"
+            value="phone"
+            checked={form.replyBy === "phone"}
+            onChange={() => update("replyBy", "phone")}
+            icon={<Phone className="size-4" aria-hidden="true" />}
+            label="Phone"
+          />
+        </div>
+      </fieldset>
+
       <div className={compact ? "grid gap-4" : "grid gap-4 sm:grid-cols-2"}>
-        <FormField label="Full name" required>
+        <label className="grid gap-2 text-sm font-medium text-ink">
+          Full name
           <input
-            required
             value={form.name}
-            onChange={(e) => update("name", e.target.value)}
+            onChange={(event) => update("name", event.target.value)}
             className="field"
             name="name"
             placeholder="Your name"
             autoComplete="name"
+            aria-invalid={error.toLowerCase().includes("name") || undefined}
           />
-        </FormField>
-        <FormField label="Email" hint={form.replyBy === "email" ? undefined : "Optional"} required={form.replyBy === "email"}>
+        </label>
+        {form.replyBy === "phone" ? (
+          <label className="grid gap-2 text-sm font-medium text-ink">
+            Phone
+            <input
+              value={form.phone}
+              onChange={(event) => update("phone", event.target.value)}
+              className="field"
+              name="phone"
+              type="tel"
+              placeholder="(916) …"
+              autoComplete="tel"
+              aria-invalid={error.toLowerCase().includes("phone") || undefined}
+            />
+          </label>
+        ) : (
+          <label className="grid gap-2 text-sm font-medium text-ink">
+            Email{" "}
+            {form.replyBy === "email" ? null : (
+              <span className="font-normal text-ink-soft">(optional)</span>
+            )}
+            <input
+              value={form.email}
+              onChange={(event) => update("email", event.target.value)}
+              className="field"
+              name="email"
+              type="email"
+              placeholder="you@email.com"
+              autoComplete="email"
+              aria-invalid={error.toLowerCase().includes("email") || undefined}
+            />
+          </label>
+        )}
+      </div>
+
+      {form.replyBy === "phone" ? (
+        <label className="grid gap-2 text-sm font-medium text-ink">
+          Email <span className="font-normal text-ink-soft">(optional)</span>
           <input
-            type="email"
             value={form.email}
-            onChange={(e) => update("email", e.target.value)}
+            onChange={(event) => update("email", event.target.value)}
             className="field"
-            name="email"
+            name="email-optional"
+            type="email"
             placeholder="you@email.com"
             autoComplete="email"
           />
-        </FormField>
-      </div>
-
-      <div className={compact ? "grid gap-4" : "grid gap-4 sm:grid-cols-2"}>
-        <FormField label="Phone" hint={form.replyBy === "phone" ? undefined : "Optional"} required={form.replyBy === "phone"}>
+        </label>
+      ) : form.replyBy === "email" ? (
+        <label className="grid gap-2 text-sm font-medium text-ink">
+          Phone <span className="font-normal text-ink-soft">(optional)</span>
           <input
-            type="tel"
             value={form.phone}
-            onChange={(e) => update("phone", e.target.value)}
+            onChange={(event) => update("phone", event.target.value)}
             className="field"
             name="phone"
-            placeholder="(916) 555-0123"
+            type="tel"
+            placeholder="(916) …"
             autoComplete="tel"
           />
-        </FormField>
-        <FormField label="What can we help with?">
-          <select
-            value={form.topic}
-            onChange={(e) => update("topic", e.target.value)}
-            className="field"
-            name="topic"
-          >
-            <option>General question</option>
-            <option>New patient information</option>
-            <option>Insurance or payment question</option>
-            <option>Existing appointment</option>
-            <option>Website feedback</option>
-          </select>
-        </FormField>
-      </div>
-
-      <fieldset>
-        <legend className="text-sm font-medium text-ink">
-          How should we reply?
-        </legend>
-        <div className="mt-2 grid grid-cols-2 gap-2 rounded-full border border-line bg-background p-1">
-          {(["email", "phone"] as const).map((method) => (
-            <label
-              key={method}
-              className={`flex min-h-11 cursor-pointer items-center justify-center rounded-full px-4 text-sm font-semibold capitalize transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ocean-300 ${
-                form.replyBy === method
-                  ? "bg-ocean-600 text-cream"
-                  : "text-ink-muted"
-              }`}
-            >
-              <input
-                type="radio"
-                name="replyBy"
-                value={method}
-                checked={form.replyBy === method}
-                onChange={() => update("replyBy", method)}
-                className="sr-only"
-              />
-              {method}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <FormField label="Message" required hint="Please keep this general">
-        <textarea
-          required
-          value={form.message}
-          onChange={(e) => update("message", e.target.value)}
-          className="field min-h-36 resize-y"
-          name="message"
-          placeholder="How can the Waikiki Dental team help?"
-        />
-      </FormField>
-
-      <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-line bg-cream p-4 text-sm leading-6 text-ink-muted">
-        <input
-          type="checkbox"
-          checked={form.consent}
-          onChange={(e) => update("consent", e.target.checked)}
-          className="mt-1 size-4 shrink-0 accent-ocean-600"
-        />
-        <span>
-          <strong className="text-ink">Privacy check:</strong> I have not
-          included medical history, insurance IDs, payment details, or other
-          sensitive information.
-        </span>
-      </label>
-
-      <div aria-hidden="true" className="hidden">
-        <label>
-          Company
-          <input
-            tabIndex={-1}
-            autoComplete="off"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            name="_gotcha"
-          />
         </label>
-      </div>
+      ) : null}
+
+      <PrivacyConsent
+        checked={form.consent}
+        onChange={(value) => update("consent", value)}
+      >
+        {formPrivacy.contactConsent}
+      </PrivacyConsent>
+      <Honeypot value={company} onChange={setCompany} />
 
       {error ? (
-        <p
-          id={errorId}
-          className="text-sm font-medium text-sunset-600"
-          role="alert"
-        >
+        <p id={errorId} className="text-sm font-medium text-sunset-600" role="alert">
           {error}
         </p>
       ) : null}
       <button
-        className="btn btn-sunset"
+        className="btn btn-primary"
         type="submit"
         disabled={status === "submitting"}
         aria-describedby={error ? errorId : undefined}
@@ -332,30 +340,5 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         The team replies during office hours — usually within one business day.
       </p>
     </form>
-  );
-}
-
-function FormField({
-  label,
-  hint,
-  required = false,
-  children,
-}: {
-  label: string;
-  hint?: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="grid gap-2 text-sm font-medium text-ink">
-      <span>
-        {label}
-        {required ? <span className="text-sunset-600"> *</span> : null}
-        {hint ? (
-          <span className="ml-2 font-normal text-ink-soft">{hint}</span>
-        ) : null}
-      </span>
-      {children}
-    </label>
   );
 }

@@ -1,12 +1,20 @@
 import {
   BadgeCheck,
+  Building2,
   CalendarCheck,
+  CalendarClock,
+  CalendarSearch,
+  Clock,
+  Ellipsis,
   HeartPulse,
   MapPin,
+  MessageCircle,
   ShieldCheck,
   SmilePlus,
   Sparkles,
   Stethoscope,
+  SunMedium,
+  Sunrise,
   Syringe,
   WandSparkles,
 } from "lucide-react";
@@ -514,18 +522,31 @@ export type AppointmentReason = {
   icon: ComponentType<{ className?: string }>;
 };
 
-export const appointmentReasons: AppointmentReason[] = [
+export const patientTypes = [
   {
-    key: "new-patient",
-    label: "New patient visit",
-    hint: "Exam, cleaning & X-rays",
-    icon: Sparkles,
+    key: "new" as const,
+    label: "First visit",
+    hint: "I haven’t been to this office",
   },
   {
-    key: "cleaning",
-    label: "Cleaning or checkup",
-    hint: "Routine preventive care",
-    icon: Stethoscope,
+    key: "returning" as const,
+    label: "Welcome back",
+    hint: "I’m a current or past patient",
+  },
+];
+
+export const appointmentReasons: AppointmentReason[] = [
+  {
+    key: "sedation",
+    label: "IV sedation",
+    hint: "Comfort-focused care",
+    icon: Syringe,
+  },
+  {
+    key: "restorative",
+    label: "Crown, implant, or repair",
+    hint: "Rebuild or replace a tooth",
+    icon: SmilePlus,
   },
   {
     key: "cosmetic",
@@ -534,30 +555,99 @@ export const appointmentReasons: AppointmentReason[] = [
     icon: WandSparkles,
   },
   {
-    key: "restorative",
-    label: "Crown, filling or implant",
-    hint: "Repair or replace a tooth",
-    icon: SmilePlus,
+    key: "cleaning",
+    label: "Cleaning or checkup",
+    hint: "Routine preventive care",
+    icon: Stethoscope,
   },
   {
     key: "emergency",
     label: "Tooth pain or emergency",
-    hint: "We'll prioritize urgent care",
+    hint: "Call if you need to be seen today",
     icon: HeartPulse,
   },
   {
     key: "other",
     label: "Something else",
-    hint: "Tell us what you need",
-    icon: CalendarCheck,
+    hint: "Tell us in a note on the last step",
+    icon: Ellipsis,
   },
 ];
 
 export const timeWindows = [
-  { key: "morning", label: "Morning" },
-  { key: "afternoon", label: "Afternoon" },
-  { key: "any", label: "Any time" },
+  {
+    key: "morning",
+    label: "Morning",
+    hint: "Before noon",
+    icon: Sunrise,
+  },
+  {
+    key: "afternoon",
+    label: "Afternoon",
+    hint: "Noon until close",
+    icon: SunMedium,
+  },
+  {
+    key: "any",
+    label: "Anytime",
+    hint: "We’ll find a fit",
+    icon: Clock,
+  },
 ];
+
+export const contactTopics = [
+  {
+    key: "general",
+    label: "General question",
+    hint: "Hours, location, a quick note",
+    icon: MessageCircle,
+  },
+  {
+    key: "new-patient",
+    label: "New patient",
+    hint: "Getting started",
+    icon: Sparkles,
+  },
+  {
+    key: "existing-appointment",
+    label: "An existing visit",
+    hint: "A change or question about a time",
+    icon: CalendarClock,
+  },
+  {
+    key: "office",
+    label: "Office question",
+    hint: "We’ll call you back — no account numbers",
+    icon: Building2,
+  },
+  {
+    key: "other",
+    label: "Something else",
+    hint: "Short and non-medical",
+    icon: Ellipsis,
+  },
+];
+
+export const formPrivacy = {
+  requestLine:
+    "Please don’t include symptoms, medical history, insurance IDs, or payment details.",
+  notesPlaceholder:
+    "Best window to call, or a non-medical accessibility request…",
+  requestConsent:
+    "I have not included medical, insurance, or payment details in this request.",
+  contactLead:
+    "A general question for the team. Please don’t include medical, insurance, or payment details.",
+  contactConsent:
+    "I have not included medical history, insurance IDs, payment details, or other sensitive information.",
+  contactPlaceholder: "How can the team help? Keep this general.",
+};
+
+export const soonestOption = {
+  key: "soonest",
+  label: "Soonest available",
+  hint: "No preferred date. The team will look for the next opening.",
+  icon: CalendarSearch,
+};
 
 export const pageRoutes = [
   "",

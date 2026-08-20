@@ -8,14 +8,17 @@ the site.
 
 | Form | Current state | Delivery path |
 | --- | --- | --- |
-| Appointment request | Deployed; inbox delivery unverified | Browser JSON `POST` to `https://formspree.io/f/xojgjoqa` |
-| General contact | Deployed; shares the appointment form's endpoint | Browser JSON `POST` to `https://formspree.io/f/xojgjoqa` (override with `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`) |
+| Appointment request | Deployed; inbox delivery unverified | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` |
+| General contact | Deployed; shares the appointment form's endpoint | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` (override with `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`) |
 
-Contact submissions are labeled with `_subject: "New contact message — Waikiki
-Dental website"` and `source: "Waikiki Dental contact form"` so the office can
-tell them apart from appointment requests in the shared inbox. To split them
-into separate Formspree forms later, create a new form and set
-`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` in the Vercel project.
+The shared endpoint lives in `src/lib/forms.ts` as `FORMSPREE_ENDPOINT`.
+Contact submissions use `_subject: "Contact message — Waikiki Dental"` and
+`form_type: "contact_message"`. Appointment requests use `_subject:
+"Appointment request — Waikiki Dental"` and `form_type: "appointment_request"`.
+Both also send a human-readable `message` banner so the office can tell them
+apart in a shared inbox. To split them into separate Formspree forms later,
+create a new form and set `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` in the
+Vercel project.
 
 An appointment request is not a confirmed appointment. The success screen only
 says the request was sent and explains that the office will confirm the final
@@ -23,14 +26,24 @@ date and time by phone or text.
 
 ## Appointment request contract
 
-The implementation is in
-`src/components/appointment-scheduler.tsx`. It sends these fields:
+The implementation is a 3-step flow (Visit / When / Reach) in
+`src/components/appointment-scheduler.tsx`, with copy and options in
+`src/lib/site.ts`. A live summary sits beside the form on desktop and in a
+compact strip on mobile. There is no review step. Preferred dates use a custom
+weekday calendar (weekends and past days disabled) or **Soonest available**.
+`/request-appointment/?reason=sedation` (or another reason key) prefills the
+visit reason. A draft is stored in `sessionStorage` under `wd-appt-request-v1`
+until a successful send.
 
-- `subject` and `source`
-- `appointment_reason` and `patient_type`
-- `preferred_date` and `preferred_time`
+It sends these fields:
+
+- `_subject` and `form_type` (`appointment_request`)
+- `source`
+- `patient_type`, `appointment_reason`, `appointment_reason_key`
+- `preferred_date`, `preferred_date_label`, `preferred_time`
 - `name`, `phone`, and optional `email`
-- `notes` and a readable `message` summary
+- `notes` and a readable `message` summary that begins with
+  `APPOINTMENT REQUEST (not confirmed)`
 - `_gotcha`, Formspree's honeypot field
 
 The client sends `Accept: application/json` and `Content-Type:
@@ -39,13 +52,16 @@ proves Formspree accepted the request for processing, not that the clinic inbox
 received it. A 429 response gets a wait-and-retry message; other service and
 network failures keep the entered data available for another attempt. A
 synchronous ref guard and the disabled sending state prevent duplicate
-requests.
+requests. Continue / Send uses the ocean primary button. Coral stays reserved
+for Book Online.
 
 ## Contact form contract
 
 The implementation is in `src/components/contact-form.tsx`. It sends
-`_subject`, `source`, `topic`, `name`, optional `email`/`phone`,
-`reply_preference`, a readable `message`, and the `_gotcha` honeypot. The email
+`_subject`, `form_type` (`contact_message`), `source`, `topic`, `topic_key`,
+`name`, optional `email`/`phone`, `reply_preference`, `privacy_check`, a
+readable `message` that begins with `CONTACT MESSAGE`, and the `_gotcha`
+honeypot. Topic and reply preference are icon chips, not a select. The email
 or phone field becomes required to match the visitor's chosen reply
 preference, and a privacy-check consent box gates submission. Error handling
 mirrors the appointment form: 429 gets a wait-and-retry message, other
@@ -67,7 +83,7 @@ test data, and be coordinated with the clinic.
 
 Before treating inbox delivery as verified:
 
-1. Confirm the `xojgjoqa` form is active in the correct Formspree account.
+1. Confirm the `xeajvpnb` form is active in the correct Formspree account.
 2. Confirm the intended clinic recipients and Reply-To behavior.
 3. Enable the production-domain restriction and appropriate spam protection.
 4. Send one clinic-approved test request with clearly synthetic, non-sensitive
@@ -138,7 +154,7 @@ The release is complete only when all of the following are true:
 3. `https://waikiki-dental.vercel.app/` is listed as an alias.
 4. The homepage is the current Pacific design (navy book card, not a stacked
    contact form + coral closer) and `/request-appointment/` returns HTTP 200.
-5. The production JavaScript contains `https://formspree.io/f/xojgjoqa` and the
+5. The production JavaScript contains `https://formspree.io/f/xeajvpnb` and the
    sent-state copy.
 
 Do not describe a preview, successful local build, pushed commit, queued

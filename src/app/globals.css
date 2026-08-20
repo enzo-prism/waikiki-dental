@@ -172,6 +172,9 @@
       placeholder:text-ink-soft focus:border-ocean-500 focus:bg-cream
       focus:ring-4 focus:ring-ocean-100;
   }
+  .field[aria-invalid="true"] {
+    @apply border-sunset-500 focus:border-sunset-500 focus:ring-sunset-100;
+  }
 }
 
 /* Custom utilities (variant-aware) */

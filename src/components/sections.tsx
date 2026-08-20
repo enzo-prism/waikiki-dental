@@ -11,6 +11,7 @@ import {
 import {
   doctor,
   featuredServices,
+  formPrivacy,
   hours,
   paymentOptions,
   reviewStats,
@@ -461,9 +462,7 @@ export function VisitPanel({
               Send a message
             </FormHeading>
             <p className="mt-2 text-sm leading-7 text-ink-muted">
-              Have a general question? Write to the team and choose how you’d like
-              to hear back. Please don’t include medical, insurance, or other
-              sensitive details.
+              {formPrivacy.contactLead}
             </p>
             <div className="mt-7">
               <ContactForm />

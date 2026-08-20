@@ -1,12 +1,10 @@
 import type { Metadata } from "next";
-import { Clock, MessageSquare, ShieldCheck } from "lucide-react";
 import { AppointmentScheduler } from "@/components/appointment-scheduler";
 import { JsonLd } from "@/components/page-templates";
-import { Eyebrow } from "@/components/sections";
-import { absoluteUrl, site } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site";
 
 const description =
-  "Request an appointment at Waikiki Dental in Roseville in a few quick steps — choose your visit, pick a time, and the team confirms by phone or text.";
+  "Request an appointment at Waikiki Dental in Roseville — tell us who you are, a preferred day, and how to reach you. The team confirms by phone or text.";
 
 export const metadata: Metadata = {
   title: "Request an Appointment",
@@ -19,84 +17,19 @@ export const metadata: Metadata = {
   },
 };
 
-const reassurance = [
-  {
-    icon: ShieldCheck,
-    title: "No account needed",
-    body: "A few quick steps, and your progress is saved as you go.",
-  },
-  {
-    icon: Clock,
-    title: "Flexible timing",
-    body: "Pick a date that suits you, or choose “soonest available” and let the team do the finding.",
-  },
-  {
-    icon: MessageSquare,
-    title: "A real person follows up",
-    body: "The Roseville team confirms your exact time by phone or text — no robo-scheduling.",
-  },
-];
+type Props = {
+  searchParams: Promise<{ reason?: string | string[] }>;
+};
 
-export default function RequestAppointmentPage() {
+export default async function RequestAppointmentPage({ searchParams }: Props) {
+  const params = await searchParams;
+  const raw = params.reason;
+  const initialReason = Array.isArray(raw) ? raw[0] : raw;
+
   return (
     <>
       <JsonLd />
-      <section className="bg-surface-alt">
-        <div className="wrap-wide grid gap-10 py-12 sm:py-16 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-14 lg:py-20">
-          <div className="lg:sticky lg:top-20">
-            <Eyebrow className="text-sunset-600">Request an appointment</Eyebrow>
-            <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
-              Let’s find a time that works for you.
-            </h1>
-            <p className="mt-5 max-w-md text-pretty text-lg leading-8 text-ink-muted">
-              Tell us a little about your visit, and the Waikiki Dental team
-              will follow up to confirm a time that fits your life.
-            </p>
-
-            <ul className="mt-8 grid gap-4">
-              {reassurance.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <li key={item.title} className="flex gap-4">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-full bg-ocean-50 text-ocean-600">
-                      <Icon className="size-5" aria-hidden="true" />
-                    </span>
-                    <div>
-                      <h2 className="font-serif text-lg font-medium text-ink">
-                        {item.title}
-                      </h2>
-                      <p className="mt-0.5 text-sm leading-7 text-ink-muted">
-                        {item.body}
-                      </p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-
-            <div className="mt-8 rounded-2xl border border-line bg-cream p-5">
-              <p className="text-sm text-ink-muted">
-                Prefer to talk now, or need urgent care?
-              </p>
-              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-                <a href={site.bookingHref} className="btn btn-sunset btn-sm">
-                  Book Online
-                </a>
-                <a href={site.phoneHref} className="btn btn-outline btn-sm" aria-label={`Call or text ${site.phone}`}>
-                  Call or text
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="mb-4 rounded-2xl border border-gold/40 bg-gold/10 p-4 text-sm leading-6 text-ink-muted">
-              <strong className="text-ink">Appointment request only.</strong> The office will confirm the final date and time. For pain or urgent dental needs, call {site.phone}.
-            </div>
-            <AppointmentScheduler />
-          </div>
-        </div>
-      </section>
+      <AppointmentScheduler initialReason={initialReason} />
     </>
   );
 }

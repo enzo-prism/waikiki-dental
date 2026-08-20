@@ -21,6 +21,8 @@ Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not 
 - Wordmark, hibiscus mark, doctor portrait: `src/components/brand.tsx`
 - Appointment form: `src/components/appointment-scheduler.tsx` (Formspree)
 - Contact form: `src/components/contact-form.tsx`
+- Shared Formspree client / endpoint: `src/lib/forms.ts` (`xeajvpnb`)
+- Form options and privacy copy: `src/lib/site.ts`
 - Operations / launch checklist: `docs/OPERATIONS.md`
 
 Do not invent Google review counts, credentials, insurance lists, or before/after results. `reviewStats.count` is `null` on purpose until a real count is confirmed.
