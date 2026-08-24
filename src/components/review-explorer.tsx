@@ -90,7 +90,10 @@ export function ReviewExplorer() {
         Showing {visibleReviews.length} verified review {visibleReviews.length === 1 ? "highlight" : "highlights"}
       </p>
 
-      <div id="review-highlight-results" className="mt-7 grid gap-5 md:grid-cols-2">
+      <div
+        id="review-highlight-results"
+        className="mt-7 grid min-h-[calc(100svh-10rem)] content-start gap-5 md:min-h-[36rem] md:grid-cols-2"
+      >
         {visibleReviews.map((review) => (
           <article
             key={`${review.name}-${review.context}`}
