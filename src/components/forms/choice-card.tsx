@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { FormIcon, type FormIconTone } from "@/components/forms/form-icon";
 
 export function ChoiceCard({
   name,
@@ -10,7 +10,8 @@ export function ChoiceCard({
   icon,
   label,
   hint,
-  accent,
+  tone = "ocean",
+  inputType = "radio",
 }: {
   name: string;
   value: string;
@@ -19,47 +20,34 @@ export function ChoiceCard({
   icon: React.ReactNode;
   label: string;
   hint: string;
-  accent?: "ocean" | "sunset";
+  tone?: FormIconTone;
+  inputType?: "radio" | "checkbox";
 }) {
-  const accentClass =
-    accent === "sunset"
-      ? "border-l-[3px] border-l-sunset-500"
-      : accent === "ocean"
-        ? "border-l-[3px] border-l-ocean-600"
-        : "";
   return (
     <label
-      className={`relative flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
+      className={`group relative flex min-h-24 min-w-0 cursor-pointer items-center gap-4 overflow-hidden rounded-2xl border p-4 transition duration-200 has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 sm:p-5 ${
         checked
-          ? "border-ocean-500 bg-ocean-50"
-          : "border-line bg-cream hover:border-ocean-300"
-      } ${accentClass}`}
+          ? "border-ocean-600 bg-ocean-50/80 ring-1 ring-inset ring-ocean-200"
+          : "border-line bg-cream hover:-translate-y-0.5 hover:border-ocean-300 hover:shadow-soft"
+      }`}
     >
       <input
-        type="radio"
+        type={inputType}
         name={name}
         value={value}
         checked={checked}
         onChange={onChange}
         className="sr-only"
       />
-      <span
-        className={`grid size-11 shrink-0 place-items-center rounded-full transition ${
-          checked ? "bg-ocean-600 text-cream" : "bg-ocean-50 text-ocean-600"
-        }`}
-      >
+      <FormIcon selected={checked} showCheck={checked} tone={tone}>
         {icon}
+      </FormIcon>
+      <span className="min-w-0 flex-1">
+        <span className="block text-balance font-serif text-lg leading-snug text-ink">
+          {label}
+        </span>
+        <span className="mt-1 block text-sm leading-5 text-ink-muted">{hint}</span>
       </span>
-      <span className="min-w-0">
-        <span className="block font-serif text-lg text-ink">{label}</span>
-        <span className="mt-0.5 block text-sm text-ink-muted">{hint}</span>
-      </span>
-      {checked ? (
-        <Check
-          className="absolute right-4 top-4 size-5 text-ocean-600"
-          aria-hidden="true"
-        />
-      ) : null}
     </label>
   );
 }

@@ -46,27 +46,6 @@ export function SiteHeader() {
   );
 }
 
-/** Sticky Request / Call bar for mobile — the only persistent conversion chrome below lg. */
-export function MobileCtaBar() {
-  return (
-    <div
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-cream/95 backdrop-blur-xl lg:hidden"
-      style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
-    >
-      <div className="grid grid-cols-2 gap-2 px-4 py-2.5">
-        <Link href={scheduleHref} className="btn btn-sunset btn-sm">
-          <CalendarCheck className="size-4" aria-hidden="true" />
-          Request a Time
-        </Link>
-        <a href={site.phoneHref} className="btn btn-outline btn-sm bg-cream" aria-label={`Call or text ${site.phone}`}>
-          <Phone className="size-4" aria-hidden="true" />
-          Call
-        </a>
-      </div>
-    </div>
-  );
-}
-
 export function SiteFooter() {
   return (
     <footer className="bg-deep text-cream/75">

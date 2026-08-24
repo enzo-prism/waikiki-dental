@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, type KeyboardEvent } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   isWeekend,
   parseLocalIso,
@@ -147,14 +147,15 @@ export function MonthCalendar({
 
   return (
     <div
-      className={`rounded-2xl border border-line bg-cream p-4 ${
+      className={`min-w-0 rounded-2xl border border-line bg-cream p-3 sm:p-4 ${
         disabled ? "pointer-events-none opacity-60" : ""
       }`}
       aria-disabled={disabled || undefined}
     >
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p id="calendar-caption" className="text-sm font-semibold text-ink">
-          {caption}
+        <p id="calendar-caption" className="flex min-w-0 items-center gap-2 text-sm font-semibold text-ink">
+          <CalendarDays className="size-4 shrink-0 text-ocean-700" aria-hidden="true" />
+          <span className="truncate">{caption}</span>
         </p>
         <div className="flex gap-1">
           <button
@@ -162,7 +163,7 @@ export function MonthCalendar({
             onClick={() => moveMonth(-1)}
             disabled={prevDisabled || disabled}
             aria-label="Previous month"
-            className="grid size-10 place-items-center rounded-full text-ink transition hover:bg-ocean-50 disabled:opacity-40"
+            className="grid size-10 place-items-center rounded-xl border border-line bg-background/50 text-ink transition hover:border-ocean-200 hover:bg-ocean-50 disabled:opacity-40"
           >
             <ChevronLeft className="size-4" aria-hidden="true" />
           </button>
@@ -171,7 +172,7 @@ export function MonthCalendar({
             onClick={() => moveMonth(1)}
             disabled={disabled}
             aria-label="Next month"
-            className="grid size-10 place-items-center rounded-full text-ink transition hover:bg-ocean-50 disabled:opacity-40"
+            className="grid size-10 place-items-center rounded-xl border border-line bg-background/50 text-ink transition hover:border-ocean-200 hover:bg-ocean-50 disabled:opacity-40"
           >
             <ChevronRight className="size-4" aria-hidden="true" />
           </button>
@@ -182,7 +183,7 @@ export function MonthCalendar({
         role="grid"
         aria-labelledby="calendar-caption"
         onKeyDown={onGridKeyDown}
-        className="grid grid-cols-7 gap-1"
+        className="grid min-w-0 grid-cols-7 gap-0.5 sm:gap-1"
       >
         {WEEKDAYS.map((day, index) => (
           <div
@@ -212,7 +213,7 @@ export function MonthCalendar({
                   year: "numeric",
                 })}
                 aria-disabled={cell.disabled || disabled}
-                className={`grid size-11 w-full place-items-center rounded-full text-sm font-medium transition ${
+                className={`grid h-10 w-full min-w-0 place-items-center rounded-xl text-sm font-medium transition sm:h-11 ${
                   selectedDay
                     ? "bg-ocean-600 text-cream"
                     : cell.disabled

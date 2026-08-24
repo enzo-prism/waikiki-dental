@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { FormIcon, type FormIconTone } from "@/components/forms/form-icon";
 
 export function ChoiceChip({
   name,
@@ -10,6 +10,7 @@ export function ChoiceChip({
   icon,
   label,
   hint,
+  tone = "ocean",
 }: {
   name: string;
   value: string;
@@ -18,13 +19,14 @@ export function ChoiceChip({
   icon: React.ReactNode;
   label: string;
   hint?: string;
+  tone?: FormIconTone;
 }) {
   return (
     <label
-      className={`flex min-h-12 cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 transition has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
+      className={`flex min-h-16 min-w-0 cursor-pointer items-center gap-3 rounded-2xl border px-3.5 py-3 transition duration-200 has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
         checked
-          ? "border-ocean-500 bg-ocean-50"
-          : "border-line bg-cream hover:border-ocean-300"
+          ? "border-ocean-600 bg-ocean-50/80 ring-1 ring-inset ring-ocean-200"
+          : "border-line bg-cream hover:-translate-y-0.5 hover:border-ocean-300 hover:shadow-soft"
       }`}
     >
       <input
@@ -35,13 +37,14 @@ export function ChoiceChip({
         onChange={onChange}
         className="sr-only"
       />
-      <span
-        className={`mt-0.5 grid size-9 shrink-0 place-items-center rounded-full ${
-          checked ? "bg-ocean-600 text-cream" : "bg-ocean-50 text-ocean-600"
-        }`}
+      <FormIcon
+        selected={checked}
+        showCheck={checked}
+        tone={tone}
+        size="sm"
       >
         {icon}
-      </span>
+      </FormIcon>
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-semibold text-ink">{label}</span>
         {hint ? (
@@ -50,9 +53,6 @@ export function ChoiceChip({
           </span>
         ) : null}
       </span>
-      {checked ? (
-        <Check className="mt-1 size-4 shrink-0 text-ocean-600" aria-hidden="true" />
-      ) : null}
     </label>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { Phone } from "lucide-react";
-import { Hibiscus } from "@/components/brand";
+import { CircleCheckBig, PhoneCall } from "lucide-react";
 import { site } from "@/lib/site";
 
 export function RequestSuccess({
@@ -23,8 +22,8 @@ export function RequestSuccess({
       role="status"
       aria-live="polite"
     >
-      <span className="mx-auto grid size-20 place-items-center rounded-full bg-sunset-50 text-sunset-500">
-        <Hibiscus size={44} />
+      <span className="mx-auto grid size-20 place-items-center rounded-[26px] border border-ocean-100 bg-ocean-50 text-ocean-700 shadow-[0_16px_32px_-22px_rgb(0_81_174/0.8)]">
+        <CircleCheckBig className="size-10" strokeWidth={1.8} aria-hidden="true" />
       </span>
       <h2 className="mt-6 font-serif text-3xl font-medium tracking-tight text-ink">
         {title}
@@ -46,7 +45,7 @@ export function RequestSuccess({
 
       <div className="mt-8 flex justify-center">
         <a href={site.phoneHref} className="btn btn-outline">
-          <Phone className="size-4" aria-hidden="true" />
+          <PhoneCall className="size-4" aria-hidden="true" />
           Need help? Call {site.phone}
         </a>
       </div>

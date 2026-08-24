@@ -2,14 +2,21 @@
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import {
+  AlertCircle,
   ArrowLeft,
   ArrowRight,
-  BadgeCheck,
+  CalendarDays,
+  ContactRound,
   HeartPulse,
   Loader2,
+  Mail,
+  MessageSquareText,
   Phone,
+  Sparkles,
+  UserRound,
+  UserRoundCheck,
+  UserRoundPlus,
 } from "lucide-react";
-import { Hibiscus } from "@/components/brand";
 import { ChoiceCard } from "@/components/forms/choice-card";
 import { ChoiceChip } from "@/components/forms/choice-chip";
 import { FormProgress } from "@/components/forms/form-progress";
@@ -170,24 +177,28 @@ export function AppointmentScheduler({
       value: patient?.label ?? "",
       empty: !patient,
       step: 0,
+      icon: UserRound,
     },
     {
       label: "Visit",
       value: reason?.label ?? "",
       empty: !reason,
       step: 0,
+      icon: Sparkles,
     },
     {
       label: "When",
       value: [whenShort, time?.label].filter(Boolean).join(" · "),
       empty: !whenShort && !time,
       step: 1,
+      icon: CalendarDays,
     },
     {
       label: "Reach",
       value: [form.name, form.phone].filter(Boolean).join(" · "),
       empty: !form.name && !form.phone,
       step: 2,
+      icon: ContactRound,
     },
   ];
 
@@ -325,21 +336,23 @@ export function AppointmentScheduler({
   const SoonestIcon = soonestOption.icon;
 
   const actions = (
-    <div className="flex items-center justify-between gap-3">
-      <button
-        type="button"
-        onClick={goBack}
-        disabled={status === "submitting"}
-        className={`btn btn-outline ${step === 0 ? "invisible" : ""}`}
-      >
-        <ArrowLeft className="size-4" aria-hidden="true" />
-        Back
-      </button>
+    <div className={`flex min-w-0 items-center gap-3 ${step === 0 ? "justify-end" : "justify-between"}`}>
+      {step > 0 ? (
+        <button
+          type="button"
+          onClick={goBack}
+          disabled={status === "submitting"}
+          className="btn btn-outline min-w-0 flex-1 sm:flex-none"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          Back
+        </button>
+      ) : null}
       <button
         type="submit"
         disabled={status === "submitting"}
         aria-describedby={error ? errorId : undefined}
-        className="btn btn-primary min-w-40"
+        className={`btn btn-primary min-w-0 ${step === 0 ? "w-full sm:w-auto sm:min-w-40" : "flex-1 sm:min-w-40 sm:flex-none"}`}
       >
         {status === "submitting" ? (
           <>
@@ -382,9 +395,9 @@ export function AppointmentScheduler({
   }
 
   return (
-    <section className="bg-surface-alt">
-      <div className="wrap-wide grid gap-10 py-12 sm:py-16 lg:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.15fr)] lg:items-start lg:gap-14 lg:py-20">
-        <div className="lg:sticky lg:top-20">
+    <section className="overflow-x-clip bg-surface-alt">
+      <div className="wrap-wide grid min-w-0 grid-cols-[minmax(0,1fr)] gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(280px,0.9fr)_minmax(0,1.15fr)] lg:items-start lg:gap-14 lg:py-20">
+        <div className="min-w-0 lg:sticky lg:top-20">
           <p className="eyebrow text-ocean-600">Request an appointment</p>
           <h1 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-5xl sm:leading-[1.07]">
             Request a time with the team.
@@ -421,17 +434,17 @@ export function AppointmentScheduler({
         <form
           aria-label="Request an appointment"
           aria-busy={status === "submitting"}
-          className="mb-32 lg:mb-0"
+          className="mb-32 min-w-0 lg:mb-0"
           onSubmit={(event) => {
             event.preventDefault();
             goNext();
           }}
           noValidate
         >
-          <div className="card shadow-soft">
+          <div className="card min-w-0 overflow-hidden shadow-soft">
           <FormProgress step={step} onJump={jumpTo} />
 
-          <div className="border-b border-line px-6 py-3 lg:hidden">
+          <div className="min-w-0 border-b border-line px-5 py-3.5 sm:px-6 lg:hidden">
             <LiveRequestSummary
               rows={summaryRows}
               currentStep={step}
@@ -440,11 +453,11 @@ export function AppointmentScheduler({
             />
           </div>
 
-          <div className="p-6 sm:p-8">
+          <div className="min-w-0 p-5 sm:p-8">
             <p aria-live="polite" className="sr-only">
               Step {step + 1} of 3: {current.title}
             </p>
-            <div key={step} className="step-pane">
+            <div key={step} className="step-pane min-w-0">
               <h2
                 ref={headingRef}
                 tabIndex={-1}
@@ -457,7 +470,7 @@ export function AppointmentScheduler({
               <div className="mt-7">
                 {step === 0 ? (
                   <div className="grid gap-8">
-                    <fieldset>
+                    <fieldset className="min-w-0">
                       <legend className="text-sm font-medium text-ink">
                         Are you new to Waikiki Dental?
                       </legend>
@@ -469,21 +482,14 @@ export function AppointmentScheduler({
                             value={type.key}
                             checked={form.patientType === type.key}
                             onChange={() => update("patientType", type.key)}
-                            accent={type.key === "new" ? "sunset" : "ocean"}
                             icon={
                               type.key === "new" ? (
-                                <Hibiscus
-                                  size={20}
-                                  className={
-                                    form.patientType === "new"
-                                      ? "text-current"
-                                      : "text-sunset-600"
-                                  }
-                                />
+                                <UserRoundPlus className="size-6" aria-hidden="true" />
                               ) : (
-                                <BadgeCheck className="size-5" aria-hidden="true" />
+                                <UserRoundCheck className="size-6" aria-hidden="true" />
                               )
                             }
+                            tone={type.key === "new" ? "sunset" : "ocean"}
                             label={type.label}
                             hint={type.hint}
                           />
@@ -491,7 +497,7 @@ export function AppointmentScheduler({
                       </div>
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset className="min-w-0">
                       <legend className="text-sm font-medium text-ink">
                         What can we help with?
                       </legend>
@@ -506,6 +512,7 @@ export function AppointmentScheduler({
                               checked={form.reason === item.key}
                               onChange={() => update("reason", item.key)}
                               icon={<Icon className="size-5" aria-hidden="true" />}
+                              tone={item.tone}
                               label={item.label}
                               hint={item.hint}
                             />
@@ -544,45 +551,25 @@ export function AppointmentScheduler({
 
                 {step === 1 ? (
                   <div className="grid gap-7">
-                    <fieldset>
+                    <fieldset className="min-w-0">
                       <legend className="text-sm font-medium text-ink">
                         Preferred day
                       </legend>
                       <div className="mt-3">
-                        <label
-                          className={`relative flex cursor-pointer items-start gap-4 rounded-2xl border p-5 transition has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
-                            form.flexible
-                              ? "border-ocean-500 bg-ocean-50"
-                              : "border-line bg-cream hover:border-ocean-300"
-                          }`}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={form.flexible}
-                            onChange={(event) => {
-                              update("flexible", event.target.checked);
-                              if (event.target.checked) update("date", "");
-                            }}
-                            className="sr-only"
-                          />
-                          <span
-                            className={`grid size-11 shrink-0 place-items-center rounded-full ${
-                              form.flexible
-                                ? "bg-ocean-600 text-cream"
-                                : "bg-ocean-50 text-ocean-600"
-                            }`}
-                          >
-                            <SoonestIcon className="size-5" aria-hidden="true" />
-                          </span>
-                          <span>
-                            <span className="block font-serif text-lg text-ink">
-                              {soonestOption.label}
-                            </span>
-                            <span className="mt-0.5 block text-sm text-ink-muted">
-                              {soonestOption.hint}
-                            </span>
-                          </span>
-                        </label>
+                        <ChoiceCard
+                          name="flexible"
+                          value={soonestOption.key}
+                          inputType="checkbox"
+                          checked={form.flexible}
+                          onChange={() => {
+                            const next = !form.flexible;
+                            update("flexible", next);
+                            if (next) update("date", "");
+                          }}
+                          icon={<SoonestIcon className="size-5" aria-hidden="true" />}
+                          label={soonestOption.label}
+                          hint={soonestOption.hint}
+                        />
                       </div>
                       <div className="mt-4">
                         <MonthCalendar
@@ -596,7 +583,7 @@ export function AppointmentScheduler({
                       </div>
                     </fieldset>
 
-                    <fieldset>
+                    <fieldset className="min-w-0">
                       <legend className="text-sm font-medium text-ink">
                         Time of day
                       </legend>
@@ -627,62 +614,88 @@ export function AppointmentScheduler({
                     <div className="grid gap-4 sm:grid-cols-2">
                       <label className="grid gap-2 text-sm font-medium text-ink">
                         Full name
-                        <input
-                          value={form.name}
-                          onChange={(event) => update("name", event.target.value)}
-                          className="field"
-                          name="name"
-                          placeholder="Your name"
-                          autoComplete="name"
-                          aria-invalid={
-                            error.toLowerCase().includes("name") || undefined
-                          }
-                        />
+                        <span className="relative block min-w-0">
+                          <UserRound
+                            className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-ink-soft"
+                            aria-hidden="true"
+                          />
+                          <input
+                            value={form.name}
+                            onChange={(event) => update("name", event.target.value)}
+                            className="field pl-11"
+                            name="name"
+                            placeholder="Your name"
+                            autoComplete="name"
+                            aria-invalid={
+                              error.toLowerCase().includes("name") || undefined
+                            }
+                          />
+                        </span>
                       </label>
                       <label className="grid gap-2 text-sm font-medium text-ink">
                         Phone
-                        <input
-                          value={form.phone}
-                          onChange={(event) => update("phone", event.target.value)}
-                          className="field"
-                          name="phone"
-                          type="tel"
-                          placeholder="(916) …"
-                          autoComplete="tel"
-                          aria-invalid={
-                            error.toLowerCase().includes("phone") || undefined
-                          }
-                        />
+                        <span className="relative block min-w-0">
+                          <Phone
+                            className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-ink-soft"
+                            aria-hidden="true"
+                          />
+                          <input
+                            value={form.phone}
+                            onChange={(event) => update("phone", event.target.value)}
+                            className="field pl-11"
+                            name="phone"
+                            type="tel"
+                            inputMode="tel"
+                            placeholder="(916) …"
+                            autoComplete="tel"
+                            aria-invalid={
+                              error.toLowerCase().includes("phone") || undefined
+                            }
+                          />
+                        </span>
                       </label>
                     </div>
                     <label className="grid gap-2 text-sm font-medium text-ink">
                       Email{" "}
                       <span className="font-normal text-ink-soft">(optional)</span>
-                      <input
-                        value={form.email}
-                        onChange={(event) => update("email", event.target.value)}
-                        className="field"
-                        name="email"
-                        type="email"
-                        placeholder="you@email.com"
-                        autoComplete="email"
-                        aria-invalid={
-                          error.toLowerCase().includes("email") || undefined
-                        }
-                      />
+                      <span className="relative block min-w-0">
+                        <Mail
+                          className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-ink-soft"
+                          aria-hidden="true"
+                        />
+                        <input
+                          value={form.email}
+                          onChange={(event) => update("email", event.target.value)}
+                          className="field pl-11"
+                          name="email"
+                          type="email"
+                          inputMode="email"
+                          placeholder="you@email.com"
+                          autoComplete="email"
+                          aria-invalid={
+                            error.toLowerCase().includes("email") || undefined
+                          }
+                        />
+                      </span>
                     </label>
                     <label className="grid gap-2 text-sm font-medium text-ink">
                       Anything the team should know?{" "}
                       <span className="font-normal text-ink-soft">(optional)</span>
-                      <textarea
-                        value={form.notes}
-                        onChange={(event) =>
-                          update("notes", event.target.value.slice(0, 500))
-                        }
-                        className="field min-h-28 resize-y"
-                        name="notes"
-                        placeholder={formPrivacy.notesPlaceholder}
-                      />
+                      <span className="relative block min-w-0">
+                        <MessageSquareText
+                          className="pointer-events-none absolute left-4 top-4 size-4 text-ink-soft"
+                          aria-hidden="true"
+                        />
+                        <textarea
+                          value={form.notes}
+                          onChange={(event) =>
+                            update("notes", event.target.value.slice(0, 500))
+                          }
+                          className="field min-h-28 resize-y py-3 pl-11"
+                          name="notes"
+                          placeholder={formPrivacy.notesPlaceholder}
+                        />
+                      </span>
                     </label>
                     <PrivacyConsent
                       checked={form.consent}
@@ -699,8 +712,9 @@ export function AppointmentScheduler({
                 <p
                   id={errorId}
                   role="alert"
-                  className="mt-5 text-sm font-medium text-sunset-600"
+                  className="mt-5 flex items-start gap-2 rounded-xl border border-sunset-100 bg-sunset-50 p-3 text-sm font-medium leading-5 text-sunset-700"
                 >
+                  <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                   {error}
                 </p>
               ) : null}
@@ -710,7 +724,7 @@ export function AppointmentScheduler({
           <div
             className="fixed inset-x-0 z-40 border-t border-line bg-cream/95 px-4 py-2.5 backdrop-blur-xl lg:static lg:z-auto lg:rounded-b-2xl lg:bg-cream lg:px-8 lg:py-4 lg:backdrop-blur-none"
             style={{
-              bottom: "calc(4.25rem + env(safe-area-inset-bottom, 0px))",
+              bottom: "env(safe-area-inset-bottom, 0px)",
             }}
           >
             {actions}

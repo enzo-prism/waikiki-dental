@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
-import { MobileCtaBar, SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { MobileCtaBar } from "@/components/mobile-cta-bar";
+import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { site } from "@/lib/site";
 import "./globals.css";
 

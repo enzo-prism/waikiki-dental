@@ -207,14 +207,6 @@
   }
 }
 
-/* Reserve space for the fixed mobile Request/Call bar so it never covers
-   footer content. The bar itself is hidden at lg and up. */
-@media (max-width: 1023px) {
-  body {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.25rem);
-  }
-}
-
 /* Appointment scheduler — gentle step transition (neutralized by the
    reduced-motion rule above). */
 @keyframes wd-step {

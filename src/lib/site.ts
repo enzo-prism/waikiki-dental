@@ -4,16 +4,18 @@ import {
   CalendarCheck,
   CalendarClock,
   CalendarSearch,
-  Clock,
+  Clock3,
   Ellipsis,
   HeartPulse,
   MapPin,
   MessageCircle,
+  MessageCircleMore,
   ShieldCheck,
   SmilePlus,
   Sparkles,
   Stethoscope,
-  SunMedium,
+  Siren,
+  Sun,
   Sunrise,
   Syringe,
   WandSparkles,
@@ -518,6 +520,7 @@ export type AppointmentReason = {
   label: string;
   hint: string;
   icon: ComponentType<{ className?: string }>;
+  tone?: "ocean" | "sunset" | "neutral";
 };
 
 export const patientTypes = [
@@ -538,7 +541,7 @@ export const appointmentReasons: AppointmentReason[] = [
     key: "sedation",
     label: "IV sedation",
     hint: "Comfort-focused care",
-    icon: Syringe,
+    icon: ShieldCheck,
   },
   {
     key: "restorative",
@@ -550,25 +553,27 @@ export const appointmentReasons: AppointmentReason[] = [
     key: "cosmetic",
     label: "Cosmetic consult",
     hint: "Whitening, veneers, Invisalign",
-    icon: WandSparkles,
+    icon: Sparkles,
   },
   {
     key: "cleaning",
     label: "Cleaning or checkup",
     hint: "Routine preventive care",
-    icon: Stethoscope,
+    icon: BadgeCheck,
   },
   {
     key: "emergency",
     label: "Tooth pain or emergency",
     hint: "Call if you need to be seen today",
-    icon: HeartPulse,
+    icon: Siren,
+    tone: "sunset",
   },
   {
     key: "other",
     label: "Something else",
     hint: "Tell us in a note on the last step",
-    icon: Ellipsis,
+    icon: MessageCircleMore,
+    tone: "neutral",
   },
 ];
 
@@ -583,13 +588,13 @@ export const timeWindows = [
     key: "afternoon",
     label: "Afternoon",
     hint: "Noon until close",
-    icon: SunMedium,
+    icon: Sun,
   },
   {
     key: "any",
     label: "Anytime",
     hint: "We’ll find a fit",
-    icon: Clock,
+    icon: Clock3,
   },
 ];
 
