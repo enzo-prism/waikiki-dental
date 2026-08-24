@@ -10,6 +10,7 @@ import {
   featuredServices,
   findService,
   implantProcess,
+  scheduleHref,
   servicesByCategory,
   site,
   type Service,
@@ -58,10 +59,10 @@ function PageHeader({
       ) : null}
       {actions ? (
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          <a href={site.bookingHref} className="btn btn-sunset">
+          <Link href={scheduleHref} className="btn btn-sunset">
             <CalendarCheck className="size-4" aria-hidden="true" />
-            Book Online
-          </a>
+            Request Appointment
+          </Link>
           <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
             <Phone className="size-4" aria-hidden="true" />
             Call or text
@@ -108,10 +109,10 @@ function DefaultServicePage({ service }: { service: Service }) {
               {service.description}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={site.bookingHref} className="btn btn-sunset">
+              <Link href={scheduleHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
-                Book Online
-              </a>
+                Request Appointment
+              </Link>
               <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
                 <Phone className="size-4" aria-hidden="true" />
                 Call or text
@@ -160,10 +161,10 @@ function SedationServicePage({ service }: { service: Service }) {
             {service.description}
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a href={site.bookingHref} className="btn btn-sunset">
+            <Link href={scheduleHref} className="btn btn-sunset">
               <CalendarCheck className="size-4" aria-hidden="true" />
-              Book Online
-            </a>
+              Request Appointment
+            </Link>
             <a href={site.phoneHref} className="btn btn-ghost-light" aria-label={`Call or text ${site.phone}`}>
               <Phone className="size-4" aria-hidden="true" />
               Call or text
@@ -228,10 +229,10 @@ function ProcessServicePage({
             {service.description}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href={site.bookingHref} className="btn btn-sunset">
+            <Link href={scheduleHref} className="btn btn-sunset">
               <CalendarCheck className="size-4" aria-hidden="true" />
-              Book Online
-            </a>
+              Request Appointment
+            </Link>
             <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
               <Phone className="size-4" aria-hidden="true" />
               Call or text
@@ -350,10 +351,10 @@ export function DoctorPage() {
               ))}
             </div>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={site.bookingHref} className="btn btn-sunset">
+              <Link href={scheduleHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
-                Book Online
-              </a>
+                Request Appointment
+              </Link>
               <Link href="/iv-sedation/" className="btn btn-outline">
                 Sedation dentistry
                 <ArrowRight className="size-4" aria-hidden="true" />

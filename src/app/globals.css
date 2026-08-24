@@ -207,7 +207,7 @@
   }
 }
 
-/* Reserve space for the fixed mobile Book/Call bar so it never covers
+/* Reserve space for the fixed mobile Request/Call bar so it never covers
    footer content. The bar itself is hidden at lg and up. */
 @media (max-width: 1023px) {
   body {

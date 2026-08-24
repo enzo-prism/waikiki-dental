@@ -318,10 +318,10 @@ export function MobileMenu() {
       </nav>
 
       <div className="wrap-wide relative grid gap-2 pb-[max(2rem,env(safe-area-inset-bottom,0px))] pt-2">
-        <a href={site.bookingHref} className="btn btn-sunset">
+        <Link href={scheduleHref} className="btn btn-sunset">
           <CalendarCheck className="size-4" aria-hidden="true" />
-          Book Online
-        </a>
+          Request Appointment
+        </Link>
         <a href={site.phoneHref} className="btn btn-outline">
           <Phone className="size-4" aria-hidden="true" />
           Call or text {site.phone}

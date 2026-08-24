@@ -377,8 +377,8 @@ export function VisitPanel({
             title="Getting started is the easy part."
             body={
               showForm
-                ? "Book online, call or text the front desk, or send a quick note. The office is on Pleasant Grove Boulevard in Roseville."
-                : "Book online, call or text the front desk, or request a time. The office is on Pleasant Grove Boulevard in Roseville."
+                ? "Request an appointment, call or text the front desk, or send a quick note. The office is on Pleasant Grove Boulevard in Roseville."
+                : "Request a preferred day and time, or call or text the front desk. The office is on Pleasant Grove Boulevard in Roseville."
             }
             headingLevel={headingLevel}
           />
@@ -444,12 +444,12 @@ export function VisitPanel({
 
           {showForm ? (
             <p className="mt-6 text-sm text-ink-muted">
-              Prefer that the office pick a time?{" "}
+              Ready to plan a visit?{" "}
               <Link
                 href={scheduleHref}
                 className="font-semibold text-ocean-700 underline-offset-4 hover:underline"
               >
-                Request an appointment
+                Use our appointment form
               </Link>
               .
             </p>
@@ -476,26 +476,19 @@ export function VisitPanel({
                 The next step is a conversation.
               </h3>
               <p className="mt-4 max-w-md text-pretty leading-8 text-cream/75">
-                Book online in a couple of minutes, or call or text the Roseville
-                office. Prefer the team to find a time? Request an appointment
-                instead.
+                Choose a preferred day and time in our website form, or call or
+                text the Roseville office. The team will confirm the final slot.
               </p>
             </div>
             <div className="mt-8 flex flex-col gap-3">
-              <a href={site.bookingHref} className="btn btn-sunset">
+              <Link href={scheduleHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
-                Book Online
-              </a>
+                Request Appointment
+              </Link>
               <a href={site.phoneHref} className="btn btn-ghost-light">
                 <Phone className="size-4" aria-hidden="true" />
                 Call or text {site.phone}
               </a>
-              <Link
-                href={scheduleHref}
-                className="text-center text-sm font-semibold text-cream/80 underline-offset-4 hover:text-cream hover:underline"
-              >
-                Request an appointment
-              </Link>
             </div>
           </div>
         )}
@@ -504,7 +497,7 @@ export function VisitPanel({
   );
 }
 
-/** Quiet closer — coral is reserved for the Book button, not a full-bleed slab. */
+/** Quiet closer — one clear on-site scheduling action plus a phone fallback. */
 export function BookStrip() {
   return (
     <section className="border-t border-line bg-cream">
@@ -514,14 +507,15 @@ export function BookStrip() {
             Ready when you are.
           </h2>
           <p className="mt-2 max-w-xl text-ink-muted">
-            Book online in a couple of minutes, or call or text the Roseville office.
+            Request a preferred day and time in a couple of minutes, or call or
+            text the Roseville office.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <a href={site.bookingHref} className="btn btn-sunset">
+          <Link href={scheduleHref} className="btn btn-sunset">
             <CalendarCheck className="size-4" aria-hidden="true" />
-            Book Online
-          </a>
+            Request Appointment
+          </Link>
           <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
             <Phone className="size-4" aria-hidden="true" />
             Call or text

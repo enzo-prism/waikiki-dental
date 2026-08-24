@@ -53,7 +53,7 @@ received it. A 429 response gets a wait-and-retry message; other service and
 network failures keep the entered data available for another attempt. A
 synchronous ref guard and the disabled sending state prevent duplicate
 requests. Continue / Send uses the ocean primary button. Coral stays reserved
-for Book Online.
+for the site-native appointment CTA.
 
 ## Contact form contract
 
@@ -94,14 +94,13 @@ Before treating inbox delivery as verified:
 
 ## Conversion chrome
 
-Keep these paths intact when changing pages or CTAs. Coral is reserved for
-Book Online (Jarvis). Do not add a third solid button.
+Keep these paths intact when changing pages or CTAs. Coral is reserved for the
+site-native appointment form. Do not add a third solid button.
 
 | Intent | Control | Surfaces |
 | --- | --- | --- |
-| Book a visit now | Coral **Book Online** | Header (`lg+`), sticky mobile bar, navy homepage book card, `BookStrip` |
+| Request a visit | Coral **Request Appointment** | Header (`lg+`), sticky mobile bar, navy homepage appointment card, `BookStrip` |
 | Talk to the office | Outline **Call or text** | Hero (`lg+`), mobile bar, interiors |
-| Office picks a time | Text **Request an appointment** | Hero (`lg+`), visit panel, footer, mobile menu |
 | General question | Contact form | Contact and office pages only |
 
 Homepage `VisitPanel` uses `showForm={false}`. Do not stack `BookStrip` on
@@ -152,7 +151,7 @@ The release is complete only when all of the following are true:
 2. `npx vercel inspect <deployment-url>` reports `target: production` and
    `Ready`.
 3. `https://waikiki-dental.vercel.app/` is listed as an alias.
-4. The homepage is the current Pacific design (navy book card, not a stacked
+4. The homepage is the current Pacific design (navy appointment card, not a stacked
    contact form + coral closer) and `/request-appointment/` returns HTTP 200.
 5. The production JavaScript contains `https://formspree.io/f/xeajvpnb` and the
    sent-state copy.

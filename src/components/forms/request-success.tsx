@@ -10,14 +10,12 @@ export function RequestSuccess({
   recap,
   onReset,
   resetLabel,
-  jarvis = false,
 }: {
   title: string;
   body: string;
   recap: { label: string; value: string }[];
   onReset: () => void;
   resetLabel: string;
-  jarvis?: boolean;
 }) {
   return (
     <div
@@ -52,17 +50,6 @@ export function RequestSuccess({
           Need help? Call {site.phone}
         </a>
       </div>
-      {jarvis ? (
-        <p className="mt-5 text-sm text-ink-muted">
-          Prefer to choose a time yourself?{" "}
-          <a
-            href={site.bookingHref}
-            className="font-semibold text-sunset-700 underline-offset-4 hover:underline"
-          >
-            Book Online
-          </a>
-        </p>
-      ) : null}
       <button
         type="button"
         onClick={onReset}

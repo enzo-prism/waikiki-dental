@@ -37,20 +37,14 @@ export default function Home() {
               delivered without rush or judgment.
             </p>
             <div className="mt-9 hidden flex-wrap items-center gap-3 lg:flex">
-              <a href={site.bookingHref} className="btn btn-sunset">
+              <Link href={scheduleHref} className="btn btn-sunset">
                 <CalendarCheck className="size-4" aria-hidden="true" />
-                Book Online
-              </a>
+                Request Appointment
+              </Link>
               <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
                 <Phone className="size-4" aria-hidden="true" />
                 Call or text
               </a>
-              <Link
-                href={scheduleHref}
-                className="text-sm font-medium text-ink-muted underline-offset-4 hover:text-ink hover:underline"
-              >
-                Request an appointment
-              </Link>
             </div>
 
             <ul className="mt-10 flex flex-col gap-2 text-sm text-ink-muted sm:flex-row sm:flex-wrap sm:gap-x-6">

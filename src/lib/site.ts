@@ -31,8 +31,6 @@ export const site = {
   shortAddress: "1271 Pleasant Grove Blvd., Roseville, CA",
   mapsHref:
     "https://www.google.com/maps/search/?api=1&query=1271%20Pleasant%20Grove%20Blvd%20Suite%20100%20Roseville%20CA%2095747",
-  bookingHref:
-    "https://schedule.jarvisanalytics.com/frame/drmike-dtxa?location_id=2721782163260582",
   baseUrl: "https://waikiki-dental.vercel.app",
   description:
     "Waikiki Dental is Dr. Michael Narodovich's Roseville, CA practice — IV sedation, implants, CEREC same-day crowns, and unhurried family care for patients who want dentistry without the dread.",

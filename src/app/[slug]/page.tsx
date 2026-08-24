@@ -50,7 +50,7 @@ const staticPages: Record<
   "contact-waikiki-dental": {
     title: "Contact Waikiki Dental",
     description:
-      "Contact Waikiki Dental in Roseville, CA — book online, call or text (916) 772-6248, send a message, or stop by 1271 Pleasant Grove Blvd.",
+      "Contact Waikiki Dental in Roseville, CA — request an appointment online, call or text (916) 772-6248, send a message, or stop by 1271 Pleasant Grove Blvd.",
   },
 };
 

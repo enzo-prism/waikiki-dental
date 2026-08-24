@@ -375,7 +375,6 @@ export function AppointmentScheduler({
             ]}
             onReset={reset}
             resetLabel="Start a new request"
-            jarvis
           />
         </div>
       </section>
@@ -405,22 +404,17 @@ export function AppointmentScheduler({
           </div>
 
           <div className="mt-8 hidden rounded-2xl border border-line bg-cream p-5 lg:block">
-            <p className="text-sm font-semibold text-ink">Want to choose a time now?</p>
+            <p className="text-sm font-semibold text-ink">Prefer to talk it through?</p>
             <p className="mt-1 text-sm text-ink-muted">
-              Book Online opens the live scheduler. Or call the office.
+              Call or text the Roseville office and a team member can help.
             </p>
-            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-              <a href={site.bookingHref} className="btn btn-sunset btn-sm">
-                Book Online
-              </a>
-              <a
-                href={site.phoneHref}
-                className="btn btn-outline btn-sm"
-                aria-label={`Call or text ${site.phone}`}
-              >
-                Call or text
-              </a>
-            </div>
+            <a
+              href={site.phoneHref}
+              className="btn btn-outline btn-sm mt-3"
+              aria-label={`Call or text ${site.phone}`}
+            >
+              Call or text
+            </a>
           </div>
         </div>
 

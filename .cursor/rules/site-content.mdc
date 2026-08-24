@@ -11,5 +11,8 @@ alwaysApply: true
 - Do not submit the live Formspree appointment form unless the user explicitly requests a clinic-approved test.
 - Do not connect or cut over `waikikidental.com`.
 - Aim copy at IV sedation and higher-ticket care, not general-dentistry volume.
-- Coral is reserved for **Book Online**. Secondary is **Call or text**. Request an appointment stays a text path. Do not put the contact form on the homepage.
+- Coral is reserved for **Request Appointment**, which routes to the custom
+  on-site form at `/request-appointment/`. Secondary is **Call or text**. Do
+  not introduce an external booking-system link or put the contact form on the
+  homepage.
 - This repo is Waikiki Dental only. Sacramento Dental Medicine lives in `enzo-prism/sacramento-dental-medicine-redesign`.

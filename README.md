@@ -103,12 +103,12 @@ privacy boundaries, the delivery checklist, and the production release process.
 
 ## Conversion chrome
 
-One coral verb. Do not add a third solid button.
+One coral scheduling verb. Do not add a third solid button.
 
-- **Book Online** (coral) → Jarvis scheduler. Header at `lg+`, sticky mobile
-  bar, navy homepage book card, interior `BookStrip`.
+- **Request Appointment** (coral) → the custom on-site form at
+  `/request-appointment/`. Header at `lg+`, sticky mobile bar, navy homepage
+  appointment card, interior `BookStrip`.
 - **Call or text** (outline) → `tel:` the Roseville office.
-- **Request an appointment** (text) → `/request-appointment/`.
 - **Contact form** → Contact and office pages only. Homepage uses
   `VisitPanel showForm={false}`.
 
@@ -129,7 +129,7 @@ live in `src/components/site-chrome.tsx` and `src/components/site-nav.tsx`.
   (royal Pacific blue `#0051ae` from the logo, hibiscus coral CTAs, porcelain
   canvas, navy dark sections, gold ratings), Fraunces + Manrope, the practice's
   real logo and photos, reduced-motion-aware scroll reveals, and a sticky
-  mobile Book/Call bar.
+  mobile Request/Call bar.
 
 ## Deployment
 
@@ -157,6 +157,6 @@ live Formspree form.
 ## Notes
 
 The site preserves Waikiki Dental's public content facts: Roseville address,
-phone, online booking link, doctor bio, service menu, new-patient info, hours,
+phone, on-site appointment form, doctor bio, service menu, new-patient info, hours,
 and testimonials. The live `waikikidental.com` domain is not yet connected;
 this deploy ships to a Vercel URL first (`site.baseUrl`).

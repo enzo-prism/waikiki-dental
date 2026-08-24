@@ -32,13 +32,13 @@ export function SiteHeader() {
             <HeartPulse className="size-3.5" aria-hidden="true" />
             Emergency
           </Link>
-          <a
-            href={site.bookingHref}
+          <Link
+            href={scheduleHref}
             className="hidden btn btn-sunset btn-sm lg:inline-flex"
           >
             <CalendarCheck className="size-4" aria-hidden="true" />
-            Book Online
-          </a>
+            Request Appointment
+          </Link>
           <MobileMenu />
         </div>
       </nav>
@@ -46,7 +46,7 @@ export function SiteHeader() {
   );
 }
 
-/** Sticky Book / Call bar for mobile — the only persistent conversion chrome below lg. */
+/** Sticky Request / Call bar for mobile — the only persistent conversion chrome below lg. */
 export function MobileCtaBar() {
   return (
     <div
@@ -54,10 +54,10 @@ export function MobileCtaBar() {
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <div className="grid grid-cols-2 gap-2 px-4 py-2.5">
-        <a href={site.bookingHref} className="btn btn-sunset btn-sm">
+        <Link href={scheduleHref} className="btn btn-sunset btn-sm">
           <CalendarCheck className="size-4" aria-hidden="true" />
-          Book Online
-        </a>
+          Request a Time
+        </Link>
         <a href={site.phoneHref} className="btn btn-outline btn-sm bg-cream" aria-label={`Call or text ${site.phone}`}>
           <Phone className="size-4" aria-hidden="true" />
           Call
@@ -78,10 +78,10 @@ export function SiteFooter() {
             from Dr. Michael Narodovich in Roseville.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <a href={site.bookingHref} className="btn btn-sunset btn-sm">
+            <Link href={scheduleHref} className="btn btn-sunset btn-sm">
               <CalendarCheck className="size-4" aria-hidden="true" />
-              Book Online
-            </a>
+              Request Appointment
+            </Link>
             <a href={site.phoneHref} className="btn btn-ghost-light btn-sm">
               <Phone className="size-4" aria-hidden="true" />
               {site.phone}
