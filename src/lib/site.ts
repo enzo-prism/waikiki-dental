@@ -435,36 +435,117 @@ export const serviceAliases: Record<string, string> = {
 };
 
 /* ------------------------------------------------------------------ *
- * Social proof. These three quotes are real public testimonials.
- * `reviewStats.count` is intentionally null — set it to the VERIFIED
- * Google review count (and update `href`) before launch so the site
- * never displays a fabricated number.
+ * Google review proof, verified against the live Waikiki Dental listing
+ * on August 24, 2026. Topic counts are Google's own corpus-wide labels;
+ * excerpts are intentionally short and link back to the full source.
  * ------------------------------------------------------------------ */
 export const reviewStats = {
-  rating: null as number | null,
-  count: null as number | null,
+  rating: 4.9,
+  count: 426,
+  fiveStarCount: 403,
   source: "Google",
-  href: "https://www.google.com/maps/search/?api=1&query=Waikiki%20Dental%20Roseville%20CA",
+  verifiedOn: "August 24, 2026",
+  href: "https://www.google.com/maps/place/Waikiki+Dental/@38.7717804,-121.3154872,15z/data=!4m2!3m1!1s0x0:0x556f1e63828910ed?sa=X&place_id=ChIJmbGEGJUhm4AR7RCJgmMeb1U",
 };
 
-export const testimonials = [
+export const reviewDistribution = [
+  { stars: 5, count: 403 },
+  { stars: 4, count: 10 },
+  { stars: 3, count: 3 },
+  { stars: 2, count: 2 },
+  { stars: 1, count: 8 },
+];
+
+export type ReviewTheme =
+  | "team"
+  | "comfort"
+  | "doctor"
+  | "same-day"
+  | "sedation";
+
+export const reviewThemeLabels: Record<ReviewTheme, string> = {
+  team: "The team",
+  comfort: "Comfort",
+  doctor: "Dr. Mike",
+  "same-day": "Same-day care",
+  sedation: "Sedation",
+};
+
+export const reviewTopics = [
+  { label: "Friendly staff", mentions: 171 },
+  { label: "Dr. Mike", mentions: 58 },
+  { label: "Caring staff", mentions: 54 },
+  { label: "Welcoming atmosphere", mentions: 34 },
+  { label: "Hygienist", mentions: 19 },
+  { label: "Efficient staff", mentions: 16 },
+  { label: "Crowns", mentions: 13 },
+  { label: "Painless cleaning", mentions: 5 },
+  { label: "Deep cleaning", mentions: 5 },
+  { label: "Crown repair", mentions: 3 },
+];
+
+export type ReviewExcerpt = {
+  quote: string;
+  name: string;
+  context: string;
+  themes: ReviewTheme[];
+};
+
+export const reviewExcerpts: ReviewExcerpt[] = [
   {
     quote:
-      "Always a great experience at Waikiki Dental. Professional and very friendly staff and doctor.",
-    name: "Robert M.",
-    location: "Roseville, CA",
+      "The service is great, the staff is knowledgeable and experienced, and their equipment is cutting edge.",
+    name: "Greg R.",
+    context: "Same-day crown care",
+    themes: ["same-day", "team"],
   },
   {
     quote:
-      "We love Waikiki Dental. The culture is warm and welcoming, and the doctor and staff are gentle and friendly. Highly recommend!",
-    name: "Rosanne P.",
-    location: "Roseville, CA",
+      "Dr. Mike is a friendly, professional, talented dentist. I especially appreciate his sedation services.",
+    name: "Janis C.",
+    context: "Sedation patient",
+    themes: ["sedation", "doctor"],
   },
   {
     quote:
-      "I've been looking for a dentist for awhile because I'm terrified of going. I was referred to Waikiki Dental by a friend and couldn't be happier.",
-    name: "Lindsay F.",
-    location: "Roseville, CA",
+      "Excellent chair-side manner, friendly and fun. Welcoming atmosphere and outstanding service.",
+    name: "Benjamin S.",
+    context: "Patient experience",
+    themes: ["comfort", "team"],
+  },
+  {
+    quote:
+      "They listen to my husband's concerns and are attentive to details.",
+    name: "Joeni C.",
+    context: "Attentive care",
+    themes: ["comfort", "doctor"],
+  },
+  {
+    quote: "Great location and welcoming team. Dr. Mike is awesome.",
+    name: "Charlene S.",
+    context: "Long-time patient",
+    themes: ["team", "doctor"],
+  },
+  {
+    quote:
+      "Everyone is so kind and professional. I felt comfortable and well taken care of the whole time.",
+    name: "Lilyan A.",
+    context: "Comfort-focused care",
+    themes: ["comfort", "team"],
+  },
+  {
+    quote:
+      "I broke a tooth and they were able to fix it and crown the tooth in one day!",
+    name: "Cindy T.",
+    context: "Same-day crown care",
+    themes: ["same-day"],
+  },
+  {
+    quote:
+      "Always a great experience here with knowledgeable and professional staff.",
+    name: "Colin S.",
+    context: "Patient experience",
+    themes: ["team"],
   },
 ];
 
@@ -744,6 +825,13 @@ export const dentistJsonLd = {
     },
   ],
   areaServed: ["Roseville", "Granite Bay", "Rocklin", "Lincoln"],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: reviewStats.rating,
+    reviewCount: reviewStats.count,
+    bestRating: 5,
+    worstRating: 1,
+  },
 };
 
 export function findService(slug: string) {

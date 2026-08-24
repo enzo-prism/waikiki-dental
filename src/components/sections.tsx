@@ -1,10 +1,12 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   CalendarCheck,
   MapPin,
   Phone,
+  Quote,
   ShieldCheck,
   Star,
 } from "lucide-react";
@@ -14,10 +16,11 @@ import {
   formPrivacy,
   hours,
   paymentOptions,
+  reviewExcerpts,
   reviewStats,
+  reviewTopics,
   scheduleHref,
   site,
-  testimonials,
   type Service,
 } from "@/lib/site";
 import { ContactForm } from "./contact-form";
@@ -115,7 +118,7 @@ export function AggregateRating({
         }`}
       >
         {hasCount
-          ? `${reviewStats.count}+ ${reviewStats.source} reviews`
+          ? `${reviewStats.count} ${reviewStats.source} reviews`
           : `Read our ${reviewStats.source} reviews`}
       </a>
     </div>
@@ -261,25 +264,64 @@ export function PaymentStrip({ className = "" }: { className?: string }) {
   );
 }
 
-export function FeaturedQuote() {
-  const quote = testimonials[2] ?? testimonials[0];
+export function HomeReviewProof() {
+  const quote = reviewExcerpts[2] ?? reviewExcerpts[0];
+  const featuredTopics = reviewTopics.slice(0, 3);
 
   return (
-    <section className="bg-deep">
-      <div className="wrap py-14 sm:py-16">
-        <blockquote className="max-w-3xl text-balance font-serif text-2xl font-medium leading-snug tracking-tight text-cream sm:text-3xl sm:leading-[1.2]">
-          “{quote.quote}”
-        </blockquote>
-        <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-gold-soft">
-          {quote.name} · {quote.location}
-        </p>
-        <Link
-          href="/patient-testimonials/"
-          className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-cream/80 underline-offset-4 hover:text-cream hover:underline"
-        >
-          More patient notes
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </Link>
+    <section className="bg-deep text-cream">
+      <div className="wrap grid gap-10 py-14 sm:py-16 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-16">
+        <div className="rounded-3xl border border-cream/15 bg-cream/[0.055] p-6 sm:p-8">
+          <p className="eyebrow text-gold-soft">Google reviews</p>
+          <div className="mt-4 flex items-end gap-3">
+            <span className="font-serif text-6xl font-medium leading-none text-cream sm:text-7xl">
+              {reviewStats.rating.toFixed(1)}
+            </span>
+            <div className="pb-1.5">
+              <StarRow className="mb-1.5" />
+              <p className="text-sm text-cream/70">
+                {reviewStats.count} patient reviews
+              </p>
+            </div>
+          </div>
+          <p className="mt-5 border-t border-cream/15 pt-4 text-xs leading-5 text-cream/55">
+            {reviewStats.fiveStarCount} five-star reviews · verified {reviewStats.verifiedOn}
+          </p>
+        </div>
+
+        <div>
+          <p className="eyebrow text-gold-soft">The pattern is the proof</p>
+          <h2 className="mt-4 max-w-2xl text-balance font-serif text-3xl font-medium leading-tight tracking-tight text-cream sm:text-4xl">
+            Patients keep describing care that feels warm, capable, and genuinely calm.
+          </h2>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {featuredTopics.map((topic) => (
+              <span
+                key={topic.label}
+                className="inline-flex items-center gap-2 rounded-full border border-cream/15 bg-cream/[0.06] px-3.5 py-2 text-sm text-cream/80"
+              >
+                <strong className="font-semibold text-cream">{topic.mentions}</strong>
+                {topic.label.toLowerCase()} mentions
+              </span>
+            ))}
+          </div>
+
+          <blockquote className="mt-7 border-l border-sunset-400 pl-5 text-lg leading-8 text-cream/85">
+            <Quote className="mb-3 size-5 text-sunset-300" aria-hidden="true" />
+            “{quote.quote}”
+            <footer className="mt-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-soft">
+              {quote.name} · Google review
+            </footer>
+          </blockquote>
+
+          <Link
+            href="/patient-testimonials/"
+            className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-cream underline-offset-4 hover:underline"
+          >
+            Explore what patients are saying
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -323,36 +365,6 @@ export function DoctorSpotlight() {
               </span>
             ))}
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function Reviews() {
-  return (
-    <section className="bg-deep text-cream">
-      <div className="wrap py-20 sm:py-24">
-        <SectionHeader
-          tone="dark"
-          eyebrow="Patient notes"
-          title="What Roseville patients keep saying."
-          body="Every word below comes from a real patient of the practice. Warm welcome, gentle care, nerves put to rest."
-        />
-        <AggregateRating tone="dark" className="mt-8" />
-
-        <div className="mt-12 grid gap-8 lg:grid-cols-3">
-          {testimonials.map((testimonial) => (
-            <figure key={testimonial.name} className="border-t border-cream/15 pt-6">
-              <blockquote className="text-lg leading-8 text-cream/90">
-                “{testimonial.quote}”
-              </blockquote>
-              <figcaption className="mt-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-soft">
-                {testimonial.name}
-                <span className="font-normal text-cream/60"> · {testimonial.location}</span>
-              </figcaption>
-            </figure>
-          ))}
         </div>
       </div>
     </section>

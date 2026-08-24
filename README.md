@@ -65,9 +65,10 @@ public waikikidental.com site and self-hosted in `public/media/`:
 
 ### Before the public custom-domain launch
 
-1. **Verified reviews.** Set `reviewStats.count` (and confirm `reviewStats.href`)
-   in `site.ts` to your real Google review count. It's intentionally `null` so
-   no fabricated number ships.
+1. **Review freshness.** The Google rating, count, distribution, topic counts,
+   and short excerpts in `site.ts` were verified on August 24, 2026. Re-check
+   the live listing before the custom-domain launch and update the verification
+   date whenever those values change.
 2. **Form inbox verification.** Both forms are connected to Formspree; run the
    clinic-approved inbox delivery checklist in `docs/OPERATIONS.md`.
 

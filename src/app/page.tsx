@@ -3,8 +3,8 @@ import Link from "next/link";
 import { CalendarCheck, Phone } from "lucide-react";
 import {
   DoctorSpotlight,
-  FeaturedQuote,
   FlagshipServices,
+  HomeReviewProof,
   VisitPanel,
 } from "@/components/sections";
 import { JsonLd } from "@/components/page-templates";
@@ -70,7 +70,7 @@ export default function Home() {
         </div>
       </section>
 
-      <FeaturedQuote />
+      <HomeReviewProof />
       <FlagshipServices />
       <DoctorSpotlight />
       <VisitPanel showForm={false} />

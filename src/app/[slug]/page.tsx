@@ -43,9 +43,9 @@ const staticPages: Record<
       "New to Waikiki Dental? Insurance, payment options, CareCredit financing, and online forms — everything sorted before your first Roseville visit.",
   },
   "patient-testimonials": {
-    title: "Patient Testimonials",
+    title: "Patient Reviews",
     description:
-      "What Roseville patients say about Waikiki Dental: a friendly, gentle, professional team that's unusually good with dental anxiety.",
+      "Explore Waikiki Dental's 4.9-star Google rating, 426 patient reviews, recurring themes, and verified review highlights from Roseville patients.",
   },
   "contact-waikiki-dental": {
     title: "Contact Waikiki Dental",

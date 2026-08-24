@@ -1,6 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BadgeCheck, CalendarCheck, Phone } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  BadgeCheck,
+  CalendarCheck,
+  Phone,
+  Star,
+} from "lucide-react";
 import {
   cerecProcess,
   dentistJsonLd,
@@ -10,6 +17,9 @@ import {
   featuredServices,
   findService,
   implantProcess,
+  reviewDistribution,
+  reviewStats,
+  reviewTopics,
   scheduleHref,
   servicesByCategory,
   site,
@@ -19,12 +29,12 @@ import {
   BookStrip,
   Eyebrow,
   PaymentStrip,
-  Reviews,
   SectionHeader,
   ServicesGrid,
   VisitPanel,
 } from "./sections";
 import { DoctorPortrait } from "./brand";
+import { ReviewExplorer } from "./review-explorer";
 
 export function JsonLd() {
   return (
@@ -514,20 +524,159 @@ export function NewPatientsPage() {
 }
 
 export function TestimonialsPage() {
+  const featuredTopics = reviewTopics.slice(0, 4);
+  const supportingTopics = reviewTopics.slice(4);
+
   return (
     <>
       <JsonLd />
-      <section className="bg-surface-alt py-16 sm:py-20">
-        <div className="wrap">
-          <PageHeader
-            eyebrow="Patient testimonials"
-            title="Don't take our word for it."
-            body="Roseville patients describe the same practice again and again: friendly, gentle, professional — and unusually good with nerves."
-            actions={false}
-          />
+      <section className="overflow-hidden bg-deep text-cream">
+        <div className="wrap grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:py-24">
+          <div>
+            <Eyebrow className="text-gold-soft">Patient reviews</Eyebrow>
+            <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-cream sm:text-6xl">
+              426 reviews. One remarkably consistent feeling.
+            </h1>
+            <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
+              The full Google record is organized here by rating, recurring topics,
+              and short patient excerpts — with one clear path to every review at
+              the source.
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={reviewStats.href}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-light"
+              >
+                Read all {reviewStats.count} on Google
+                <ArrowUpRight className="size-4" aria-hidden="true" />
+              </a>
+              <Link href={scheduleHref} className="btn btn-sunset">
+                <CalendarCheck className="size-4" aria-hidden="true" />
+                Request Appointment
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-cream/15 bg-cream/[0.06] p-6 shadow-soft-lg sm:p-8">
+            <div className="flex flex-wrap items-end justify-between gap-5 border-b border-cream/15 pb-6">
+              <div>
+                <p className="eyebrow text-gold-soft">Google rating</p>
+                <div className="mt-3 flex items-end gap-3">
+                  <span className="font-serif text-7xl font-medium leading-none text-cream">
+                    {reviewStats.rating.toFixed(1)}
+                  </span>
+                  <div className="pb-1.5">
+                    <div className="flex gap-1 text-gold-soft" aria-label="4.9 out of 5 stars">
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <Star key={index} className="size-4 fill-current" aria-hidden="true" />
+                      ))}
+                    </div>
+                    <p className="mt-1.5 text-sm text-cream/65">{reviewStats.count} reviews</p>
+                  </div>
+                </div>
+              </div>
+              <p className="rounded-full border border-gold-soft/30 bg-gold-soft/10 px-3 py-1.5 text-xs font-semibold text-gold-soft">
+                {reviewStats.fiveStarCount} five-star reviews
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-3" aria-label="Google review rating distribution">
+              {reviewDistribution.map((row) => (
+                <div key={row.stars} className="grid grid-cols-[2.75rem_1fr_2.25rem] items-center gap-3 text-xs">
+                  <span className="text-cream/65">{row.stars} star</span>
+                  <span className="h-1.5 overflow-hidden rounded-full bg-cream/10">
+                    <span
+                      className="block h-full rounded-full bg-gold-soft"
+                      style={{ width: `${(row.count / reviewStats.count) * 100}%` }}
+                    />
+                  </span>
+                  <span className="text-right font-semibold text-cream/80">{row.count}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 text-xs leading-5 text-cream/50">
+              Rating and counts verified on {reviewStats.verifiedOn}. Google reviews can change over time.
+            </p>
+          </div>
         </div>
       </section>
-      <Reviews />
+
+      <section className="bg-surface-alt py-20 sm:py-24">
+        <div className="wrap">
+          <SectionHeader
+            eyebrow="What patients mention most"
+            title="The strongest themes are human, not clinical."
+            body="Google's topic summary across the full review record points to the same experience again and again: a friendly team, caring attention, and an office that lowers the temperature of a dental visit."
+          />
+
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredTopics.map((topic, index) => (
+              <article
+                key={topic.label}
+                className={`rounded-3xl border p-6 ${
+                  index === 0
+                    ? "border-ocean-700 bg-ocean-700 text-cream"
+                    : "border-line bg-cream text-ink"
+                }`}
+              >
+                <p
+                  className={`font-serif text-5xl font-medium leading-none ${
+                    index === 0 ? "text-cream" : "text-ocean-700"
+                  }`}
+                >
+                  {topic.mentions}
+                </p>
+                <h2 className="mt-4 font-serif text-xl font-medium">{topic.label}</h2>
+                <p className={`mt-2 text-sm leading-6 ${index === 0 ? "text-cream/70" : "text-ink-muted"}`}>
+                  mentions in Google reviews
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {supportingTopics.map((topic) => (
+              <span key={topic.label} className="chip bg-cream">
+                <strong className="font-semibold text-ink">{topic.mentions}</strong>
+                {topic.label}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-background py-20 sm:py-24">
+        <div className="wrap">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <SectionHeader
+              eyebrow="In patients' own words"
+              title="Find the experience that matters to you."
+              body="Use the filters to explore short, verified excerpts about comfort, the team, Dr. Mike, sedation, and same-day care."
+            />
+            <div className="rounded-2xl border border-line bg-cream p-5 text-sm leading-6 text-ink-muted lg:justify-self-end lg:max-w-md">
+              Excerpts are shortened for readability and attributed with reviewer initials.
+              The rating, distribution, and topic counts above were captured from Google
+              on {reviewStats.verifiedOn}.
+            </div>
+          </div>
+          <div className="mt-10">
+            <ReviewExplorer />
+          </div>
+          <div className="mt-10 flex justify-center">
+            <a
+              href={reviewStats.href}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline"
+            >
+              Explore every review on Google
+              <ArrowUpRight className="size-4" aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+      </section>
       <BookStrip />
     </>
   );
