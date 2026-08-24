@@ -526,6 +526,28 @@ export function NewPatientsPage() {
 export function TestimonialsPage() {
   const featuredTopics = reviewTopics.slice(0, 4);
   const supportingTopics = reviewTopics.slice(4);
+  const corpusStats = [
+    {
+      value: reviewStats.count,
+      label: "Public reviews read",
+      detail: "The complete Google review record",
+    },
+    {
+      value: reviewStats.writtenReviewCount,
+      label: "Written experiences",
+      detail: "Every available comment included in the analysis",
+    },
+    {
+      value: reviewStats.ratingOnlyCount,
+      label: "Rating-only reviews",
+      detail: "Included in the rating distribution",
+    },
+    {
+      value: reviewStats.fourOrFiveStarCount,
+      label: "Four- or five-star",
+      detail: "97% of the full public review record",
+    },
+  ];
 
   return (
     <>
@@ -535,12 +557,11 @@ export function TestimonialsPage() {
           <div>
             <Eyebrow className="text-gold-soft">Patient reviews</Eyebrow>
             <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-cream sm:text-6xl">
-              426 reviews. One remarkably consistent feeling.
+              426 reviews. We read the entire public record.
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
-              The full Google record is organized here by rating, recurring topics,
-              and short patient excerpts — with one clear path to every review at
-              the source.
+              Every public rating and all 323 written experiences were reviewed,
+              then organized here into the patterns that matter most to patients.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
@@ -549,7 +570,7 @@ export function TestimonialsPage() {
                 rel="noreferrer"
                 className="btn btn-light"
               >
-                Read all {reviewStats.count} on Google
+                Open all {reviewStats.count} Google reviews
                 <ArrowUpRight className="size-4" aria-hidden="true" />
               </a>
               <Link href={scheduleHref} className="btn btn-sunset">
@@ -600,6 +621,47 @@ export function TestimonialsPage() {
               Rating and counts verified on {reviewStats.verifiedOn}. Google reviews can change over time.
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="border-b border-line bg-cream py-14 sm:py-16">
+        <div className="wrap">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="eyebrow">Full-record analysis</p>
+              <h2 className="mt-4 text-balance font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+                No cherry-picking. Every public rating counts.
+              </h2>
+            </div>
+            <p className="max-w-xl text-pretty leading-7 text-ink-muted">
+              Google prevents its review panel from being embedded on another
+              website. The summaries below cover the full record, and the direct
+              link opens every original review in Google&apos;s public panel with no
+              Business Profile access required.
+            </p>
+          </div>
+
+          <div className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {corpusStats.map((stat) => (
+              <article key={stat.label} className="rounded-2xl border border-line bg-background p-5 sm:p-6">
+                <p className="font-serif text-4xl font-medium leading-none text-ocean-700">
+                  {stat.value}
+                </p>
+                <h3 className="mt-3 font-semibold text-ink">{stat.label}</h3>
+                <p className="mt-1.5 text-sm leading-6 text-ink-muted">{stat.detail}</p>
+              </article>
+            ))}
+          </div>
+
+          <a
+            href={reviewStats.href}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-7 inline-flex min-h-11 items-center gap-2 font-semibold text-ocean-700 underline decoration-ocean-200 underline-offset-4 transition hover:text-ocean-900"
+          >
+            Read the complete public review history
+            <ArrowUpRight className="size-4" aria-hidden="true" />
+          </a>
         </div>
       </section>
 
@@ -671,7 +733,7 @@ export function TestimonialsPage() {
               rel="noreferrer"
               className="btn btn-outline"
             >
-              Explore every review on Google
+              Open every Google review
               <ArrowUpRight className="size-4" aria-hidden="true" />
             </a>
           </div>

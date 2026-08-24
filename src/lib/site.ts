@@ -435,17 +435,20 @@ export const serviceAliases: Record<string, string> = {
 };
 
 /* ------------------------------------------------------------------ *
- * Google review proof, verified against the live Waikiki Dental listing
- * on August 24, 2026. Topic counts are Google's own corpus-wide labels;
- * excerpts are intentionally short and link back to the full source.
+ * Google review proof, verified by reading the complete public Waikiki Dental
+ * review panel on August 24, 2026. Topic counts are Google's own corpus-wide
+ * labels; excerpts are intentionally short and link back to the full source.
  * ------------------------------------------------------------------ */
 export const reviewStats = {
   rating: 4.9,
   count: 426,
   fiveStarCount: 403,
+  fourOrFiveStarCount: 413,
+  writtenReviewCount: 323,
+  ratingOnlyCount: 103,
   source: "Google",
   verifiedOn: "August 24, 2026",
-  href: "https://www.google.com/maps/place/Waikiki+Dental/@38.7717804,-121.3154872,15z/data=!4m2!3m1!1s0x0:0x556f1e63828910ed?sa=X&place_id=ChIJmbGEGJUhm4AR7RCJgmMeb1U",
+  href: "https://www.google.com/maps/place/Waikiki+Dental+%7C+Roseville,+CA/@38.7717804,-121.3154872,15z/data=!3m1!5s0x809b2173405b150d:0x40163809ed708a6f!4m8!3m7!1s0x809b21951884b199:0x556f1e63828910ed!8m2!3d38.7717804!4d-121.3154872!9m1!1b1!16s%2Fg%2F1tgnrxyg?entry=ttu",
 };
 
 export const reviewDistribution = [
