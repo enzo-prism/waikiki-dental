@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
+import { NavigationScrollManager } from "@/components/navigation-scroll-manager";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -53,9 +54,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${manrope.variable} h-full scroll-smooth antialiased`}
+      className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-ink">
+        <NavigationScrollManager />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-deep focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-cream focus:outline-none focus-visible:ring-4 focus-visible:ring-ocean-200"

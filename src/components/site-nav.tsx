@@ -232,7 +232,7 @@ export function MobileMenu() {
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
-      trigger?.focus();
+      trigger?.focus({ preventScroll: true });
     };
   }, [open]);
 

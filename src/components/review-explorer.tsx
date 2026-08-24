@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Quote, Star } from "lucide-react";
 import {
   reviewExcerpts,
@@ -28,6 +28,8 @@ function ReviewStars() {
 
 export function ReviewExplorer() {
   const [activeFilter, setActiveFilter] = useState<"all" | ReviewTheme>("all");
+  const filtersRef = useRef<HTMLDivElement>(null);
+  const filterTopBeforeUpdate = useRef<number | null>(null);
 
   const visibleReviews = useMemo(
     () =>
@@ -37,9 +39,29 @@ export function ReviewExplorer() {
     [activeFilter],
   );
 
+  useLayoutEffect(() => {
+    const previousTop = filterTopBeforeUpdate.current;
+    filterTopBeforeUpdate.current = null;
+    if (previousTop === null || !filtersRef.current) return;
+
+    const currentTop = filtersRef.current.getBoundingClientRect().top;
+    const shift = currentTop - previousTop;
+    if (Math.abs(shift) > 1) {
+      window.scrollBy({ top: shift, left: 0, behavior: "auto" });
+    }
+  }, [activeFilter]);
+
+  function selectFilter(filter: "all" | ReviewTheme) {
+    if (filter === activeFilter) return;
+    filterTopBeforeUpdate.current =
+      filtersRef.current?.getBoundingClientRect().top ?? null;
+    setActiveFilter(filter);
+  }
+
   return (
     <div>
       <div
+        ref={filtersRef}
         className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
         aria-label="Filter review highlights"
       >
@@ -49,8 +71,9 @@ export function ReviewExplorer() {
             <button
               key={filter.key}
               type="button"
-              onClick={() => setActiveFilter(filter.key)}
+              onClick={() => selectFilter(filter.key)}
               aria-pressed={selected}
+              aria-controls="review-highlight-results"
               className={`min-h-11 shrink-0 rounded-full border px-4 text-sm font-semibold transition ${
                 selected
                   ? "border-deep bg-deep text-cream"
@@ -67,7 +90,7 @@ export function ReviewExplorer() {
         Showing {visibleReviews.length} verified review {visibleReviews.length === 1 ? "highlight" : "highlights"}
       </p>
 
-      <div className="mt-7 grid gap-5 md:grid-cols-2">
+      <div id="review-highlight-results" className="mt-7 grid gap-5 md:grid-cols-2">
         {visibleReviews.map((review) => (
           <article
             key={`${review.name}-${review.context}`}

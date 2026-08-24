@@ -149,7 +149,22 @@ export function AppointmentScheduler({
       skipInitialFocus.current = false;
       return;
     }
-    headingRef.current?.focus();
+    const heading = headingRef.current;
+    if (!heading) return;
+
+    heading.focus({ preventScroll: true });
+
+    const rect = heading.getBoundingClientRect();
+    const safeTop = window.innerWidth < 1024 ? 96 : 112;
+    const safeBottom = window.innerHeight - (window.innerWidth < 1024 ? 112 : 48);
+
+    if (rect.top < safeTop || rect.bottom > safeBottom) {
+      window.scrollBy({
+        top: rect.top - safeTop,
+        left: 0,
+        behavior: "auto",
+      });
+    }
   }, [step, status]);
 
   function update<K extends keyof FormData>(key: K, value: FormData[K]) {
