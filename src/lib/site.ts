@@ -35,7 +35,7 @@ export const site = {
     "https://www.google.com/maps/search/?api=1&query=1271%20Pleasant%20Grove%20Blvd%20Suite%20100%20Roseville%20CA%2095747",
   baseUrl: "https://waikiki-dental.vercel.app",
   description:
-    "Waikiki Dental is Dr. Michael Narodovich's Roseville, CA practice — IV sedation, implants, CEREC same-day crowns, and unhurried family care for patients who want dentistry without the dread.",
+    "Roseville dentist Dr. Michael Narodovich offers IV sedation, dental implants, same-day crowns, and unhurried care for patients who want less dental anxiety.",
 };
 
 export const hours = [
@@ -736,7 +736,7 @@ export const soonestOption = {
   icon: CalendarSearch,
 };
 
-export const pageRoutes = [
+export const canonicalPageRoutes = [
   "",
   "michael-narodovich-dmd",
   "roseville-dental-care",
@@ -746,6 +746,10 @@ export const pageRoutes = [
   "contact-waikiki-dental",
   "request-appointment",
   ...services.map((service) => service.slug),
+];
+
+export const pageRoutes = [
+  ...canonicalPageRoutes,
   ...Object.keys(serviceAliases),
 ];
 

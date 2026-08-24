@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SedationArticlePage } from "@/components/page-templates";
-import { absoluteUrl } from "@/lib/site";
+import { createPageMetadata } from "@/lib/metadata";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -17,15 +17,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   if (slug !== sedationSlug) return {};
 
-  return {
-    title: "IV Sedation Dentistry Roseville",
+  return createPageMetadata({
+    title: "IV Sedation Dentistry in Roseville, CA",
     description:
       "Learn how IV sedation can help anxious dental patients receive comfortable care at Waikiki Dental in Roseville.",
-    alternates: {
-      // Canonicalize to the primary service page to avoid duplicate content.
-      canonical: absoluteUrl("/iv-sedation/"),
-    },
-  };
+    // Canonicalize this legacy article to the primary service page.
+    path: "/iv-sedation/",
+  });
 }
 
 export default async function DentalBlogPage({ params }: Props) {

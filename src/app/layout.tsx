@@ -3,6 +3,7 @@ import { Fraunces, Manrope } from "next/font/google";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { NavigationScrollManager } from "@/components/navigation-scroll-manager";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
+import { homeTitle, socialImage } from "@/lib/metadata";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -25,7 +26,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(site.baseUrl),
   title: {
-    default: "Waikiki Dental | Dentist in Roseville, CA",
+    default: homeTitle,
     template: "%s | Waikiki Dental",
   },
   description: site.description,
@@ -33,12 +34,19 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Waikiki Dental | Dentist in Roseville, CA",
+    title: homeTitle,
     description: site.description,
     url: site.baseUrl,
     siteName: "Waikiki Dental",
     locale: "en_US",
     type: "website",
+    images: [socialImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: homeTitle,
+    description: site.description,
+    images: [socialImage],
   },
   robots: {
     index: true,
