@@ -8,9 +8,15 @@ import {
   VisitPanel,
 } from "@/components/sections";
 import { JsonLd } from "@/components/page-templates";
-import { Hibiscus } from "@/components/brand";
 import { WaveUnderline } from "@/components/waves";
-import { heroFacts, heroImage, heroImageAlt, scheduleHref, site } from "@/lib/site";
+import {
+  brandAssets,
+  heroFacts,
+  heroImage,
+  heroImageAlt,
+  scheduleHref,
+  site,
+} from "@/lib/site";
 
 export default function Home() {
   return (
@@ -20,9 +26,19 @@ export default function Home() {
       <section className="relative overflow-hidden bg-background">
         <div className="wrap-wide relative grid items-center gap-12 pb-20 pt-14 sm:pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pb-24 lg:pt-20">
           <div>
-            <span className="eyebrow">
-              <Hibiscus size={16} className="shrink-0 text-sunset-600" />
-              Roseville · IV sedation &amp; restorative care
+            <span className="inline-flex max-w-full flex-nowrap items-center gap-2.5 font-sans text-[10px] font-semibold uppercase leading-[1.45] tracking-[0.12em] text-ocean-600 sm:text-[11px] sm:tracking-[0.24em]">
+              <Image
+                src={brandAssets.icon}
+                alt=""
+                width={75}
+                height={73}
+                aria-hidden="true"
+                sizes="24px"
+                className="h-auto w-6 shrink-0"
+              />
+              <span className="min-w-0">
+                Roseville · IV sedation &amp; restorative care
+              </span>
             </span>
             <h1 className="mt-6 text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-ink sm:text-6xl lg:text-[4.25rem]">
               Dentistry that feels like{" "}
