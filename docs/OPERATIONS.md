@@ -159,3 +159,12 @@ The release is complete only when all of the following are true:
 Do not describe a preview, successful local build, pushed commit, queued
 build, or unverified alias as a completed production release. A GitHub push
 alone is not a production release.
+
+## Current release baseline
+
+As of August 25, 2026, commit `348f713` is the verified homepage feature
+baseline containing the authentic team-media experience. Documentation-only
+commits may advance production without changing that feature baseline. For each
+release, record the exact deployed SHA externally or in the task handoff and
+repeat the production checks above; do not assume this dated baseline is still
+current.

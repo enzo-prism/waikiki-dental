@@ -40,6 +40,8 @@ npm run build
 - **Production:** [waikiki-dental.vercel.app](https://waikiki-dental.vercel.app/)
 - **Source of truth:** the `main` branch in GitHub
 - **Custom domain:** `waikikidental.com` is not connected to this deployment yet
+- **Verified site baseline:** homepage team-media experience from commit
+  `348f713` (verified August 25, 2026)
 
 ## Content & configuration
 
@@ -60,8 +62,19 @@ public waikikidental.com site and self-hosted in `public/media/`:
   `src/components/brand.tsx`)
 - `dr-narodovich.jpg` — studio portrait (275×412). Keep frames near that size.
 - `dr-narodovich-patient.jpg` — in-office candid (home hero, doctor page)
+- `waikiki-team-2026.webp` — current team photograph published by the practice;
+  used in the homepage team introduction.
+- `team-jessica.webp` and `team-nayeli.webp` — staff portraits cropped from
+  official practice spotlights; used in the homepage profile cards.
 - `office-hero.jpg` — stock operatory placeholder. **Not rendered.** Replace
   with a real Roseville office photo before using it.
+
+The team assets are optimized, metadata-free WebP files and are served locally;
+the production site does not load Facebook embeds, trackers, or expiring social
+CDN URLs. Source links, selection decisions, and the reuse boundary are recorded
+in [`docs/MEDIA-PROVENANCE.md`](docs/MEDIA-PROVENANCE.md). Publication on an
+official social account establishes source authenticity, but the practice should
+still confirm website-reuse approval before the custom-domain launch.
 
 ### Before the public custom-domain launch
 
@@ -71,6 +84,8 @@ public waikikidental.com site and self-hosted in `public/media/`:
    date whenever those values change.
 2. **Form inbox verification.** Both forms are connected to Formspree; run the
    clinic-approved inbox delivery checklist in `docs/OPERATIONS.md`.
+3. **Media reuse approval.** Confirm that the practice approves continued
+   website use of the three team images listed in `docs/MEDIA-PROVENANCE.md`.
 
 ## Formspree integration
 
@@ -126,6 +141,9 @@ live in `src/components/site-chrome.tsx` and `src/components/site-nav.tsx`.
   live Formspree delivery with honest success/error states.
 - **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD, `sitemap.ts`,
   `robots.ts`, trailing-slash URLs.
+- **Practice familiarity** — a high-homepage team introduction uses current,
+  practice-published photography to introduce Dr. Mike, Jessica, and Nayeli
+  before visitors reach the service catalog.
 - **Design system** — "Pacific Premium" palette anchored to the real brand
   (royal Pacific blue `#0051ae` from the logo, hibiscus coral CTAs, porcelain
   canvas, navy dark sections, gold ratings), Fraunces + Manrope, the practice's
@@ -161,3 +179,6 @@ The site preserves Waikiki Dental's public content facts: Roseville address,
 phone, on-site appointment form, doctor bio, service menu, new-patient info, hours,
 and testimonials. The live `waikikidental.com` domain is not yet connected;
 this deploy ships to a Vercel URL first (`site.baseUrl`).
+
+For a concise snapshot of shipped features, verification evidence, and remaining
+launch gates, see [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md).

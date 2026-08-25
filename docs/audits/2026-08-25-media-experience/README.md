@@ -26,3 +26,24 @@ Screenshots can confirm hierarchy, reflow, and visible contrast risk, but not co
 - `08-final-full-desktop.png`: complete final homepage after lazy images and scroll states were loaded.
 
 Interactive checks also confirmed no horizontal overflow at 320, 390, 768, or 1440 px; all three new images loaded successfully; buttons retained a 48 px minimum height; and the section's appointment action opened `/request-appointment/` at the top of the page.
+
+## Implemented result
+
+The accepted design ships in homepage implementation commit `348f713`. The new
+section follows review proof and precedes the services grid, so visitors meet
+real team members early without displacing the appointment action or core care
+information. The primary action stays on the website at
+`/request-appointment/`; the only external action is a secondary link to the
+verified official Facebook page.
+
+The final media files are locally hosted WebP derivatives. The production page
+does not hotlink social images or load a Facebook video player. Source and
+reuse decisions are documented in [`../../MEDIA-PROVENANCE.md`](../../MEDIA-PROVENANCE.md).
+
+## Live verification
+
+On August 25, 2026, the canonical Vercel alias served the accepted section, all
+three media URLs returned HTTP 200, and the appointment action resolved to the
+request page with a zero scroll offset. This audit records the feature baseline;
+every later production release still requires a fresh Vercel readiness and live
+route readback.
