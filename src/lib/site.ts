@@ -772,7 +772,7 @@ export const heroImage = "/media/dr-narodovich-patient.jpg";
 export const heroImageAlt =
   "Dr. Michael Narodovich talking with a smiling patient in a treatment room at Waikiki Dental";
 export const careImage = "/media/office-hero.jpg";
-export const doctorPortrait: string | null = "/media/dr-narodovich.jpg";
+export const doctorPortrait: string | null = "/media/dr-narodovich-hd.jpg";
 export const doctorCandid = "/media/dr-narodovich-patient.jpg";
 export const doctorCandidAlt =
   "Dr. Michael Narodovich chatting with a patient at the Roseville office";

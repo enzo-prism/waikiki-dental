@@ -102,8 +102,8 @@ export function WordmarkLockup({
 }
 
 /**
- * Dr. Narodovich's real headshot. Keep the frame near the 275×412 source
- * so the portrait stays sharp.
+ * Dr. Narodovich's restored 1024×1536 headshot. The original 275×412 source
+ * remains in /public/media as a non-destructive archival fallback.
  */
 export function DoctorPortrait({
   priority = false,
