@@ -5,6 +5,7 @@ import {
   DoctorSpotlight,
   FlagshipServices,
   HomeReviewProof,
+  TeamWelcome,
   VisitPanel,
 } from "@/components/sections";
 import { JsonLd } from "@/components/page-templates";
@@ -87,6 +88,7 @@ export default function Home() {
       </section>
 
       <HomeReviewProof />
+      <TeamWelcome />
       <FlagshipServices />
       <DoctorSpotlight />
       <VisitPanel showForm={false} />

@@ -567,6 +567,37 @@ export const trustPoints = [
   "Gentle with anxious patients",
 ];
 
+/* ------------------------------------------------------------------ *
+ * Team story — current practice-owned photos published by Waikiki
+ * Dental on its official Facebook page in March 2026. Cropped portraits
+ * are self-hosted so the experience stays fast and does not depend on a
+ * social platform or expose visitors to third-party tracking.
+ * ------------------------------------------------------------------ */
+export const teamStory = {
+  groupImage: "/media/waikiki-team-2026.webp",
+  groupImageAlt:
+    "Dr. Michael Narodovich with the Waikiki Dental team in burgundy scrubs in front of the practice's hibiscus mural",
+  socialHref: "https://www.facebook.com/waikikidentalroseville/",
+  members: [
+    {
+      name: "Jessica",
+      role: "RDA manager",
+      image: "/media/team-jessica.webp",
+      alt: "Jessica, RDA manager at Waikiki Dental",
+      summary:
+        "A nearly ten-year team member who keeps the office organized and helps patients feel known and cared for.",
+    },
+    {
+      name: "Nayeli",
+      role: "Roving dental assistant",
+      image: "/media/team-nayeli.webp",
+      alt: "Nayeli, roving dental assistant at Waikiki Dental",
+      summary:
+        "A friendly, flexible presence who steps between reception and chairside support wherever the day needs her.",
+    },
+  ],
+};
+
 /* New-patient hook — built only on facts stated on the public practice site. */
 export const newPatientOffer = {
   eyebrow: "Now accepting new patients",
@@ -757,8 +788,8 @@ export const pageRoutes = [
  * Imagery — self-hosted in /public/media for fast, reliable LCP.
  * `logo`, `logoIcon`, `doctorPortrait`, and `doctorCandid` are the
  * practice's real brand assets and photos, sourced from the current
- * public waikikidental.com site. `careImage` remains a tasteful
- * placeholder until a real Roseville office photo is available.
+ * public waikikidental.com site. Current team photography is described
+ * in `teamStory` above. `careImage` remains an unused placeholder.
  * ------------------------------------------------------------------ */
 export const brandAssets = {
   /** Full "Waikiki DENTAL" wordmark with hibiscus — transparent PNG, 511×73. */

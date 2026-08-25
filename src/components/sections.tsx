@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -21,6 +22,7 @@ import {
   reviewTopics,
   scheduleHref,
   site,
+  teamStory,
   type Service,
 } from "@/lib/site";
 import { ContactForm } from "./contact-form";
@@ -321,6 +323,89 @@ export function HomeReviewProof() {
             Explore what patients are saying
             <ArrowUpRight className="size-4" aria-hidden="true" />
           </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function TeamWelcome() {
+  return (
+    <section className="bg-surface-alt py-20 sm:py-24">
+      <div className="wrap grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-16">
+        <div className="relative mx-auto w-full max-w-[620px] lg:mx-0">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-line bg-cream shadow-soft-lg sm:aspect-[7/8]">
+            <Image
+              src={teamStory.groupImage}
+              alt={teamStory.groupImageAlt}
+              fill
+              sizes="(max-width: 1024px) 100vw, 53vw"
+              className="object-cover object-center"
+            />
+          </div>
+          <p className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/20 bg-deep/90 px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-cream shadow-soft backdrop-blur-sm sm:inset-x-auto sm:left-5 sm:px-5">
+            The Waikiki Dental team · Roseville
+          </p>
+        </div>
+
+        <div>
+          <Eyebrow>Before your first hello</Eyebrow>
+          <h2 className="mt-4 text-balance font-serif text-4xl font-medium leading-[1.08] tracking-tight text-ink sm:text-[2.9rem]">
+            Come in already knowing a few friendly faces.
+          </h2>
+          <p className="mt-6 text-pretty text-lg leading-8 text-ink-muted">
+            This is the real Roseville team, photographed inside Waikiki Dental.
+            Meet two of the people who help the office feel organized, familiar,
+            and welcoming from your first conversation onward.
+          </p>
+
+          <div className="mt-8 grid gap-3">
+            {teamStory.members.map((member) => (
+              <article
+                key={member.name}
+                className="grid grid-cols-[76px_minmax(0,1fr)] items-center gap-4 rounded-2xl border border-line bg-cream p-3.5 shadow-[0_12px_32px_-26px_rgb(11_33_64/0.4)] sm:grid-cols-[88px_minmax(0,1fr)] sm:gap-5 sm:p-4"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-ocean-50">
+                  <Image
+                    src={member.image}
+                    alt={member.alt}
+                    fill
+                    sizes="88px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                    <h3 className="font-serif text-xl font-medium text-ink">
+                      {member.name}
+                    </h3>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-ocean-600">
+                      {member.role}
+                    </p>
+                  </div>
+                  <p className="mt-1.5 text-sm leading-6 text-ink-muted">
+                    {member.summary}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link href={scheduleHref} className="btn btn-sunset">
+              <CalendarCheck className="size-4" aria-hidden="true" />
+              Request Appointment
+            </Link>
+            <a
+              href={teamStory.socialHref}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline"
+            >
+              More from the team
+              <ArrowUpRight className="size-4" aria-hidden="true" />
+            </a>
+          </div>
         </div>
       </div>
     </section>

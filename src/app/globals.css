@@ -185,8 +185,8 @@
    Browsers without scroll-driven animations render content normally. */
 @keyframes hf-reveal {
   from {
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 0.9;
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
