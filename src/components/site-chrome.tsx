@@ -7,7 +7,7 @@ import {
   Phone,
 } from "lucide-react";
 import { emergency, hours, navItems, scheduleHref, site } from "@/lib/site";
-import { BrandLogo, Hibiscus, WordmarkLockup } from "./brand";
+import { BrandLogo, Hibiscus } from "./brand";
 import { DesktopNav, MobileMenu } from "./site-nav";
 
 export function SiteHeader() {
@@ -51,7 +51,22 @@ export function SiteFooter() {
     <footer className="bg-deep text-cream/75">
       <section className="wrap-wide grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.9fr_0.9fr]">
         <div>
-          <WordmarkLockup />
+          <Link
+            href="/"
+            className="group inline-flex max-w-full flex-col gap-4 rounded-[1.75rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-300 focus-visible:ring-offset-4 focus-visible:ring-offset-deep"
+            aria-label="Waikiki Dental — home"
+          >
+            <span className="inline-flex w-full max-w-[17rem] rounded-[1.75rem] border border-cream/14 bg-gradient-to-br from-cream via-cream to-ocean-50 px-5 py-4 shadow-[0_20px_50px_rgba(2,13,34,0.28)] transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_24px_60px_rgba(2,13,34,0.34)] motion-reduce:transform-none motion-reduce:transition-none">
+              <BrandLogo className="h-auto w-full" />
+            </span>
+            <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-ocean-200">
+              <span
+                aria-hidden="true"
+                className="size-2 rounded-full bg-sunset-400 shadow-[0_0_0_6px_rgba(255,255,255,0.05)]"
+              />
+              Roseville, CA
+            </span>
+          </Link>
           <p className="mt-5 max-w-md text-sm leading-7 text-cream/70">
             IV sedation, implants, same-day crowns, and unhurried family care
             from Dr. Michael Narodovich in Roseville.
