@@ -4,6 +4,7 @@ import { useId, useRef, useState } from "react";
 import { Loader2, Mail, Phone, Send } from "lucide-react";
 import { ChoiceChip } from "@/components/forms/choice-chip";
 import { Honeypot, PrivacyConsent } from "@/components/forms/privacy-note";
+import { LeadAttributionHiddenFields } from "@/components/lead-attribution-fields";
 import { RequestSuccess } from "@/components/forms/request-success";
 import {
   FORMSPREE_ENDPOINT,
@@ -12,6 +13,7 @@ import {
   phoneDigitCount,
   submitFormspree,
 } from "@/lib/forms";
+import { withLeadAttribution } from "@/lib/lead-attribution";
 import { contactTopics, formPrivacy } from "@/lib/site";
 
 type FormState = {
@@ -102,7 +104,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
     try {
       const response = await submitFormspree(
-        {
+        withLeadAttribution({
           _subject: "Contact message — Waikiki Dental",
           form_type: "contact_message",
           source: "Waikiki Dental contact form",
@@ -125,7 +127,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             form.message.trim(),
           ].join("\n"),
           _gotcha: company,
-        },
+        }),
         CONTACT_FORM_ENDPOINT,
       );
 
@@ -313,6 +315,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         {formPrivacy.contactConsent}
       </PrivacyConsent>
       <Honeypot value={company} onChange={setCompany} />
+      <LeadAttributionHiddenFields />
 
       {error ? (
         <p id={errorId} className="text-sm font-medium text-sunset-600" role="alert">

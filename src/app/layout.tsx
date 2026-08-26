@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
+import { LeadAttributionCapture } from "@/components/lead-attribution-capture";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { NavigationScrollManager } from "@/components/navigation-scroll-manager";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
@@ -65,6 +66,7 @@ export default function RootLayout({
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-ink">
+        <LeadAttributionCapture />
         <NavigationScrollManager />
         <a
           href="#main-content"

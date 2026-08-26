@@ -23,6 +23,7 @@ import { FormProgress } from "@/components/forms/form-progress";
 import { LiveRequestSummary, type SummaryRow } from "@/components/forms/live-summary";
 import { MonthCalendar } from "@/components/forms/month-calendar";
 import { Honeypot, PrivacyConsent, PrivacyNote } from "@/components/forms/privacy-note";
+import { LeadAttributionHiddenFields } from "@/components/lead-attribution-fields";
 import { RequestSuccess } from "@/components/forms/request-success";
 import {
   clearAppointmentDraft,
@@ -35,6 +36,7 @@ import {
   submitFormspree,
   writeAppointmentDraft,
 } from "@/lib/forms";
+import { withLeadAttribution } from "@/lib/lead-attribution";
 import {
   appointmentReasons,
   formPrivacy,
@@ -287,34 +289,36 @@ export function AppointmentScheduler({
     const timeLabel = time?.label ?? "Anytime";
 
     try {
-      const response = await submitFormspree({
-        _subject: "Appointment request — Waikiki Dental",
-        form_type: "appointment_request",
-        source: "Waikiki Dental appointment request",
-        patient_type: patientLabel,
-        appointment_reason: reason?.label ?? form.reason,
-        appointment_reason_key: form.reason,
-        preferred_date: form.flexible ? "Soonest available" : form.date,
-        preferred_date_label: dateLabel,
-        preferred_time: timeLabel,
-        name: form.name.trim(),
-        phone: form.phone.trim(),
-        ...(form.email.trim() ? { email: form.email.trim() } : {}),
-        notes: form.notes.trim() || "None",
-        message: [
-          "APPOINTMENT REQUEST (not confirmed)",
-          "",
-          `Patient: ${patientLabel}`,
-          `Visit: ${reason?.label ?? form.reason}`,
-          `Preferred date: ${dateLabel}`,
-          `Preferred time: ${timeLabel}`,
-          `Name: ${form.name.trim()}`,
-          `Phone: ${form.phone.trim()}`,
-          `Email: ${form.email.trim() || "Not provided"}`,
-          `Notes: ${form.notes.trim() || "None"}`,
-        ].join("\n"),
-        _gotcha: gotcha,
-      });
+      const response = await submitFormspree(
+        withLeadAttribution({
+          _subject: "Appointment request — Waikiki Dental",
+          form_type: "appointment_request",
+          source: "Waikiki Dental appointment request",
+          patient_type: patientLabel,
+          appointment_reason: reason?.label ?? form.reason,
+          appointment_reason_key: form.reason,
+          preferred_date: form.flexible ? "Soonest available" : form.date,
+          preferred_date_label: dateLabel,
+          preferred_time: timeLabel,
+          name: form.name.trim(),
+          phone: form.phone.trim(),
+          ...(form.email.trim() ? { email: form.email.trim() } : {}),
+          notes: form.notes.trim() || "None",
+          message: [
+            "APPOINTMENT REQUEST (not confirmed)",
+            "",
+            `Patient: ${patientLabel}`,
+            `Visit: ${reason?.label ?? form.reason}`,
+            `Preferred date: ${dateLabel}`,
+            `Preferred time: ${timeLabel}`,
+            `Name: ${form.name.trim()}`,
+            `Phone: ${form.phone.trim()}`,
+            `Email: ${form.email.trim() || "Not provided"}`,
+            `Notes: ${form.notes.trim() || "None"}`,
+          ].join("\n"),
+          _gotcha: gotcha,
+        }),
+      );
 
       if (!response.ok) {
         isSubmittingRef.current = false;
@@ -456,6 +460,7 @@ export function AppointmentScheduler({
           }}
           noValidate
         >
+          <LeadAttributionHiddenFields />
           <div className="card min-w-0 overflow-hidden shadow-soft">
           <FormProgress step={step} onJump={jumpTo} />
 

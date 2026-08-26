@@ -45,6 +45,9 @@ It sends these fields:
 - `notes` and a readable `message` summary that begins with
   `APPOINTMENT REQUEST (not confirmed)`
 - `_gotcha`, Formspree's honeypot field
+- first-touch `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`,
+  `utm_term`, `gclid`, `fbclid`, `ttclid`, and parsed `ad_id` (empty when the
+  visitor arrived without tags)
 
 The client sends `Accept: application/json` and `Content-Type:
 application/json`. It shows success only after an HTTP success response. That
@@ -60,13 +63,27 @@ for the site-native appointment CTA.
 The implementation is in `src/components/contact-form.tsx`. It sends
 `_subject`, `form_type` (`contact_message`), `source`, `topic`, `topic_key`,
 `name`, optional `email`/`phone`, `reply_preference`, `privacy_check`, a
-readable `message` that begins with `CONTACT MESSAGE`, and the `_gotcha`
-honeypot. Topic and reply preference are icon chips, not a select. The email
+readable `message` that begins with `CONTACT MESSAGE`, the `_gotcha`
+honeypot, and the same first-touch UTM / click-ID / `ad_id` fields as the
+appointment form. Topic and reply preference are icon chips, not a select. The email
 or phone field becomes required to match the visitor's chosen reply
 preference, and a privacy-check consent box gates submission. Error handling
 mirrors the appointment form: 429 gets a wait-and-retry message, other
 failures preserve entered data, and success renders only after an HTTP
 success response.
+
+## First-touch ad tags
+
+Both public lead forms (appointment and contact) stamp the first paid or
+tagged visit so later organic page views do not overwrite it. The browser
+keeps that record in `localStorage` (`wd_lead_attribution_v1`) for 90 days,
+with `sessionStorage` fallback when durable storage is blocked. `ad_id` is
+parsed from `utm_content` when that value is a bare numeric Meta `{{ad.id}}`
+or a trailing numeric id after a creative prefix. Click IDs are copied from
+the URL only; empty is correct for organic, call, or WhatsApp arrivals.
+
+Do not invent review counts, click IDs, or ad identifiers in copy or
+payloads.
 
 ## Privacy boundary
 
