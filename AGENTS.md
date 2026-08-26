@@ -26,6 +26,7 @@ Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not 
 - Appointment form: `src/components/appointment-scheduler.tsx` (Formspree)
 - Contact form: `src/components/contact-form.tsx`
 - Shared Formspree client / endpoint: `src/lib/forms.ts` (`xeajvpnb`)
+- First-touch UTM / click ID / `ad_id`: `src/lib/lead-attribution.ts`
 - Form options and privacy copy: `src/lib/site.ts`
 - Operations / launch checklist: `docs/OPERATIONS.md`
 
