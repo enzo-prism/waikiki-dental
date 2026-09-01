@@ -5,7 +5,7 @@ import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { NavigationScrollManager } from "@/components/navigation-scroll-manager";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { homeTitle, socialImage } from "@/lib/metadata";
-import { site } from "@/lib/site";
+import { isPreviewDeploy, site } from "@/lib/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -49,10 +49,17 @@ export const metadata: Metadata = {
     description: site.description,
     images: [socialImage],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: isPreviewDeploy
+    ? { index: false, follow: false }
+    : {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+        },
+      },
 };
 
 export default function RootLayout({

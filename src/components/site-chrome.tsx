@@ -189,12 +189,12 @@ export function SiteFooter() {
             <Link href="/new-patients/" className="transition hover:text-cream">
               New Patients
             </Link>
-            <a
-              href="https://waikikidental.com/privacy-policy/"
+            <Link
+              href="/privacy-practices/"
               className="transition hover:text-cream"
             >
-              Privacy Policy
-            </a>
+              Privacy Practices
+            </Link>
           </div>
         </div>
       </div>

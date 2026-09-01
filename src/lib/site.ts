@@ -22,6 +22,21 @@ import {
 } from "lucide-react";
 import type { ComponentType } from "react";
 
+const productionSiteUrl = "https://waikikidental.com";
+
+export function resolveSiteUrl(): string {
+  const explicit = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/$/, "");
+  if (explicit) return explicit;
+
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3000";
+  }
+
+  return productionSiteUrl;
+}
+
+export const isPreviewDeploy = process.env.VERCEL_ENV === "preview";
+
 export const site = {
   name: "Waikiki Dental",
   doctor: "Michael Narodovich, DMD",
@@ -33,7 +48,7 @@ export const site = {
   shortAddress: "1271 Pleasant Grove Blvd., Roseville, CA",
   mapsHref:
     "https://www.google.com/maps/search/?api=1&query=1271%20Pleasant%20Grove%20Blvd%20Suite%20100%20Roseville%20CA%2095747",
-  baseUrl: "https://waikiki-dental.vercel.app",
+  baseUrl: resolveSiteUrl(),
   description:
     "Roseville dentist Dr. Michael Narodovich offers IV sedation, dental implants, same-day crowns, and unhurried care for patients who want less dental anxiety.",
 };
