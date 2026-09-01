@@ -56,6 +56,9 @@ editorial boundary. The media audit and responsive screenshots are in
 2. Run one clinic-approved, non-sensitive Formspree delivery test and verify the
    real inbox, recipients, Reply-To behavior, and spam/domain controls.
 3. Re-run the form delivery check after any Formspree endpoint or recipient change.
+4. Complete the paid Vercel Web Analytics enablement and live data readback,
+   Search Console ownership, and GA4 privacy/account decisions in
+   `ANALYTICS-SEARCH.md`.
 
 ## Highest-value future media upgrade
 

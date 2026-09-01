@@ -3,6 +3,7 @@ import { Fraunces, Manrope } from "next/font/google";
 import { LeadAttributionCapture } from "@/components/lead-attribution-capture";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { NavigationScrollManager } from "@/components/navigation-scroll-manager";
+import { SiteAnalytics } from "@/components/site-analytics";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { homeTitle, socialImage } from "@/lib/metadata";
 import { isPreviewDeploy, site } from "@/lib/site";
@@ -67,6 +68,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const analyticsEnabled = process.env.VERCEL_WEB_ANALYTICS_ENABLED === "true";
+
   return (
     <html
       lang="en"
@@ -91,6 +94,7 @@ export default function RootLayout({
         </main>
         <SiteFooter />
         <MobileCtaBar />
+        {analyticsEnabled ? <SiteAnalytics /> : null}
       </body>
     </html>
   );

@@ -173,6 +173,15 @@ Do not describe a preview, successful local build, pushed commit, queued
 build, or unverified alias as a completed production release. A GitHub push
 alone is not a production release.
 
+## Analytics and Search Console
+
+Follow [`ANALYTICS-SEARCH.md`](ANALYTICS-SEARCH.md). Code readiness is not
+account enablement: verify the Vercel project feature, production script and
+beacon, then dashboard/API data. Do not add GA4 until the dedicated property and
+healthcare privacy gates in that document are satisfied. Search Console is not
+complete until the operating Google identity has verified access and the live
+sitemap can be read back through the API.
+
 ## Current release baseline
 
 As of September 1, 2026, commit `6772636` is the verified public-domain launch

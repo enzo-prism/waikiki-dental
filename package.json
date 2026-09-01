@@ -10,9 +10,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --experimental-default-type=module --test src/lib/forms.test.ts src/lib/lead-attribution.test.ts"
+    "test": "node --experimental-strip-types --experimental-default-type=module --test src/lib/forms.test.ts src/lib/lead-attribution.test.ts src/lib/analytics.test.ts"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "lucide-react": "^1.20.0",
     "next": "16.3.2",
     "react": "19.2.8",
