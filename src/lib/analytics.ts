@@ -12,7 +12,7 @@ function normalizedPathname(pathname: string) {
   return pathname.replace(/\/+$/, "") || "/";
 }
 
-function analyticsPath(pathname: string) {
+export function sanitizeAnalyticsPath(pathname: string) {
   const normalized = normalizedPathname(pathname);
 
   if (normalized === "/privacy-practices") return null;
@@ -40,7 +40,7 @@ export function sanitizeVercelAnalyticsEvent(
   try {
     const isAbsolute = /^https?:\/\//i.test(event.url);
     const url = new URL(event.url, "https://analytics.invalid");
-    const path = analyticsPath(url.pathname);
+    const path = sanitizeAnalyticsPath(url.pathname);
 
     if (!path) return null;
 

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { LeadAttributionCapture } from "@/components/lead-attribution-capture";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { NavigationScrollManager } from "@/components/navigation-scroll-manager";
@@ -94,6 +95,7 @@ export default function RootLayout({
         </main>
         <SiteFooter />
         <MobileCtaBar />
+        <GoogleAnalytics />
         {analyticsEnabled ? <SiteAnalytics /> : null}
       </body>
     </html>

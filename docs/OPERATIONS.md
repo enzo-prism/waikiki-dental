@@ -175,12 +175,12 @@ alone is not a production release.
 
 ## Analytics and Search Console
 
-Follow [`ANALYTICS-SEARCH.md`](ANALYTICS-SEARCH.md). Code readiness is not
-account enablement: verify the Vercel project feature, production script and
-beacon, then dashboard/API data. Do not add GA4 until the dedicated property and
-healthcare privacy gates in that document are satisfied. Search Console is not
-complete until the operating Google identity has verified access and the live
-sitemap can be read back through the API.
+Follow [`ANALYTICS-SEARCH.md`](ANALYTICS-SEARCH.md). Code readiness is not live
+collection: verify the production GA script, the grouped `page_view` payload,
+and then Realtime/API data. Vercel Web Analytics remains a separate paid feature
+and must not be enabled without approval. Search Console is not complete until
+the operating Google identity has verified access and the live sitemap can be
+read back through the API.
 
 ## Current release baseline
 

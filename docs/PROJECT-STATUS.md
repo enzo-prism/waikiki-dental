@@ -46,6 +46,8 @@ editorial boundary. The media audit and responsive screenshots are in
 - New team images load from the site's own origin and return HTTP 200.
 - The team-section appointment CTA opens `/request-appointment/` at the top of
   the page.
+- GA4 uses the dedicated Waikiki property and privacy-grouped production route
+  tracking documented in `ANALYTICS-SEARCH.md`.
 - The linked Vercel project is `waikiki-dental-preview`; production readiness must be
   re-read after every release rather than inferred from a Git push.
 
@@ -56,9 +58,8 @@ editorial boundary. The media audit and responsive screenshots are in
 2. Run one clinic-approved, non-sensitive Formspree delivery test and verify the
    real inbox, recipients, Reply-To behavior, and spam/domain controls.
 3. Re-run the form delivery check after any Formspree endpoint or recipient change.
-4. Complete the paid Vercel Web Analytics enablement and live data readback,
-   Search Console ownership, and GA4 privacy/account decisions in
-   `ANALYTICS-SEARCH.md`.
+4. Complete the paid Vercel Web Analytics enablement and live data readback and
+   Search Console ownership in `ANALYTICS-SEARCH.md`.
 
 ## Highest-value future media upgrade
 

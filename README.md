@@ -182,5 +182,6 @@ and matches `site.baseUrl`.
 For a concise snapshot of shipped features, verification evidence, and remaining
 launch gates, see [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md).
 
-For the privacy-safe Vercel Analytics boundary and the account-side GA4 and
-Search Console gates, see [`docs/ANALYTICS-SEARCH.md`](docs/ANALYTICS-SEARCH.md).
+For the privacy-safe GA4 route boundary, optional Vercel Analytics boundary,
+and Search Console access gates, see
+[`docs/ANALYTICS-SEARCH.md`](docs/ANALYTICS-SEARCH.md).
