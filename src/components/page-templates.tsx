@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import {
   cerecProcess,
+  absoluteUrl,
   dentistJsonLd,
   doctor,
   doctorCandid,
@@ -42,6 +43,80 @@ export function JsonLd() {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(dentistJsonLd) }}
     />
+  );
+}
+
+function ServiceJsonLd({ service }: { service: Service }) {
+  const url = absoluteUrl(`/${service.slug}/`);
+  const graph = [
+    dentistJsonLd,
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: service.title,
+      description: service.description,
+      url,
+      areaServed: "Roseville, CA",
+      provider: {
+        "@type": "Dentist",
+        name: site.name,
+        url: site.baseUrl,
+        telephone: site.phone,
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: absoluteUrl("/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Dental services",
+          item: absoluteUrl("/roseville-dental-care/"),
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: service.title,
+          item: url,
+        },
+      ],
+    },
+  ];
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+    />
+  );
+}
+
+function ServiceBreadcrumbs({
+  service,
+  tone = "light",
+}: {
+  service: Service;
+  tone?: "light" | "dark";
+}) {
+  const muted = tone === "dark" ? "text-cream/65" : "text-ink-muted";
+  const current = tone === "dark" ? "text-cream" : "text-ink";
+  return (
+    <nav aria-label="Breadcrumb" className={`mb-6 text-sm ${muted}`}>
+      <ol className="flex flex-wrap items-center gap-2">
+        <li><Link href="/">Home</Link></li>
+        <li aria-hidden="true">/</li>
+        <li><Link href="/roseville-dental-care/">Dental services</Link></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" className={current}>{service.title}</li>
+      </ol>
+    </nav>
   );
 }
 
@@ -107,10 +182,11 @@ function DefaultServicePage({ service }: { service: Service }) {
 
   return (
     <>
-      <JsonLd />
+      <ServiceJsonLd service={service} />
       <section className="bg-background">
         <div className="wrap grid gap-12 py-16 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
           <div>
+            <ServiceBreadcrumbs service={service} />
             <Eyebrow>{service.eyebrow}</Eyebrow>
             <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
               {service.title} in Roseville
@@ -160,12 +236,13 @@ function DefaultServicePage({ service }: { service: Service }) {
 function SedationServicePage({ service }: { service: Service }) {
   return (
     <>
-      <JsonLd />
+      <ServiceJsonLd service={service} />
       <section className="bg-deep text-cream">
         <div className="wrap py-20 sm:py-28">
+          <ServiceBreadcrumbs service={service} tone="dark" />
           <Eyebrow className="text-gold-soft">{service.eyebrow}</Eyebrow>
           <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-cream sm:text-6xl">
-            Years of put-off dentistry, finished in calm visits.
+            IV sedation dentistry for calmer care in Roseville.
           </h1>
           <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
             {service.description}
@@ -228,9 +305,10 @@ function ProcessServicePage({
 
   return (
     <>
-      <JsonLd />
+      <ServiceJsonLd service={service} />
       <section className="bg-background">
         <div className="wrap py-16 sm:py-20">
+          <ServiceBreadcrumbs service={service} />
           <Eyebrow>{service.eyebrow}</Eyebrow>
           <h1 className="mt-4 max-w-3xl text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
             {service.title} in Roseville
@@ -336,6 +414,92 @@ export function ServicesHubPage() {
                 <ServicesGrid items={group.items} />
               </div>
             </div>
+          ))}
+        </div>
+      </section>
+      <BookStrip />
+    </>
+  );
+}
+
+export function OrthodonticsPage() {
+  const items = [
+    findService("roseville-invisalign"),
+    findService("traditional-braces"),
+  ].filter((service): service is Service => Boolean(service));
+  const url = absoluteUrl("/orthodontics/");
+  const jsonLd = [
+    dentistJsonLd,
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Orthodontics and Invisalign",
+      description:
+        "Invisalign clear aligners and traditional braces planned around alignment, bite, and daily life in Roseville, CA.",
+      url,
+      areaServed: "Roseville, CA",
+      provider: { "@type": "Dentist", name: site.name, url: site.baseUrl },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Dental services", item: absoluteUrl("/roseville-dental-care/") },
+        { "@type": "ListItem", position: 3, name: "Orthodontics", item: url },
+      ],
+    },
+  ];
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <section className="bg-surface-alt py-16 sm:py-20">
+        <div className="wrap">
+          <nav aria-label="Breadcrumb" className="mb-6 text-sm text-ink-muted">
+            <ol className="flex flex-wrap items-center gap-2">
+              <li><Link href="/">Home</Link></li>
+              <li aria-hidden="true">/</li>
+              <li><Link href="/roseville-dental-care/">Dental services</Link></li>
+              <li aria-hidden="true">/</li>
+              <li aria-current="page" className="text-ink">Orthodontics</li>
+            </ol>
+          </nav>
+          <PageHeader
+            eyebrow="Orthodontics in Roseville"
+            title="A straighter smile, planned around real life."
+            body="Compare clear, removable Invisalign aligners with the precise control of traditional braces. The right route depends on your alignment, bite, goals, and daily routine."
+          />
+        </div>
+      </section>
+
+      <section className="bg-background py-16 sm:py-20">
+        <div className="wrap">
+          <SectionHeader
+            eyebrow="Two proven approaches"
+            title="Clear aligners or traditional braces?"
+            body="Start with an evaluation, then choose the approach that fits the movement your teeth need and the way you want treatment to fit your day."
+          />
+          <div className="mt-10">
+            <ServicesGrid items={items} />
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-surface-alt py-16 sm:py-20">
+        <div className="wrap grid gap-8 lg:grid-cols-3">
+          {[
+            ["What does the first visit cover?", "The dentist reviews alignment, spacing, crowding, bite, oral health, and what you want to change."],
+            ["Is Invisalign right for every case?", "No. Some tooth movements and bite concerns need the control of braces. An evaluation makes that distinction clear."],
+            ["Can adults have orthodontic treatment?", "Yes. Adults can be evaluated for clear aligners or braces as long as their teeth and supporting tissues are healthy enough for movement."],
+          ].map(([question, answer]) => (
+            <article key={question} className="card p-7">
+              <h2 className="font-serif text-2xl font-medium text-ink">{question}</h2>
+              <p className="mt-3 text-sm leading-7 text-ink-muted">{answer}</p>
+            </article>
           ))}
         </div>
       </section>

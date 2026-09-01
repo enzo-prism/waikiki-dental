@@ -5,6 +5,7 @@ import {
   DoctorPage,
   NewPatientsPage,
   OfficePage,
+  OrthodonticsPage,
   ServicePage,
   ServicesHubPage,
   TestimonialsPage,
@@ -58,6 +59,11 @@ const staticPages: Record<
     description:
       "Contact Waikiki Dental in Roseville, CA — request an appointment online, call or text (916) 772-6248, send a message, or stop by 1271 Pleasant Grove Blvd.",
   },
+  orthodontics: {
+    title: "Orthodontics & Invisalign in Roseville, CA",
+    description:
+      "Compare Invisalign clear aligners and traditional braces at Waikiki Dental in Roseville, with a plan built around your smile, bite, and daily routine.",
+  },
 };
 
 const aliasPages: Record<string, { title: string; description: string }> = {
@@ -76,10 +82,43 @@ const aliasPages: Record<string, { title: string; description: string }> = {
     description:
       "Explore cosmetic dentistry in Roseville, including whitening, bonding, veneers, Invisalign, and personalized smile makeover planning with Dr. Narodovich.",
   },
-  orthodontics: {
-    title: "Orthodontics in Roseville, CA",
+};
+
+const serviceMetadata: Record<string, { title: string; description: string }> = {
+  "roseville-invisalign": {
+    title: "Invisalign in Roseville, CA",
     description:
-      "Compare Invisalign clear aligners and traditional braces at Waikiki Dental in Roseville, with treatment planned around your smile, bite, and daily routine.",
+      "Explore clear, removable Invisalign aligners in Roseville. See whether aligners fit your smile and bite, and request a consultation at Waikiki Dental.",
+  },
+  "iv-sedation": {
+    title: "IV Sedation Dentistry in Roseville, CA",
+    description:
+      "Ask about monitored IV sedation dentistry in Roseville for dental anxiety, a strong gag reflex, or longer treatment visits at Waikiki Dental.",
+  },
+  "dental-emergencies": {
+    title: "Emergency Dentist in Roseville, CA",
+    description:
+      "Call Waikiki Dental for urgent tooth pain, swelling, a broken tooth, or a lost filling or crown. The Roseville team will guide your next step.",
+  },
+  "digital-x-ray": {
+    title: "Dental X-Rays in Roseville, CA",
+    description:
+      "Digital dental X-rays in Roseville help identify decay, root concerns, and bone changes that a visual exam cannot show. Learn what to expect.",
+  },
+  "roseville-cerec-same-day-crowns": {
+    title: "CEREC Same-Day Crowns in Roseville, CA",
+    description:
+      "Restore a damaged tooth with a CEREC porcelain crown designed, milled, and placed at Waikiki Dental in one Roseville visit when appropriate.",
+  },
+  "teeth-whitening": {
+    title: "Professional Teeth Whitening in Roseville, CA",
+    description:
+      "Brighten deep, set-in stains with professional teeth whitening planned around your smile, sensitivity, and goals at Waikiki Dental in Roseville.",
+  },
+  "roseville-dental-implants": {
+    title: "Dental Implants in Roseville, CA",
+    description:
+      "Explore dental implants in Roseville for replacing one or more missing teeth with a stable, natural-looking restoration at Waikiki Dental.",
   },
 };
 
@@ -98,14 +137,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const page = staticPages[slug];
   const aliasPage = aliasPages[slug];
   const service = findService(slug);
+  const serviceSeo = serviceMetadata[slug];
 
   const title =
     page?.title ??
     aliasPage?.title ??
+    serviceSeo?.title ??
     (service ? `${service.title} in Roseville, CA` : "Roseville Dental Care");
   const description =
     page?.description ??
     aliasPage?.description ??
+    serviceSeo?.description ??
     (service
       ? `${service.summary} Care is available at Waikiki Dental in Roseville, CA.`
       : site.description);
@@ -127,6 +169,7 @@ export default async function SlugPage({ params }: Props) {
   if (slug === "new-patients") return <NewPatientsPage />;
   if (slug === "patient-testimonials") return <TestimonialsPage />;
   if (slug === "contact-waikiki-dental") return <ContactPage />;
+  if (slug === "orthodontics") return <OrthodonticsPage />;
 
   const service = findService(slug);
   if (service) return <ServicePage service={service} />;

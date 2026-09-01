@@ -446,7 +446,6 @@ export const serviceAliases: Record<string, string> = {
   "roseville-family-dentist": "cleanings-exams",
   "family-dentistry": "cleanings-exams",
   "cosmetic-dentistry": "smile-makeover",
-  orthodontics: "roseville-invisalign",
 };
 
 /* ------------------------------------------------------------------ *
@@ -790,6 +789,7 @@ export const canonicalPageRoutes = [
   "new-patients",
   "patient-testimonials",
   "contact-waikiki-dental",
+  "orthodontics",
   "request-appointment",
   ...services.map((service) => service.slug),
 ];
