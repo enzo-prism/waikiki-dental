@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --experimental-default-type=module --test src/lib/lead-attribution.test.ts"
+    "test": "node --experimental-strip-types --experimental-default-type=module --test src/lib/forms.test.ts src/lib/lead-attribution.test.ts"
   },
   "dependencies": {
     "lucide-react": "^1.20.0",

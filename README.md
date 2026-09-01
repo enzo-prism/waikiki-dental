@@ -37,11 +37,11 @@ npm run build
 
 ## Current environments
 
-- **Production:** [waikiki-dental.vercel.app](https://waikiki-dental.vercel.app/)
+- **Production:** [waikikidental.com](https://waikikidental.com/)
 - **Source of truth:** the `main` branch in GitHub
-- **Custom domain:** `waikikidental.com` is not connected to this deployment yet
+- **Vercel project:** `waikiki-dental-preview`
 - **Verified site baseline:** homepage team-media experience from commit
-  `348f713` (verified August 25, 2026)
+  `6772636` (verified on the public domain September 1, 2026)
 
 ## Content & configuration
 
@@ -74,13 +74,13 @@ the production site does not load Facebook embeds, trackers, or expiring social
 CDN URLs. Source links, selection decisions, and the reuse boundary are recorded
 in [`docs/MEDIA-PROVENANCE.md`](docs/MEDIA-PROVENANCE.md). Publication on an
 official social account establishes source authenticity, but the practice should
-still confirm website-reuse approval before the custom-domain launch.
+still confirm ongoing website-reuse approval for those images.
 
-### Before the public custom-domain launch
+### Post-launch operations
 
 1. **Review freshness.** The Google rating, count, distribution, topic counts,
    and short excerpts in `site.ts` were verified on August 24, 2026. Re-check
-   the live listing before the custom-domain launch and update the verification
+   the live listing during routine content reviews and update the verification
    date whenever those values change.
 2. **Form inbox verification.** Both forms are connected to Formspree; run the
    clinic-approved inbox delivery checklist in `docs/OPERATIONS.md`.
@@ -102,12 +102,12 @@ Formspree's `_gotcha` honeypot, keeps a session draft until send, and preserves
 entered data when a network or service error allows a retry.
 
 The contact form (`src/components/contact-form.tsx`) submits to the same
-Formspree form by default, labeled via `_subject`/`source` so the office can
+Formspree form by default, labeled via `subject`/`source` so the office can
 tell contact messages from appointment requests. Set
 `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` to a dedicated Formspree form to
 separate them. Never commit Formspree account tokens or private credentials.
 
-Before the public custom-domain launch, use an approved synthetic request to
+For each form release, use an approved synthetic request to
 verify Formspree inbox receipt, intended office notification, Reply-To behavior,
 phone-only requests, spam and domain controls, accessibility, and the
 unavailable-service fallback. Keep both forms limited to non-sensitive
@@ -152,11 +152,10 @@ live in `src/components/site-chrome.tsx` and `src/components/site-nav.tsx`.
 
 ## Deployment
 
-Hosted on Vercel. `main` is the GitHub source of truth. **This repo is not
-wired to Vercel Git integration** — `git push origin main` does not update
-[waikiki-dental.vercel.app](https://waikiki-dental.vercel.app/). Production
-requires an authenticated `vercel deploy --prod --yes` (or Vercel MCP deploy).
-Do not attach `waikikidental.com` until the practice signs off.
+Hosted on Vercel in the `waikiki-dental-preview` project. `main` is the GitHub
+source of truth and a production deployment must be verified after every push.
+If the Git-triggered deployment does not start, deploy the reviewed checkout
+with an authenticated `vercel deploy --prod --yes`.
 
 ```bash
 npm ci
@@ -169,7 +168,7 @@ npx vercel inspect <deployment-url>
 
 The release is complete only when `origin/main` is the intended commit, the
 deployment reports `target: production` and `Ready`, and
-`https://waikiki-dental.vercel.app/` is listed as an alias. Then confirm the
+`https://waikikidental.com/` serves that deployment. Then confirm the
 appointment page returns HTTP 200. Routine verification must not submit the
 live Formspree form.
 
@@ -177,8 +176,8 @@ live Formspree form.
 
 The site preserves Waikiki Dental's public content facts: Roseville address,
 phone, on-site appointment form, doctor bio, service menu, new-patient info, hours,
-and testimonials. The live `waikikidental.com` domain is not yet connected;
-this deploy ships to a Vercel URL first (`site.baseUrl`).
+and testimonials. `waikikidental.com` is the live canonical production domain
+and matches `site.baseUrl`.
 
 For a concise snapshot of shipped features, verification evidence, and remaining
 launch gates, see [`docs/PROJECT-STATUS.md`](docs/PROJECT-STATUS.md).

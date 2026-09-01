@@ -12,7 +12,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 Marketing site for Dr. Michael Narodovich's Waikiki Dental practice (Roseville, CA). Next.js 16 App Router, React 19, Tailwind v4, npm, Node 24.
 
-This is a **new site** (not live on `waikikidental.com` yet). Production preview: https://waikiki-dental.vercel.app/
+This site is live at https://waikikidental.com/ in Vercel project `waikiki-dental-preview`.
 
 Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not mix copy, phone numbers, hours, or brand tokens between the two.
 
@@ -62,7 +62,7 @@ No local env is required to run the site. `.env.example` documents
 - Install is `npm ci`. Dev server is already started in the `dev` terminal on port 3000.
 - After UI or content changes, run `npm run lint` and `npm run build`. Open http://localhost:3000 and click through Home, Services, Doctor, and Request Appointment.
 - Do **not** submit the live Formspree appointment form from cloud unless the user explicitly asks for a clinic-approved test. Verify the page loads and client validation works instead.
-- Do not attach or cut over `waikikidental.com`. Preview URL only until the practice signs off.
+- Preserve `waikikidental.com` as the canonical production domain and verify it after every release.
 - Positioning: IV sedation and higher-ticket care, not general-dentistry volume. Do not add “new patient specials” or high-volume SEO copy that fights that brief.
 - Secrets belong in the Cloud Agents dashboard, not committed `.env` files. Form IDs in `NEXT_PUBLIC_*` are public; never commit Formspree account tokens.
-- **GitHub is not connected to Vercel.** `git push origin main` updates the repo only. Production is `npx vercel deploy --prod --yes` from an authenticated CLI, or a Vercel MCP deploy after the Vercel server is authenticated in Cursor. `VERCEL_TOKEN` (if used) belongs in Cloud Agent secrets, not the repo. Confirm `target: production`, `Ready`, and alias `https://waikiki-dental.vercel.app/` before calling a release complete.
+- Verify the Git-triggered production deployment after each `main` push. If it does not start, use `npx vercel deploy --prod --yes` from an authenticated CLI. `VERCEL_TOKEN` (if used) belongs in Cloud Agent secrets, not the repo. Confirm `target: production`, `Ready`, and the public `https://waikikidental.com/` readback before calling a release complete.

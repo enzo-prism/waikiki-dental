@@ -7,10 +7,12 @@ import { Honeypot, PrivacyConsent } from "@/components/forms/privacy-note";
 import { LeadAttributionHiddenFields } from "@/components/lead-attribution-fields";
 import { RequestSuccess } from "@/components/forms/request-success";
 import {
+  buildContactFormspreePayload,
   FORMSPREE_ENDPOINT,
   formNetworkError,
   isEmail,
-  phoneDigitCount,
+  isUsPhone,
+  resolveFormspreeEndpoint,
   submitFormspree,
 } from "@/lib/forms";
 import { withLeadAttribution } from "@/lib/lead-attribution";
@@ -37,7 +39,10 @@ const initialState: FormState = {
 };
 
 const CONTACT_FORM_ENDPOINT =
-  process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT ?? FORMSPREE_ENDPOINT;
+  resolveFormspreeEndpoint(
+    process.env.NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT,
+    FORMSPREE_ENDPOINT,
+  );
 
 export function ContactForm({ compact = false }: { compact?: boolean }) {
   const [form, setForm] = useState<FormState>(initialState);
@@ -80,8 +85,8 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       setError("That email address doesn’t look right.");
       return;
     }
-    if (form.phone && phoneDigitCount(form.phone) < 10) {
-      setError("That phone number looks incomplete.");
+    if (form.phone && !isUsPhone(form.phone)) {
+      setError("Enter a 10-digit US phone number (a leading +1 is okay).");
       return;
     }
     if (!form.consent) {
@@ -104,30 +109,18 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
     try {
       const response = await submitFormspree(
-        withLeadAttribution({
-          _subject: "Contact message — Waikiki Dental",
-          form_type: "contact_message",
-          source: "Waikiki Dental contact form",
-          topic: topic?.label ?? form.topic,
-          topic_key: form.topic,
-          name: form.name.trim(),
-          ...(form.email.trim() ? { email: form.email.trim() } : {}),
-          ...(form.phone.trim() ? { phone: form.phone.trim() } : {}),
-          reply_preference: form.replyBy === "email" ? "Email" : "Phone",
-          privacy_check: "Yes",
-          message: [
-            "CONTACT MESSAGE",
-            "",
-            `Topic: ${topic?.label ?? form.topic}`,
-            `Name: ${form.name.trim()}`,
-            `Email: ${form.email.trim() || "Not provided"}`,
-            `Phone: ${form.phone.trim() || "Not provided"}`,
-            `Preferred reply: ${form.replyBy === "email" ? "Email" : "Phone"}`,
-            "",
-            form.message.trim(),
-          ].join("\n"),
-          _gotcha: company,
-        }),
+        withLeadAttribution(
+          buildContactFormspreePayload({
+            topicLabel: topic?.label ?? form.topic,
+            topicKey: form.topic,
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            replyPreference: form.replyBy === "email" ? "Email" : "Phone",
+            message: form.message,
+            gotcha: company,
+          }),
+        ),
         CONTACT_FORM_ENDPOINT,
       );
 
@@ -208,6 +201,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
           name="message"
           placeholder={formPrivacy.contactPlaceholder}
           aria-invalid={error.toLowerCase().includes("message") || undefined}
+          maxLength={2_000}
         />
       </label>
 
@@ -243,6 +237,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             name="name"
             placeholder="Your name"
             autoComplete="name"
+            maxLength={120}
             aria-invalid={error.toLowerCase().includes("name") || undefined}
           />
         </label>
@@ -257,6 +252,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
               type="tel"
               placeholder="(916) …"
               autoComplete="tel"
+              maxLength={32}
               aria-invalid={error.toLowerCase().includes("phone") || undefined}
             />
           </label>
@@ -274,6 +270,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
               type="email"
               placeholder="you@email.com"
               autoComplete="email"
+              maxLength={254}
               aria-invalid={error.toLowerCase().includes("email") || undefined}
             />
           </label>
@@ -291,6 +288,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             type="email"
             placeholder="you@email.com"
             autoComplete="email"
+            maxLength={254}
           />
         </label>
       ) : form.replyBy === "email" ? (
@@ -304,6 +302,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             type="tel"
             placeholder="(916) …"
             autoComplete="tel"
+            maxLength={32}
           />
         </label>
       ) : null}

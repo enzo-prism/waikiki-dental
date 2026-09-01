@@ -27,11 +27,12 @@ import { LeadAttributionHiddenFields } from "@/components/lead-attribution-field
 import { RequestSuccess } from "@/components/forms/request-success";
 import {
   clearAppointmentDraft,
+  buildAppointmentFormspreePayload,
   formatLongDate,
   formatShortDate,
   formNetworkError,
   isEmail,
-  phoneDigitCount,
+  isUsPhone,
   readAppointmentDraft,
   submitFormspree,
   writeAppointmentDraft,
@@ -126,6 +127,7 @@ export function AppointmentScheduler({
   const [ready, setReady] = useState(false);
 
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
   const isSubmittingRef = useRef(false);
   const skipInitialFocus = useRef(true);
   const errorId = useId();
@@ -168,6 +170,11 @@ export function AppointmentScheduler({
       });
     }
   }, [step, status]);
+
+  useEffect(() => {
+    if (!error) return;
+    errorRef.current?.focus({ preventScroll: false });
+  }, [error]);
 
   function update<K extends keyof FormData>(key: K, value: FormData[K]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -236,8 +243,8 @@ export function AppointmentScheduler({
       if (form.name.trim().length < 2) return "Please enter your name.";
       if (!form.phone.trim())
         return "Please add a phone number so we can confirm.";
-      if (phoneDigitCount(form.phone) < 10)
-        return "That phone number looks incomplete.";
+      if (!isUsPhone(form.phone))
+        return "Enter a 10-digit US phone number (a leading +1 is okay).";
       if (form.email && !isEmail(form.email))
         return "That email address doesn’t look right.";
       if (!form.consent)
@@ -290,34 +297,21 @@ export function AppointmentScheduler({
 
     try {
       const response = await submitFormspree(
-        withLeadAttribution({
-          _subject: "Appointment request — Waikiki Dental",
-          form_type: "appointment_request",
-          source: "Waikiki Dental appointment request",
-          patient_type: patientLabel,
-          appointment_reason: reason?.label ?? form.reason,
-          appointment_reason_key: form.reason,
-          preferred_date: form.flexible ? "Soonest available" : form.date,
-          preferred_date_label: dateLabel,
-          preferred_time: timeLabel,
-          name: form.name.trim(),
-          phone: form.phone.trim(),
-          ...(form.email.trim() ? { email: form.email.trim() } : {}),
-          notes: form.notes.trim() || "None",
-          message: [
-            "APPOINTMENT REQUEST (not confirmed)",
-            "",
-            `Patient: ${patientLabel}`,
-            `Visit: ${reason?.label ?? form.reason}`,
-            `Preferred date: ${dateLabel}`,
-            `Preferred time: ${timeLabel}`,
-            `Name: ${form.name.trim()}`,
-            `Phone: ${form.phone.trim()}`,
-            `Email: ${form.email.trim() || "Not provided"}`,
-            `Notes: ${form.notes.trim() || "None"}`,
-          ].join("\n"),
-          _gotcha: gotcha,
-        }),
+        withLeadAttribution(
+          buildAppointmentFormspreePayload({
+            patientLabel,
+            reasonLabel: reason?.label ?? form.reason,
+            reasonKey: form.reason,
+            preferredDate: form.flexible ? "Soonest available" : form.date,
+            preferredDateLabel: dateLabel,
+            preferredTime: timeLabel,
+            name: form.name,
+            phone: form.phone,
+            email: form.email,
+            notes: form.notes,
+            gotcha,
+          }),
+        ),
       );
 
       if (!response.ok) {
@@ -646,6 +640,7 @@ export function AppointmentScheduler({
                             name="name"
                             placeholder="Your name"
                             autoComplete="name"
+                            maxLength={120}
                             aria-invalid={
                               error.toLowerCase().includes("name") || undefined
                             }
@@ -668,6 +663,7 @@ export function AppointmentScheduler({
                             inputMode="tel"
                             placeholder="(916) …"
                             autoComplete="tel"
+                            maxLength={32}
                             aria-invalid={
                               error.toLowerCase().includes("phone") || undefined
                             }
@@ -692,6 +688,7 @@ export function AppointmentScheduler({
                           inputMode="email"
                           placeholder="you@email.com"
                           autoComplete="email"
+                          maxLength={254}
                           aria-invalid={
                             error.toLowerCase().includes("email") || undefined
                           }
@@ -713,6 +710,7 @@ export function AppointmentScheduler({
                           }
                           className="field min-h-28 resize-y py-3 pl-11"
                           name="notes"
+                          maxLength={500}
                           placeholder={formPrivacy.notesPlaceholder}
                         />
                       </span>
@@ -730,8 +728,10 @@ export function AppointmentScheduler({
 
               {error ? (
                 <p
+                  ref={errorRef}
                   id={errorId}
                   role="alert"
+                  tabIndex={-1}
                   className="mt-5 flex items-start gap-2 rounded-xl border border-sunset-100 bg-sunset-50 p-3 text-sm font-medium leading-5 text-sunset-700"
                 >
                   <AlertCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />

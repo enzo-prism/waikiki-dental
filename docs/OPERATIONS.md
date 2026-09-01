@@ -8,12 +8,12 @@ the site.
 
 | Form | Current state | Delivery path |
 | --- | --- | --- |
-| Appointment request | Deployed; inbox delivery unverified | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` |
-| General contact | Deployed; shares the appointment form's endpoint | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` (override with `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`) |
+| Appointment request | Live; account delivery requires a controlled re-verification after form releases | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` |
+| General contact | Live; shares the appointment form's endpoint | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` (override with `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`) |
 
 The shared endpoint lives in `src/lib/forms.ts` as `FORMSPREE_ENDPOINT`.
-Contact submissions use `_subject: "Contact message — Waikiki Dental"` and
-`form_type: "contact_message"`. Appointment requests use `_subject:
+Contact submissions use `subject: "Contact message — Waikiki Dental"` and
+`form_type: "contact_message"`. Appointment requests use `subject:
 "Appointment request — Waikiki Dental"` and `form_type: "appointment_request"`.
 Both also send a human-readable `message` banner so the office can tell them
 apart in a shared inbox. To split them into separate Formspree forms later,
@@ -37,7 +37,7 @@ until a successful send.
 
 It sends these fields:
 
-- `_subject` and `form_type` (`appointment_request`)
+- `subject` and `form_type` (`appointment_request`)
 - `source`
 - `patient_type`, `appointment_reason`, `appointment_reason_key`
 - `preferred_date`, `preferred_date_label`, `preferred_time`
@@ -50,7 +50,8 @@ It sends these fields:
   visitor arrived without tags)
 
 The client sends `Accept: application/json` and `Content-Type:
-application/json`. It shows success only after an HTTP success response. That
+application/json`, enforces an eight-second transport timeout, and shows
+success only after an HTTP success response. That
 proves Formspree accepted the request for processing, not that the clinic inbox
 received it. A 429 response gets a wait-and-retry message; other service and
 network failures keep the entered data available for another attempt. A
@@ -61,7 +62,7 @@ for the site-native appointment CTA.
 ## Contact form contract
 
 The implementation is in `src/components/contact-form.tsx`. It sends
-`_subject`, `form_type` (`contact_message`), `source`, `topic`, `topic_key`,
+`subject`, `form_type` (`contact_message`), `source`, `topic`, `topic_key`,
 `name`, optional `email`/`phone`, `reply_preference`, `privacy_check`, a
 readable `message` that begins with `CONTACT MESSAGE`, the `_gotcha`
 honeypot, and the same first-touch UTM / click-ID / `ad_id` fields as the
@@ -125,22 +126,17 @@ home. PNG wordmark is cream-only; navy uses `WordmarkLockup`.
 
 ## Production topology
 
-GitHub `main` is the source of truth. **Vercel Git integration is not
-connected to this repository.** `git push origin main` does not update
-https://waikiki-dental.vercel.app/. Production requires an authenticated
-CLI or MCP deploy:
+GitHub `main` is the source of truth. Production runs in Vercel project
+`waikiki-dental-preview`, with `https://waikikidental.com/` as the public
+canonical domain. Verify the Git-triggered production deployment after every
+push; use an authenticated CLI deploy if it does not start:
 
 ```bash
 npx vercel deploy --prod --yes
 ```
 
 Cloud agents: authenticate the Vercel MCP server in Cursor, or put
-`VERCEL_TOKEN` in Cloud Agent secrets (never in the repo). Do not attach
-`waikikidental.com`.
-
-Connecting the GitHub repo in the Vercel project would make `main` pushes
-create production deployments automatically. Until that is done, treat every
-release as an explicit `vercel deploy --prod`.
+`VERCEL_TOKEN` in Cloud Agent secrets (never in the repo).
 
 ## Production release
 
@@ -167,7 +163,7 @@ The release is complete only when all of the following are true:
 1. `origin/main` points to the intended commit.
 2. `npx vercel inspect <deployment-url>` reports `target: production` and
    `Ready`.
-3. `https://waikiki-dental.vercel.app/` is listed as an alias.
+3. `https://waikikidental.com/` serves the intended deployment.
 4. The homepage is the current Pacific design (navy appointment card, not a stacked
    contact form + coral closer) and `/request-appointment/` returns HTTP 200.
 5. The production JavaScript contains `https://formspree.io/f/xeajvpnb` and the
@@ -179,9 +175,6 @@ alone is not a production release.
 
 ## Current release baseline
 
-As of August 25, 2026, commit `348f713` is the verified homepage feature
-baseline containing the authentic team-media experience. Documentation-only
-commits may advance production without changing that feature baseline. For each
-release, record the exact deployed SHA externally or in the task handoff and
-repeat the production checks above; do not assume this dated baseline is still
-current.
+As of September 1, 2026, commit `6772636` is the verified public-domain launch
+baseline. For each release, record the exact deployed SHA in the task handoff
+and repeat the production checks above; do not assume this baseline is current.

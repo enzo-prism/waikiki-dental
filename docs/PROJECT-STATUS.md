@@ -1,13 +1,13 @@
 # Project status
 
-Last reviewed: August 25, 2026
+Last reviewed: September 1, 2026
 
 ## Current production baseline
 
-- Production: <https://waikiki-dental.vercel.app/>
+- Production: <https://waikikidental.com/>
 - Source of truth: GitHub `main`
-- Homepage media implementation baseline: `348f713`
-- Custom domain: `waikikidental.com` is not connected to this Vercel project
+- Public-domain launch baseline: `6772636`
+- Vercel project: `waikiki-dental-preview`
 - Scheduling: every appointment CTA remains on-site at
   `/request-appointment/`; no legacy booking-system links are permitted
 
@@ -46,16 +46,16 @@ editorial boundary. The media audit and responsive screenshots are in
 - New team images load from the site's own origin and return HTTP 200.
 - The team-section appointment CTA opens `/request-appointment/` at the top of
   the page.
-- The linked Vercel project is `waikiki-dental`; production readiness must be
+- The linked Vercel project is `waikiki-dental-preview`; production readiness must be
   re-read after every release rather than inferred from a Git push.
 
-## Remaining launch gates
+## Remaining operational gates
 
 1. Obtain practice approval for continued website reuse of the three social
    images documented in `MEDIA-PROVENANCE.md`.
 2. Run one clinic-approved, non-sensitive Formspree delivery test and verify the
    real inbox, recipients, Reply-To behavior, and spam/domain controls.
-3. Complete stakeholder approval before connecting `waikikidental.com`.
+3. Re-run the form delivery check after any Formspree endpoint or recipient change.
 
 ## Highest-value future media upgrade
 
