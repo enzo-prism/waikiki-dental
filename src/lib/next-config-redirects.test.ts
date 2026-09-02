@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import nextConfig from "./next.config.ts";
+import nextConfig from "../../next.config.ts";
 
 describe("next.config redirects", () => {
   it("sends any extra path under /request-appointment/ to the real form", async () => {
