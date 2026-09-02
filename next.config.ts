@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
       { source: "/roseville-teeth-whitening/", destination: "/teeth-whitening/", permanent: true },
       { source: "/roseville-veneers/", destination: "/veneers/", permanent: true },
       { source: "/appointments/", destination: "/request-appointment/", permanent: true },
+      // Conversion URL: extra segments (ads, relative links, index.html) must
+      // land on the real form. :path+ requires at least one extra segment so
+      // /request-appointment/ itself is not redirected. Query strings pass through.
+      { source: "/request-appointment/:path+", destination: "/request-appointment/", permanent: true },
+      { source: "/request-appointment/:path+/", destination: "/request-appointment/", permanent: true },
       { source: "/dental-implants/", destination: "/roseville-dental-implants/", permanent: true },
       { source: "/invisalign/", destination: "/roseville-invisalign/", permanent: true },
       { source: "/meet-our-doctors/", destination: "/michael-narodovich-dmd/", permanent: true },
