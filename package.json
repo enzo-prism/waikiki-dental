@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --experimental-default-type=module --test src/lib/forms.test.ts src/lib/lead-attribution.test.ts src/lib/analytics.test.ts src/lib/google-analytics.test.ts"
+    "test": "node --experimental-strip-types --experimental-default-type=module --test next.config.test.ts src/lib/forms.test.ts src/lib/lead-attribution.test.ts src/lib/analytics.test.ts src/lib/google-analytics.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
