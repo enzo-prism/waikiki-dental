@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
       // /request-appointment/ itself is not redirected. Query strings pass through.
       { source: "/request-appointment/:path+", destination: "/request-appointment/", permanent: true },
       { source: "/request-appointment/:path+/", destination: "/request-appointment/", permanent: true },
+      {
+        source: "/roseville-cerec-same-day-crowns/",
+        destination: "/roseville-dental-care/",
+        statusCode: 301,
+      },
       { source: "/dental-implants/", destination: "/roseville-dental-implants/", permanent: true },
       { source: "/invisalign/", destination: "/roseville-invisalign/", permanent: true },
       { source: "/meet-our-doctors/", destination: "/michael-narodovich-dmd/", permanent: true },

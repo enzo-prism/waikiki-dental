@@ -43,6 +43,21 @@ describe("next.config redirects", () => {
     );
   });
 
+  it("301s the unpublished CEREC page to the services hub", async () => {
+    const redirects = await nextConfig.redirects!();
+    const cerec = redirects.find(
+      (rule) => rule.source === "/roseville-cerec-same-day-crowns/",
+    );
+    assert.deepEqual(
+      {
+        destination: cerec?.destination,
+        statusCode: "statusCode" in (cerec ?? {}) ? cerec?.statusCode : undefined,
+        permanent: "permanent" in (cerec ?? {}) ? cerec?.permanent : undefined,
+      },
+      { destination: "/roseville-dental-care/", statusCode: 301, permanent: undefined },
+    );
+  });
+
   it("keeps the /appointments/ alias pointed at the form", async () => {
     const redirects = await nextConfig.redirects!();
     const alias = redirects.find((rule) => rule.source === "/appointments/");

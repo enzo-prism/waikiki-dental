@@ -50,8 +50,8 @@ export default function Home() {
             </h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
               Dr. Michael Narodovich built this practice for people who have put
-              care off — monitored IV sedation, implants, and same-day crowns,
-              delivered without rush or judgment.
+              care off — monitored IV sedation and dental implants, delivered
+              without rush or judgment.
             </p>
             <div className="mt-9 hidden flex-wrap items-center gap-3 lg:flex">
               <Link href={scheduleHref} className="btn btn-sunset">

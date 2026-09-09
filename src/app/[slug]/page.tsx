@@ -37,7 +37,7 @@ const staticPages: Record<
   "roseville-dental-care": {
     title: "Dental Services in Roseville, CA",
     description:
-      "Explore Waikiki Dental's full menu of Roseville dental care: cleanings, cosmetic dentistry, Invisalign, implants, CEREC same-day crowns, and IV sedation.",
+      "Explore Waikiki Dental's full menu of Roseville dental care: cleanings, cosmetic dentistry, Invisalign, implants, and IV sedation.",
   },
   "waikiki-dental-roseville": {
     title: "Our Roseville Dental Office",
@@ -104,11 +104,6 @@ const serviceMetadata: Record<string, { title: string; description: string }> = 
     title: "Dental X-Rays in Roseville, CA",
     description:
       "Digital dental X-rays in Roseville help identify decay, root concerns, and bone changes that a visual exam cannot show. Learn what to expect.",
-  },
-  "roseville-cerec-same-day-crowns": {
-    title: "CEREC Same-Day Crowns in Roseville, CA",
-    description:
-      "Restore a damaged tooth with a CEREC porcelain crown designed, milled, and placed at Waikiki Dental in one Roseville visit when appropriate.",
   },
   "teeth-whitening": {
     title: "Professional Teeth Whitening in Roseville, CA",
