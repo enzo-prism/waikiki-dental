@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
       {
         source: "/roseville-cerec-same-day-crowns/",
         destination: "/roseville-dental-care/",
-        permanent: true,
+        statusCode: 301,
       },
       { source: "/dental-implants/", destination: "/roseville-dental-implants/", permanent: true },
       { source: "/invisalign/", destination: "/roseville-invisalign/", permanent: true },

@@ -49,8 +49,12 @@ describe("next.config redirects", () => {
       (rule) => rule.source === "/roseville-cerec-same-day-crowns/",
     );
     assert.deepEqual(
-      { destination: cerec?.destination, permanent: cerec?.permanent },
-      { destination: "/roseville-dental-care/", permanent: true },
+      {
+        destination: cerec?.destination,
+        statusCode: "statusCode" in (cerec ?? {}) ? cerec?.statusCode : undefined,
+        permanent: "permanent" in (cerec ?? {}) ? cerec?.permanent : undefined,
+      },
+      { destination: "/roseville-dental-care/", statusCode: 301, permanent: undefined },
     );
   });
 
