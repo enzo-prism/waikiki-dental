@@ -224,7 +224,7 @@ export function FlagshipServices() {
       <div className="wrap">
         <SectionHeader
           eyebrow="The work we are known for"
-          title="Sedation, implants, and same-day crowns."
+          title="IV sedation and dental implants."
           body="Higher-stakes care, delivered at a calmer pace — with the rest of the menu under one roof."
         />
         <Link

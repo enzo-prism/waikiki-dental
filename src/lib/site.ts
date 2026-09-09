@@ -1,7 +1,6 @@
 import {
   BadgeCheck,
   Building2,
-  CalendarCheck,
   CalendarClock,
   CalendarSearch,
   Clock3,
@@ -50,7 +49,7 @@ export const site = {
     "https://www.google.com/maps/search/?api=1&query=1271%20Pleasant%20Grove%20Blvd%20Suite%20100%20Roseville%20CA%2095747",
   baseUrl: resolveSiteUrl(),
   description:
-    "Roseville dentist Dr. Michael Narodovich offers IV sedation, dental implants, same-day crowns, and unhurried care for patients who want less dental anxiety.",
+    "Roseville dentist Dr. Michael Narodovich offers IV sedation, dental implants, and unhurried care for patients who want less dental anxiety.",
 };
 
 export const hours = [
@@ -82,7 +81,7 @@ export const doctor = {
   ],
 };
 
-/* Service categories — used to group the 14 services for scannability + SEO. */
+/* Service categories — used to group services for scannability + SEO. */
 export type ServiceCategoryKey =
   | "preventive"
   | "cosmetic"
@@ -109,7 +108,7 @@ export const serviceCategories: {
   {
     key: "restorative",
     label: "Restorative & Implants",
-    description: "Repair, rebuild, replace — often in a single visit.",
+    description: "Repair, rebuild, or replace a tooth with a plan built around you.",
   },
   {
     key: "orthodontics",
@@ -244,23 +243,6 @@ export const services: Service[] = [
     icon: WandSparkles,
   },
   {
-    title: "Same Day Crowns",
-    slug: "roseville-cerec-same-day-crowns",
-    eyebrow: "CEREC technology",
-    category: "restorative",
-    summary:
-      "A porcelain crown designed, milled, and placed before you leave — one visit, no temporaries.",
-    description:
-      "With CEREC, Dr. Narodovich scans your tooth digitally, designs the crown with CAD/CAM tools, and mills it from strong porcelain right in the Roseville office. You walk out with the finished crown the same day.",
-    highlights: [
-      "Digital scans, no goopy impressions",
-      "No temporary crown, no second visit",
-      "Milled in-office from strong porcelain",
-      "Built for strength and a natural look",
-    ],
-    icon: CalendarCheck,
-  },
-  {
     title: "Teeth Whitening",
     slug: "teeth-whitening",
     eyebrow: "Brighter, evenly",
@@ -385,7 +367,6 @@ export const services: Service[] = [
 export const featuredServiceSlugs = [
   "iv-sedation",
   "roseville-dental-implants",
-  "roseville-cerec-same-day-crowns",
 ] as const;
 
 export const featuredServices = featuredServiceSlugs
@@ -394,27 +375,8 @@ export const featuredServices = featuredServiceSlugs
 
 export const heroFacts = [
   "IV sedation for anxious patients",
-  "CEREC crowns in one visit",
+  "Dental implants and restorative care",
   "Now accepting new patients",
-];
-
-export const cerecProcess = [
-  {
-    title: "Scan",
-    body: "A digital scan of the tooth — no goopy impressions.",
-  },
-  {
-    title: "Design",
-    body: "The crown is designed in-office with CAD/CAM tools.",
-  },
-  {
-    title: "Mill",
-    body: "Porcelain is milled in the Roseville office the same day.",
-  },
-  {
-    title: "Place",
-    body: "You leave with the finished crown — no temporary, no second visit.",
-  },
 ];
 
 export const implantProcess = [
@@ -477,14 +439,12 @@ export type ReviewTheme =
   | "team"
   | "comfort"
   | "doctor"
-  | "same-day"
   | "sedation";
 
 export const reviewThemeLabels: Record<ReviewTheme, string> = {
   team: "The team",
   comfort: "Comfort",
   doctor: "Dr. Mike",
-  "same-day": "Same-day care",
   sedation: "Sedation",
 };
 
@@ -513,8 +473,8 @@ export const reviewExcerpts: ReviewExcerpt[] = [
     quote:
       "The service is great, the staff is knowledgeable and experienced, and their equipment is cutting edge.",
     name: "Greg R.",
-    context: "Same-day crown care",
-    themes: ["same-day", "team"],
+    context: "Patient experience",
+    themes: ["team"],
   },
   {
     quote:
@@ -554,8 +514,8 @@ export const reviewExcerpts: ReviewExcerpt[] = [
     quote:
       "I broke a tooth and they were able to fix it and crown the tooth in one day!",
     name: "Cindy T.",
-    context: "Same-day crown care",
-    themes: ["same-day"],
+    context: "Emergency visit",
+    themes: ["comfort"],
   },
   {
     quote:
@@ -577,7 +537,7 @@ export const navItems = [
 export const trustPoints = [
   "Now welcoming new patients",
   "Family, cosmetic, implant & sedation dentistry",
-  "CEREC crowns in a single visit",
+  "Implants and restorative dentistry",
   "Gentle with anxious patients",
 ];
 

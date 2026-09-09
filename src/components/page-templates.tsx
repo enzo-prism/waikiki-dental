@@ -9,7 +9,6 @@ import {
   Star,
 } from "lucide-react";
 import {
-  cerecProcess,
   absoluteUrl,
   dentistJsonLd,
   doctor,
@@ -375,9 +374,6 @@ export function ServicePage({ service }: { service: Service }) {
   if (service.slug === "iv-sedation") {
     return <SedationServicePage service={service} />;
   }
-  if (service.slug === "roseville-cerec-same-day-crowns") {
-    return <ProcessServicePage service={service} steps={cerecProcess} />;
-  }
   if (service.slug === "roseville-dental-implants") {
     return <ProcessServicePage service={service} steps={implantProcess} />;
   }
@@ -395,7 +391,7 @@ export function ServicesHubPage() {
           <PageHeader
             eyebrow="Roseville dental care"
             title="One office for every stage of your smile."
-            body="Preventive cleanings, cosmetic refinements, implants, orthodontics, CEREC same-day crowns, and IV sedation — a complete menu, delivered at a calmer pace."
+            body="Preventive cleanings, cosmetic refinements, implants, orthodontics, and IV sedation — a complete menu, delivered at a calmer pace."
           />
         </div>
       </section>
@@ -879,7 +875,7 @@ export function TestimonialsPage() {
             <SectionHeader
               eyebrow="In patients' own words"
               title="Find the experience that matters to you."
-              body="Use the filters to explore short, verified excerpts about comfort, the team, Dr. Mike, sedation, and same-day care."
+              body="Use the filters to explore short, verified excerpts about comfort, the team, Dr. Mike, and sedation."
             />
             <div className="rounded-2xl border border-line bg-cream p-5 text-sm leading-6 text-ink-muted lg:justify-self-end lg:max-w-md">
               Excerpts are shortened for readability and attributed with reviewer initials.

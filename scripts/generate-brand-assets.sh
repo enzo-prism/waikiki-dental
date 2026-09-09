@@ -55,7 +55,7 @@ magick -size 1200x630 canvas:'#0b2140' \
   -annotate +64+371 'deep breath.' \
   -font '/System/Library/Fonts/Avenir Next.ttc' \
   -fill '#d8e5f5' -pointsize 22 -kerning 0.5 \
-  -annotate +66+500 'Sedation  •  Implants  •  Same-day crowns' \
+  -annotate +66+500 'Sedation  •  Implants  •  Unhurried care' \
   -fill '#fdfcfa' -pointsize 20 \
   -annotate +842+575 'Michael Narodovich, DMD' \
   -strip -depth 8 -define png:compression-level=9 \
