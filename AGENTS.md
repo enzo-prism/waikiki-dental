@@ -20,7 +20,7 @@ Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not 
 
 - Content, hours, services, doctor bio, CTAs: `src/lib/site.ts`
 - Design tokens: `src/app/globals.css`
-- Header / footer / mobile Book+Call bar: `src/components/site-chrome.tsx`
+- Header / footer / mobile Request+Call bar: `src/components/site-chrome.tsx`
 - Desktop mega-menu, current-page state, mobile sheet: `src/components/site-nav.tsx`
 - Wordmark, hibiscus mark, doctor portrait: `src/components/brand.tsx`
 - Appointment form: `src/components/appointment-scheduler.tsx` (Formspree)
@@ -30,9 +30,11 @@ Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not 
 - Form options and privacy copy: `src/lib/site.ts`
 - Operations / launch checklist: `docs/OPERATIONS.md`
 
-Service menu (confirmed by the practice, 2026-09-23): dental bonding is NOT offered, and crowns are traditional two-visit crowns only — never advertise same-day/CEREC crowns.
+Service menu (confirmed by the practice in the 2026-09-23 sync): dental bonding is NOT offered, and crowns are traditional two-visit crowns only (`/dental-crowns/`). Never advertise same-day/CEREC crowns or restore bonding. Their old URLs redirect (`next.config.ts`).
 
-Do not invent Google review counts, credentials, insurance lists, or before/after results. `reviewStats.count` is `null` on purpose until a real count is confirmed.
+Do not invent Google review counts, credentials, insurance lists, or before/after results. `reviewStats` holds Google figures verified on the date in `verifiedOn`; re-verify on the live listing before changing any number.
+
+Scheduling (also in `AGENTS.local.md`): every appointment CTA stays on-site at `/request-appointment/`. No Jarvis or other third-party booking links. It is an appointment request; the office confirms the time by phone or text.
 
 ## Conversion chrome
 
@@ -40,12 +42,11 @@ Keep one coral verb. Do not add a third solid CTA.
 
 | Intent | Control | Where it lives |
 | --- | --- | --- |
-| Book a visit now | Coral **Book Online** → Jarvis | Header (`lg+`), sticky mobile bar, navy homepage book card, interior `BookStrip` |
+| Request a visit | Coral **Request Appointment** → `/request-appointment/` | Header (`lg+`), sticky mobile bar, navy homepage appointment card, interior `BookStrip` |
 | Talk to the office | Outline **Call or text** | Hero (`lg+`), mobile bar, interiors |
-| Office picks a time | Text **Request an appointment** | Hero (`lg+`), visit panel, footer, mobile menu |
 | General question | Contact form | Contact and office pages only — not the homepage |
 
-Homepage `VisitPanel` must use `showForm={false}` (navy book card). Do not stack `BookStrip` on home; the mobile bar already covers Book/Call below `lg`. PNG wordmark (`BrandLogo`) is cream-only; navy surfaces use `WordmarkLockup`. `public/media/office-hero.jpg` is a placeholder and is not rendered.
+Homepage `VisitPanel` must use `showForm={false}` (navy appointment card). Do not stack `BookStrip` on home; the mobile bar already covers Request/Call below `lg`. PNG wordmark (`BrandLogo`) is cream-only; navy surfaces use `WordmarkLockup`. `public/media/office-hero.jpg` is a placeholder and is not rendered.
 
 ## Commands
 

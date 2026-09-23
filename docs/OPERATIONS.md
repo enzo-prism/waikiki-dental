@@ -184,6 +184,8 @@ read back through the API.
 
 ## Current release baseline
 
-As of September 1, 2026, commit `6772636` is the verified public-domain launch
-baseline. For each release, record the exact deployed SHA in the task handoff
+As of September 23, 2026, the service-menu release (traditional crowns at
+`/dental-crowns/`, dental bonding retired, feature commit `932e7ef`) is the
+verified production baseline. The public-domain launch baseline was `6772636`
+(September 1, 2026). For each release, record the exact deployed SHA in the task handoff
 and repeat the production checks above; do not assume this baseline is current.

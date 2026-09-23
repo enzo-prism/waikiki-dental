@@ -40,14 +40,14 @@ npm run build
 - **Production:** [waikikidental.com](https://waikikidental.com/)
 - **Source of truth:** the `main` branch in GitHub
 - **Vercel project:** `waikiki-dental-preview`
-- **Verified site baseline:** homepage team-media experience from commit
-  `6772636` (verified on the public domain September 1, 2026)
+- **Verified site baseline:** service-menu release of September 23, 2026
+  (traditional crowns added, bonding retired). See `docs/PROJECT-STATUS.md`.
 
 ## Content & configuration
 
 `src/lib/site.ts` is the single source of truth for site content: practice
 details, hours, the service catalog (grouped by category), the doctor bio &
-credentials, testimonials/review stats, the new-patient offer, payment options,
+credentials, testimonials/review stats, payment options,
 the appointment-scheduler options, and image paths. Edit content there.
 
 ### Brand assets & imagery
@@ -176,7 +176,8 @@ live Formspree form.
 
 The site preserves Waikiki Dental's public content facts: Roseville address,
 phone, on-site appointment form, doctor bio, service menu, new-patient info, hours,
-and testimonials. `waikikidental.com` is the live canonical production domain
+and testimonials. The service menu was last confirmed with the practice on
+September 23, 2026: no dental bonding, and traditional (not same-day) crowns. `waikikidental.com` is the live canonical production domain
 and matches `site.baseUrl`.
 
 For a concise snapshot of shipped features, verification evidence, and remaining
