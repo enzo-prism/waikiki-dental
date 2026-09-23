@@ -177,16 +177,16 @@ export const services: Service[] = [
   {
     title: "Dental Crowns",
     slug: "dental-crowns",
-    eyebrow: "Traditional crowns",
+    eyebrow: "Traditional lab crowns",
     category: "restorative",
     summary:
-      "A custom crown that covers and protects a cracked, worn, or weakened tooth — so it can keep doing its job.",
+      "A custom lab-made crown that covers and protects a cracked, worn, or weakened tooth — so it can keep doing its job.",
     description:
-      "When a tooth is too damaged for a filling, a crown restores its shape and strength. Waikiki Dental provides traditional crowns: the tooth is prepared and protected with a temporary crown, and your custom crown is placed at a follow-up visit.",
+      "When a tooth is too damaged for a filling, a crown restores its shape and strength. Waikiki Dental provides traditional lab crowns: the tooth is prepared and protected with a temporary crown, and a dental lab fabricates your custom crown for a follow-up visit.",
     highlights: [
       "Protects cracked or weakened teeth",
       "Restores shape and chewing strength",
-      "Custom-made to fit your bite",
+      "Fabricated by a dental lab to fit your bite",
       "A temporary crown protects the tooth between visits",
     ],
     icon: ShieldCheck,
@@ -402,11 +402,11 @@ export const crownProcess = [
   },
   {
     title: "Prepare",
-    body: "The tooth is shaped and a temporary crown protects it while your custom crown is made.",
+    body: "The tooth is shaped and a temporary crown protects it while a dental lab makes your custom crown.",
   },
   {
     title: "Place",
-    body: "At a follow-up visit, your crown is fitted, adjusted to your bite, and cemented.",
+    body: "At a follow-up visit, the lab-made crown is fitted, adjusted to your bite, and cemented.",
   },
 ];
 
