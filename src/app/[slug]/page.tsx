@@ -37,7 +37,7 @@ const staticPages: Record<
   "roseville-dental-care": {
     title: "Dental Services in Roseville, CA",
     description:
-      "Explore Waikiki Dental's full menu of Roseville dental care: cleanings, cosmetic dentistry, Invisalign, implants, and IV sedation.",
+      "Explore Waikiki Dental's full menu of Roseville dental care: cleanings, cosmetic dentistry, Invisalign, crowns, implants, and IV sedation.",
   },
   "waikiki-dental-roseville": {
     title: "Our Roseville Dental Office",
@@ -80,7 +80,7 @@ const aliasPages: Record<string, { title: string; description: string }> = {
   "cosmetic-dentistry": {
     title: "Cosmetic Dentistry in Roseville, CA",
     description:
-      "Explore cosmetic dentistry in Roseville, including whitening, bonding, veneers, Invisalign, and personalized smile makeover planning with Dr. Narodovich.",
+      "Explore cosmetic dentistry in Roseville, including whitening, veneers, Invisalign, and personalized smile makeover planning with Dr. Narodovich.",
   },
 };
 
@@ -109,6 +109,11 @@ const serviceMetadata: Record<string, { title: string; description: string }> = 
     title: "Professional Teeth Whitening in Roseville, CA",
     description:
       "Brighten deep, set-in stains with professional teeth whitening planned around your smile, sensitivity, and goals at Waikiki Dental in Roseville.",
+  },
+  "dental-crowns": {
+    title: "Dental Crowns in Roseville, CA",
+    description:
+      "Traditional dental crowns in Roseville for cracked, worn, or weakened teeth. See how the two-visit process works and request an appointment at Waikiki Dental.",
   },
   "roseville-dental-implants": {
     title: "Dental Implants in Roseville, CA",

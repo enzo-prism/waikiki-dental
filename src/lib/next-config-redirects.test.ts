@@ -43,7 +43,7 @@ describe("next.config redirects", () => {
     );
   });
 
-  it("301s the unpublished CEREC page to the services hub", async () => {
+  it("301s the unpublished CEREC page to traditional crowns", async () => {
     const redirects = await nextConfig.redirects!();
     const cerec = redirects.find(
       (rule) => rule.source === "/roseville-cerec-same-day-crowns/",
@@ -54,7 +54,16 @@ describe("next.config redirects", () => {
         statusCode: "statusCode" in (cerec ?? {}) ? cerec?.statusCode : undefined,
         permanent: "permanent" in (cerec ?? {}) ? cerec?.permanent : undefined,
       },
-      { destination: "/roseville-dental-care/", statusCode: 301, permanent: undefined },
+      { destination: "/dental-crowns/", statusCode: 301, permanent: undefined },
+    );
+  });
+
+  it("sends the retired bonding page to the services hub", async () => {
+    const redirects = await nextConfig.redirects!();
+    const bonding = redirects.find((rule) => rule.source === "/dental-bonding/");
+    assert.deepEqual(
+      { destination: bonding?.destination, permanent: bonding?.permanent },
+      { destination: "/roseville-dental-care/", permanent: true },
     );
   });
 

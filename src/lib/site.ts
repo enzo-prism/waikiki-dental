@@ -175,6 +175,23 @@ export const services: Service[] = [
     icon: SmilePlus,
   },
   {
+    title: "Dental Crowns",
+    slug: "dental-crowns",
+    eyebrow: "Traditional crowns",
+    category: "restorative",
+    summary:
+      "A custom crown that covers and protects a cracked, worn, or weakened tooth — so it can keep doing its job.",
+    description:
+      "When a tooth is too damaged for a filling, a crown restores its shape and strength. Waikiki Dental provides traditional crowns: the tooth is prepared and protected with a temporary crown, and your custom crown is placed at a follow-up visit.",
+    highlights: [
+      "Protects cracked or weakened teeth",
+      "Restores shape and chewing strength",
+      "Custom-made to fit your bite",
+      "A temporary crown protects the tooth between visits",
+    ],
+    icon: ShieldCheck,
+  },
+  {
     title: "Digital X-Ray",
     slug: "digital-x-ray",
     eyebrow: "Sharper diagnostics",
@@ -214,9 +231,9 @@ export const services: Service[] = [
     eyebrow: "Cosmetic planning",
     category: "cosmetic",
     summary:
-      "Whitening, veneers, bonding, alignment — combined into one plan built around the smile you actually want.",
+      "Whitening, veneers, crowns, alignment — combined into one plan built around the smile you actually want.",
     description:
-      "A smile makeover isn't one procedure; it's a plan. Dr. Narodovich blends whitening, bonding, veneers, crowns, orthodontics, or implants into a sequence designed around your goals and your timeline.",
+      "A smile makeover isn't one procedure; it's a plan. Dr. Narodovich blends whitening, veneers, crowns, orthodontics, or implants into a sequence designed around your goals and your timeline.",
     highlights: [
       "One roadmap, tailored to you",
       "Addresses color, shape, and alignment",
@@ -224,23 +241,6 @@ export const services: Service[] = [
       "Designed for a natural result",
     ],
     icon: Sparkles,
-  },
-  {
-    title: "Dental Bonding",
-    slug: "dental-bonding",
-    eyebrow: "Small fixes, big difference",
-    category: "cosmetic",
-    summary:
-      "A chip, a small gap, a rough edge — often refined in a single conservative visit.",
-    description:
-      "Dental bonding uses tooth-colored material to smooth chips, close small gaps, and even out worn edges — usually while preserving healthy enamel. It's cosmetic dentistry's quickest win.",
-    highlights: [
-      "Repairs chips and worn edges",
-      "Closes small gaps",
-      "Blends invisibly with your enamel",
-      "Often complete in one visit",
-    ],
-    icon: WandSparkles,
   },
   {
     title: "Teeth Whitening",
@@ -394,6 +394,22 @@ export const implantProcess = [
   },
 ];
 
+/* Traditional (two-visit) crowns only — same-day/CEREC crowns are not offered. */
+export const crownProcess = [
+  {
+    title: "Exam",
+    body: "Dr. Narodovich checks the tooth and explains whether a crown is the right repair.",
+  },
+  {
+    title: "Prepare",
+    body: "The tooth is shaped and a temporary crown protects it while your custom crown is made.",
+  },
+  {
+    title: "Place",
+    body: "At a follow-up visit, your crown is fitted, adjusted to your bite, and cemented.",
+  },
+];
+
 /** Services grouped by category, in `serviceCategories` order, skipping empties. */
 export function servicesByCategory() {
   return serviceCategories
@@ -509,13 +525,6 @@ export const reviewExcerpts: ReviewExcerpt[] = [
     name: "Lilyan A.",
     context: "Comfort-focused care",
     themes: ["comfort", "team"],
-  },
-  {
-    quote:
-      "I broke a tooth and they were able to fix it and crown the tooth in one day!",
-    name: "Cindy T.",
-    context: "Emergency visit",
-    themes: ["comfort"],
   },
   {
     quote:

@@ -16,6 +16,7 @@ import {
   doctorCandidAlt,
   featuredServices,
   findService,
+  crownProcess,
   implantProcess,
   reviewDistribution,
   reviewStats,
@@ -376,6 +377,9 @@ export function ServicePage({ service }: { service: Service }) {
   }
   if (service.slug === "roseville-dental-implants") {
     return <ProcessServicePage service={service} steps={implantProcess} />;
+  }
+  if (service.slug === "dental-crowns") {
+    return <ProcessServicePage service={service} steps={crownProcess} />;
   }
   return <DefaultServicePage service={service} />;
 }

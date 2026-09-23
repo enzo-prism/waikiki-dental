@@ -30,6 +30,8 @@ Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not 
 - Form options and privacy copy: `src/lib/site.ts`
 - Operations / launch checklist: `docs/OPERATIONS.md`
 
+Service menu (confirmed by the practice, 2026-09-23): dental bonding is NOT offered, and crowns are traditional two-visit crowns only — never advertise same-day/CEREC crowns.
+
 Do not invent Google review counts, credentials, insurance lists, or before/after results. `reviewStats.count` is `null` on purpose until a real count is confirmed.
 
 ## Conversion chrome
