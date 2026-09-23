@@ -113,7 +113,7 @@ const serviceMetadata: Record<string, { title: string; description: string }> = 
   "dental-crowns": {
     title: "Dental Crowns in Roseville, CA",
     description:
-      "Traditional dental crowns in Roseville for cracked, worn, or weakened teeth. See how the two-visit process works and request an appointment at Waikiki Dental.",
+      "Traditional lab-made dental crowns in Roseville for cracked, worn, or weakened teeth. See how the two-visit process works and request an appointment at Waikiki Dental.",
   },
   "roseville-dental-implants": {
     title: "Dental Implants in Roseville, CA",
