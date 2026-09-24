@@ -5,11 +5,11 @@ export const homeTitle =
   "Roseville Dentist for Comfortable Care | Waikiki Dental";
 
 export const socialImage = {
-  url: absoluteUrl("/social/waikiki-dental-share-v2.png"),
+  url: absoluteUrl("/social/waikiki-dental-share-v3.jpg"),
   width: 1200,
   height: 630,
-  type: "image/png",
-  alt: "Dr. Michael Narodovich speaking with a smiling patient beside Waikiki Dental's message: Dentistry that feels like a deep breath.",
+  type: "image/jpeg",
+  alt: "Waikiki Dental: Dentistry that feels like a deep breath. A painted Pacific horizon at sunset beside a portrait of Michael Narodovich, DMD.",
 };
 
 type PageMetadataOptions = {

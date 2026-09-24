@@ -770,10 +770,14 @@ export const pageRoutes = [
 
 /* ------------------------------------------------------------------ *
  * Imagery — self-hosted in /public/media for fast, reliable LCP.
- * `logo`, `logoIcon`, `doctorPortrait`, and `doctorCandid` are the
- * practice's real brand assets and photos, sourced from the current
- * public waikikidental.com site. Current team photography is described
- * in `teamStory` above. `careImage` remains an unused placeholder.
+ *
+ * Editorial rule: every image is either real photography of this practice
+ * (the doctor's portrait, the team, the office) or original abstract art.
+ * No AI-generated or stock people, patients, or treatment rooms.
+ *
+ * `doctorPortrait` is Dr. Narodovich's real studio headshot. Team and office
+ * photography lives in `teamStory` above. The artwork is rendered by
+ * `scripts/generate-abstract-art.py` (see docs/MEDIA-PROVENANCE.md).
  * ------------------------------------------------------------------ */
 export const brandAssets = {
   /** Full "Waikiki DENTAL" wordmark with hibiscus — transparent PNG, 511×73. */
@@ -783,14 +787,30 @@ export const brandAssets = {
   /** The hibiscus flower alone — transparent PNG, 75×73. */
   icon: "/media/hibiscus.png",
 };
-export const heroImage = "/media/dr-narodovich-patient.jpg";
-export const heroImageAlt =
-  "Dr. Michael Narodovich talking with a smiling patient in a treatment room at Waikiki Dental";
-export const careImage = "/media/office-hero.jpg";
 export const doctorPortrait: string | null = "/media/dr-narodovich-hd.jpg";
-export const doctorCandid = "/media/dr-narodovich-patient.jpg";
-export const doctorCandidAlt =
-  "Dr. Michael Narodovich chatting with a patient at the Roseville office";
+/** Square face crop of the same real headshot, for small avatar cards. */
+export const doctorAvatar = "/media/dr-narodovich-avatar.jpg";
+
+export type Artwork = {
+  /** Frame 0 of the loop — the LCP-safe still and reduced-motion fallback. */
+  poster: string;
+  webm: string;
+  mp4: string;
+};
+
+/** "Tide": a painted Pacific horizon whose light swells on a 12s breath. */
+export const artwork = {
+  tide: {
+    poster: "/media/art/tide-poster.jpg",
+    webm: "/media/art/tide-loop.webm",
+    mp4: "/media/art/tide-loop.mp4",
+  },
+  tideNight: {
+    poster: "/media/art/tide-night-poster.jpg",
+    webm: "/media/art/tide-night-loop.webm",
+    mp4: "/media/art/tide-night-loop.mp4",
+  },
+} satisfies Record<string, Artwork>;
 
 export const dentistJsonLd = {
   "@context": "https://schema.org",

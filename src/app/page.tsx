@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CalendarCheck, Phone } from "lucide-react";
+import { ArrowUpRight, CalendarCheck, Phone, Star } from "lucide-react";
+import { AmbientVideo } from "@/components/ambient-video";
 import {
   DoctorSpotlight,
   FlagshipServices,
@@ -11,10 +12,12 @@ import {
 import { JsonLd } from "@/components/page-templates";
 import { WaveUnderline } from "@/components/waves";
 import {
+  artwork,
   brandAssets,
+  doctor,
+  doctorAvatar,
   heroFacts,
-  heroImage,
-  heroImageAlt,
+  reviewStats,
   scheduleHref,
   site,
 } from "@/lib/site";
@@ -74,15 +77,49 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="relative aspect-[5/4] overflow-hidden rounded-3xl border border-line shadow-soft">
-            <Image
-              src={heroImage}
-              alt={heroImageAlt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 46vw"
-              className="object-cover"
-              priority
-            />
+          <div className="relative mx-auto w-full max-w-[640px] pb-10 sm:pb-8 lg:max-w-none lg:pb-0">
+            <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-deep shadow-soft-lg sm:aspect-[4/3] lg:aspect-square">
+              <AmbientVideo
+                artwork={artwork.tide}
+                sizes="(max-width: 1024px) 100vw, 46vw"
+                preload
+                controlClassName="right-4 top-4"
+              />
+            </div>
+
+            <Link
+              href="/michael-narodovich-dmd/"
+              className="group absolute inset-x-4 bottom-0 flex items-center gap-4 rounded-2xl border border-line bg-cream/95 p-3 pr-4 shadow-soft-lg backdrop-blur-md transition-transform duration-300 hover:-translate-y-0.5 sm:inset-x-auto sm:left-6 sm:w-[24.5rem] lg:-bottom-8 lg:-left-8"
+            >
+              <span className="relative size-16 shrink-0 overflow-hidden rounded-xl bg-ocean-50">
+                <Image
+                  src={doctorAvatar}
+                  alt=""
+                  fill
+                  sizes="64px"
+                  className="object-cover"
+                />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block font-serif text-base leading-6 text-ink sm:truncate sm:text-lg">
+                  {doctor.name}
+                </span>
+                <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.18em] text-ocean-600">
+                  Your dentist · Roseville
+                </span>
+                <span className="mt-1.5 flex items-center gap-1.5 text-xs text-ink-muted">
+                  <Star className="size-3.5 fill-gold text-gold" aria-hidden="true" />
+                  <span>
+                    <strong className="font-semibold text-ink">{reviewStats.rating}</strong>{" "}
+                    on {reviewStats.source} · {reviewStats.count} reviews
+                  </span>
+                </span>
+              </span>
+              <ArrowUpRight
+                className="size-4 shrink-0 text-ink-soft transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ocean-600"
+                aria-hidden="true"
+              />
+            </Link>
           </div>
         </div>
       </section>

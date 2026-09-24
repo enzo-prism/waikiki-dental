@@ -46,7 +46,11 @@ Keep one coral verb. Do not add a third solid CTA.
 | Talk to the office | Outline **Call or text** | Hero (`lg+`), mobile bar, interiors |
 | General question | Contact form | Contact and office pages only — not the homepage |
 
-Homepage `VisitPanel` must use `showForm={false}` (navy appointment card). Do not stack `BookStrip` on home; the mobile bar already covers Request/Call below `lg`. PNG wordmark (`BrandLogo`) is cream-only; navy surfaces use `WordmarkLockup`. `public/media/office-hero.jpg` is a placeholder and is not rendered.
+Homepage `VisitPanel` must use `showForm={false}` (navy appointment card). Do not stack `BookStrip` on home; the mobile bar already covers Request/Call below `lg`. PNG wordmark (`BrandLogo`) is cream-only; navy surfaces use `WordmarkLockup`.
+
+## Imagery
+
+Every image is either real photography of this practice (Dr. Mike's portrait, the team, the office) or original abstract art. Never add AI-generated or stock people, patients, or treatment rooms. The "Tide" artwork (homepage hero, IV sedation hero, share card) is rendered by `scripts/generate-abstract-art.py` into `public/media/art/` and `public/social/`; play loops only through `AmbientVideo`, which keeps the poster for reduced-motion/data-saver visitors and a visible pause button. Provenance: `docs/MEDIA-PROVENANCE.md`.
 
 ## Commands
 

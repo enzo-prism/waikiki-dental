@@ -10,10 +10,9 @@ import {
 } from "lucide-react";
 import {
   absoluteUrl,
+  artwork,
   dentistJsonLd,
   doctor,
-  doctorCandid,
-  doctorCandidAlt,
   featuredServices,
   findService,
   crownProcess,
@@ -24,6 +23,7 @@ import {
   scheduleHref,
   servicesByCategory,
   site,
+  teamStory,
   type Service,
 } from "@/lib/site";
 import {
@@ -34,6 +34,7 @@ import {
   ServicesGrid,
   VisitPanel,
 } from "./sections";
+import { AmbientVideo } from "./ambient-video";
 import { DoctorPortrait } from "./brand";
 import { ReviewExplorer } from "./review-explorer";
 
@@ -237,14 +238,14 @@ function SedationServicePage({ service }: { service: Service }) {
   return (
     <>
       <ServiceJsonLd service={service} />
-      <section className="bg-deep text-cream">
-        <div className="wrap py-20 sm:py-28">
+      <section className="relative isolate flex flex-col-reverse overflow-hidden bg-deep text-cream lg:block">
+        <div className="wrap relative z-10 -mt-10 pb-20 sm:-mt-16 sm:pb-28 lg:mt-0 lg:py-28">
           <ServiceBreadcrumbs service={service} tone="dark" />
           <Eyebrow className="text-gold-soft">{service.eyebrow}</Eyebrow>
-          <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-cream sm:text-6xl">
+          <h1 className="mt-5 max-w-2xl text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-cream sm:text-6xl">
             IV sedation dentistry for calmer care in Roseville.
           </h1>
-          <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
+          <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-cream/75">
             {service.description}
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
@@ -257,6 +258,16 @@ function SedationServicePage({ service }: { service: Service }) {
               Call or text
             </a>
           </div>
+        </div>
+        <div
+          className="relative aspect-[16/10] w-full [mask-image:linear-gradient(to_bottom,transparent,black_35%,black_80%,transparent)] sm:aspect-[16/7] lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[60%] lg:[mask-image:linear-gradient(to_right,transparent,black_45%)]"
+        >
+          <AmbientVideo
+            artwork={artwork.tideNight}
+            sizes="(max-width: 1024px) 100vw, 60vw"
+            tone="dark"
+            controlClassName="right-4 top-[26%] lg:top-auto lg:bottom-6 lg:right-6"
+          />
         </div>
       </section>
 
@@ -556,15 +567,21 @@ export function DoctorPage() {
         </div>
 
         <div className="wrap mt-20 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-          <div className="relative aspect-[5/4] overflow-hidden rounded-3xl border border-line shadow-soft">
-            <Image
-              src={doctorCandid}
-              alt={doctorCandidAlt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
+          <figure className="relative">
+            <div className="relative aspect-[5/4] overflow-hidden rounded-3xl border border-line bg-surface-alt shadow-soft">
+              <Image
+                src={teamStory.groupImage}
+                alt={teamStory.groupImageAlt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-[50%_42%]"
+              />
+            </div>
+            <figcaption className="mt-3 text-sm text-ink-soft">
+              Dr. Mike and the team in front of the office&rsquo;s hand-painted
+              hibiscus mural.
+            </figcaption>
+          </figure>
           <div>
             <Eyebrow>In the office</Eyebrow>
             <h2 className="mt-4 text-balance font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">

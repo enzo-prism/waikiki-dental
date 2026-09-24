@@ -7,6 +7,7 @@ alwaysApply: true
 
 - Edit practice facts, services, hours, bios, and CTAs in `src/lib/site.ts`, not by scattering copy through components.
 - Keep brand tokens in `src/app/globals.css` (Pacific blue `#0051ae`, hibiscus coral). Do not invent a second palette.
+- Imagery is real practice photography or original abstract art only (see `scripts/generate-abstract-art.py`). No AI-generated or stock people, patients, or treatment rooms.
 - Never fabricate review counts, credentials, insurance, or clinical outcomes. `reviewStats` holds verified Google figures dated by `verifiedOn`; re-verify before changing them.
 - Service menu: no dental bonding; crowns are traditional two-visit crowns only. Never advertise same-day/CEREC crowns.
 - Do not submit the live Formspree appointment form unless the user explicitly requests a clinic-approved test.

@@ -60,14 +60,25 @@ public waikikidental.com site and self-hosted in `public/media/`:
   type), never this PNG.
 - `hibiscus.png` — the flower alone (legacy asset; UI hibiscus is the SVG in
   `src/components/brand.tsx`)
-- `dr-narodovich.jpg` — studio portrait (275×412). Keep frames near that size.
-- `dr-narodovich-patient.jpg` — in-office candid (home hero, doctor page)
-- `waikiki-team-2026.webp` — current team photograph published by the practice;
-  used in the homepage team introduction.
+- `dr-narodovich.jpg` — original studio portrait (275×412), kept as the
+  archival source for `dr-narodovich-hd.jpg` (the rendered portrait).
+- `dr-narodovich-avatar.jpg` — square face crop of the same real headshot;
+  used on the homepage hero doctor card and the share card.
+- `waikiki-team-2026.webp` — current team photograph published by the practice,
+  in front of the office's hibiscus mural; used in the homepage team
+  introduction and the doctor page's "In the office" section.
 - `team-jessica.webp` and `team-nayeli.webp` — staff portraits cropped from
   official practice spotlights; used in the homepage profile cards.
-- `office-hero.jpg` — stock operatory placeholder. **Not rendered.** Replace
-  with a real Roseville office photo before using it.
+- `art/tide-*` — original abstract artwork ("Tide"): posters plus silent
+  WebM/MP4 loops for the homepage hero (day) and IV sedation hero (night).
+  Rendered by `scripts/generate-abstract-art.py`, which also renders
+  `public/social/waikiki-dental-share-v3.jpg`.
+
+**Imagery rule:** use real photography of this practice or original abstract
+art. No AI-generated or stock images of people, patients, or treatment rooms.
+Artwork loops go through `AmbientVideo`
+(`src/components/ambient-video.tsx`): poster first, video only on screen,
+still for reduced-motion/data-saver visitors, and a visible pause control.
 
 The team assets are optimized, metadata-free WebP files and are served locally;
 the production site does not load Facebook embeds, trackers, or expiring social

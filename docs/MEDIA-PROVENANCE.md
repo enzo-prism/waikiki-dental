@@ -10,7 +10,29 @@ Verified on August 25, 2026 as a logged-out visitor.
 | `public/media/team-jessica.webp` | [Jessica staff spotlight](https://www.facebook.com/photo.php?fbid=1514286047366790&set=pb.100063562271528.-2207520000&type=3) | Published by the official practice page on March 6, 2026. The portrait was cropped from the practice's own staff graphic. | Homepage staff profile |
 | `public/media/team-nayeli.webp` | [Nayeli staff spotlight](https://www.facebook.com/photo.php?fbid=1513396077455787&set=pb.100063562271528.-2207520000&type=3) | Published by the official practice page on March 5, 2026. The portrait was cropped from the practice's own staff graphic. | Homepage staff profile |
 
-All three assets are self-hosted and stripped of metadata. No Facebook scripts, trackers, or expiring CDN URLs are loaded by the website.
+All three assets are self-hosted and stripped of metadata.
+
+## Original artwork
+
+| Local asset | Source | Site use |
+| --- | --- | --- |
+| `public/media/art/tide-poster.jpg`, `tide-loop.webm`, `tide-loop.mp4` | Rendered by `scripts/generate-abstract-art.py` (procedural; no photographs, stock, or AI image models) | Homepage hero |
+| `public/media/art/tide-night-poster.jpg`, `tide-night-loop.webm`, `tide-night-loop.mp4` | Same script, night palette | IV sedation page hero |
+| `public/social/waikiki-dental-share-v3.jpg` | Same script: Tide artwork plus Dr. Narodovich's real headshot | Open Graph / Twitter card |
+
+"Tide" is a painted Pacific horizon in the brand palette whose light swells
+and settles on a 12-second breathing cycle. The loops are seamless, silent,
+about 170–200 KB as WebM (MP4 fallback about 0.9–1.1 MB), and the poster is
+frame 0, so the still and the video match exactly.
+
+## Retired imagery
+
+On September 24, 2026 the site stopped using `dr-narodovich-patient.jpg`, an
+AI-generated scene of the doctor with a patient (it carried an invented wall
+sign and did not depict the real office), and `office-hero.jpg`, an unused
+stock operatory. The homepage hero, doctor page, and share card now use the
+real team and portrait photography plus the original artwork above. Do not
+reintroduce AI-generated or stock images of people, patients, or rooms. No Facebook scripts, trackers, or expiring CDN URLs are loaded by the website.
 
 ## Production asset details
 

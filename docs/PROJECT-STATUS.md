@@ -34,6 +34,12 @@ Last reviewed: September 23, 2026
 
 ## Media decision record
 
+September 24, 2026: the AI-generated doctor-and-patient image was removed from
+the homepage hero, the doctor page, and the share card. Imagery is now real
+practice photography plus original abstract artwork ("Tide", with silent
+breathing video loops on the homepage and IV sedation heroes). See
+`MEDIA-PROVENANCE.md`.
+
 The team photograph and Jessica and Nayeli staff portraits are self-hosted in
 `public/media/`. Google Maps contributor images, Yelp reviewer uploads, patient
 treatment imagery, and assets with unclear ownership or consent were excluded.
