@@ -10,6 +10,12 @@ import { usePathname } from "next/navigation";
  * near its footer. Reset only click-initiated route changes, while leaving
  * Back/Forward scroll restoration intact.
  */
+function samePath(a: string, b: string) {
+  const strip = (path: string) =>
+    path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+  return strip(a) === strip(b);
+}
+
 export function NavigationScrollManager() {
   const pathname = usePathname();
   const previousPathname = useRef(pathname);
@@ -62,11 +68,26 @@ export function NavigationScrollManager() {
         return;
       }
 
+      // Only a pathname change clears the flag below. A query-only link on the
+      // same page never changes the pathname, so flagging it would leak the
+      // reset into the next Back/Forward navigation.
+      if (samePath(destination.pathname, current.pathname)) return;
+
       resetOnNextRoute.current = true;
     }
 
+    // Back/Forward is never click-initiated: drop any stale flag (e.g. from a
+    // click whose navigation was cancelled) so history restoration is kept.
+    function handlePopState() {
+      resetOnNextRoute.current = false;
+    }
+
     document.addEventListener("click", handleClick, true);
-    return () => document.removeEventListener("click", handleClick, true);
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      document.removeEventListener("click", handleClick, true);
+      window.removeEventListener("popstate", handlePopState);
+    };
   }, []);
 
   useLayoutEffect(() => {

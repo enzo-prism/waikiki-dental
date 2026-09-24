@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { sanitizeAnalyticsPath } from "./analytics.ts";
 import {
   GOOGLE_ANALYTICS_MEASUREMENT_ID,
+  googleAnalyticsPageFields,
   isGoogleAnalyticsProductionHostname,
 } from "./google-analytics.ts";
 
@@ -36,5 +37,17 @@ describe("Google Analytics configuration", () => {
     assert.equal(sanitizeAnalyticsPath("/iv-sedation"), "/services");
     assert.equal(sanitizeAnalyticsPath("/privacy-practices/"), null);
   });
-});
 
+  it("builds page fields with no query string, real title, or referrer", () => {
+    const safePath = sanitizeAnalyticsPath("/request-appointment/");
+    assert.ok(safePath);
+    assert.deepEqual(
+      googleAnalyticsPageFields("https://waikikidental.com", safePath),
+      {
+        page_location: "https://waikikidental.com/conversion",
+        page_referrer: "",
+        page_title: "Waikiki Dental",
+      },
+    );
+  });
+});

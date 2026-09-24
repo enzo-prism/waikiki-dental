@@ -29,9 +29,13 @@ for contact messages.
 ## Checks
 
 ```bash
+npm test
 npm run lint
+npx tsc --noEmit
 npm run build
 ```
+
+`npm run build` prerenders every route as static HTML.
 
 > Run these on Node 24 (see `engines` in `package.json`) — they match the Vercel build.
 
@@ -150,8 +154,14 @@ live in `src/components/site-chrome.tsx` and `src/components/site-nav.tsx`.
   Inbox delivery remains pending a clinic-approved end-to-end test.
 - **Contact form** — topic and reply chips, privacy confirmation, honeypot, and
   live Formspree delivery with honest success/error states.
-- **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD, `sitemap.ts`,
-  `robots.ts`, trailing-slash URLs.
+- **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD (no
+  self-serving `aggregateRating`), `sitemap.ts` dated by `siteLastUpdated`,
+  `robots.ts`, trailing-slash URLs. Legacy URLs 301/308 in `next.config.ts`;
+  unknown slugs 404 (`dynamicParams = false`).
+- **Security headers** — `next.config.ts` sends a production CSP, framing and
+  MIME-sniffing protection, a restrictive Permissions-Policy, and
+  `X-Robots-Tag: noindex` on every host except `waikikidental.com`
+  (tested in `src/lib/next-config-headers.test.ts`).
 - **Practice familiarity** — a high-homepage team introduction uses current,
   practice-published photography to introduce Dr. Mike, Jessica, and Nayeli
   before visitors reach the service catalog.
@@ -170,7 +180,9 @@ with an authenticated `vercel deploy --prod --yes`.
 
 ```bash
 npm ci
+npm test
 npm run lint
+npx tsc --noEmit
 npm run build
 git push origin main
 npx vercel deploy --prod --yes

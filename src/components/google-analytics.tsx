@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { sanitizeAnalyticsPath } from "@/lib/analytics";
 import {
   GOOGLE_ANALYTICS_MEASUREMENT_ID,
+  googleAnalyticsPageFields,
   isGoogleAnalyticsProductionHostname,
 } from "@/lib/google-analytics";
 
@@ -16,7 +17,9 @@ declare global {
   }
 }
 
-function initializeGoogleAnalytics() {
+type PageFields = ReturnType<typeof googleAnalyticsPageFields>;
+
+function initializeGoogleAnalytics(pageFields: PageFields) {
   window.dataLayer = window.dataLayer || [];
   window.gtag =
     window.gtag ||
@@ -33,6 +36,9 @@ function initializeGoogleAnalytics() {
     allow_ad_personalization_signals: false,
     allow_google_signals: false,
     send_page_view: false,
+    // Sanitized from the first hit onward; gtag would otherwise read
+    // document.location/title/referrer for its automatic events.
+    ...pageFields,
   });
 
   const script = document.createElement("script");
@@ -56,12 +62,13 @@ export function GoogleAnalytics() {
     const safePath = sanitizeAnalyticsPath(pathname);
     if (!safePath) return;
 
-    initializeGoogleAnalytics();
+    const pageFields = googleAnalyticsPageFields(window.location.origin, safePath);
+    initializeGoogleAnalytics(pageFields);
+    // `set` applies to every later hit, including automatic engagement hits.
+    window.gtag?.("set", pageFields);
     window.gtag?.("event", "page_view", {
-      page_location: `${window.location.origin}${safePath}`,
+      ...pageFields,
       page_path: safePath,
-      page_referrer: "",
-      page_title: "Waikiki Dental",
       send_to: GOOGLE_ANALYTICS_MEASUREMENT_ID,
     });
   }, [pathname]);

@@ -18,7 +18,7 @@ export function BrandLogo({
       alt="Waikiki Dental"
       width={brandAssets.logoWidth}
       height={brandAssets.logoHeight}
-      priority={priority}
+      preload={priority}
       className={className}
     />
   );
@@ -120,7 +120,7 @@ export function DoctorPortrait({
       fill
       sizes="275px"
       className={className}
-      priority={priority}
+      preload={priority}
     />
   );
 }

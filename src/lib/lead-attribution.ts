@@ -121,17 +121,35 @@ function normalizeAttribution(
   return next;
 }
 
-function readStorage(storage: Storage | undefined, key: string) {
+type StorageKind = "localStorage" | "sessionStorage";
+
+/**
+ * Blocked site data makes the `window.localStorage` getter itself throw a
+ * SecurityError, so resolve the storage area inside a try and treat any
+ * failure as "no storage" (the in-memory record still works for the visit).
+ */
+function safeStorage(kind: StorageKind): Storage | null {
+  if (typeof window === "undefined") return null;
   try {
-    return storage?.getItem(key) ?? "";
+    return window[kind] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function readStorage(kind: StorageKind, key: string) {
+  try {
+    return safeStorage(kind)?.getItem(key) ?? "";
   } catch {
     return "";
   }
 }
 
-function writeStorage(storage: Storage | undefined, key: string, value: string) {
+function writeStorage(kind: StorageKind, key: string, value: string) {
+  const storage = safeStorage(kind);
+  if (!storage) return false;
   try {
-    storage?.setItem(key, value);
+    storage.setItem(key, value);
     return true;
   } catch {
     return false;
@@ -154,11 +172,11 @@ function isPrivacyRestricted() {
 function readStoredRaw() {
   if (typeof window === "undefined") return memoryRecord;
   if (isPrivacyRestricted()) {
-    return readStorage(window.sessionStorage, ATTRIBUTION_SESSION_KEY) || memoryRecord;
+    return readStorage("sessionStorage", ATTRIBUTION_SESSION_KEY) || memoryRecord;
   }
   return (
-    readStorage(window.localStorage, ATTRIBUTION_STORAGE_KEY) ||
-    readStorage(window.sessionStorage, ATTRIBUTION_SESSION_KEY) ||
+    readStorage("localStorage", ATTRIBUTION_STORAGE_KEY) ||
+    readStorage("sessionStorage", ATTRIBUTION_SESSION_KEY) ||
     memoryRecord
   );
 }
@@ -192,9 +210,9 @@ function persistRecord(record: StoredAttributionRecord) {
   if (typeof window === "undefined") return;
 
   if (isPrivacyRestricted()) {
-    writeStorage(window.sessionStorage, ATTRIBUTION_SESSION_KEY, serialized);
-  } else if (!writeStorage(window.localStorage, ATTRIBUTION_STORAGE_KEY, serialized)) {
-    writeStorage(window.sessionStorage, ATTRIBUTION_SESSION_KEY, serialized);
+    writeStorage("sessionStorage", ATTRIBUTION_SESSION_KEY, serialized);
+  } else if (!writeStorage("localStorage", ATTRIBUTION_STORAGE_KEY, serialized)) {
+    writeStorage("sessionStorage", ATTRIBUTION_SESSION_KEY, serialized);
   }
 
   if (previous !== serialized) {
@@ -248,11 +266,14 @@ export function withLeadAttribution<T extends Record<string, unknown>>(
 
 export function resetLeadAttributionForTests() {
   memoryRecord = "";
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.removeItem(ATTRIBUTION_STORAGE_KEY);
-    window.sessionStorage.removeItem(ATTRIBUTION_SESSION_KEY);
-  } catch {
-    // Tests may run without storage.
+  for (const [kind, key] of [
+    ["localStorage", ATTRIBUTION_STORAGE_KEY],
+    ["sessionStorage", ATTRIBUTION_SESSION_KEY],
+  ] as const) {
+    try {
+      safeStorage(kind)?.removeItem(key);
+    } catch {
+      // Tests may run without storage.
+    }
   }
 }

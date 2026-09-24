@@ -1,10 +1,9 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Loader2, Mail, Phone, Send } from "lucide-react";
 import { ChoiceChip } from "@/components/forms/choice-chip";
 import { Honeypot, PrivacyConsent } from "@/components/forms/privacy-note";
-import { LeadAttributionHiddenFields } from "@/components/lead-attribution-fields";
 import { RequestSuccess } from "@/components/forms/request-success";
 import {
   buildContactFormspreePayload,
@@ -28,6 +27,8 @@ type FormState = {
   consent: boolean;
 };
 
+type ErrorField = "topic" | "message" | "replyBy" | "name" | "email" | "phone" | "consent";
+
 const initialState: FormState = {
   name: "",
   email: "",
@@ -48,13 +49,48 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
   const [form, setForm] = useState<FormState>(initialState);
   const [company, setCompany] = useState("");
   const [error, setError] = useState("");
+  // Which control the current error belongs to (null for network errors).
+  const [errorField, setErrorField] = useState<ErrorField | null>(null);
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
   const isSubmittingRef = useRef(false);
+  const focusFormAfterReset = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
   const errorId = useId();
+
+  // Move focus to a new error so it is announced and the visitor lands next
+  // to it, matching the appointment scheduler.
+  useEffect(() => {
+    if (!error) return;
+    errorRef.current?.focus({ preventScroll: false });
+  }, [error]);
+
+  // "Send another message" unmounts the success panel; return focus to the
+  // top of the fresh form instead of dropping it to <body>.
+  useEffect(() => {
+    if (status !== "idle" || !focusFormAfterReset.current) return;
+    focusFormAfterReset.current = false;
+    formRef.current?.querySelector<HTMLInputElement>("input")?.focus();
+  }, [status]);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((current) => ({ ...current, [key]: value }));
     setError("");
+    setErrorField(null);
+  }
+
+  function showError(message: string, field: ErrorField | null = null) {
+    setError(message);
+    setErrorField(field);
+  }
+
+  /** aria-invalid + aria-describedby for the control the error belongs to. */
+  function invalidProps(field: ErrorField) {
+    const invalid = Boolean(error) && errorField === field;
+    return {
+      "aria-invalid": invalid || undefined,
+      "aria-describedby": invalid ? errorId : undefined,
+    } as const;
   }
 
   async function submitForm(event: React.FormEvent<HTMLFormElement>) {
@@ -62,36 +98,41 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
     if (isSubmittingRef.current || status === "submitting") return;
 
     if (!form.topic) {
-      setError("Please choose what this is about.");
+      showError("Please choose what this is about.", "topic");
       return;
     }
-    if (!form.message.trim() || form.name.trim().length < 2) {
-      setError("Please complete your name and message.");
+    if (!form.message.trim()) {
+      showError("Please add a short message.", "message");
       return;
     }
     if (!form.replyBy) {
-      setError("Please choose email or phone so we know how to reply.");
+      showError("Please choose email or phone so we know how to reply.", "replyBy");
+      return;
+    }
+    if (form.name.trim().length < 2) {
+      showError("Please enter your name.", "name");
       return;
     }
     if (form.replyBy === "email" && !form.email.trim()) {
-      setError("Please add your email, or choose a phone reply.");
+      showError("Please add your email, or choose a phone reply.", "email");
       return;
     }
     if (form.replyBy === "phone" && !form.phone.trim()) {
-      setError("Please add your phone number, or choose an email reply.");
+      showError("Please add your phone number, or choose an email reply.", "phone");
       return;
     }
     if (form.email && !isEmail(form.email)) {
-      setError("That email address doesn’t look right.");
+      showError("That email address doesn’t look right.", "email");
       return;
     }
     if (form.phone && !isUsPhone(form.phone)) {
-      setError("Enter a 10-digit US phone number (a leading +1 is okay).");
+      showError("Enter a 10-digit US phone number (a leading +1 is okay).", "phone");
       return;
     }
     if (!form.consent) {
-      setError(
+      showError(
         "Please confirm that this message does not include sensitive information.",
+        "consent",
       );
       return;
     }
@@ -103,7 +144,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
     isSubmittingRef.current = true;
     setStatus("submitting");
-    setError("");
+    showError("");
 
     const topic = contactTopics.find((item) => item.key === form.topic);
 
@@ -127,7 +168,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       if (!response.ok) {
         isSubmittingRef.current = false;
         setStatus("idle");
-        setError(formNetworkError(response.status, "contact"));
+        showError(formNetworkError(response.status, "contact"));
         return;
       }
 
@@ -135,7 +176,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
     } catch {
       isSubmittingRef.current = false;
       setStatus("idle");
-      setError(
+      showError(
         "We couldn’t send your message. Check your connection and try again, or call the office.",
       );
     }
@@ -143,9 +184,10 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
   function reset() {
     isSubmittingRef.current = false;
+    focusFormAfterReset.current = true;
     setForm(initialState);
     setCompany("");
-    setError("");
+    showError("");
     setStatus("idle");
   }
 
@@ -163,13 +205,17 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
 
   return (
     <form
+      ref={formRef}
+      // POST keeps name/phone/email out of the URL if someone submits before
+      // hydration; the JS handler always prevents the native submit.
+      method="post"
       onSubmit={submitForm}
       className="grid gap-5"
       aria-label="Contact Waikiki Dental"
       aria-busy={status === "submitting"}
       noValidate
     >
-      <fieldset>
+      <fieldset {...invalidProps("topic")}>
         <legend className="text-sm font-medium text-ink">What is this about?</legend>
         <div
           className={`mt-3 grid gap-3 ${compact ? "grid-cols-1" : "sm:grid-cols-2"}`}
@@ -200,12 +246,12 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
           className="field min-h-36 resize-y"
           name="message"
           placeholder={formPrivacy.contactPlaceholder}
-          aria-invalid={error.toLowerCase().includes("message") || undefined}
+          {...invalidProps("message")}
           maxLength={2_000}
         />
       </label>
 
-      <fieldset>
+      <fieldset {...invalidProps("replyBy")}>
         <legend className="text-sm font-medium text-ink">How should we reply?</legend>
         <div className="mt-3 grid grid-cols-2 gap-3">
           <ChoiceChip
@@ -238,7 +284,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             placeholder="Your name"
             autoComplete="name"
             maxLength={120}
-            aria-invalid={error.toLowerCase().includes("name") || undefined}
+            {...invalidProps("name")}
           />
         </label>
         {form.replyBy === "phone" ? (
@@ -253,7 +299,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
               placeholder="(916) …"
               autoComplete="tel"
               maxLength={32}
-              aria-invalid={error.toLowerCase().includes("phone") || undefined}
+              {...invalidProps("phone")}
             />
           </label>
         ) : (
@@ -271,7 +317,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
               placeholder="you@email.com"
               autoComplete="email"
               maxLength={254}
-              aria-invalid={error.toLowerCase().includes("email") || undefined}
+              {...invalidProps("email")}
             />
           </label>
         )}
@@ -289,6 +335,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             placeholder="you@email.com"
             autoComplete="email"
             maxLength={254}
+            {...invalidProps("email")}
           />
         </label>
       ) : form.replyBy === "email" ? (
@@ -303,6 +350,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
             placeholder="(916) …"
             autoComplete="tel"
             maxLength={32}
+            {...invalidProps("phone")}
           />
         </label>
       ) : null}
@@ -310,14 +358,21 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       <PrivacyConsent
         checked={form.consent}
         onChange={(value) => update("consent", value)}
+        invalid={Boolean(error) && errorField === "consent"}
+        describedBy={errorId}
       >
         {formPrivacy.contactConsent}
       </PrivacyConsent>
       <Honeypot value={company} onChange={setCompany} />
-      <LeadAttributionHiddenFields />
 
       {error ? (
-        <p id={errorId} className="text-sm font-medium text-sunset-600" role="alert">
+        <p
+          ref={errorRef}
+          id={errorId}
+          tabIndex={-1}
+          className="text-sm font-medium text-sunset-600"
+          role="alert"
+        >
           {error}
         </p>
       ) : null}

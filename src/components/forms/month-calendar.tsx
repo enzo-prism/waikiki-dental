@@ -1,9 +1,17 @@
 "use client";
 
-import { useMemo, useState, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from "react";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import {
-  isWeekend,
+  isSelectableDate,
+  isSelectableIso,
   parseLocalIso,
   startOfToday,
   toLocalIso,
@@ -23,29 +31,54 @@ type Cell = {
   iso: string;
   date: Date;
   inMonth: boolean;
-  disabled: boolean;
+  selectable: boolean;
 };
 
-function buildCells(year: number, month: number): Cell[] {
-  const first = new Date(year, month, 1);
-  const startOffset = first.getDay();
-  const today = startOfToday();
-  const cells: Cell[] = [];
+/** Six fixed weeks so the calendar height never jumps between months. */
+function buildWeeks(year: number, month: number, today: Date): Cell[][] {
+  const startOffset = new Date(year, month, 1).getDay();
+  const weeks: Cell[][] = [];
 
   for (let index = 0; index < 42; index += 1) {
     const date = new Date(year, month, index - startOffset + 1);
     const inMonth = date.getMonth() === month;
-    const disabled =
-      !inMonth || date < today || isWeekend(date);
-    cells.push({
+    if (index % 7 === 0) weeks.push([]);
+    weeks[weeks.length - 1].push({
       iso: toLocalIso(date),
       date,
       inMonth,
-      disabled,
+      selectable: inMonth && isSelectableDate(date, today),
     });
   }
 
-  return cells;
+  return weeks;
+}
+
+function monthStart(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+function addDays(date: Date, days: number) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+}
+
+/** Same day-of-month `delta` months away, clamped to that month's length. */
+function addMonths(date: Date, delta: number) {
+  const lastDay = new Date(date.getFullYear(), date.getMonth() + delta + 1, 0);
+  return new Date(
+    lastDay.getFullYear(),
+    lastDay.getMonth(),
+    Math.min(date.getDate(), lastDay.getDate()),
+  );
+}
+
+function fullDateLabel(date: Date) {
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 export function MonthCalendar({
@@ -57,92 +90,120 @@ export function MonthCalendar({
   onChange: (iso: string) => void;
   disabled?: boolean;
 }) {
+  const captionId = useId();
   const today = startOfToday();
-  const selected = value ? parseLocalIso(value) : null;
+  const todayIso = toLocalIso(today);
   const [cursor, setCursor] = useState(() =>
-    selected
-      ? new Date(selected.getFullYear(), selected.getMonth(), 1)
-      : new Date(today.getFullYear(), today.getMonth(), 1),
+    monthStart(isSelectableIso(value) ? parseLocalIso(value) : today),
   );
+  // The day that owns the roving tabindex; follows the arrow keys.
+  const [focusedIso, setFocusedIso] = useState(value);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const pendingFocusIso = useRef<string | null>(null);
 
-  const cells = useMemo(
-    () => buildCells(cursor.getFullYear(), cursor.getMonth()),
+  const weeks = useMemo(
+    () => buildWeeks(cursor.getFullYear(), cursor.getMonth(), startOfToday()),
     [cursor],
   );
+  const selectableIsos = weeks
+    .flat()
+    .filter((cell) => cell.selectable)
+    .map((cell) => cell.iso);
 
   const caption = cursor.toLocaleDateString("en-US", {
     month: "long",
     year: "numeric",
   });
-  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-  const prevDisabled = cursor <= currentMonthStart;
+  const prevDisabled = cursor <= monthStart(today);
 
-  const focusIso =
-    value && cells.some((cell) => cell.iso === value && !cell.disabled)
-      ? value
-      : (cells.find((cell) => cell.iso === toLocalIso(today) && !cell.disabled)
-          ?.iso ?? cells.find((cell) => !cell.disabled)?.iso ?? "");
+  // Exactly one tabbable day in the visible month: the keyboard-focused day,
+  // else the chosen day, else today, else the first requestable weekday.
+  const activeIso =
+    [focusedIso, value, todayIso].find((iso) => selectableIsos.includes(iso)) ??
+    selectableIsos[0] ??
+    "";
+
+  // Move DOM focus only after a keyboard move has rendered the target day,
+  // including when the move switched months and replaced every cell.
+  useEffect(() => {
+    const iso = pendingFocusIso.current;
+    if (!iso) return;
+    pendingFocusIso.current = null;
+    gridRef.current
+      ?.querySelector<HTMLButtonElement>(`button[data-iso="${iso}"]`)
+      ?.focus();
+  });
 
   function moveMonth(delta: number) {
     setCursor((current) => new Date(current.getFullYear(), current.getMonth() + delta, 1));
   }
 
-  function firstEnabledOnOrAfter(date: Date, direction: 1 | -1) {
-    const next = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    for (let i = 0; i < 14; i += 1) {
-      if (next >= today && !isWeekend(next)) return next;
-      next.setDate(next.getDate() + direction);
+  /** Nearest requestable weekday from `date`, stepping in `direction`. */
+  function nearestSelectable(date: Date, direction: 1 | -1) {
+    const beforeToday = date < today;
+    let next = beforeToday ? today : date;
+    const step = beforeToday ? 1 : direction;
+    for (let i = 0; i < 7; i += 1) {
+      if (isSelectableDate(next, today)) return next;
+      next = addDays(next, step);
     }
     return null;
   }
 
   function onGridKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (disabled) return;
-
-    if (event.key === "PageDown") {
-      event.preventDefault();
-      moveMonth(1);
-      return;
-    }
-    if (event.key === "PageUp") {
-      event.preventDefault();
-      if (!prevDisabled) moveMonth(-1);
-      return;
-    }
-
-    const originIso = value || focusIso;
-    if (!originIso) return;
-    const origin = parseLocalIso(originIso);
-    const next = new Date(origin.getFullYear(), origin.getMonth(), origin.getDate());
+    if (disabled || !activeIso) return;
+    const origin = parseLocalIso(activeIso);
+    let target: Date;
     let direction: 1 | -1 = 1;
 
-    if (event.key === "ArrowRight") next.setDate(next.getDate() + 1);
-    else if (event.key === "ArrowLeft") {
-      next.setDate(next.getDate() - 1);
-      direction = -1;
-    } else if (event.key === "ArrowDown") next.setDate(next.getDate() + 7);
-    else if (event.key === "ArrowUp") {
-      next.setDate(next.getDate() - 7);
-      direction = -1;
-    } else if (event.key === "Home") {
-      next.setDate(next.getDate() - ((next.getDay() + 6) % 7));
-      direction = next < today ? 1 : -1;
-    } else if (event.key === "End") {
-      next.setDate(next.getDate() + ((5 - next.getDay() + 7) % 7));
-    } else {
-      return;
+    switch (event.key) {
+      case "ArrowRight":
+        target = addDays(origin, 1);
+        break;
+      case "ArrowLeft":
+        target = addDays(origin, -1);
+        direction = -1;
+        break;
+      case "ArrowDown":
+        target = addDays(origin, 7);
+        break;
+      case "ArrowUp":
+        target = addDays(origin, -7);
+        direction = -1;
+        break;
+      case "Home":
+        // Monday of this week (weekends are never requestable).
+        target = addDays(origin, 1 - origin.getDay());
+        break;
+      case "End":
+        // Friday of this week.
+        target = addDays(origin, 5 - origin.getDay());
+        direction = -1;
+        break;
+      case "PageDown":
+        target = addMonths(origin, 1);
+        break;
+      case "PageUp":
+        target = addMonths(origin, -1);
+        direction = -1;
+        break;
+      default:
+        return;
     }
-
-    if (next < today) direction = 1;
-
-    const enabled = firstEnabledOnOrAfter(next, direction);
-    if (!enabled || (enabled < currentMonthStart && prevDisabled)) return;
 
     event.preventDefault();
-    onChange(toLocalIso(enabled));
-    if (enabled.getMonth() !== cursor.getMonth()) {
-      setCursor(new Date(enabled.getFullYear(), enabled.getMonth(), 1));
+    const next = nearestSelectable(target, direction) ?? nearestSelectable(target, 1);
+    if (!next) return;
+
+    const iso = toLocalIso(next);
+    setFocusedIso(iso);
+    if (
+      next.getMonth() !== cursor.getMonth() ||
+      next.getFullYear() !== cursor.getFullYear()
+    ) {
+      setCursor(monthStart(next));
     }
+    pendingFocusIso.current = iso;
   }
 
   return (
@@ -153,7 +214,11 @@ export function MonthCalendar({
       aria-disabled={disabled || undefined}
     >
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p id="calendar-caption" className="flex min-w-0 items-center gap-2 text-sm font-semibold text-ink">
+        <p
+          id={captionId}
+          aria-live="polite"
+          className="flex min-w-0 items-center gap-2 text-sm font-semibold text-ink"
+        >
           <CalendarDays className="size-4 shrink-0 text-ocean-700" aria-hidden="true" />
           <span className="truncate">{caption}</span>
         </p>
@@ -180,57 +245,71 @@ export function MonthCalendar({
       </div>
 
       <div
+        ref={gridRef}
         role="grid"
-        aria-labelledby="calendar-caption"
+        aria-labelledby={captionId}
+        aria-disabled={disabled || undefined}
         onKeyDown={onGridKeyDown}
-        className="grid min-w-0 grid-cols-7 gap-0.5 sm:gap-1"
+        className="grid min-w-0 gap-0.5 sm:gap-1"
       >
-        {WEEKDAYS.map((day, index) => (
-          <div
-            key={`${day.long}-${index}`}
-            className="grid h-8 place-items-center text-[11px] font-semibold uppercase tracking-wide text-ink-soft"
-          >
-            <abbr title={day.long} className="no-underline">
-              {day.short}
-            </abbr>
+        <div role="row" className="grid grid-cols-7 gap-0.5 sm:gap-1">
+          {WEEKDAYS.map((day, index) => (
+            <div
+              key={`${day.long}-${index}`}
+              role="columnheader"
+              aria-label={day.long}
+              className="grid h-8 place-items-center text-[11px] font-semibold uppercase tracking-wide text-ink-soft"
+            >
+              <abbr title={day.long} className="no-underline" aria-hidden="true">
+                {day.short}
+              </abbr>
+            </div>
+          ))}
+        </div>
+        {weeks.map((week) => (
+          <div key={week[0].iso} role="row" className="grid grid-cols-7 gap-0.5 sm:gap-1">
+            {week.map((cell) => {
+              // Days from the neighbouring months are empty, non-interactive cells.
+              if (!cell.inMonth) {
+                return <div key={cell.iso} role="gridcell" className="h-10 sm:h-11" />;
+              }
+              const selectedDay = cell.iso === value;
+              const isToday = cell.iso === todayIso;
+              const tabbable = !disabled && cell.iso === activeIso;
+              return (
+                <div key={cell.iso} role="gridcell" aria-selected={selectedDay}>
+                  <button
+                    type="button"
+                    data-iso={cell.iso}
+                    tabIndex={tabbable ? 0 : -1}
+                    disabled={!cell.selectable || disabled}
+                    onClick={() => {
+                      setFocusedIso(cell.iso);
+                      onChange(cell.iso);
+                    }}
+                    aria-label={`${fullDateLabel(cell.date)}${
+                      cell.selectable ? "" : ", unavailable"
+                    }`}
+                    aria-current={isToday ? "date" : undefined}
+                    className={`grid h-10 w-full min-w-0 place-items-center rounded-xl text-sm font-medium transition sm:h-11 ${
+                      selectedDay
+                        ? "bg-ocean-600 text-cream"
+                        : !cell.selectable
+                          ? "text-ink-soft"
+                          : "text-ink hover:bg-ocean-50"
+                    } ${isToday && !selectedDay && cell.selectable ? "ring-1 ring-ocean-400" : ""}`}
+                  >
+                    {cell.date.getDate()}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         ))}
-        {cells.map((cell) => {
-          const selectedDay = cell.iso === value;
-          const isToday = cell.iso === toLocalIso(today);
-          const tabbable = !disabled && !cell.disabled && cell.iso === focusIso;
-          return (
-            <div key={cell.iso} role="gridcell" aria-selected={selectedDay}>
-              <button
-                type="button"
-                tabIndex={tabbable ? 0 : -1}
-                disabled={cell.disabled || disabled}
-                onClick={() => onChange(cell.iso)}
-                aria-label={cell.date.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-                aria-disabled={cell.disabled || disabled}
-                className={`grid h-10 w-full min-w-0 place-items-center rounded-xl text-sm font-medium transition sm:h-11 ${
-                  selectedDay
-                    ? "bg-ocean-600 text-cream"
-                    : cell.disabled
-                      ? "text-ink-soft"
-                      : "text-ink hover:bg-ocean-50"
-                } ${isToday && !selectedDay && !cell.disabled ? "ring-1 ring-ocean-400" : ""} ${
-                  !cell.inMonth ? "opacity-0" : ""
-                }`}
-              >
-                {cell.inMonth ? cell.date.getDate() : ""}
-              </button>
-            </div>
-          );
-        })}
       </div>
       <p className="mt-3 text-xs leading-5 text-ink-soft">
-        Office hours are weekdays. Saturday and Sunday aren’t selectable.
+        Office hours are weekdays. Saturday and Sunday aren’t selectable. Arrow
+        keys move between days; Enter chooses one.
       </p>
     </div>
   );

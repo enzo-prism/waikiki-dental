@@ -21,19 +21,28 @@ export function MobileCtaBar() {
         className="fixed inset-x-0 bottom-0 z-50 border-t border-line bg-cream/95 backdrop-blur-xl lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
-        <div className="grid grid-cols-2 gap-2 px-4 py-2.5">
-        <Link href={scheduleHref} className="btn btn-sunset btn-sm min-w-0 px-3">
-          <CalendarCheck className="size-4 shrink-0" aria-hidden="true" />
-          <span className="truncate">Request a Time</span>
-        </Link>
-        <a
-          href={site.phoneHref}
-          className="btn btn-outline btn-sm min-w-0 bg-cream px-3"
-          aria-label={`Call or text ${site.phone}`}
-        >
-          <Phone className="size-4 shrink-0" aria-hidden="true" />
-          Call
-        </a>
+        <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] gap-2 px-4 py-2.5">
+          <Link
+            href={scheduleHref}
+            className="btn btn-sunset btn-sm min-h-11 min-w-0 gap-1.5 px-3 tracking-normal"
+          >
+            <CalendarCheck
+              className="size-4 shrink-0 max-[359px]:hidden"
+              aria-hidden="true"
+            />
+            <span className="whitespace-nowrap">Request Appointment</span>
+          </Link>
+          <a
+            href={site.phoneHref}
+            className="btn btn-outline btn-sm min-h-11 min-w-0 gap-1.5 bg-cream px-3 tracking-normal"
+            aria-label={`Call or text ${site.phone}`}
+          >
+            <Phone
+              className="size-4 shrink-0 max-[359px]:hidden"
+              aria-hidden="true"
+            />
+            <span className="whitespace-nowrap">Call or text</span>
+          </a>
         </div>
       </div>
     </>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { CircleCheckBig, PhoneCall } from "lucide-react";
 import { site } from "@/lib/site";
 
@@ -16,6 +17,14 @@ export function RequestSuccess({
   onReset: () => void;
   resetLabel: string;
 }) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // The submitted form unmounts; move focus here so it is not dropped to
+  // <body> and screen readers announce the confirmation heading.
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   return (
     <div
       className="card p-8 text-center shadow-soft sm:p-12"
@@ -25,7 +34,11 @@ export function RequestSuccess({
       <span className="mx-auto grid size-20 place-items-center rounded-[26px] border border-ocean-100 bg-ocean-50 text-ocean-700 shadow-[0_16px_32px_-22px_rgb(0_81_174/0.8)]">
         <CircleCheckBig className="size-10" strokeWidth={1.8} aria-hidden="true" />
       </span>
-      <h2 className="mt-6 font-serif text-3xl font-medium tracking-tight text-ink">
+      <h2
+        ref={headingRef}
+        tabIndex={-1}
+        className="mt-6 font-serif text-3xl font-medium tracking-tight text-ink outline-none"
+      >
         {title}
       </h2>
       <p className="mx-auto mt-3 max-w-md text-pretty leading-8 text-ink-muted">

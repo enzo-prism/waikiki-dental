@@ -6,7 +6,6 @@ import {
   Clock3,
   Ellipsis,
   HeartPulse,
-  MapPin,
   MessageCircle,
   MessageCircleMore,
   ShieldCheck,
@@ -36,15 +35,26 @@ export function resolveSiteUrl(): string {
 
 export const isPreviewDeploy = process.env.VERCEL_ENV === "preview";
 
+/** Postal address parts; `site.address` and the Dentist JSON-LD derive from these. */
+const addressParts = {
+  street: "1271 Pleasant Grove Blvd.",
+  suite: "Suite #100",
+  locality: "Roseville",
+  region: "CA",
+  postalCode: "95747",
+  country: "US",
+};
+
 export const site = {
   name: "Waikiki Dental",
-  doctor: "Michael Narodovich, DMD",
   phone: "(916) 772-6248",
   phoneHref: "tel:+19167726248",
   email: "office@waikikidental.com",
   emailHref: "mailto:office@waikikidental.com",
-  address: "1271 Pleasant Grove Blvd. Suite #100, Roseville, CA 95747",
-  shortAddress: "1271 Pleasant Grove Blvd., Roseville, CA",
+  address: `${addressParts.street} ${addressParts.suite}, ${addressParts.locality}, ${addressParts.region} ${addressParts.postalCode}`,
+  addressParts,
+  /** Office coordinates, matching the Google Maps listing in `reviewStats.href`. */
+  geo: { latitude: 38.7717804, longitude: -121.3154872 },
   mapsHref:
     "https://www.google.com/maps/search/?api=1&query=1271%20Pleasant%20Grove%20Blvd%20Suite%20100%20Roseville%20CA%2095747",
   baseUrl: resolveSiteUrl(),
@@ -136,7 +146,6 @@ export type Service = {
   description: string;
   highlights: string[];
   icon: ComponentType<{ className?: string }>;
-  image?: string;
 };
 
 export const services: Service[] = [
@@ -543,13 +552,6 @@ export const navItems = [
   { label: "Contact", href: "/contact-waikiki-dental/" },
 ];
 
-export const trustPoints = [
-  "Now welcoming new patients",
-  "Family, cosmetic, implant & sedation dentistry",
-  "Implants and restorative dentistry",
-  "Gentle with anxious patients",
-];
-
 /* ------------------------------------------------------------------ *
  * Team story — current practice-owned photos published by Waikiki
  * Dental on its official Facebook page in March 2026. Cropped portraits
@@ -581,18 +583,6 @@ export const teamStory = {
   ],
 };
 
-/* New-patient hook — built only on facts stated on the public practice site. */
-export const newPatientOffer = {
-  eyebrow: "Now accepting new patients",
-  title: "Your first visit, made simple.",
-  body: "Most dental insurance plans are welcome, CareCredit financing keeps bigger treatment plans manageable, and your paperwork is handled online before you arrive. The team will help you confirm your benefits before any treatment begins.",
-  points: [
-    "Most dental insurance plans accepted",
-    "CareCredit financing available",
-    "Online forms before you arrive",
-  ],
-};
-
 /* Insurance & financing trust strip, based on the public new-patient page. */
 export const paymentOptions = {
   insuranceNote: "Most dental insurance plans welcome",
@@ -606,7 +596,6 @@ export const paymentOptions = {
 /* Emergency fast-path — surfaced in the header utility bar. */
 export const emergency = {
   label: "Dental emergency?",
-  cta: "Call for urgent availability",
   href: "/dental-emergencies/",
 };
 
@@ -763,10 +752,14 @@ export const canonicalPageRoutes = [
   ...services.map((service) => service.slug),
 ];
 
-export const pageRoutes = [
-  ...canonicalPageRoutes,
-  ...Object.keys(serviceAliases),
-];
+/**
+ * Routes prerendered by `[slug]`. Legacy aliases in `serviceAliases` are not
+ * listed: `next.config.ts` redirects every one of them before routing.
+ */
+export const pageRoutes = canonicalPageRoutes;
+
+/** Last substantive site update (ISO date), used for sitemap `lastModified`. */
+export const siteLastUpdated = "2026-09-24";
 
 /* ------------------------------------------------------------------ *
  * Imagery — self-hosted in /public/media for fast, reliable LCP.
@@ -812,68 +805,59 @@ export const artwork = {
   },
 } satisfies Record<string, Artwork>;
 
+/** Converts an `hours` range like "9:00 AM - 5:00 PM" to schema.org 24h times. */
+function to24Hour(time: string) {
+  const match = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(time.trim());
+  if (!match) throw new Error(`Unrecognized office hour: ${time}`);
+  const [, rawHour, minutes, meridiem] = match;
+  const hour = (Number(rawHour) % 12) + (meridiem.toUpperCase() === "PM" ? 12 : 0);
+  return `${String(hour).padStart(2, "0")}:${minutes}`;
+}
+
+/** Stable node id so Service JSON-LD can reference the practice as provider. */
+export const dentistId = `${site.baseUrl}/#dentist`;
+
+/*
+ * No aggregateRating: Google's review-snippet policy disallows self-serving
+ * review markup for a LocalBusiness on its own site, especially figures copied
+ * from Google itself.
+ */
 export const dentistJsonLd = {
   "@context": "https://schema.org",
   "@type": "Dentist",
+  "@id": dentistId,
   name: `${site.name} - Roseville`,
   url: site.baseUrl,
+  image: absoluteUrl(teamStory.groupImage),
   telephone: site.phone,
   email: site.email,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "1271 Pleasant Grove Blvd. Suite #100",
-    addressLocality: "Roseville",
-    addressRegion: "CA",
-    postalCode: "95747",
-    addressCountry: "US",
+    streetAddress: `${site.addressParts.street} ${site.addressParts.suite}`,
+    addressLocality: site.addressParts.locality,
+    addressRegion: site.addressParts.region,
+    postalCode: site.addressParts.postalCode,
+    addressCountry: site.addressParts.country,
   },
-  medicalSpecialty: [
-    "Family Dentistry",
-    "Cosmetic Dentistry",
-    "Orthodontics",
-    "Dental Implants",
-    "Sedation Dentistry",
-  ],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Monday",
-      opens: "09:00",
-      closes: "17:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Tuesday",
-      opens: "09:00",
-      closes: "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Wednesday",
-      opens: "08:00",
-      closes: "17:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Thursday",
-      opens: "09:00",
-      closes: "18:00",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: "Friday",
-      opens: "08:00",
-      closes: "16:00",
-    },
-  ],
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: site.geo.latitude,
+    longitude: site.geo.longitude,
+  },
+  medicalSpecialty: "Dentistry",
+  openingHoursSpecification: hours
+    .filter(([, range]) => range.includes("-"))
+    .map(([day, range]) => {
+      const [opens, closes] = range.split("-");
+      return {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: day,
+        opens: to24Hour(opens),
+        closes: to24Hour(closes),
+      };
+    }),
   areaServed: ["Roseville", "Granite Bay", "Rocklin", "Lincoln"],
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: reviewStats.rating,
-    reviewCount: reviewStats.count,
-    bestRating: 5,
-    worstRating: 1,
-  },
+  sameAs: [teamStory.socialHref, reviewStats.href],
 };
 
 export function findService(slug: string) {
@@ -885,5 +869,3 @@ export function absoluteUrl(path = "") {
   const normalized = path.startsWith("/") ? path : `/${path}`;
   return `${site.baseUrl}${normalized}`;
 }
-
-export { MapPin };

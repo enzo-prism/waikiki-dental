@@ -80,10 +80,28 @@
     color: var(--color-ink);
   }
 
+  /* Two-tone focus indicator: a cream halo (box-shadow) inside an
+     ocean-600 outline. The outline carries ≥7:1 on cream/porcelain; the
+     halo carries ≥14:1 on navy, so focus reads on every surface. Forced
+     colors drops the halo but keeps the real outline in a system color. */
+  :root {
+    --focus-ring: var(--color-ocean-600);
+    --focus-halo: var(--color-cream);
+  }
+
   :where(a, button, summary, input, textarea, select):focus-visible {
-    outline: 2px solid var(--color-ocean-500);
+    outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--focus-halo);
     border-radius: 6px;
+  }
+
+  /* Choice cards / chips / consent rows wrap a visually hidden input:
+     show the indicator on the visible label. */
+  :where(label):has(input:focus-visible) {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--focus-halo);
   }
 
   button,
@@ -124,30 +142,33 @@
   .btn {
     @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full
       px-6 text-sm font-semibold tracking-wide transition-all duration-200
-      outline-none focus:outline-none focus-visible:outline-none
-      focus-visible:ring-4 active:translate-y-px;
+      active:translate-y-px;
+  }
+  /* Real outline + cream halo (see base :focus-visible) — ≥3:1 on cream
+     and navy surfaces, and survives forced-colors mode. */
+  .btn:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--focus-halo);
   }
   .btn-primary {
-    @apply bg-ocean-600 text-cream shadow-soft hover:bg-ocean-700
-      focus-visible:ring-ocean-200;
+    @apply bg-ocean-600 text-cream shadow-soft hover:bg-ocean-700;
   }
   .btn-sunset {
-    @apply bg-sunset-600 text-cream shadow-soft hover:bg-sunset-700
-      focus-visible:ring-sunset-100;
+    @apply bg-sunset-600 text-cream shadow-soft hover:bg-sunset-700;
   }
   .btn-outline {
     @apply border border-line-strong bg-transparent text-ink hover:border-ocean-600
-      hover:bg-cream focus-visible:ring-ocean-200;
+      hover:bg-cream;
   }
   .btn-dark {
-    @apply bg-deep text-cream hover:bg-deep-700 focus-visible:ring-deep/30;
+    @apply bg-deep text-cream hover:bg-deep-700;
   }
   .btn-light {
-    @apply bg-cream text-deep hover:bg-white focus-visible:ring-cream/40;
+    @apply bg-cream text-deep hover:bg-white;
   }
   .btn-ghost-light {
-    @apply border border-cream/40 text-cream hover:bg-cream/10
-      focus-visible:ring-cream/30;
+    @apply border border-cream/40 text-cream hover:bg-cream/10;
   }
   .btn-sm {
     @apply min-h-10 px-4 text-[13px];
@@ -164,12 +185,14 @@
 
   .field {
     @apply min-h-12 w-full rounded-xl border border-line bg-background/50 px-4
-      text-base text-ink outline-none transition
-      placeholder:text-ink-soft focus:border-ocean-500 focus:bg-cream
-      focus:ring-4 focus:ring-ocean-100;
+      text-base text-ink outline-hidden transition
+      placeholder:text-ink-soft focus:border-ocean-600 focus:bg-cream
+      focus:ring-4 focus:ring-ocean-100 focus:inset-ring-1
+      focus:inset-ring-ocean-600;
   }
   .field[aria-invalid="true"] {
-    @apply border-sunset-500 focus:border-sunset-500 focus:ring-sunset-100;
+    @apply border-sunset-500 focus:border-sunset-600 focus:ring-sunset-100
+      focus:inset-ring-sunset-600;
   }
 }
 

@@ -1,6 +1,6 @@
 # Project status
 
-Last reviewed: September 23, 2026
+Last reviewed: September 24, 2026
 
 ## Current production baseline
 
@@ -53,7 +53,7 @@ editorial boundary. The media audit and responsive screenshots are in
 ## Verification completed
 
 - ESLint passes.
-- The Next.js production build passes and statically generates all routes.
+- The Next.js production build passes and prerenders all routes as static HTML.
 - The homepage was checked at 320, 390, 768, and 1440 px with no horizontal
   overflow.
 - New team images load from the site's own origin and return HTTP 200.
@@ -76,34 +76,65 @@ editorial boundary. The media audit and responsive screenshots are in
 
 ## Known open issues (audit of September 23, 2026)
 
-These were found in a full codebase audit and are not yet fixed. Items 1 and 5
-need the practice. The rest are engineering work.
+Found in a full codebase audit. Items 1–4 need the practice; item 5 is
+engineering work that is intentionally deferred.
 
 1. **Privacy notice PDF names another office.** `public/privacy-practices.pdf`
    lists the Privacy Officer and complaint contact as 916-727-6453, 4320
    Elverta Rd, Antelope, not the Roseville office. Get a Waikiki-specific
    notice from the practice and replace the file.
-2. **Lead forms break when browser storage is blocked.**
-   `src/lib/lead-attribution.ts` reads `window.localStorage` outside its
-   try/catch, and the draft helpers in `src/lib/forms.ts` are unguarded, so
-   submission can fail.
-3. **Pre-hydration submit puts contact details in the URL.** Neither `<form>`
-   sets `method`, so a native GET submit before JavaScript loads writes name,
-   phone, and email into the query string.
-4. **GA automatic hits are not path-sanitized.** `src/components/google-analytics.tsx`
-   passes sanitized `page_location`/`page_title` only on the manual
-   `page_view`, not in `config`.
-5. **Structured-data rating and sedation wording.** `aggregateRating` in the
-   Dentist JSON-LD reuses Google figures (self-serving review markup), and
-   "Deep, monitored relaxation" for IV sedation should be checked against the
-   doctor's sedation permit.
-6. **No website privacy policy** covering GA cookies, attribution storage,
-   and Formspree.
-7. **Accessibility:** low-contrast focus rings on choice cards and buttons,
-   the date picker's arrow keys don't move focus, and its grid ARIA is invalid.
-8. **SEO hygiene:** legacy redirects take two hops for URLs without a trailing
-   slash, `/family-dentistry/` serves a duplicate page, and the
-   `/dental-blog/[slug]` route can never be reached.
+2. **No website privacy policy** covering GA cookies, attribution storage,
+   and Formspree. Also confirm with the practice whether Formspree needs a
+   BAA / HIPAA review for appointment requests.
+3. **Sedation wording.** "Deep, monitored relaxation" for IV sedation should
+   be checked against the doctor's sedation permit.
+4. **Practice sign-offs still pending:** the clinic-approved Formspree live
+   delivery test and approval of the social images (see "Remaining
+   operational gates" above).
+5. **Legacy URLs without a trailing slash take two redirect hops** (for
+   example `/family-dentistry` → `/family-dentistry/` → `/cleanings-exams/`).
+   With `trailingSlash: true`, Next unshifts its built-in trailing-slash
+   redirect ahead of custom `redirects()` (`lib/load-custom-routes.js`), so a
+   single hop would need per-rule duplicates without the slash.
+
+### Fixed in the September 24, 2026 audit pass
+
+- Dentist JSON-LD: removed the self-serving `aggregateRating`; added `@id`,
+  `image`, `geo`, and `sameAs`; `medicalSpecialty` is the schema.org
+  `Dentistry` value; address and opening hours derive from `site` / `hours`.
+  Service and orthodontics JSON-LD reference the Dentist by `@id`.
+- Review figures on the testimonials page and its metadata derive from
+  `reviewStats`; the contact meta description uses `site` phone and address.
+- `/family-dentistry/` now 301s to `/cleanings-exams/` like the other
+  aliases; aliases are no longer prerendered, the unreachable
+  `/dental-blog/[slug]` route was removed (its legacy URL still redirects),
+  and unknown slugs 404 via `dynamicParams = false`.
+- Security headers in `next.config.ts` (production CSP, `X-Frame-Options`,
+  `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `poweredByHeader:
+  false`) and `X-Robots-Tag: noindex` for every non-production host.
+- Sitemap `lastModified` follows `siteLastUpdated` (2026-09-24).
+- Testimonials topic cards use `h3` under their `h2` section.
+- `vercel.json` installs with `npm ci`.
+- Unused exports removed from `src/lib/site.ts`.
+- Lead forms survive blocked or full browser storage (`safeStorage`), both
+  forms use `method="post"` so a pre-hydration submit never puts contact
+  details in a URL, and a restored or expired past/weekend preferred date is
+  rejected.
+- GA automatic hits (e.g. `user_engagement`) now carry only the grouped
+  location, fixed title, and empty referrer. The CSP allows GA4 (including
+  `www.google.com/g/collect`) and Formspree; verified with zero violations
+  against a production build served as `waikikidental.com`.
+- `/request-appointment/` is static (the `?reason=` preselect is read on the
+  client), so every route is prerendered.
+- Accessibility: visible two-tone focus outline on every control (≥3:1 on
+  cream and navy, survives forced colors); roving-tabindex date grid with
+  valid grid ARIA; per-field `aria-invalid`/`aria-describedby`; error and
+  success focus management on both forms; mobile menu closes on route change
+  and at `lg`, makes the page inert while open; mega-menu Escape returns
+  focus; labelled nav landmarks; new-tab cues; review filter `role="group"`.
+- Mobile bar says **Request Appointment**; Fraunces italic is loaded (no faux
+  italic); review topics read "58 mentions of “Dr. Mike”"; the navigation
+  scroll manager no longer leaks its reset flag on query-only links.
 
 ## Highest-value future media upgrade
 

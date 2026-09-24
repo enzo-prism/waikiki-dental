@@ -13,6 +13,8 @@ import "./globals.css";
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
+  // Load the true italic face so emphasized display copy is not synthesized.
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -81,7 +83,7 @@ export default function RootLayout({
         <NavigationScrollManager />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-deep focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-cream focus:outline-none focus-visible:ring-4 focus-visible:ring-ocean-200"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-deep focus:px-5 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-cream"
         >
           Skip to content
         </a>

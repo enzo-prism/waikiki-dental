@@ -46,14 +46,16 @@ function navClass(active: boolean) {
 }
 
 /**
- * Accessible services mega-menu: opens on hover-intent and click, closes on
- * outside-click, Escape, and navigation. The "Services" label goes to the hub;
- * the chevron toggles the menu for keyboard users.
+ * Accessible services mega-menu (a disclosure, not an ARIA menu): opens on
+ * hover-intent and click, closes on outside-click, focus leaving, Escape, and
+ * navigation. The "Services" label goes to the hub; the chevron toggles the
+ * panel for keyboard users and gets focus back when Escape closes it.
  */
 export function ServicesDropdown() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const groups = servicesByCategory();
   const active = isServicesCurrent(pathname);
@@ -76,7 +78,15 @@ export function ServicesDropdown() {
       }
     }
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      if (
+        ref.current &&
+        document.activeElement &&
+        ref.current.contains(document.activeElement)
+      ) {
+        toggleRef.current?.focus();
+      }
     }
     document.addEventListener("mousedown", onDocClick);
     document.addEventListener("keydown", onKey);
@@ -95,6 +105,12 @@ export function ServicesDropdown() {
         setOpen(true);
       }}
       onMouseLeave={scheduleClose}
+      onBlur={(event) => {
+        const next = event.relatedTarget;
+        if (!(next instanceof Node) || !event.currentTarget.contains(next)) {
+          setOpen(false);
+        }
+      }}
     >
       <div className="flex items-center gap-0.5">
         <Link
@@ -106,13 +122,15 @@ export function ServicesDropdown() {
           Services
         </Link>
         <button
+          ref={toggleRef}
           type="button"
           aria-expanded={open}
-          aria-haspopup="true"
           aria-controls="services-menu"
           aria-label="Browse services"
           onClick={() => setOpen((value) => !value)}
-          className={`grid size-8 place-items-center rounded-full text-ink-soft transition hover:bg-ocean-50 hover:text-ink ${
+          // 32px visual chip; the ::after extends the hit area to 44×44
+          // (into the gap before the next nav item) without layout shift.
+          className={`relative grid size-8 place-items-center rounded-full text-ink-soft transition after:absolute after:-inset-y-1.5 after:-left-0.5 after:-right-2.5 after:content-[''] hover:bg-ocean-50 hover:text-ink ${
             open ? "bg-ocean-50 text-ink" : ""
           }`}
         >
@@ -123,47 +141,46 @@ export function ServicesDropdown() {
         </button>
       </div>
 
-      {open ? (
-        <div
-          id="services-menu"
-          className="absolute left-0 top-[calc(100%+0.75rem)] w-[min(46rem,calc(100vw-2.5rem))] rounded-2xl border border-line bg-cream p-5 shadow-soft-lg"
-        >
-          <div className="grid grid-cols-3 gap-x-6 gap-y-5">
-            {groups.map((group) => (
-              <div key={group.key}>
-                <p className="eyebrow mb-2 text-ocean-600">{group.label}</p>
-                <ul className="grid gap-0.5">
-                  {group.items.map((service) => (
-                    <li key={service.slug}>
-                      <Link
-                        href={`/${service.slug}/`}
-                        onClick={() => setOpen(false)}
-                        aria-current={
-                          isCurrent(`/${service.slug}/`, pathname)
-                            ? "page"
-                            : undefined
-                        }
-                        className="block rounded-lg px-2 py-1.5 text-sm text-ink-muted transition hover:bg-ocean-50 hover:text-ink"
-                      >
-                        {service.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 border-t border-line pt-3">
-            <Link
-              href="/roseville-dental-care/"
-              onClick={() => setOpen(false)}
-              className="text-sm font-semibold text-ocean-700 transition hover:text-ocean-800"
-            >
-              View all services →
-            </Link>
-          </div>
+      <div
+        id="services-menu"
+        hidden={!open}
+        className="absolute left-0 top-[calc(100%+0.75rem)] w-[min(46rem,calc(100vw-2.5rem))] rounded-2xl border border-line bg-cream p-5 shadow-soft-lg"
+      >
+        <div className="grid grid-cols-3 gap-x-6 gap-y-5">
+          {groups.map((group) => (
+            <div key={group.key}>
+              <p className="eyebrow mb-2 text-ocean-600">{group.label}</p>
+              <ul className="grid gap-0.5">
+                {group.items.map((service) => (
+                  <li key={service.slug}>
+                    <Link
+                      href={`/${service.slug}/`}
+                      onClick={() => setOpen(false)}
+                      aria-current={
+                        isCurrent(`/${service.slug}/`, pathname)
+                          ? "page"
+                          : undefined
+                      }
+                      className="block rounded-lg px-2 py-1.5 text-sm text-ink-muted transition hover:bg-ocean-50 hover:text-ink"
+                    >
+                      {service.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-      ) : null}
+        <div className="mt-4 border-t border-line pt-3">
+          <Link
+            href="/roseville-dental-care/"
+            onClick={() => setOpen(false)}
+            className="text-sm font-semibold text-ocean-700 transition hover:text-ocean-800"
+          >
+            View all services →
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
@@ -195,14 +212,39 @@ export function DesktopNav() {
 export function MobileMenu() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [menuPathname, setMenuPathname] = useState(pathname);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
+
+  // Close whenever the route changes by any means (link, Back/Forward).
+  // Adjusting state during render avoids a setState-in-effect cascade.
+  if (menuPathname !== pathname) {
+    setMenuPathname(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     if (!open) return;
 
     const trigger = triggerRef.current;
     const sheet = sheetRef.current;
+
+    // Background content is inert while the modal sheet is open.
+    const inerted: Element[] = [];
+    for (const child of Array.from(document.body.children)) {
+      if (child === sheet || child.hasAttribute("inert")) continue;
+      child.setAttribute("inert", "");
+      inerted.push(child);
+    }
+
+    // The sheet is lg:hidden — close it if the viewport grows past lg so the
+    // body is never left scroll-locked behind an invisible sheet.
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    function onDesktopChange(event: MediaQueryListEvent) {
+      if (event.matches) setOpen(false);
+    }
+    desktop.addEventListener("change", onDesktopChange);
+
     const closeButton = sheet?.querySelector<HTMLButtonElement>(
       "[data-close-menu]",
     );
@@ -232,6 +274,8 @@ export function MobileMenu() {
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("keydown", onKey);
+      desktop.removeEventListener("change", onDesktopChange);
+      for (const element of inerted) element.removeAttribute("inert");
       trigger?.focus({ preventScroll: true });
     };
   }, [open]);
@@ -272,7 +316,10 @@ export function MobileMenu() {
         </button>
       </div>
 
-      <nav className="wrap-wide relative flex-1 overflow-y-auto py-6">
+      <nav
+        aria-label="Mobile"
+        className="wrap-wide relative flex-1 overflow-y-auto py-6"
+      >
         <ul className="grid gap-1">
           {links.map((item) => {
             const active = isCurrent(item.href, pathname);
@@ -293,22 +340,9 @@ export function MobileMenu() {
           })}
           <li>
             <Link
-              href={scheduleHref}
-              onClick={() => setOpen(false)}
-              aria-current={
-                isCurrent(scheduleHref, pathname) ? "page" : undefined
-              }
-              className="mt-2 inline-flex items-center gap-2 py-4 text-sm font-semibold text-ocean-700"
-            >
-              <CalendarCheck className="size-4" aria-hidden="true" />
-              Request an appointment
-            </Link>
-          </li>
-          <li>
-            <Link
               href={emergency.href}
               onClick={() => setOpen(false)}
-              className="inline-flex items-center gap-2 py-2 text-sm font-semibold text-sunset-700"
+              className="mt-2 inline-flex items-center gap-2 py-4 text-sm font-semibold text-sunset-700"
             >
               <HeartPulse className="size-4" aria-hidden="true" />
               {emergency.label}
@@ -318,7 +352,11 @@ export function MobileMenu() {
       </nav>
 
       <div className="wrap-wide relative grid gap-2 pb-[max(2rem,env(safe-area-inset-bottom,0px))] pt-2">
-        <Link href={scheduleHref} className="btn btn-sunset">
+        <Link
+          href={scheduleHref}
+          onClick={() => setOpen(false)}
+          className="btn btn-sunset"
+        >
           <CalendarCheck className="size-4" aria-hidden="true" />
           Request Appointment
         </Link>

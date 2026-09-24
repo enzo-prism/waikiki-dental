@@ -18,7 +18,11 @@ const filters: Array<{ key: "all" | ReviewTheme; label: string }> = [
 
 function ReviewStars() {
   return (
-    <div className="flex gap-0.5 text-gold" aria-label="5 out of 5 stars">
+    <div
+      role="img"
+      className="flex gap-0.5 text-gold"
+      aria-label="5 out of 5 stars"
+    >
       {Array.from({ length: 5 }).map((_, index) => (
         <Star key={index} className="size-4 fill-current" aria-hidden="true" />
       ))}
@@ -62,6 +66,7 @@ export function ReviewExplorer() {
     <div>
       <div
         ref={filtersRef}
+        role="group"
         className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
         aria-label="Filter review highlights"
       >
@@ -92,7 +97,7 @@ export function ReviewExplorer() {
 
       <div
         id="review-highlight-results"
-        className="mt-7 grid min-h-[calc(100svh-10rem)] content-start gap-5 md:min-h-[36rem] md:grid-cols-2"
+        className="mt-7 grid min-h-[270px] content-start gap-5 md:min-h-[36rem] md:grid-cols-2"
       >
         {visibleReviews.map((review) => (
           <article

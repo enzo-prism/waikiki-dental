@@ -23,7 +23,7 @@ export function ChoiceChip({
 }) {
   return (
     <label
-      className={`flex min-h-16 min-w-0 cursor-pointer items-center gap-3 rounded-2xl border px-3.5 py-3 transition duration-200 has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-ocean-100 ${
+      className={`flex min-h-16 min-w-0 cursor-pointer items-center gap-3 rounded-2xl border px-3.5 py-3 transition duration-200 ${
         checked
           ? "border-ocean-600 bg-ocean-50/80 ring-1 ring-inset ring-ocean-200"
           : "border-line bg-cream hover:-translate-y-0.5 hover:border-ocean-300 hover:shadow-soft"

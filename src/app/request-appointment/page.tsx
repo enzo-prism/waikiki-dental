@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AppointmentScheduler } from "@/components/appointment-scheduler";
+import { AppointmentRequest } from "@/components/appointment-scheduler";
 import { JsonLd } from "@/components/page-templates";
 import { createPageMetadata } from "@/lib/metadata";
 
@@ -12,19 +12,13 @@ export const metadata: Metadata = createPageMetadata({
   path: "/request-appointment/",
 });
 
-type Props = {
-  searchParams: Promise<{ reason?: string | string[] }>;
-};
-
-export default async function RequestAppointmentPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const raw = params.reason;
-  const initialReason = Array.isArray(raw) ? raw[0] : raw;
-
+// Static page: `?reason=<key>` is read on the client (see AppointmentRequest),
+// so this route no longer opts into dynamic rendering via searchParams.
+export default function RequestAppointmentPage() {
   return (
     <>
       <JsonLd />
-      <AppointmentScheduler initialReason={initialReason} />
+      <AppointmentRequest />
     </>
   );
 }

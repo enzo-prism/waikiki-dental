@@ -151,7 +151,9 @@ that checkout explicitly:
 
 ```bash
 npm ci
+npm test
 npm run lint
+npx tsc --noEmit
 npm run build
 git status -sb
 git push origin main

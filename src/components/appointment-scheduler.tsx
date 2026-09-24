@@ -1,6 +1,14 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import {
+  Suspense,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { useSearchParams } from "next/navigation";
 import {
   AlertCircle,
   ArrowLeft,
@@ -23,7 +31,6 @@ import { FormProgress } from "@/components/forms/form-progress";
 import { LiveRequestSummary, type SummaryRow } from "@/components/forms/live-summary";
 import { MonthCalendar } from "@/components/forms/month-calendar";
 import { Honeypot, PrivacyConsent, PrivacyNote } from "@/components/forms/privacy-note";
-import { LeadAttributionHiddenFields } from "@/components/lead-attribution-fields";
 import { RequestSuccess } from "@/components/forms/request-success";
 import {
   clearAppointmentDraft,
@@ -32,6 +39,7 @@ import {
   formatShortDate,
   formNetworkError,
   isEmail,
+  isSelectableIso,
   isUsPhone,
   readAppointmentDraft,
   submitFormspree,
@@ -59,6 +67,21 @@ type FormData = {
   notes: string;
   consent: boolean;
 };
+
+type ErrorField =
+  | "patientType"
+  | "reason"
+  | "date"
+  | "timeOfDay"
+  | "name"
+  | "phone"
+  | "email"
+  | "consent";
+
+type ValidationError = { message: string; field: ErrorField };
+
+const PAST_DATE_MESSAGE =
+  "That day is no longer available. Pick another weekday, or choose soonest available.";
 
 const initialData: FormData = {
   patientType: "",
@@ -105,6 +128,24 @@ function subscribeNever() {
   return () => {};
 }
 
+function AppointmentSchedulerFromUrl() {
+  const reason = useSearchParams().get("reason") ?? undefined;
+  return <AppointmentScheduler initialReason={reason} />;
+}
+
+/**
+ * Reads `?reason=` on the client so /request-appointment/ can be prerendered
+ * as a static page. The prerendered HTML is the fallback (the full form with
+ * no reason preselected); the URL-aware form replaces it on the client.
+ */
+export function AppointmentRequest() {
+  return (
+    <Suspense fallback={<AppointmentScheduler />}>
+      <AppointmentSchedulerFromUrl />
+    </Suspense>
+  );
+}
+
 export function AppointmentScheduler({
   initialReason,
 }: {
@@ -122,6 +163,8 @@ export function AppointmentScheduler({
   const [form, setForm] = useState<FormData>(seeded);
   const [step, setStep] = useState(0);
   const [error, setError] = useState("");
+  // Which control the current error belongs to (null for network errors).
+  const [errorField, setErrorField] = useState<ErrorField | null>(null);
   const [status, setStatus] = useState<"idle" | "submitting" | "done">("idle");
   const [gotcha, setGotcha] = useState("");
   const [ready, setReady] = useState(false);
@@ -134,11 +177,15 @@ export function AppointmentScheduler({
 
   if (isClient && !ready) {
     const draft = readAppointmentDraft({ step: 0, form: seeded });
+    // A restored day may have passed (or be tampered with); drop it and send
+    // the visitor back to the day step rather than submitting a stale date.
+    const staleDate = Boolean(draft.form.date) && !isSelectableIso(draft.form.date);
     setForm({
       ...draft.form,
+      date: staleDate ? "" : draft.form.date,
       reason: seeded.reason || (isValidReason(draft.form.reason) ? draft.form.reason : ""),
     });
-    setStep(draft.step);
+    setStep(staleDate ? Math.min(draft.step, 1) : draft.step);
     setReady(true);
   }
 
@@ -179,6 +226,21 @@ export function AppointmentScheduler({
   function update<K extends keyof FormData>(key: K, value: FormData[K]) {
     setForm((current) => ({ ...current, [key]: value }));
     setError("");
+    setErrorField(null);
+  }
+
+  function showError(message: string, field: ErrorField | null = null) {
+    setError(message);
+    setErrorField(field);
+  }
+
+  /** aria-invalid + aria-describedby for the control the error belongs to. */
+  function invalidProps(field: ErrorField) {
+    const invalid = Boolean(error) && errorField === field;
+    return {
+      "aria-invalid": invalid || undefined,
+      "aria-describedby": invalid ? errorId : undefined,
+    } as const;
   }
 
   const reason = appointmentReasons.find((item) => item.key === form.reason);
@@ -226,53 +288,70 @@ export function AppointmentScheduler({
     },
   ];
 
-  function validate(target: number): string {
+  function validate(target: number): ValidationError | null {
+    const fail = (field: ErrorField, message: string) => ({ field, message });
     if (target === 0) {
-      if (!form.patientType) return "Please choose first visit or welcome back.";
-      if (!form.reason) return "Please choose a reason for your visit.";
-      return "";
+      if (!form.patientType)
+        return fail("patientType", "Please choose first visit or welcome back.");
+      if (!form.reason) return fail("reason", "Please choose a reason for your visit.");
+      return null;
     }
     if (target === 1) {
       if (!form.flexible && !form.date)
-        return "Pick a preferred day, or choose soonest available.";
+        return fail("date", "Pick a preferred day, or choose soonest available.");
+      if (!form.flexible && !isSelectableIso(form.date))
+        return fail("date", PAST_DATE_MESSAGE);
       if (!form.timeOfDay)
-        return "Please choose morning, afternoon, or anytime.";
-      return "";
+        return fail("timeOfDay", "Please choose morning, afternoon, or anytime.");
+      return null;
     }
     if (target === 2) {
-      if (form.name.trim().length < 2) return "Please enter your name.";
+      if (form.name.trim().length < 2) return fail("name", "Please enter your name.");
       if (!form.phone.trim())
-        return "Please add a phone number so we can confirm.";
+        return fail("phone", "Please add a phone number so we can confirm.");
       if (!isUsPhone(form.phone))
-        return "Enter a 10-digit US phone number (a leading +1 is okay).";
+        return fail("phone", "Enter a 10-digit US phone number (a leading +1 is okay).");
       if (form.email && !isEmail(form.email))
-        return "That email address doesn’t look right.";
+        return fail("email", "That email address doesn’t look right.");
       if (!form.consent)
-        return "Please confirm this request doesn’t include sensitive details.";
+        return fail(
+          "consent",
+          "Please confirm this request doesn’t include sensitive details.",
+        );
     }
-    return "";
+    return null;
   }
 
   function goNext() {
-    const message = validate(step);
-    if (message) {
-      setError(message);
+    // Re-check earlier steps before sending: a day chosen before midnight
+    // (or restored from a draft) can be in the past by the time of submit.
+    const earlier = step === 2 ? [0, 1].find((target) => validate(target)) : undefined;
+    if (earlier !== undefined) {
+      const problem = validate(earlier)!;
+      if (problem.field === "date") update("date", "");
+      setStep(earlier);
+      showError(problem.message, problem.field);
       return;
     }
-    setError("");
+    const problem = validate(step);
+    if (problem) {
+      showError(problem.message, problem.field);
+      return;
+    }
+    showError("");
     if (step < 2) setStep((value) => value + 1);
     else void submit();
   }
 
   function goBack() {
     if (status === "submitting") return;
-    setError("");
+    showError("");
     setStep((value) => Math.max(0, value - 1));
   }
 
   function jumpTo(target: number) {
     if (status === "submitting" || target > step) return;
-    setError("");
+    showError("");
     setStep(target);
   }
 
@@ -280,7 +359,7 @@ export function AppointmentScheduler({
     if (isSubmittingRef.current) return;
     isSubmittingRef.current = true;
     setStatus("submitting");
-    setError("");
+    showError("");
 
     if (gotcha.trim()) {
       setStatus("done");
@@ -317,7 +396,7 @@ export function AppointmentScheduler({
       if (!response.ok) {
         isSubmittingRef.current = false;
         setStatus("idle");
-        setError(formNetworkError(response.status, "appointment"));
+        showError(formNetworkError(response.status, "appointment"));
         return;
       }
 
@@ -326,7 +405,7 @@ export function AppointmentScheduler({
     } catch {
       isSubmittingRef.current = false;
       setStatus("idle");
-      setError(
+      showError(
         "We couldn’t send your request. Check your connection and try again, or call the office.",
       );
     }
@@ -339,7 +418,7 @@ export function AppointmentScheduler({
       reason: isValidReason(initialReason) ? initialReason! : "",
     });
     setStep(0);
-    setError("");
+    showError("");
     setGotcha("");
     setStatus("idle");
     clearAppointmentDraft();
@@ -445,6 +524,9 @@ export function AppointmentScheduler({
         </div>
 
         <form
+          // POST keeps name/phone/email out of the URL if someone submits
+          // before hydration; the JS handler below always prevents it.
+          method="post"
           aria-label="Request an appointment"
           aria-busy={status === "submitting"}
           className="mb-32 min-w-0 lg:mb-0"
@@ -454,7 +536,6 @@ export function AppointmentScheduler({
           }}
           noValidate
         >
-          <LeadAttributionHiddenFields />
           <div className="card min-w-0 overflow-hidden shadow-soft">
           <FormProgress step={step} onJump={jumpTo} />
 
@@ -484,7 +565,10 @@ export function AppointmentScheduler({
               <div className="mt-7">
                 {step === 0 ? (
                   <div className="grid gap-8">
-                    <fieldset className="min-w-0">
+                    <fieldset
+                      className="min-w-0"
+                      {...invalidProps("patientType")}
+                    >
                       <legend className="text-sm font-medium text-ink">
                         Are you new to Waikiki Dental?
                       </legend>
@@ -511,7 +595,7 @@ export function AppointmentScheduler({
                       </div>
                     </fieldset>
 
-                    <fieldset className="min-w-0">
+                    <fieldset className="min-w-0" {...invalidProps("reason")}>
                       <legend className="text-sm font-medium text-ink">
                         What can we help with?
                       </legend>
@@ -565,7 +649,7 @@ export function AppointmentScheduler({
 
                 {step === 1 ? (
                   <div className="grid gap-7">
-                    <fieldset className="min-w-0">
+                    <fieldset className="min-w-0" {...invalidProps("date")}>
                       <legend className="text-sm font-medium text-ink">
                         Preferred day
                       </legend>
@@ -597,7 +681,7 @@ export function AppointmentScheduler({
                       </div>
                     </fieldset>
 
-                    <fieldset className="min-w-0">
+                    <fieldset className="min-w-0" {...invalidProps("timeOfDay")}>
                       <legend className="text-sm font-medium text-ink">
                         Time of day
                       </legend>
@@ -641,9 +725,7 @@ export function AppointmentScheduler({
                             placeholder="Your name"
                             autoComplete="name"
                             maxLength={120}
-                            aria-invalid={
-                              error.toLowerCase().includes("name") || undefined
-                            }
+                            {...invalidProps("name")}
                           />
                         </span>
                       </label>
@@ -664,9 +746,7 @@ export function AppointmentScheduler({
                             placeholder="(916) …"
                             autoComplete="tel"
                             maxLength={32}
-                            aria-invalid={
-                              error.toLowerCase().includes("phone") || undefined
-                            }
+                            {...invalidProps("phone")}
                           />
                         </span>
                       </label>
@@ -689,9 +769,7 @@ export function AppointmentScheduler({
                           placeholder="you@email.com"
                           autoComplete="email"
                           maxLength={254}
-                          aria-invalid={
-                            error.toLowerCase().includes("email") || undefined
-                          }
+                          {...invalidProps("email")}
                         />
                       </span>
                     </label>
@@ -718,6 +796,8 @@ export function AppointmentScheduler({
                     <PrivacyConsent
                       checked={form.consent}
                       onChange={(value) => update("consent", value)}
+                      invalid={Boolean(error) && errorField === "consent"}
+                      describedBy={errorId}
                     >
                       {formPrivacy.requestConsent}
                     </PrivacyConsent>

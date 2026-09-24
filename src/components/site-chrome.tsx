@@ -13,7 +13,10 @@ import { DesktopNav, MobileMenu } from "./site-nav";
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-cream/90 backdrop-blur-xl">
-      <nav className="wrap-wide flex items-center justify-between gap-6 py-3.5">
+      <nav
+        aria-label="Primary"
+        className="wrap-wide flex items-center justify-between gap-6 py-3.5"
+      >
         <Link
           href="/"
           className="flex min-w-0 shrink-0 items-center"
@@ -53,7 +56,7 @@ export function SiteFooter() {
         <div>
           <Link
             href="/"
-            className="group inline-flex max-w-full flex-col gap-4 rounded-[1.75rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ocean-300 focus-visible:ring-offset-4 focus-visible:ring-offset-deep"
+            className="group inline-flex max-w-full flex-col gap-4 rounded-[1.75rem] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ocean-300 focus-visible:ring-offset-4 focus-visible:ring-offset-deep"
             aria-label="Waikiki Dental — home"
           >
             <span className="inline-flex w-full max-w-[17rem] rounded-[1.75rem] border border-cream/14 bg-gradient-to-br from-cream via-cream to-ocean-50 px-5 py-4 shadow-[0_20px_50px_rgba(2,13,34,0.28)] transition duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_24px_60px_rgba(2,13,34,0.34)] motion-reduce:transform-none motion-reduce:transition-none">
@@ -83,8 +86,11 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div>
-          <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ocean-300">
+        <nav aria-labelledby="footer-explore-heading">
+          <h2
+            id="footer-explore-heading"
+            className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ocean-300"
+          >
             Explore
           </h2>
           <ul className="mt-5 grid gap-2.5 text-sm">
@@ -116,7 +122,7 @@ export function SiteFooter() {
               </Link>
             </li>
           </ul>
-        </div>
+        </nav>
 
         <div>
           <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ocean-300">

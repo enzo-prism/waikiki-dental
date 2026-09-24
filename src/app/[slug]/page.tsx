@@ -14,7 +14,7 @@ import { createPageMetadata } from "@/lib/metadata";
 import {
   findService,
   pageRoutes,
-  serviceAliases,
+  reviewStats,
   site,
 } from "@/lib/site";
 
@@ -50,37 +50,17 @@ const staticPages: Record<
       "New to Waikiki Dental? Insurance, payment options, CareCredit financing, and online forms — everything sorted before your first Roseville visit.",
   },
   "patient-testimonials": {
-    title: "4.9-Star Google Reviews",
-    description:
-      "Explore Waikiki Dental's 4.9-star Google rating, 426 patient reviews, recurring themes, and verified review highlights from Roseville patients.",
+    title: `${reviewStats.rating.toFixed(1)}-Star Google Reviews`,
+    description: `Explore Waikiki Dental's ${reviewStats.rating.toFixed(1)}-star Google rating, ${reviewStats.count} patient reviews, recurring themes, and verified review highlights from Roseville patients.`,
   },
   "contact-waikiki-dental": {
     title: "Contact Our Roseville Dental Office",
-    description:
-      "Contact Waikiki Dental in Roseville, CA — request an appointment online, call or text (916) 772-6248, send a message, or stop by 1271 Pleasant Grove Blvd.",
+    description: `Contact Waikiki Dental in Roseville, CA — request an appointment online, call or text ${site.phone}, send a message, or stop by ${site.addressParts.street}`,
   },
   orthodontics: {
     title: "Orthodontics & Invisalign in Roseville, CA",
     description:
       "Compare Invisalign clear aligners and traditional braces at Waikiki Dental in Roseville, with a plan built around your smile, bite, and daily routine.",
-  },
-};
-
-const aliasPages: Record<string, { title: string; description: string }> = {
-  "roseville-family-dentist": {
-    title: "Family Dentist in Roseville, CA",
-    description:
-      "Choose unhurried family dentistry in Roseville, with preventive exams, careful cleanings, honest guidance, and comfort-focused care at Waikiki Dental.",
-  },
-  "family-dentistry": {
-    title: "Family Dentistry in Roseville, CA",
-    description:
-      "Explore gentle family dentistry in Roseville for children and adults, including preventive exams, cleanings, digital X-rays, and personalized treatment planning.",
-  },
-  "cosmetic-dentistry": {
-    title: "Cosmetic Dentistry in Roseville, CA",
-    description:
-      "Explore cosmetic dentistry in Roseville, including whitening, veneers, Invisalign, and personalized smile makeover planning with Dr. Narodovich.",
   },
 };
 
@@ -126,6 +106,10 @@ const serviceMetadata: Record<string, { title: string; description: string }> = 
 // must be excluded here so the catch-all doesn't claim the same path.
 const reservedRoutes = new Set(["request-appointment"]);
 
+// Only the prerendered slugs exist; anything else 404s without rendering a
+// self-canonical page. Legacy aliases are redirected in next.config.ts.
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return pageRoutes
     .filter((slug) => slug && !reservedRoutes.has(slug))
@@ -135,28 +119,24 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = staticPages[slug];
-  const aliasPage = aliasPages[slug];
   const service = findService(slug);
   const serviceSeo = serviceMetadata[slug];
 
   const title =
     page?.title ??
-    aliasPage?.title ??
     serviceSeo?.title ??
     (service ? `${service.title} in Roseville, CA` : "Roseville Dental Care");
   const description =
     page?.description ??
-    aliasPage?.description ??
     serviceSeo?.description ??
     (service
       ? `${service.summary} Care is available at Waikiki Dental in Roseville, CA.`
       : site.description);
-  const canonicalSlug = serviceAliases[slug] ?? slug;
 
   return createPageMetadata({
     title,
     description,
-    path: `/${canonicalSlug}/`,
+    path: `/${slug}/`,
   });
 }
 

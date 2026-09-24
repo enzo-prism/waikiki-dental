@@ -35,10 +35,32 @@ export type AppointmentDraft<T> = {
   form: T;
 };
 
+/**
+ * Returns the requested Web Storage area, or null when it is unavailable.
+ * Blocked cookies/site data make the `window.sessionStorage` getter itself
+ * throw a SecurityError, so the property access must sit inside the try.
+ */
+export function safeStorage(kind: "localStorage" | "sessionStorage"): Storage | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window[kind] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function removeDraftQuietly() {
+  try {
+    safeStorage("sessionStorage")?.removeItem(APPOINTMENT_STORAGE_KEY);
+  } catch {
+    // Storage is blocked or broken; there is nothing to clear.
+  }
+}
+
 export function readAppointmentDraft<T>(fallback: AppointmentDraft<T>) {
   if (typeof window === "undefined") return fallback;
   try {
-    const raw = sessionStorage.getItem(APPOINTMENT_STORAGE_KEY);
+    const raw = safeStorage("sessionStorage")?.getItem(APPOINTMENT_STORAGE_KEY);
     if (!raw) return fallback;
     const saved = JSON.parse(raw) as Partial<AppointmentDraft<T>>;
     return {
@@ -49,17 +71,25 @@ export function readAppointmentDraft<T>(fallback: AppointmentDraft<T>) {
       form: { ...fallback.form, ...saved.form },
     };
   } catch {
-    sessionStorage.removeItem(APPOINTMENT_STORAGE_KEY);
+    removeDraftQuietly();
     return fallback;
   }
 }
 
+/** Best effort: a full or blocked sessionStorage must never break the form. */
 export function writeAppointmentDraft<T>(draft: AppointmentDraft<T>) {
-  sessionStorage.setItem(APPOINTMENT_STORAGE_KEY, JSON.stringify(draft));
+  const storage = safeStorage("sessionStorage");
+  if (!storage) return false;
+  try {
+    storage.setItem(APPOINTMENT_STORAGE_KEY, JSON.stringify(draft));
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function clearAppointmentDraft() {
-  sessionStorage.removeItem(APPOINTMENT_STORAGE_KEY);
+  removeDraftQuietly();
 }
 
 export function toLocalIso(date: Date) {
@@ -98,6 +128,24 @@ export function startOfToday() {
 export function isWeekend(date: Date) {
   const day = date.getDay();
   return day === 0 || day === 6;
+}
+
+const LOCAL_ISO_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * The calendar's single "can this day be requested?" rule: today or later,
+ * and a weekday. `today` defaults to the visitor's local midnight.
+ */
+export function isSelectableDate(date: Date, today = startOfToday()) {
+  return date >= today && !isWeekend(date);
+}
+
+/** Validates a stored/typed YYYY-MM-DD preferred date against the same rule. */
+export function isSelectableIso(iso: string, today = startOfToday()) {
+  if (!LOCAL_ISO_RE.test(iso)) return false;
+  const date = parseLocalIso(iso);
+  if (Number.isNaN(date.getTime()) || toLocalIso(date) !== iso) return false;
+  return isSelectableDate(date, today);
 }
 
 export function isEmail(value: string) {

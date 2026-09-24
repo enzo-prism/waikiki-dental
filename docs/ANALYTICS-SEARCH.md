@@ -53,8 +53,19 @@ privacy-reduced manual page view on each public route change. It:
 - reports testimonials as `/reviews`, practice pages as `/practice`, blog
   articles as `/education`, and treatment pages as `/services`;
 - excludes `/privacy-practices`;
-- clears the page referrer; and
+- clears the page referrer;
+- sets the same grouped `page_location`, fixed `page_title`, and empty
+  `page_referrer` in `gtag("config")` and with `gtag("set")` before every page
+  view, so gtag's automatic hits (such as `user_engagement`) never carry the
+  raw URL, query string, click IDs, or treatment page titles; and
 - disables Google Signals and ad-personalization signals.
+
+The production Content-Security-Policy in `next.config.ts` allows GA4 script
+and collection origins (`www.googletagmanager.com`, `*.google-analytics.com`,
+`*.analytics.google.com`, and `www.google.com`, which GA4 also beacons to).
+If GA or Formspree endpoints change, update the CSP and
+`src/lib/next-config-headers.test.ts` together, then confirm there are no
+CSP violations in the browser console on `waikikidental.com`.
 
 Do not add form values, names, email addresses, phone numbers, treatment or
 appointment reasons, notes, UTM values, click IDs, user IDs, or custom lead

@@ -75,4 +75,30 @@ describe("next.config redirects", () => {
       { destination: "/request-appointment/", permanent: true },
     );
   });
+
+  it("301s every legacy service alias instead of serving a duplicate page", async () => {
+    const redirects = await nextConfig.redirects!();
+    const aliases = {
+      "/family-dentistry/": "/cleanings-exams/",
+      "/roseville-family-dentist/": "/cleanings-exams/",
+      "/cosmetic-dentistry/": "/smile-makeover/",
+    };
+    for (const [source, destination] of Object.entries(aliases)) {
+      const rule = redirects.find((candidate) => candidate.source === source);
+      assert.deepEqual(
+        { destination: rule?.destination, permanent: rule?.permanent },
+        { destination, permanent: true },
+        source,
+      );
+    }
+  });
+
+  it("keeps the legacy sedation article redirected to IV sedation", async () => {
+    const redirects = await nextConfig.redirects!();
+    const article = redirects.find(
+      (rule) =>
+        rule.source === "/dental-blog/2746154-say-goodbye-to-dental-anxiety-with-iv-sedation/",
+    );
+    assert.equal(article?.destination, "/iv-sedation/");
+  });
 });

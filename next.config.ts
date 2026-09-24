@@ -1,7 +1,75 @@
 import type { NextConfig } from "next";
 
+/** The only host that should be indexed; every other host gets noindex. */
+export const productionHost = "waikikidental.com";
+
+/**
+ * Production Content-Security-Policy. The site is fully static, so there are
+ * no per-request nonces: Next's inline bootstrap scripts and the inline
+ * JSON-LD need 'unsafe-inline'. External origins are limited to GA4
+ * (gtag.js + collection) and Formspree. Vercel Web Analytics loads from
+ * /_vercel/insights on this origin in production, so 'self' covers it.
+ */
+export function contentSecurityPolicy() {
+  const googleAnalytics = [
+    "https://www.googletagmanager.com",
+    "https://*.google-analytics.com",
+    "https://*.analytics.google.com",
+    // GA4 also beacons to www.google.com/g/collect; without it hits are
+    // blocked (verified against a production build on 2026-09-24).
+    "https://www.google.com",
+  ];
+  const directives: Record<string, string[]> = {
+    "default-src": ["'self'"],
+    "script-src": ["'self'", "'unsafe-inline'", "https://www.googletagmanager.com"],
+    "style-src": ["'self'", "'unsafe-inline'"],
+    "img-src": ["'self'", "data:", "blob:", ...googleAnalytics],
+    "font-src": ["'self'"],
+    "media-src": ["'self'"],
+    "connect-src": ["'self'", ...googleAnalytics, "https://formspree.io"],
+    "form-action": ["'self'", "https://formspree.io"],
+    "object-src": ["'none'"],
+    "base-uri": ["'self'"],
+    "frame-ancestors": ["'none'"],
+    "upgrade-insecure-requests": [],
+  };
+  return Object.entries(directives)
+    .map(([name, values]) => [name, ...values].join(" "))
+    .join("; ");
+}
+
+export const securityHeaders = [
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value:
+      "accelerometer=(), browsing-topics=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()",
+  },
+];
+
 const nextConfig: NextConfig = {
   trailingSlash: true,
+  poweredByHeader: false,
+  async headers() {
+    // CSP is production-only: dev HMR and React's dev tooling need eval and
+    // websocket connections that the production policy intentionally blocks.
+    const csp =
+      process.env.NODE_ENV === "development"
+        ? []
+        : [{ key: "Content-Security-Policy", value: contentSecurityPolicy() }];
+    return [
+      { source: "/:path*", headers: [...securityHeaders, ...csp] },
+      {
+        // Preview/*.vercel.app hosts must never be indexed. Host values are
+        // anchored regexes matched against the port-less hostname.
+        source: "/:path*",
+        missing: [{ type: "host", value: productionHost.replace(/\./g, "\\.") }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+    ];
+  },
   // Imagery is self-hosted in /public/media, so no remote patterns are needed.
   async redirects() {
     return [
@@ -13,6 +81,7 @@ const nextConfig: NextConfig = {
       },
       { source: "/cosmetic-dentistry/", destination: "/smile-makeover/", permanent: true },
       { source: "/roseville-family-dentist/", destination: "/cleanings-exams/", permanent: true },
+      { source: "/family-dentistry/", destination: "/cleanings-exams/", permanent: true },
       {
         source: "/dental-blog/2746154-say-goodbye-to-dental-anxiety-with-iv-sedation/",
         destination: "/iv-sedation/",

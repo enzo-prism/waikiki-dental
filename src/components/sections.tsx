@@ -122,6 +122,7 @@ export function AggregateRating({
         {hasCount
           ? `${reviewStats.count} ${reviewStats.source} reviews`
           : `Read our ${reviewStats.source} reviews`}
+        <span className="sr-only"> (opens in a new tab)</span>
       </a>
     </div>
   );
@@ -303,7 +304,7 @@ export function HomeReviewProof() {
                 className="inline-flex items-center gap-2 rounded-full border border-cream/15 bg-cream/[0.06] px-3.5 py-2 text-sm text-cream/80"
               >
                 <strong className="font-semibold text-cream">{topic.mentions}</strong>
-                {topic.label.toLowerCase()} mentions
+                mentions of “{topic.label}”
               </span>
             ))}
           </div>
@@ -339,7 +340,7 @@ export function TeamWelcome() {
               src={teamStory.groupImage}
               alt={teamStory.groupImageAlt}
               fill
-              sizes="(max-width: 1024px) 100vw, 53vw"
+              sizes="(max-width: 1024px) min(100vw, 620px), 620px"
               className="object-cover object-center"
             />
           </div>
@@ -404,6 +405,7 @@ export function TeamWelcome() {
             >
               More from the team
               <ArrowUpRight className="size-4" aria-hidden="true" />
+              <span className="sr-only">(opens in a new tab)</span>
             </a>
           </div>
         </div>

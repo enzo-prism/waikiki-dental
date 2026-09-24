@@ -5,6 +5,8 @@ import {
   buildAppointmentFormspreePayload,
   buildContactFormspreePayload,
   isEmail,
+  isSelectableDate,
+  isSelectableIso,
   isUsPhone,
   resolveFormspreeEndpoint,
   submitFormspree,
@@ -51,6 +53,26 @@ describe("contact validation helpers", () => {
     assert.equal(isEmail(" patient@example.com "), true);
     assert.equal(isEmail("patient@"), false);
     assert.equal(isEmail(`${"a".repeat(250)}@x.com`), false);
+  });
+});
+
+describe("preferred date rules", () => {
+  // Thursday, September 24, 2026 (local midnight).
+  const today = new Date(2026, 8, 24);
+
+  it("allows today and later weekdays", () => {
+    assert.equal(isSelectableIso("2026-09-24", today), true);
+    assert.equal(isSelectableIso("2026-09-28", today), true);
+    assert.equal(isSelectableDate(new Date(2026, 9, 1), today), true);
+  });
+
+  it("rejects past days, weekends, and malformed values", () => {
+    assert.equal(isSelectableIso("2026-09-23", today), false);
+    assert.equal(isSelectableIso("2026-09-26", today), false);
+    assert.equal(isSelectableIso("2026-09-27", today), false);
+    assert.equal(isSelectableIso("2026-02-30", today), false);
+    assert.equal(isSelectableIso("next tuesday", today), false);
+    assert.equal(isSelectableIso("", today), false);
   });
 });
 

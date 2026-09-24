@@ -11,6 +11,7 @@ import {
 import {
   absoluteUrl,
   artwork,
+  dentistId,
   dentistJsonLd,
   doctor,
   featuredServices,
@@ -58,12 +59,7 @@ function ServiceJsonLd({ service }: { service: Service }) {
       description: service.description,
       url,
       areaServed: "Roseville, CA",
-      provider: {
-        "@type": "Dentist",
-        name: site.name,
-        url: site.baseUrl,
-        telephone: site.phone,
-      },
+      provider: { "@id": dentistId },
     },
     {
       "@context": "https://schema.org",
@@ -449,7 +445,7 @@ export function OrthodonticsPage() {
         "Invisalign clear aligners and traditional braces planned around alignment, bite, and daily life in Roseville, CA.",
       url,
       areaServed: "Roseville, CA",
-      provider: { "@type": "Dentist", name: site.name, url: site.baseUrl },
+      provider: { "@id": dentistId },
     },
     {
       "@context": "https://schema.org",
@@ -706,6 +702,10 @@ export function NewPatientsPage() {
 
 export function TestimonialsPage() {
   const featuredTopics = reviewTopics.slice(0, 4);
+  const rating = reviewStats.rating.toFixed(1);
+  const fourOrFiveStarShare = Math.round(
+    (reviewStats.fourOrFiveStarCount / reviewStats.count) * 100,
+  );
   const supportingTopics = reviewTopics.slice(4);
   const corpusStats = [
     {
@@ -726,7 +726,7 @@ export function TestimonialsPage() {
     {
       value: reviewStats.fourOrFiveStarCount,
       label: "Four- or five-star",
-      detail: "97% of the full public review record",
+      detail: `${fourOrFiveStarShare}% of the full public review record`,
     },
   ];
 
@@ -738,10 +738,10 @@ export function TestimonialsPage() {
           <div>
             <Eyebrow className="text-gold-soft">Patient reviews</Eyebrow>
             <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-cream sm:text-6xl">
-              426 reviews. We read the entire public record.
+              {reviewStats.count} reviews. We read the entire public record.
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
-              Every public rating and all 323 written experiences were reviewed,
+              Every public rating and all {reviewStats.writtenReviewCount} written experiences were reviewed,
               then organized here into the patterns that matter most to patients.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -767,10 +767,10 @@ export function TestimonialsPage() {
                 <p className="eyebrow text-gold-soft">Google rating</p>
                 <div className="mt-3 flex items-end gap-3">
                   <span className="font-serif text-7xl font-medium leading-none text-cream">
-                    {reviewStats.rating.toFixed(1)}
+                    {rating}
                   </span>
                   <div className="pb-1.5">
-                    <div className="flex gap-1 text-gold-soft" aria-label="4.9 out of 5 stars">
+                    <div className="flex gap-1 text-gold-soft" aria-label={`${rating} out of 5 stars`}>
                       {Array.from({ length: 5 }).map((_, index) => (
                         <Star key={index} className="size-4 fill-current" aria-hidden="true" />
                       ))}
@@ -871,7 +871,7 @@ export function TestimonialsPage() {
                 >
                   {topic.mentions}
                 </p>
-                <h2 className="mt-4 font-serif text-xl font-medium">{topic.label}</h2>
+                <h3 className="mt-4 font-serif text-xl font-medium">{topic.label}</h3>
                 <p className={`mt-2 text-sm leading-6 ${index === 0 ? "text-cream/70" : "text-ink-muted"}`}>
                   mentions in Google reviews
                 </p>
@@ -932,12 +932,6 @@ export function ContactPage() {
       <VisitPanel headingLevel="h1" />
     </>
   );
-}
-
-export function SedationArticlePage() {
-  const service = findService("iv-sedation");
-  if (!service) return null;
-  return <ServicePage service={service} />;
 }
 
 export function NotFoundMarketing() {
