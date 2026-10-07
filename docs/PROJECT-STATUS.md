@@ -1,13 +1,16 @@
 # Project status
 
-Last reviewed: September 24, 2026
+Last reviewed: October 7, 2026
 
 ## Current production baseline
 
 - Production: <https://waikikidental.com/>
 - Source of truth: GitHub `main`
-- Current production baseline: service-menu release, September 23, 2026
-  (feature commit `932e7ef`)
+- Current production baseline: October seasonal layer, October 7, 2026
+  (PR #8 `d31ed92`)
+- Earlier releases: lab-made crown copy and service-menu guard test (PR #7
+  `cdc35c0`, October 6); audit fixes (`43dfcbe`, September 24); service-menu
+  release (`932e7ef`, September 23)
 - Public-domain launch baseline: `6772636` (September 1, 2026)
 - Vercel project: `waikiki-dental-preview`
 - Scheduling: every appointment CTA remains on-site at
@@ -58,6 +61,10 @@ ghost-tooth) switches itself on October 1–31 Pacific and off on November 1
 with no redeploy. Preview with `?season=halloween`; opt out with
 `?season=off`. Rules and scope are in `AGENTS.md` ("Seasonal layer").
 
+After November 1, 2026, set `activeSeason` to `null` so the dormant head
+script stops shipping. Next year needs a new `SeasonalTheme` id and dates
+plus a versioned `public/seasonal/<id>/` folder.
+
 ## Verification completed
 
 - ESLint passes.
@@ -102,8 +109,13 @@ engineering work that is intentionally deferred.
 5. **Legacy URLs without a trailing slash take two redirect hops** (for
    example `/family-dentistry` → `/family-dentistry/` → `/cleanings-exams/`).
    With `trailingSlash: true`, Next unshifts its built-in trailing-slash
-   redirect ahead of custom `redirects()` (`lib/load-custom-routes.js`), so a
-   single hop would need per-rule duplicates without the slash.
+   redirect ahead of custom `redirects()` (`lib/load-custom-routes.js`).
+   October 7, 2026: slashless twins in `vercel.json` `redirects` were tried on
+   a preview deploy (PR #9) and do NOT help: Vercel's Next.js routes still
+   apply the trailing-slash redirect first. The only remaining fix is
+   `skipTrailingSlashRedirect` plus slash handling in a proxy, which would put
+   a function in front of every request on an otherwise fully static site;
+   not worth it, since search engines follow both 308s.
 
 ### Fixed in the September 24, 2026 audit pass
 
