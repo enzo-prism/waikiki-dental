@@ -52,6 +52,13 @@ export const securityHeaders = [
 const nextConfig: NextConfig = {
   trailingSlash: true,
   poweredByHeader: false,
+  experimental: {
+    // Next 16.3 turns Turbopack's build cache on by default. On Vercel, the
+    // restored cache compiled a stale globals.css: new Tailwind utilities,
+    // but the previous commit's hand-written CSS (preview of PR #11,
+    // 2026-10-07). Builds take ~40s, so correctness wins over a warm cache.
+    turbopackFileSystemCacheForBuild: false,
+  },
   async headers() {
     // CSP is production-only: dev HMR and React's dev tooling need eval and
     // websocket connections that the production policy intentionally blocks.
