@@ -38,6 +38,7 @@ import {
 import { AmbientVideo } from "./ambient-video";
 import { DoctorPortrait } from "./brand";
 import { ReviewExplorer } from "./review-explorer";
+import { SeasonalNotFoundArt } from "./seasonal";
 
 export function JsonLd() {
   return (
@@ -938,6 +939,7 @@ export function NotFoundMarketing() {
   return (
     <section className="bg-background py-28">
       <div className="wrap relative max-w-2xl text-center">
+        <SeasonalNotFoundArt />
         <Eyebrow className="justify-center">404 · Page not found</Eyebrow>
         <h1 className="mt-4 text-balance font-serif text-5xl font-medium tracking-tight text-ink">
           Let’s get you back to your smile.

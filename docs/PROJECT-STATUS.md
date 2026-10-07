@@ -50,6 +50,14 @@ See [`MEDIA-PROVENANCE.md`](MEDIA-PROVENANCE.md) for source links and the full
 editorial boundary. The media audit and responsive screenshots are in
 [`audits/2026-08-25-media-experience/`](audits/2026-08-25-media-experience/).
 
+## Seasonal layer
+
+October 2026: a Halloween layer (Harvest Tide hero, a once-per-session bat
+fly-by, amber underline draw-in, pumpkin-hibiscus favicon, and a 404
+ghost-tooth) switches itself on October 1–31 Pacific and off on November 1
+with no redeploy. Preview with `?season=halloween`; opt out with
+`?season=off`. Rules and scope are in `AGENTS.md` ("Seasonal layer").
+
 ## Verification completed
 
 - ESLint passes.

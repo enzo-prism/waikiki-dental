@@ -12,6 +12,8 @@ export function WaveUnderline({ className = "" }: { className?: string }) {
     >
       <path
         d="M3 9 q22.5 -9 45 0 t45 0 t45 0 t42 0"
+        // Normalized so the seasonal draw-in can animate the dash (globals.css).
+        pathLength={1}
         stroke="currentColor"
         strokeWidth="3.2"
         strokeLinecap="round"

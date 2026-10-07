@@ -54,6 +54,10 @@ class Palette:
     horizon: float
     sun_x: float
     sun_strength: float
+    # Disc radius and how far its centre sits above the horizon (fractions of
+    # the canvas height). The defaults are the original Tide sun.
+    sun_radius: float = 0.05
+    sun_lift: float = 0.028
 
 
 DAY = Palette(
@@ -106,6 +110,38 @@ NIGHT = Palette(
     horizon=0.56,
     sun_x=0.70,
     sun_strength=0.62,
+)
+
+
+# Seasonal (October): the same horizon at dusk, with a harvest moon rising
+# where the sun sets. Violet sky, an ember band on the horizon, and a warm
+# moon path across a deep sea; the edges still dissolve into `deep` navy.
+HARVEST = Palette(
+    sky=(
+        (0.00, "#0b2140"),
+        (0.20, "#101f45"),
+        (0.34, "#1f2a5a"),
+        (0.44, "#3d3466"),
+        (0.50, "#7a4a6a"),
+        (0.53, "#c9764f"),
+        (0.55, "#e89a4c"),
+        (0.56, "#d27a45"),
+    ),
+    sea=(
+        (0.56, "#3b4a7a"),
+        (0.60, "#22355f"),
+        (0.70, "#142849"),
+        (0.85, "#0d2244"),
+        (1.00, "#0b2140"),
+    ),
+    sun_core="#ffdca0",
+    sun_halo="#e58c3e",
+    glitter="#ffd08a",
+    horizon=0.56,
+    sun_x=0.64,
+    sun_strength=1.0,
+    sun_radius=0.068,
+    sun_lift=0.05,
 )
 
 
@@ -242,8 +278,8 @@ class Renderer:
         colour *= (1 + 0.035 * mottle * (1.2 - 0.4 * (y > horizon)))[..., None]
 
         # A diffused sun resting on the horizon — soft, painterly edge.
-        sun_y = horizon - 0.028
-        radius = 0.05 * (1 + 0.07 * breath)
+        sun_y = horizon - p.sun_lift
+        radius = p.sun_radius * (1 + 0.07 * breath)
         dy = y - sun_y
         r = np.sqrt(self.sun_dx**2 + dy**2)
         edge_noise = 0.006 * warp + 0.003 * mottle
@@ -374,18 +410,30 @@ def social_card() -> None:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--still", action="store_true", help="render posters only")
+    parser.add_argument(
+        "--only",
+        help="render just this variant (e.g. tide-harvest); skips the share card",
+    )
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
 
-    variants = [
-        ("tide", Renderer(1200, 1200, DAY)),
-        ("tide-night", Renderer(1600, 1000, NIGHT)),
-    ]
-    for name, renderer in variants:
+    variants = {
+        "tide": lambda: Renderer(1200, 1200, DAY),
+        "tide-night": lambda: Renderer(1600, 1000, NIGHT),
+        # October seasonal hero (see src/lib/seasonal.ts).
+        "tide-harvest": lambda: Renderer(1200, 1200, HARVEST),
+    }
+    if args.only and args.only not in variants:
+        raise SystemExit(f"unknown variant {args.only!r}; choose from {', '.join(variants)}")
+    for name, make in variants.items():
+        if args.only and name != args.only:
+            continue
+        renderer = make()
         save_poster(renderer, OUT / f"{name}-poster.jpg")
         if not args.still:
             encode(renderer, OUT / f"{name}-loop")
-    social_card()
+    if not args.only:
+        social_card()
 
 
 if __name__ == "__main__":

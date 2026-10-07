@@ -52,6 +52,17 @@ Homepage `VisitPanel` must use `showForm={false}` (navy appointment card). Do no
 
 Every image is either real photography of this practice (Dr. Mike's portrait, the team, the office) or original abstract art. Never add AI-generated or stock people, patients, or treatment rooms. The "Tide" artwork (homepage hero, IV sedation hero, share card) is rendered by `scripts/generate-abstract-art.py` into `public/media/art/` and `public/social/`; play loops only through `AmbientVideo`, which keeps the poster for reduced-motion/data-saver visitors and a visible pause button. Provenance: `docs/MEDIA-PROVENANCE.md`.
 
+## Seasonal layer (October)
+
+Small, optional delight on top of the design system, never a re-theme. The current layer is Halloween (`halloween-2026`, October 1–31 on the practice's America/Los_Angeles calendar), configured in `src/lib/seasonal.ts`.
+
+- **Gating:** an inline `<head>` script (`SeasonScript`, `src/components/seasonal.tsx`) sets `<html data-wd-season="halloween">` before first paint while the season is in range, so it switches on and off without a redeploy and never flashes or shifts layout. All seasonal CSS (end of `globals.css`) is keyed off that attribute, so nothing renders or downloads out of season. Set `activeSeason` to `null` to ship no script at all.
+- **Preview / opt-out:** `?season=halloween` previews it for the rest of the tab session (even out of season), `?season=off` keeps it off in that browser, `?season=auto` resets.
+- **Inventory:** the homepage hero swaps Tide for "Harvest Tide" (a harvest moon rising over the same Pacific, `AmbientVideo` `seasonal` prop); three bats lift off the moon once per session when the art is on screen (`HarvestBats`); the "a deep breath." underline turns amber and draws itself in; the SVG favicon becomes a pumpkin-hibiscus (`SeasonalFavicon`); and the 404 page shows a ghost-tooth over the night Tide. Nothing else changes.
+- **Never decorate** CTAs, the phone number, ratings or reviews, forms, `/request-appointment/`, contact, `/dental-emergencies/`, `/iv-sedation/`, or privacy pages. Keep the tone friendly for anxious patients: no skulls, gore, drills, jump scares, decay imagery, cobwebs or dust (hygiene connotation), or candy-shaming copy.
+- **Rules:** decorative art is `aria-hidden`, never shifts layout (absolutely positioned, or in flow only when revealed before first paint, like the 404 art), uses `pointer-events: none`, and animates only `transform`/`opacity`. Motion follows `isAmbientMotionAllowed()` (reduced motion, Save-Data, and the artwork pause button all suppress the bats), and any one-off animation stays under 5 seconds (WCAG 2.2.2). The `--wd-harvest-*` tokens are for seasonal art only. Art is original (procedural or hand-drawn SVG), never AI or stock.
+- **Tests:** `src/lib/seasonal.test.ts` runs the real head script against a fake browser at the Pacific-time boundaries.
+
 ## Commands
 
 ```bash
