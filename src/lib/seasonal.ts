@@ -29,24 +29,8 @@ export type SeasonalTheme = {
   startsOn: string;
   endsOn: string;
   timeZone: string;
-  /** Seasonal hero poster, preloaded on `/` while the season is active. */
-  heroPoster: string;
   /** Seasonal favicon swapped in after hydration. */
   icon: string;
-};
-
-/** Same shape as `Artwork` in site.ts (kept local so this file stays import-free). */
-export type SeasonalArtwork = {
-  poster: string;
-  webm: string;
-  mp4: string;
-};
-
-/** "Harvest Tide": the homepage Tide at dusk, a harvest moon rising where the sun sets. */
-export const harvestTide: SeasonalArtwork = {
-  poster: "/media/art/tide-harvest-poster.jpg",
-  webm: "/media/art/tide-harvest-loop.webm",
-  mp4: "/media/art/tide-harvest-loop.mp4",
 };
 
 export const halloween2026: SeasonalTheme = {
@@ -55,7 +39,6 @@ export const halloween2026: SeasonalTheme = {
   startsOn: "2026-10-01",
   endsOn: "2026-10-31",
   timeZone: "America/Los_Angeles",
-  heroPoster: harvestTide.poster,
   icon: "/seasonal/halloween-2026/icon.svg",
 };
 
@@ -104,7 +87,6 @@ export function buildSeasonScript(theme: SeasonalTheme) {
     param: SEASON_QUERY_PARAM,
     optOutKey: SEASON_OPT_OUT_KEY,
     previewKey: SEASON_PREVIEW_KEY,
-    heroPoster: theme.heroPoster,
   }).replace(/</g, "\\u003c");
 
   return `(function(c){try{
@@ -123,6 +105,5 @@ if(!on){var t=new Intl.DateTimeFormat("en-CA",{year:"numeric",month:"2-digit",da
 on=/^\\d{4}-\\d{2}-\\d{2}$/.test(t)&&t>=c.startsOn&&t<=c.endsOn}
 if(!on)return;
 d.setAttribute(c.attribute,c.name);
-if(window.location.pathname==="/"){var l=document.createElement("link");l.rel="preload";l.as="image";l.href=c.heroPoster;document.head.appendChild(l)}
 }catch(e){}})(${config});`;
 }

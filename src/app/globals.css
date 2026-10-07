@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* `season:` styles an element only while <html data-wd-season> is set
+   (see "Seasonal layer" at the end of this file). */
+@custom-variant season (&:where(html[data-wd-season] *));
+
 /* ------------------------------------------------------------------ *
  * Waikiki Dental — "Pacific Premium" design system
  * Anchored to the practice's real brand: royal Pacific blue (#0051ae
@@ -253,7 +257,6 @@
 :root {
   /* Reserved for seasonal art — never for UI, text, or CTAs. */
   --wd-harvest-amber: #d9822b;
-  --wd-harvest-dusk: #101f45;
   /* Near-black so silhouettes still read against the violet dusk sky. */
   --wd-harvest-ink: #070d1d;
 }
@@ -265,15 +268,179 @@ html[data-wd-season] .wd-season-only {
   display: block;
 }
 
-/* Hero artwork: the seasonal poster covers the default one. The URL comes
-   from an inline custom property and is only applied in season, so other
-   months never download it. */
-html[data-wd-season] .wd-season-poster {
+/* Homepage hero at night: a dusk sky with a few stars and a warm horizon
+   that settles into the navy of the reviews band below. The scene itself
+   (moon, lights, Polaroids) is `HalloweenHeroScene` in seasonal.tsx. */
+html[data-wd-season] .wd-hero-night {
+  background:
+    radial-gradient(ellipse 70% 38% at 72% 100%, rgb(217 130 43 / 0.32), transparent 70%),
+    linear-gradient(180deg, #0a1430 0%, #131a45 40%, #251c50 72%, #3a2352 100%);
+  color-scheme: dark;
+}
+html[data-wd-season] .wd-hero-night::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.4px 1.4px at 8% 14%, rgb(255 248 230 / 0.9), transparent),
+    radial-gradient(1px 1px at 23% 41%, rgb(255 248 230 / 0.7), transparent),
+    radial-gradient(1.2px 1.2px at 41% 9%, rgb(255 248 230 / 0.85), transparent),
+    radial-gradient(1px 1px at 57% 30%, rgb(255 248 230 / 0.6), transparent),
+    radial-gradient(1.6px 1.6px at 69% 6%, rgb(255 248 230 / 0.95), transparent),
+    radial-gradient(1px 1px at 83% 47%, rgb(255 248 230 / 0.65), transparent),
+    radial-gradient(1.2px 1.2px at 94% 22%, rgb(255 248 230 / 0.8), transparent),
+    radial-gradient(1px 1px at 33% 63%, rgb(255 248 230 / 0.5), transparent);
+  background-size: 560px 380px;
+  mask-image: linear-gradient(to bottom, #000 45%, transparent 85%);
+}
+
+/* The hero scene scales from its own width, so every piece keeps its
+   place from a phone to a desktop. */
+.wd-scene {
+  container-type: inline-size;
+}
+
+.wd-moon {
+  position: absolute;
+  left: 84%;
+  top: 14%;
+  width: 24cqw;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 9999px;
+  background:
+    radial-gradient(circle at 34% 40%, rgb(214 160 82 / 0.35) 0 7%, transparent 8%),
+    radial-gradient(circle at 62% 64%, rgb(214 160 82 / 0.3) 0 10%, transparent 11%),
+    radial-gradient(circle at 66% 30%, rgb(214 160 82 / 0.25) 0 5%, transparent 6%),
+    radial-gradient(circle at 40% 36%, #fff6dc, #f7d993 58%, #eab765 100%);
+  box-shadow:
+    0 0 4cqw 1cqw rgb(247 217 147 / 0.45),
+    0 0 18cqw 6cqw rgb(217 130 43 / 0.22);
+}
+
+/* String lights: bulbs hang from the wire and switch on one by one, once
+   (under 3s, so no pause control is needed under WCAG 2.2.2). */
+.wd-bulb {
+  position: absolute;
+  width: 1.9cqw;
+  translate: -50% 0;
+}
+.wd-bulb::before {
+  /* socket */
+  content: "";
   display: block;
-  background-color: var(--wd-harvest-dusk);
-  background-image: var(--wd-season-poster);
-  background-position: center;
-  background-size: cover;
+  width: 1cqw;
+  height: 1.1cqw;
+  margin: 0 auto;
+  border-radius: 0.25cqw;
+  background: var(--wd-harvest-ink);
+}
+.wd-bulb > span {
+  position: relative;
+  display: block;
+  height: 2.6cqw;
+  border-radius: 50% 50% 46% 46% / 38% 38% 62% 62%;
+  background: radial-gradient(circle at 40% 32%, #fff8e4 0 18%, var(--bulb) 60%);
+}
+.wd-bulb > span::after {
+  /* glow */
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7cqw;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--bulb) 0, transparent 68%);
+  opacity: 0.55;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-wd-season] .wd-bulb > span,
+  html[data-wd-season] .wd-bulb > span::after {
+    animation: wd-bulb-on 0.9s var(--delay, 0s) ease-out both;
+  }
+}
+@keyframes wd-bulb-on {
+  0% {
+    opacity: 0.12;
+  }
+  22% {
+    opacity: 1;
+  }
+  36% {
+    opacity: 0.3;
+  }
+  52% {
+    opacity: 1;
+  }
+  64% {
+    opacity: 0.6;
+  }
+}
+
+/* Polaroids clipped to the string: they settle with one damped swing
+   around the clothespin (under 3s) and lift a little on hover. */
+.wd-polaroid {
+  position: absolute;
+  margin: 0;
+  background: var(--color-cream);
+  border-radius: 0.6cqw;
+  box-shadow:
+    0 2.4cqw 5cqw -1.6cqw rgb(3 8 22 / 0.7),
+    0 0 0 1px rgb(11 33 64 / 0.06);
+  rotate: var(--tilt);
+  transform-origin: 50% 0;
+  transition:
+    translate 0.3s ease,
+    scale 0.3s ease;
+}
+.wd-polaroid:hover {
+  translate: 0 -0.8cqw;
+  scale: 1.015;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html[data-wd-season] .wd-polaroid {
+    animation: wd-swing 2.6s var(--delay, 0s) cubic-bezier(0.33, 0.7, 0.45, 1) both;
+  }
+}
+@keyframes wd-swing {
+  0% {
+    rotate: calc(var(--tilt) + 8deg);
+  }
+  30% {
+    rotate: calc(var(--tilt) - 4.5deg);
+  }
+  55% {
+    rotate: calc(var(--tilt) + 2deg);
+  }
+  78% {
+    rotate: calc(var(--tilt) - 0.8deg);
+  }
+  100% {
+    rotate: var(--tilt);
+  }
+}
+.wd-clothespin {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2.6cqw;
+  height: 6.4cqw;
+  translate: -50% -58%;
+  border-radius: 0.5cqw;
+  background: linear-gradient(90deg, #b9864f, #d8ab72 45%, #b9864f);
+  box-shadow: 0 0.4cqw 0.8cqw rgb(3 8 22 / 0.45);
+}
+.wd-clothespin::after {
+  /* the spring */
+  content: "";
+  position: absolute;
+  inset: 44% -12% auto;
+  height: 0.9cqw;
+  border-radius: 0.4cqw;
+  background: #8d97a6;
 }
 
 /* "a deep breath." underline turns moonlit amber and draws itself in. */
@@ -293,15 +460,16 @@ html[data-wd-season] .wd-hero-wave {
   }
 }
 
-/* Bats lifting off the harvest moon — once per session, under 5s. The
-   layer is a size container so flight paths scale with the artwork. */
+/* Bats lifting off the hero moon — once per session, under 5s. The layer
+   is a size container so flight paths scale with the scene. */
 .wd-bats {
   container-type: size;
 }
 .wd-bat {
   position: absolute;
-  left: 64%;
-  top: 50%;
+  /* The center of the hero moon (.wd-moon). */
+  left: 84%;
+  top: 14%;
   margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
   width: var(--size);
   color: var(--wd-harvest-ink);

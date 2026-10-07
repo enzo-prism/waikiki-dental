@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { readActiveSeason } from "@/lib/seasonal";
 import type { Artwork } from "@/lib/site";
 
 const PAUSE_STORAGE_KEY = "wd-ambient-motion-paused";
@@ -62,9 +61,6 @@ export function isAmbientMotionAllowed() {
 }
 
 const serverFalse = () => false;
-const serverNull = () => null;
-// The head script sets the season attribute once, before hydration.
-const subscribeNever = () => () => {};
 
 /**
  * Decorative, silent artwork loop. The still poster renders on the server
@@ -79,7 +75,6 @@ export function AmbientVideo({
   className = "",
   controlClassName = "bottom-3 right-3",
   tone = "light",
-  seasonal,
 }: {
   artwork: Artwork;
   sizes: string;
@@ -87,8 +82,6 @@ export function AmbientVideo({
   className?: string;
   controlClassName?: string;
   tone?: "light" | "dark";
-  /** Artwork shown instead while the named season is active (see seasonal.ts). */
-  seasonal?: { season: string; artwork: Artwork };
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   // Both read browser-only state, so the server (and hydration) render is
@@ -96,8 +89,6 @@ export function AmbientVideo({
   const motionAllowed = useSyncExternalStore(subscribeMotion, motionAllowedNow, serverFalse);
   const paused = useSyncExternalStore(subscribePaused, readPaused, serverFalse);
   const [playing, setPlaying] = useState(false);
-  const season = useSyncExternalStore(subscribeNever, readActiveSeason, serverNull);
-  const loop = seasonal && season === seasonal.season ? seasonal.artwork : artwork;
 
   useEffect(() => {
     const video = videoRef.current;
@@ -133,8 +124,7 @@ export function AmbientVideo({
       document.removeEventListener("visibilitychange", onVisibility);
       video.pause();
     };
-    // `loop.webm` remounts the <video> (keyed) when the seasonal loop applies.
-  }, [motionAllowed, paused, loop.webm]);
+  }, [motionAllowed, paused]);
 
   const toggle = () => writePaused(!paused);
 
@@ -148,19 +138,9 @@ export function AmbientVideo({
         preload={preload}
         className="object-cover"
       />
-      {seasonal ? (
-        // Hidden unless <html data-wd-season> is set; the poster URL is only
-        // applied (and fetched) in season. See globals.css.
-        <div
-          aria-hidden="true"
-          className="wd-season-poster absolute inset-0 hidden"
-          style={{ "--wd-season-poster": `url(${seasonal.artwork.poster})` } as React.CSSProperties}
-        />
-      ) : null}
       {motionAllowed ? (
         <>
           <video
-            key={loop.webm}
             ref={videoRef}
             aria-hidden="true"
             tabIndex={-1}
@@ -175,8 +155,8 @@ export function AmbientVideo({
               playing ? "opacity-100" : "opacity-0"
             }`}
           >
-            <source src={loop.webm} type="video/webm" />
-            <source src={loop.mp4} type="video/mp4" />
+            <source src={artwork.webm} type="video/webm" />
+            <source src={artwork.mp4} type="video/mp4" />
           </video>
           <button
             type="button"
