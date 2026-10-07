@@ -19,6 +19,9 @@ All three assets are self-hosted and stripped of metadata.
 | `public/media/art/tide-poster.jpg`, `tide-loop.webm`, `tide-loop.mp4` | Rendered by `scripts/generate-abstract-art.py` (procedural; no photographs, stock, or AI image models) | Homepage hero |
 | `public/media/art/tide-night-poster.jpg`, `tide-night-loop.webm`, `tide-night-loop.mp4` | Same script, night palette | IV sedation page hero |
 | `public/social/waikiki-dental-share-v3.jpg` | Same script: Tide artwork plus Dr. Narodovich's real headshot | Open Graph / Twitter card |
+| `public/media/art/tide-harvest-poster.jpg`, `tide-harvest-loop.webm`, `tide-harvest-loop.mp4` | Same script, `HARVEST` palette (`--only tide-harvest`): a harvest moon rising over the Tide horizon at dusk | Homepage hero in October only (seasonal layer) |
+| `public/seasonal/halloween-2026/icon.svg` | Hand-drawn SVG: the site's hibiscus favicon recoloured as a pumpkin, plus a crescent moon | Favicon in October only |
+| Bat silhouettes and the ghost-tooth (`src/components/seasonal-client.tsx`, `seasonal.tsx`) | Hand-drawn inline SVG | Homepage hero fly-by and 404 page in October only |
 
 "Tide" is a painted Pacific horizon in the brand palette whose light swells
 and settles on a 12-second breathing cycle. The loops are seamless, silent,

@@ -4,6 +4,8 @@ import { GoogleAnalytics } from "@/components/google-analytics";
 import { LeadAttributionCapture } from "@/components/lead-attribution-capture";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { NavigationScrollManager } from "@/components/navigation-scroll-manager";
+import { SeasonScript } from "@/components/seasonal";
+import { SeasonalFavicon } from "@/components/seasonal-client";
 import { SiteAnalytics } from "@/components/site-analytics";
 import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { homeTitle, socialImage } from "@/lib/metadata";
@@ -77,7 +79,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${fraunces.variable} ${manrope.variable} h-full antialiased`}
+      // The season script may set data-wd-season before hydration.
+      suppressHydrationWarning
     >
+      <head>
+        <SeasonScript />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-ink">
         <LeadAttributionCapture />
         <NavigationScrollManager />
@@ -98,6 +105,7 @@ export default function RootLayout({
         <SiteFooter />
         <MobileCtaBar />
         <GoogleAnalytics />
+        <SeasonalFavicon />
         {analyticsEnabled ? <SiteAnalytics /> : null}
       </body>
     </html>

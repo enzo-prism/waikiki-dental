@@ -10,6 +10,7 @@ import {
   VisitPanel,
 } from "@/components/sections";
 import { JsonLd } from "@/components/page-templates";
+import { HarvestBats } from "@/components/seasonal-client";
 import { WaveUnderline } from "@/components/waves";
 import {
   artwork,
@@ -21,6 +22,7 @@ import {
   scheduleHref,
   site,
 } from "@/lib/site";
+import { harvestTide } from "@/lib/seasonal";
 
 export default function Home() {
   return (
@@ -48,7 +50,7 @@ export default function Home() {
               Dentistry that feels like{" "}
               <span className="relative inline-block italic text-ocean-700">
                 a deep breath.
-                <WaveUnderline className="pointer-events-none absolute -bottom-1 left-0 h-2.5 w-full text-sunset-500 sm:-bottom-3 sm:h-3" />
+                <WaveUnderline className="wd-hero-wave pointer-events-none absolute -bottom-1 left-0 h-2.5 w-full text-sunset-500 sm:-bottom-3 sm:h-3" />
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
@@ -84,7 +86,9 @@ export default function Home() {
                 sizes="(max-width: 1024px) 100vw, 46vw"
                 preload
                 controlClassName="right-4 top-4"
+                seasonal={{ season: "halloween", artwork: harvestTide }}
               />
+              <HarvestBats />
             </div>
 
             <Link
