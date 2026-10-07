@@ -71,9 +71,6 @@ const nextConfig: NextConfig = {
     ];
   },
   // Imagery is self-hosted in /public/media, so no remote patterns are needed.
-  // Every literal alias below has a slashless twin in vercel.json, which
-  // Vercel applies before Next's trailing-slash redirect, so legacy links
-  // land in one hop. Keep the two lists in sync (enforced by the tests).
   async redirects() {
     return [
       {
