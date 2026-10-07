@@ -689,7 +689,7 @@ export function NewPatientsPage() {
             <div className="grid gap-4">
               <article
                 id="insurance-medi-cal"
-                className="rounded-2xl border border-line bg-cream p-6"
+                className="scroll-mt-28 rounded-2xl border border-line bg-cream p-6"
               >
                 <h2 className="font-serif text-xl font-medium text-ink">
                   {insuranceAndMediCal.heading}
@@ -718,7 +718,7 @@ export function NewPatientsPage() {
             <PaymentStrip />
           </div>
 
-          <div id="faq" className="mt-10 grid gap-4">
+          <div id="faq" className="mt-10 grid scroll-mt-28 gap-4">
             {faqs.map((faq) => (
               <article
                 key={faq.question}
