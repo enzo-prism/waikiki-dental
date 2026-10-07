@@ -14,6 +14,9 @@ import {
   dentistId,
   dentistJsonLd,
   doctor,
+  faqJsonLd,
+  faqs,
+  insuranceAndMediCal,
   featuredServices,
   findService,
   crownProcess,
@@ -45,6 +48,15 @@ export function JsonLd() {
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(dentistJsonLd) }}
+    />
+  );
+}
+
+export function FaqJsonLd() {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
     />
   );
 }
@@ -649,10 +661,6 @@ export function OfficePage() {
 export function NewPatientsPage() {
   const details: Array<[string, string]> = [
     [
-      "Insurance support",
-      "Most dental insurance plans are accepted, and the team will help you understand your benefits and estimated costs before treatment begins.",
-    ],
-    [
       "Flexible payment options",
       "Cash, checks, debit, and major credit cards are all welcome; payment is due at the time of treatment.",
     ],
@@ -669,6 +677,7 @@ export function NewPatientsPage() {
   return (
     <>
       <JsonLd />
+      <FaqJsonLd />
       <section className="bg-surface-alt py-16 sm:py-20">
         <div className="wrap">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
@@ -678,6 +687,20 @@ export function NewPatientsPage() {
               body="Insurance, payment, financing, forms — here's how the team makes the practical part painless, so your first appointment is just about you."
             />
             <div className="grid gap-4">
+              <article
+                id="insurance-medi-cal"
+                className="rounded-2xl border border-line bg-cream p-6"
+              >
+                <h2 className="font-serif text-xl font-medium text-ink">
+                  {insuranceAndMediCal.heading}
+                </h2>
+                <p className="mt-2 leading-7 text-ink-muted">
+                  {insuranceAndMediCal.welcome}
+                </p>
+                <p className="mt-3 leading-7 text-ink-muted">
+                  {insuranceAndMediCal.mediCal}
+                </p>
+              </article>
               {details.map(([title, body]) => (
                 <article
                   key={title}
@@ -691,8 +714,22 @@ export function NewPatientsPage() {
           </div>
 
           <div className="mt-10 rounded-2xl border border-line bg-cream p-6 sm:p-7">
-            <p className="eyebrow mb-3">Insurance &amp; financing</p>
+            <p className="eyebrow mb-3">{insuranceAndMediCal.heading}</p>
             <PaymentStrip />
+          </div>
+
+          <div id="faq" className="mt-10 grid gap-4">
+            {faqs.map((faq) => (
+              <article
+                key={faq.question}
+                className="rounded-2xl border border-line bg-cream p-6 sm:p-7"
+              >
+                <h2 className="font-serif text-xl font-medium text-ink">
+                  {faq.question}
+                </h2>
+                <p className="mt-2 leading-7 text-ink-muted">{faq.answer}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
