@@ -24,21 +24,22 @@ describe("Medi-Cal and self-pay copy", () => {
     assert.equal(insuranceAndMediCal.heading, "Insurance & Medi-Cal");
   });
 
-  it("answers Do you accept Medi-Cal? without accepting Denti-Cal", () => {
+  it("answers Do you accept Medi-Cal? with the doctor's cash-rate wording", () => {
     const mediCalFaq = faqs.find(
       (faq) => faq.question === "Do you accept Medi-Cal?",
     );
     assert.ok(mediCalFaq);
-    assert.match(mediCalFaq.answer, /No\./);
-    assert.match(mediCalFaq.answer, /do not accept Medi-Cal \(Denti-Cal\)/);
-    assert.match(insuranceAndMediCal.mediCal, /do not accept Medi-Cal \(Denti-Cal\)/);
+    assert.equal(mediCalFaq.answer, insuranceAndMediCal.mediCal);
+    assert.match(
+      mediCalFaq.answer,
+      /Unfortunately, we don't accept Medi-Cal \(Denti-Cal\), but we do offer discounted rates for patients who pay cash\./,
+    );
+    assert.equal(mediCalFaq.answer.includes(site.phone), true);
     assert.doesNotMatch(insuranceAndMediCal.welcome, /\bare accepted\b/i);
   });
 
-  it("points self-pay visitors to documented options and the office phone", () => {
+  it("keeps the office phone and email and still lists documented CareCredit", () => {
     const copy = insurancePublicCopy();
-    assert.match(insuranceAndMediCal.mediCal, /self-pay patients/);
-    assert.match(insuranceAndMediCal.mediCal, /cash-pay options/);
     assert.equal(copy.includes(site.phone), true);
     assert.match(copy, /CareCredit/);
     assert.equal(site.phone, "(916) 772-6248");
@@ -49,6 +50,7 @@ describe("Medi-Cal and self-pay copy", () => {
     const copy = insurancePublicCopy();
     assert.doesNotMatch(copy, /membership/i);
     assert.doesNotMatch(copy, /\d+\s*%/);
+    assert.doesNotMatch(copy, /\$\d/);
     assert.doesNotMatch(copy, /sunbit|lendingclub|cherry|proceed finance/i);
     assert.deepEqual(paymentOptions.items, [
       "CareCredit financing",

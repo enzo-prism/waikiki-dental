@@ -594,25 +594,23 @@ export const paymentOptions = {
 };
 
 /*
- * Medi-Cal / Denti-Cal notice — the practice asked for this after
- * Medi-Cal patients began calling. Self-pay wording uses only payment
- * options already published on this site (cash, check, cards, CareCredit).
- * Do not invent a membership plan, cash-discount percentage, or another
- * financing partner here.
+ * Medi-Cal / Denti-Cal notice — Dr. Narodovich's wording from the
+ * 2026-10-07 meeting. Do not invent a membership plan, cash-discount
+ * percentage, dollar amount, or another financing partner here.
+ * CareCredit stays listed only where the site already documents it.
  */
 export const insuranceAndMediCal = {
   heading: "Insurance & Medi-Cal",
   welcome:
     "Most dental insurance plans are welcome, and the team will help you understand your benefits and estimated costs before treatment begins.",
   mediCal:
-    `We do not accept Medi-Cal (Denti-Cal). We welcome self-pay patients and offer cash-pay options. Call us at ${site.phone} to ask about pricing.`,
+    `Unfortunately, we don't accept Medi-Cal (Denti-Cal), but we do offer discounted rates for patients who pay cash. Call us at ${site.phone} to ask about pricing.`,
 };
 
 export const faqs = [
   {
     question: "Do you accept Medi-Cal?",
-    answer:
-      `No. We do not accept Medi-Cal (Denti-Cal). We welcome self-pay patients and offer cash-pay options, including CareCredit financing and payment by cash, check, or card. Call us at ${site.phone} to ask about pricing.`,
+    answer: insuranceAndMediCal.mediCal,
   },
 ];
 
