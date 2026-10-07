@@ -32,6 +32,8 @@ Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not 
 
 Service menu (confirmed by the practice in the 2026-09-23 sync): dental bonding is NOT offered, and crowns are traditional two-visit crowns only (`/dental-crowns/`). Never advertise same-day/CEREC crowns or restore bonding. Their old URLs redirect (`next.config.ts`).
 
+Legacy redirects: add each literal alias to `next.config.ts` `redirects()` with a trailing slash AND its slashless twin to `vercel.json` `redirects` (Vercel runs those before Next's trailing-slash redirect, so old links land in one hop). The redirect tests fail if the lists drift.
+
 Do not invent Google review counts, credentials, insurance lists, or before/after results. `reviewStats` holds Google figures verified on the date in `verifiedOn`; re-verify on the live listing before changing any number.
 
 Scheduling (also in `AGENTS.local.md`): every appointment CTA stays on-site at `/request-appointment/`. No Jarvis or other third-party booking links. It is an appointment request; the office confirms the time by phone or text.

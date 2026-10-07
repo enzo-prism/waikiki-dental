@@ -1,13 +1,16 @@
 # Project status
 
-Last reviewed: September 24, 2026
+Last reviewed: October 7, 2026
 
 ## Current production baseline
 
 - Production: <https://waikikidental.com/>
 - Source of truth: GitHub `main`
-- Current production baseline: service-menu release, September 23, 2026
-  (feature commit `932e7ef`)
+- Current production baseline: October seasonal layer plus single-hop legacy
+  redirects, October 7, 2026 (PR #8 `d31ed92`, then PR #9)
+- Earlier releases: lab-made crown copy and service-menu guard test (PR #7
+  `cdc35c0`, October 6); audit fixes (`43dfcbe`, September 24); service-menu
+  release (`932e7ef`, September 23)
 - Public-domain launch baseline: `6772636` (September 1, 2026)
 - Vercel project: `waikiki-dental-preview`
 - Scheduling: every appointment CTA remains on-site at
@@ -58,6 +61,10 @@ ghost-tooth) switches itself on October 1–31 Pacific and off on November 1
 with no redeploy. Preview with `?season=halloween`; opt out with
 `?season=off`. Rules and scope are in `AGENTS.md` ("Seasonal layer").
 
+After November 1, 2026, set `activeSeason` to `null` so the dormant head
+script stops shipping. Next year needs a new `SeasonalTheme` id and dates
+plus a versioned `public/seasonal/<id>/` folder.
+
 ## Verification completed
 
 - ESLint passes.
@@ -84,8 +91,8 @@ with no redeploy. Preview with `?season=halloween`; opt out with
 
 ## Known open issues (audit of September 23, 2026)
 
-Found in a full codebase audit. Items 1–4 need the practice; item 5 is
-engineering work that is intentionally deferred.
+Found in a full codebase audit. Items 1–4 need the practice. (Item 5, the
+two-hop legacy redirects, was fixed on October 7, 2026; see below.)
 
 1. **Privacy notice PDF names another office.** `public/privacy-practices.pdf`
    lists the Privacy Officer and complaint contact as 916-727-6453, 4320
@@ -99,11 +106,14 @@ engineering work that is intentionally deferred.
 4. **Practice sign-offs still pending:** the clinic-approved Formspree live
    delivery test and approval of the social images (see "Remaining
    operational gates" above).
-5. **Legacy URLs without a trailing slash take two redirect hops** (for
-   example `/family-dentistry` → `/family-dentistry/` → `/cleanings-exams/`).
-   With `trailingSlash: true`, Next unshifts its built-in trailing-slash
-   redirect ahead of custom `redirects()` (`lib/load-custom-routes.js`), so a
-   single hop would need per-rule duplicates without the slash.
+### Fixed on October 7, 2026
+
+- Legacy URLs without a trailing slash now redirect in one hop (for example
+  `/family-dentistry` → `/cleanings-exams/`). With `trailingSlash: true`, Next
+  runs its built-in trailing-slash redirect before custom `redirects()`, so
+  every literal alias in `next.config.ts` has a slashless twin in
+  `vercel.json`, which Vercel applies first. `src/lib/next-config-redirects.test.ts`
+  fails if the two lists drift.
 
 ### Fixed in the September 24, 2026 audit pass
 

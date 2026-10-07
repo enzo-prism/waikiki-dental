@@ -102,3 +102,30 @@ describe("next.config redirects", () => {
     assert.equal(article?.destination, "/iv-sedation/");
   });
 });
+
+describe("vercel.json single-hop legacy redirects", () => {
+  // With trailingSlash: true, Next adds the slash before custom redirects
+  // run, so /family-dentistry would hop twice. vercel.json redirects run
+  // first on Vercel; each literal alias needs a slashless twin there.
+  it("mirrors every literal next.config alias without its trailing slash", async () => {
+    const { readFile } = await import("node:fs/promises");
+    const vercel = JSON.parse(
+      await readFile(new URL("../../vercel.json", import.meta.url), "utf8"),
+    ) as { redirects: Array<Record<string, unknown>> };
+    const redirects = await nextConfig.redirects!();
+    const expected = redirects
+      .filter((rule) => !rule.has && !rule.source.includes(":"))
+      .map((rule) => ({
+        source: rule.source.replace(/\/$/, ""),
+        destination: rule.destination,
+        ...("statusCode" in rule
+          ? { statusCode: rule.statusCode }
+          : { permanent: rule.permanent }),
+      }));
+
+    assert.deepEqual(vercel.redirects, expected);
+    for (const rule of vercel.redirects) {
+      assert.ok(!String(rule.source).endsWith("/"), `${rule.source} must not end in /`);
+    }
+  });
+});
