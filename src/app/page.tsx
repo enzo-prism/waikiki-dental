@@ -10,7 +10,7 @@ import {
   VisitPanel,
 } from "@/components/sections";
 import { JsonLd } from "@/components/page-templates";
-import { HarvestBats } from "@/components/seasonal-client";
+import { HalloweenHeroScene, HeroHills, PumpkinGlyph } from "@/components/seasonal";
 import { WaveUnderline } from "@/components/waves";
 import {
   artwork,
@@ -22,17 +22,23 @@ import {
   scheduleHref,
   site,
 } from "@/lib/site";
-import { harvestTide } from "@/lib/seasonal";
 
 export default function Home() {
   return (
     <>
       <JsonLd />
 
-      <section className="relative overflow-hidden bg-background">
+      <section className="wd-hero-night relative overflow-hidden bg-background">
+        <HeroHills />
         <div className="wrap-wide relative grid items-center gap-12 pb-20 pt-14 sm:pt-16 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pb-24 lg:pt-20">
           <div>
-            <span className="inline-flex max-w-full flex-nowrap items-center gap-2.5 font-sans text-[10px] font-semibold uppercase leading-[1.45] tracking-[0.12em] text-ocean-600 sm:text-[11px] sm:tracking-[0.24em]">
+            <div className="wd-season-only mb-6">
+              <p className="inline-flex items-center gap-2 rounded-full border border-cream/20 bg-cream/[0.07] py-1.5 pl-2 pr-4 text-[13px] font-medium text-cream/90">
+                <PumpkinGlyph className="size-5 shrink-0" />
+                Happy Halloween · no tricks, just gentle care
+              </p>
+            </div>
+            <span className="inline-flex max-w-full flex-nowrap items-center gap-2.5 font-sans text-[10px] font-semibold uppercase leading-[1.45] tracking-[0.12em] text-ocean-600 season:text-gold-soft sm:text-[11px] sm:tracking-[0.24em]">
               <Image
                 src={brandAssets.icon}
                 alt=""
@@ -46,14 +52,14 @@ export default function Home() {
                 Roseville · IV sedation &amp; restorative care
               </span>
             </span>
-            <h1 className="mt-6 text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-ink sm:text-6xl lg:text-[4.25rem]">
+            <h1 className="mt-6 text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-ink season:text-cream sm:text-6xl lg:text-[4.25rem]">
               Dentistry that feels like{" "}
-              <span className="relative inline-block italic text-ocean-700">
+              <span className="relative inline-block italic text-ocean-700 season:text-gold-soft">
                 a deep breath.
                 <WaveUnderline className="wd-hero-wave pointer-events-none absolute -bottom-1 left-0 h-2.5 w-full text-sunset-500 sm:-bottom-3 sm:h-3" />
               </span>
             </h1>
-            <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
+            <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted season:text-cream/80">
               Dr. Michael Narodovich built this practice for people who have put
               care off — monitored IV sedation and dental implants, delivered
               without rush or judgment.
@@ -63,33 +69,35 @@ export default function Home() {
                 <CalendarCheck className="size-4" aria-hidden="true" />
                 Request Appointment
               </Link>
-              <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
+              <a
+                href={site.phoneHref}
+                className="btn btn-outline season:border-cream/40 season:text-cream season:hover:border-cream season:hover:bg-cream/10"
+                aria-label={`Call or text ${site.phone}`}>
                 <Phone className="size-4" aria-hidden="true" />
                 Call or text
               </a>
             </div>
 
-            <ul className="mt-10 flex flex-col gap-2 text-sm text-ink-muted sm:flex-row sm:flex-wrap sm:gap-x-6">
+            <ul className="mt-10 flex flex-col gap-2 text-sm text-ink-muted season:text-cream/75 sm:flex-row sm:flex-wrap sm:gap-x-6">
               {heroFacts.map((fact) => (
                 <li key={fact} className="inline-flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-sunset-500" aria-hidden="true" />
+                  <span className="size-1.5 rounded-full bg-sunset-500 season:bg-gold-soft" aria-hidden="true" />
                   {fact}
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[640px] pb-10 sm:pb-8 lg:max-w-none lg:pb-0">
-            <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-deep shadow-soft-lg sm:aspect-[4/3] lg:aspect-square">
+          <div className="relative mx-auto w-full max-w-[640px] pb-10 season:pb-16 sm:pb-8 sm:season:pb-8 lg:max-w-none lg:pb-0 lg:season:pb-0">
+            <div className="relative aspect-[5/4] overflow-hidden rounded-[2rem] bg-deep shadow-soft-lg season:hidden sm:aspect-[4/3] lg:aspect-square">
               <AmbientVideo
                 artwork={artwork.tide}
                 sizes="(max-width: 1024px) 100vw, 46vw"
                 preload
                 controlClassName="right-4 top-4"
-                seasonal={{ season: "halloween", artwork: harvestTide }}
               />
-              <HarvestBats />
             </div>
+            <HalloweenHeroScene />
 
             <Link
               href="/michael-narodovich-dmd/"

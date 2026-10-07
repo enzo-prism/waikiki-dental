@@ -9,7 +9,6 @@ import {
   activeSeason,
   buildSeasonScript,
   halloween2026,
-  harvestTide,
   isSeasonInRange,
 } from "./seasonal.ts";
 
@@ -43,18 +42,15 @@ function storageArea(store: Storage) {
 function runScript({
   now,
   search = "",
-  pathname = "/",
   local = new Map<string, string>(),
   session = new Map<string, string>(),
 }: {
   now: string;
   search?: string;
-  pathname?: string;
   local?: Storage;
   session?: Storage;
 }) {
   const attributes = new Map<string, string>();
-  const appended: { rel: string; as: string; href: string }[] = [];
   const fixed = new Date(now).getTime();
   class FixedDate extends Date {
     constructor(...args: unknown[]) {
@@ -63,7 +59,7 @@ function runScript({
     }
   }
   const window: Record<string, unknown> = {
-    location: { search, pathname },
+    location: { search },
   };
   for (const [name, store] of [
     ["localStorage", local],
@@ -82,8 +78,6 @@ function runScript({
     documentElement: {
       setAttribute: (name: string, value: string) => void attributes.set(name, value),
     },
-    createElement: () => ({ rel: "", as: "", href: "" }),
-    head: { appendChild: (node: { rel: string; as: string; href: string }) => void appended.push(node) },
   };
 
   runInNewContext(buildSeasonScript(halloween2026), {
@@ -94,7 +88,7 @@ function runScript({
     URLSearchParams,
   });
 
-  return { season: attributes.get(SEASON_ATTRIBUTE) ?? null, appended, local, session };
+  return { season: attributes.get(SEASON_ATTRIBUTE) ?? null, local, session };
 }
 
 describe("buildSeasonScript", () => {
@@ -103,15 +97,6 @@ describe("buildSeasonScript", () => {
     assert.equal(runScript({ now: OCT_1_MIDNIGHT }).season, "halloween");
     assert.equal(runScript({ now: OCT_31_LAST_MINUTE }).season, "halloween");
     assert.equal(runScript({ now: NOV_1_MIDNIGHT }).season, null);
-  });
-
-  it("preloads the seasonal hero poster on the homepage only", () => {
-    const home = runScript({ now: OCT_1_MIDNIGHT });
-    assert.deepEqual(home.appended, [
-      { rel: "preload", as: "image", href: harvestTide.poster },
-    ]);
-    assert.deepEqual(runScript({ now: OCT_1_MIDNIGHT, pathname: "/iv-sedation/" }).appended, []);
-    assert.deepEqual(runScript({ now: NOV_1_MIDNIGHT }).appended, []);
   });
 
   it("previews out of season with ?season=halloween for the rest of the session", () => {
@@ -171,13 +156,7 @@ describe("seasonal assets", () => {
   it("ship every file the active season references", () => {
     assert.ok(activeSeason);
     assert.ok(activeSeason.startsOn <= activeSeason.endsOn);
-    const files = [
-      activeSeason.heroPoster,
-      activeSeason.icon,
-      harvestTide.poster,
-      harvestTide.webm,
-      harvestTide.mp4,
-    ];
+    const files = [activeSeason.icon];
     for (const file of files) {
       assert.ok(existsSync(new URL(`../../public${file}`, import.meta.url)), `${file} is missing`);
     }

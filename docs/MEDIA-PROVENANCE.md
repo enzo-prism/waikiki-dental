@@ -6,7 +6,7 @@ Verified on August 25, 2026 as a logged-out visitor.
 
 | Local asset | Public source | Why it is suitable | Site use |
 | --- | --- | --- | --- |
-| `public/media/waikiki-team-2026.webp` | [Waikiki Dental team post](https://www.facebook.com/photo.php?fbid=1514115490717179&set=pb.100063562271528.-2207520000&type=3) | Published by the official Waikiki Dental page on March 6, 2026. Shows Dr. Mike and the current team inside the Roseville office. | Homepage team introduction |
+| `public/media/waikiki-team-2026.webp` | [Waikiki Dental team post](https://www.facebook.com/photo.php?fbid=1514115490717179&set=pb.100063562271528.-2207520000&type=3) | Published by the official Waikiki Dental page on March 6, 2026. Shows Dr. Mike and the current team inside the Roseville office. | Homepage team introduction; October hero Polaroid (seasonal layer) |
 | `public/media/team-jessica.webp` | [Jessica staff spotlight](https://www.facebook.com/photo.php?fbid=1514286047366790&set=pb.100063562271528.-2207520000&type=3) | Published by the official practice page on March 6, 2026. The portrait was cropped from the practice's own staff graphic. | Homepage staff profile |
 | `public/media/team-nayeli.webp` | [Nayeli staff spotlight](https://www.facebook.com/photo.php?fbid=1513396077455787&set=pb.100063562271528.-2207520000&type=3) | Published by the official practice page on March 5, 2026. The portrait was cropped from the practice's own staff graphic. | Homepage staff profile |
 
@@ -19,9 +19,12 @@ All three assets are self-hosted and stripped of metadata.
 | `public/media/art/tide-poster.jpg`, `tide-loop.webm`, `tide-loop.mp4` | Rendered by `scripts/generate-abstract-art.py` (procedural; no photographs, stock, or AI image models) | Homepage hero |
 | `public/media/art/tide-night-poster.jpg`, `tide-night-loop.webm`, `tide-night-loop.mp4` | Same script, night palette | IV sedation page hero |
 | `public/social/waikiki-dental-share-v3.jpg` | Same script: Tide artwork plus Dr. Narodovich's real headshot | Open Graph / Twitter card |
-| `public/media/art/tide-harvest-poster.jpg`, `tide-harvest-loop.webm`, `tide-harvest-loop.mp4` | Same script, `HARVEST` palette (`--only tide-harvest`): a harvest moon rising over the Tide horizon at dusk | Homepage hero in October only (seasonal layer) |
 | `public/seasonal/halloween-2026/icon.svg` | Hand-drawn SVG: the site's hibiscus favicon recoloured as a pumpkin, plus a crescent moon | Favicon in October only |
-| Bat silhouettes and the ghost-tooth (`src/components/seasonal-client.tsx`, `seasonal.tsx`) | Hand-drawn inline SVG | Homepage hero fly-by and 404 page in October only |
+| Bat silhouettes, ghost-tooth, grinning pumpkin, string lights, moon, and hills (`src/components/seasonal-client.tsx`, `seasonal.tsx`, `globals.css`) | Hand-drawn inline SVG and CSS | Homepage hero and 404 page in October only |
+
+"Harvest Tide" (the `HARVEST` palette, `--only tide-harvest`) was the October
+hero art from October 6–7, 2026. The photo hero replaced it and its files were
+removed; the script can still re-render it.
 
 "Tide" is a painted Pacific horizon in the brand palette whose light swells
 and settles on a 12-second breathing cycle. The loops are seamless, silent,

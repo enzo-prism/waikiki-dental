@@ -55,7 +55,8 @@ editorial boundary. The media audit and responsive screenshots are in
 
 ## Seasonal layer
 
-October 2026: a Halloween layer (Harvest Tide hero, a once-per-session bat
+October 2026: a Halloween layer (a moonlit homepage hero with the real team
+and Dr. Mike as Polaroids on a string of lights, a once-per-session bat
 fly-by, amber underline draw-in, pumpkin-hibiscus favicon, and a 404
 ghost-tooth) switches itself on October 1–31 Pacific and off on November 1
 with no redeploy. Preview with `?season=halloween`; opt out with

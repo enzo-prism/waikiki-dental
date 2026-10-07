@@ -65,8 +65,8 @@ function Bat() {
 }
 
 /**
- * Bats lifting off the harvest moon in the homepage hero art. Plays once
- * per session, only in season, only when the artwork is mostly on screen,
+ * Bats lifting off the moon in the homepage hero scene. Plays once per
+ * session, only in season, only when the scene is mostly on screen,
  * and never for reduced-motion, data-saver, or paused-animation visitors.
  */
 export function HarvestBats() {
@@ -112,7 +112,7 @@ export function HarvestBats() {
     <div
       ref={layerRef}
       aria-hidden="true"
-      className="wd-bats pointer-events-none absolute inset-0 overflow-hidden"
+      className="wd-bats pointer-events-none absolute inset-0"
     >
       {flying
         ? bats.map((bat) => (
