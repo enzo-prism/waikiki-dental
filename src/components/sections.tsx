@@ -16,6 +16,7 @@ import {
   featuredServices,
   formPrivacy,
   hours,
+  insuranceAndMediCal,
   paymentOptions,
   reviewExcerpts,
   reviewStats,
@@ -251,18 +252,23 @@ export function FlagshipServices() {
 
 export function PaymentStrip({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-wrap items-center gap-x-6 gap-y-3 ${className}`}>
-      <span className="inline-flex items-center gap-2 text-sm font-semibold text-ink">
-        <ShieldCheck className="size-4 text-ocean-600" aria-hidden="true" />
-        {paymentOptions.insuranceNote}
-      </span>
-      <div className="flex flex-wrap gap-2">
-        {paymentOptions.items.map((item) => (
-          <span key={item} className="chip">
-            {item}
-          </span>
-        ))}
+    <div className={className}>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+        <span className="inline-flex items-center gap-2 text-sm font-semibold text-ink">
+          <ShieldCheck className="size-4 text-ocean-600" aria-hidden="true" />
+          {paymentOptions.insuranceNote}
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {paymentOptions.items.map((item) => (
+            <span key={item} className="chip">
+              {item}
+            </span>
+          ))}
+        </div>
       </div>
+      <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-muted">
+        {insuranceAndMediCal.mediCal}
+      </p>
     </div>
   );
 }

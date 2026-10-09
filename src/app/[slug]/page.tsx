@@ -47,7 +47,7 @@ const staticPages: Record<
   "new-patients": {
     title: "New Dental Patients in Roseville",
     description:
-      "New to Waikiki Dental? Insurance, payment options, CareCredit financing, and online forms — everything sorted before your first Roseville visit.",
+      "New to Waikiki Dental? Insurance, discounted cash-pay rates, CareCredit financing, and online forms — we don't accept Medi-Cal (Denti-Cal).",
   },
   "patient-testimonials": {
     title: `${reviewStats.rating.toFixed(1)}-Star Google Reviews`,

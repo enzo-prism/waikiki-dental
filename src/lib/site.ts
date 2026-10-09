@@ -593,6 +593,41 @@ export const paymentOptions = {
   ],
 };
 
+/*
+ * Medi-Cal / Denti-Cal notice — Dr. Narodovich's wording from the
+ * 2026-10-07 meeting. Do not invent a membership plan, cash-discount
+ * percentage, dollar amount, or another financing partner here.
+ * CareCredit stays listed only where the site already documents it.
+ */
+export const insuranceAndMediCal = {
+  heading: "Insurance & Medi-Cal",
+  welcome:
+    "Most dental insurance plans are welcome, and the team will help you understand your benefits and estimated costs before treatment begins.",
+  mediCal:
+    `Unfortunately, we don't accept Medi-Cal (Denti-Cal), but we do offer discounted rates for patients who pay cash. Call us at ${site.phone} to ask about pricing.`,
+};
+
+export const faqs = [
+  {
+    question: "Do you accept Medi-Cal?",
+    answer: insuranceAndMediCal.mediCal,
+  },
+];
+
+/** FAQPage JSON-LD. `name` / `text` must stay identical to visible FAQ copy. */
+export const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+
 /* Emergency fast-path — surfaced in the header utility bar. */
 export const emergency = {
   label: "Dental emergency?",
@@ -759,7 +794,7 @@ export const canonicalPageRoutes = [
 export const pageRoutes = canonicalPageRoutes;
 
 /** Last substantive site update (ISO date), used for sitemap `lastModified`. */
-export const siteLastUpdated = "2026-09-24";
+export const siteLastUpdated = "2026-10-07";
 
 /* ------------------------------------------------------------------ *
  * Imagery — self-hosted in /public/media for fast, reliable LCP.
