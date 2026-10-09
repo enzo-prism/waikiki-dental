@@ -7,8 +7,10 @@ export const productionHost = "waikikidental.com";
  * Production Content-Security-Policy. The site is fully static, so there are
  * no per-request nonces: Next's inline bootstrap scripts and the inline
  * JSON-LD need 'unsafe-inline'. External origins are limited to GA4
- * (gtag.js + collection) and Formspree. Vercel Web Analytics loads from
- * /_vercel/insights on this origin in production, so 'self' covers it.
+ * (gtag.js + collection), Formspree, and the Jarvis scheduler iframe.
+ * Vercel Web Analytics loads from /_vercel/insights on this origin in
+ * production, so 'self' covers it. frame-ancestors stays 'none' so other
+ * sites cannot embed this origin; X-Frame-Options DENY matches that.
  */
 export function contentSecurityPolicy() {
   const googleAnalytics = [
@@ -28,6 +30,7 @@ export function contentSecurityPolicy() {
     "media-src": ["'self'"],
     "connect-src": ["'self'", ...googleAnalytics, "https://formspree.io"],
     "form-action": ["'self'", "https://formspree.io"],
+    "frame-src": ["https://schedule.jarvisanalytics.com"],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],
     "frame-ancestors": ["'none'"],
