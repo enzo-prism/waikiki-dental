@@ -10,10 +10,14 @@ function directive(policy: string, name: string) {
 }
 
 describe("next.config security headers", () => {
-  it("builds a CSP that blocks framing and allows only GA4 and Formspree", () => {
+  it("builds a CSP that blocks framing and allows only GA4, Formspree, and Jarvis", () => {
     const policy = contentSecurityPolicy();
 
     assert.equal(directive(policy, "frame-ancestors"), "frame-ancestors 'none'");
+    assert.equal(
+      directive(policy, "frame-src"),
+      "frame-src https://schedule.jarvisanalytics.com",
+    );
     assert.equal(directive(policy, "object-src"), "object-src 'none'");
     assert.equal(directive(policy, "default-src"), "default-src 'self'");
     assert.ok(directive(policy, "upgrade-insecure-requests"));
@@ -56,5 +60,8 @@ describe("next.config security headers", () => {
     assert.deepEqual(noindex?.missing, [{ type: "host", value: "waikikidental\\.com" }]);
     assert.equal(noindex?.has, undefined);
     assert.equal(nextConfig.poweredByHeader, false);
+
+    const xfo = global?.headers.find((header) => header.key === "X-Frame-Options");
+    assert.equal(xfo?.value, "DENY");
   });
 });
