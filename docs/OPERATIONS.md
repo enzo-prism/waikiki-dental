@@ -8,56 +8,18 @@ the site.
 
 | Form | Current state | Delivery path |
 | --- | --- | --- |
-| Appointment request | Live; account delivery requires a controlled re-verification after form releases | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` |
-| General contact | Live; shares the appointment form's endpoint | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` (override with `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`) |
+| Online booking | Live Jarvis embed on `/request-appointment/` | `https://schedule.jarvisanalytics.com` (CSP `frame-src`) |
+| General contact | Live | Browser JSON `POST` to `https://formspree.io/f/xeajvpnb` (override with `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT`) |
 
-The shared endpoint lives in `src/lib/forms.ts` as `FORMSPREE_ENDPOINT`.
+The Formspree endpoint lives in `src/lib/forms.ts` as `FORMSPREE_ENDPOINT`.
 Contact submissions use `subject: "Contact message — Waikiki Dental"` and
-`form_type: "contact_message"`. Appointment requests use `subject:
-"Appointment request — Waikiki Dental"` and `form_type: "appointment_request"`.
-Both also send a human-readable `message` banner so the office can tell them
-apart in a shared inbox. To split them into separate Formspree forms later,
-create a new form and set `NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` in the
-Vercel project.
+`form_type: "contact_message"`, plus a human-readable `message` banner. Set
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` to a dedicated Formspree form to
+split contact from any leftover shared-inbox history.
 
-An appointment request is not a confirmed appointment. The success screen only
-says the request was sent and explains that the office will confirm the final
-date and time by phone or text.
-
-## Appointment request contract
-
-The implementation is a 3-step flow (Visit / When / Reach) in
-`src/components/appointment-scheduler.tsx`, with copy and options in
-`src/lib/site.ts`. A live summary sits beside the form on desktop and in a
-compact strip on mobile. There is no review step. Preferred dates use a custom
-weekday calendar (weekends and past days disabled) or **Soonest available**.
-`/request-appointment/?reason=sedation` (or another reason key) prefills the
-visit reason. A draft is stored in `sessionStorage` under `wd-appt-request-v1`
-until a successful send.
-
-It sends these fields:
-
-- `subject` and `form_type` (`appointment_request`)
-- `source`
-- `patient_type`, `appointment_reason`, `appointment_reason_key`
-- `preferred_date`, `preferred_date_label`, `preferred_time`
-- `name`, `phone`, and optional `email`
-- `notes` and a readable `message` summary that begins with
-  `APPOINTMENT REQUEST (not confirmed)`
-- `_gotcha`, Formspree's honeypot field
-- first-touch `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`,
-  `utm_term`, `gclid`, `fbclid`, `ttclid`, and parsed `ad_id` (empty when the
-  visitor arrived without tags)
-
-The client sends `Accept: application/json` and `Content-Type:
-application/json`, enforces an eight-second transport timeout, and shows
-success only after an HTTP success response. That
-proves Formspree accepted the request for processing, not that the clinic inbox
-received it. A 429 response gets a wait-and-retry message; other service and
-network failures keep the entered data available for another attempt. A
-synchronous ref guard and the disabled sending state prevent duplicate
-requests. Continue / Send uses the ocean primary button. Coral stays reserved
-for the site-native appointment CTA.
+`/request-appointment/` is the Jarvis scheduler plus office phone and email.
+The retired on-site request form is gone. Coral **Request Appointment** CTAs
+still route there.
 
 ## Contact form contract
 
@@ -65,18 +27,16 @@ The implementation is in `src/components/contact-form.tsx`. It sends
 `subject`, `form_type` (`contact_message`), `source`, `topic`, `topic_key`,
 `name`, optional `email`/`phone`, `reply_preference`, `privacy_check`, a
 readable `message` that begins with `CONTACT MESSAGE`, the `_gotcha`
-honeypot, and the same first-touch UTM / click-ID / `ad_id` fields as the
-appointment form. Topic and reply preference are icon chips, not a select. The email
-or phone field becomes required to match the visitor's chosen reply
-preference, and a privacy-check consent box gates submission. Error handling
-mirrors the appointment form: 429 gets a wait-and-retry message, other
-failures preserve entered data, and success renders only after an HTTP
-success response.
+honeypot, and first-touch UTM / click-ID / `ad_id` fields. Topic and reply preference
+are icon chips, not a select. The email or phone field becomes required to
+match the visitor's chosen reply preference, and a privacy-check consent box
+gates submission. A 429 gets a wait-and-retry message, other failures preserve
+entered data, and success renders only after an HTTP success response.
 
 ## First-touch ad tags
 
-Both public lead forms (appointment and contact) stamp the first paid or
-tagged visit so later organic page views do not overwrite it. The browser
+The contact form stamps the first paid or tagged visit so later organic page
+views do not overwrite it. The browser
 keeps that record in `localStorage` (`wd_lead_attribution_v1`) for 90 days,
 with `sessionStorage` fallback when durable storage is blocked. `ad_id` is
 parsed from `utm_content` when that value is a bare numeric Meta `{{ad.id}}`
@@ -88,14 +48,14 @@ payloads.
 
 ## Privacy boundary
 
-The appointment form asks visitors not to include symptoms, medical history,
+The contact form asks visitors not to include symptoms, medical history,
 insurance IDs, payment details, or other sensitive information. Keep that
 warning and the minimal-data payload unless the practice has explicitly
 approved a compliant data-handling setup and vendor agreement.
 
-Routine engineering verification must not submit the live form. A real inbox
-delivery test creates an external message and must be deliberate, use approved
-test data, and be coordinated with the clinic.
+Routine engineering verification must not submit the live contact form. A real
+inbox delivery test creates an external message and must be deliberate, use
+approved test data, and be coordinated with the clinic.
 
 ## Formspree operations checklist
 
@@ -112,8 +72,9 @@ Before treating inbox delivery as verified:
 
 ## Conversion chrome
 
-Keep these paths intact when changing pages or CTAs. Coral is reserved for the
-site-native appointment form. Do not add a third solid button.
+Keep these paths intact when changing pages or CTAs. Coral is reserved for
+**Request Appointment** → `/request-appointment/`. Do not add a third solid
+button.
 
 | Intent | Control | Surfaces |
 | --- | --- | --- |

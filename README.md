@@ -52,7 +52,7 @@ npm run build
 `src/lib/site.ts` is the single source of truth for site content: practice
 details, hours, the service catalog (grouped by category), the doctor bio &
 credentials, testimonials/review stats, payment options,
-the appointment-scheduler options, and image paths. Edit content there.
+and image paths. Edit content there.
 
 ### Brand assets & imagery
 
@@ -97,37 +97,29 @@ still confirm ongoing website-reuse approval for those images.
    and short excerpts in `site.ts` were verified on August 24, 2026. Re-check
    the live listing during routine content reviews and update the verification
    date whenever those values change.
-2. **Form inbox verification.** Both forms are connected to Formspree; run the
-   clinic-approved inbox delivery checklist in `docs/OPERATIONS.md`.
+2. **Form inbox verification.** The contact form is connected to Formspree;
+   run the clinic-approved inbox delivery checklist in `docs/OPERATIONS.md`.
 3. **Media reuse approval.** Confirm that the practice approves continued
    website use of the three team images listed in `docs/MEDIA-PROVENANCE.md`.
 
 ## Formspree integration
 
-The guided appointment request is a 3-step Visit / When / Reach flow with a
-custom weekday calendar, live summary, and hibiscus success state. It submits
-JSON to the public Formspree endpoint `https://formspree.io/f/xeajvpnb`,
-configured in `src/lib/forms.ts`. A successful HTTP response means Formspree
-accepted the request for processing; it does not prove clinic inbox delivery or
-mean an appointment has been confirmed. The office confirms the final date and
-time by phone or text.
+The contact form (`src/components/contact-form.tsx`) submits JSON to the public
+Formspree endpoint `https://formspree.io/f/xeajvpnb`, configured in
+`src/lib/forms.ts`. A successful HTTP response means Formspree accepted the
+message for processing; it does not prove clinic inbox delivery. Set
+`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` to a dedicated Formspree form if you
+want a separate inbox. Never commit Formspree account tokens or private
+credentials.
 
-The scheduler validates required fields, prevents duplicate submissions, uses
-Formspree's `_gotcha` honeypot, keeps a session draft until send, and preserves
-entered data when a network or service error allows a retry.
+Online booking lives on `/request-appointment/` as a Jarvis iframe. It does
+not post to Formspree.
 
-The contact form (`src/components/contact-form.tsx`) submits to the same
-Formspree form by default, labeled via `subject`/`source` so the office can
-tell contact messages from appointment requests. Set
-`NEXT_PUBLIC_FORMSPREE_CONTACT_ENDPOINT` to a dedicated Formspree form to
-separate them. Never commit Formspree account tokens or private credentials.
-
-For each form release, use an approved synthetic request to
-verify Formspree inbox receipt, intended office notification, Reply-To behavior,
-phone-only requests, spam and domain controls, accessibility, and the
-unavailable-service fallback. Keep both forms limited to non-sensitive
-information unless the practice has explicitly approved a compliant
-data-handling setup and vendor agreement.
+For each contact-form release, use an approved synthetic request to verify
+Formspree inbox receipt, intended office notification, Reply-To behavior, spam
+and domain controls, accessibility, and the unavailable-service fallback. Keep
+the form limited to non-sensitive information unless the practice has
+explicitly approved a compliant data-handling setup and vendor agreement.
 
 See [Forms and release operations](docs/OPERATIONS.md) for payload details,
 privacy boundaries, the delivery checklist, and the production release process.
@@ -136,9 +128,9 @@ privacy boundaries, the delivery checklist, and the production release process.
 
 One coral scheduling verb. Do not add a third solid button.
 
-- **Request Appointment** (coral) → the custom on-site form at
-  `/request-appointment/`. Header at `lg+`, sticky mobile bar, navy homepage
-  appointment card, interior `BookStrip`.
+- **Request Appointment** (coral) → `/request-appointment/` (Jarvis embed).
+  Header at `lg+`, sticky mobile bar, navy homepage appointment card, interior
+  `BookStrip`.
 - **Call or text** (outline) → `tel:` the Roseville office.
 - **Contact form** → Contact and office pages only. Homepage uses
   `VisitPanel showForm={false}`.
@@ -148,10 +140,9 @@ live in `src/components/site-chrome.tsx` and `src/components/site-nav.tsx`.
 
 ## Key features
 
-- **Appointment scheduler** (`/request-appointment/`) — a guided 3-step request
-  (Visit / When / Reach) with a weekday calendar, live summary, and modern
-  choice cards (`src/components/appointment-scheduler.tsx`). Posts to Formspree.
-  Inbox delivery remains pending a clinic-approved end-to-end test.
+- **Appointment booking** (`/request-appointment/`) — the practice’s Jarvis
+  scheduler plus office phone and email. Header and mobile CTAs still point
+  here.
 - **Contact form** — topic and reply chips, privacy confirmation, honeypot, and
   live Formspree delivery with honest success/error states.
 - **SEO** — per-page metadata + canonicals, `Dentist` JSON-LD (no
@@ -198,7 +189,7 @@ live Formspree form.
 ## Notes
 
 The site preserves Waikiki Dental's public content facts: Roseville address,
-phone, on-site appointment form, doctor bio, service menu, new-patient info, hours,
+phone, online booking page, doctor bio, service menu, new-patient info, hours,
 and testimonials. The service menu was last confirmed with the practice on
 September 23, 2026: no dental bonding, and traditional (not same-day) crowns. `waikikidental.com` is the live canonical production domain
 and matches `site.baseUrl`.

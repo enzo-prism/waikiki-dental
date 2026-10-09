@@ -548,7 +548,7 @@ export function VisitPanel({
                 href={scheduleHref}
                 className="font-semibold text-ocean-700 underline-offset-4 hover:underline"
               >
-                Use our appointment form
+                Request an appointment
               </Link>
               .
             </p>
@@ -575,8 +575,8 @@ export function VisitPanel({
                 The next step is a conversation.
               </h3>
               <p className="mt-4 max-w-md text-pretty leading-8 text-cream/75">
-                Choose a preferred day and time in our website form, or call or
-                text the Roseville office. The team will confirm the final slot.
+                Book a time online, or call or text the Roseville office. The
+                team will confirm the final slot.
               </p>
             </div>
             <div className="mt-8 flex flex-col gap-3">

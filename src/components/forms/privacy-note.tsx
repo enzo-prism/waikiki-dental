@@ -1,25 +1,3 @@
-import { LockKeyhole } from "lucide-react";
-
-export function PrivacyNote({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`flex items-start gap-3 rounded-2xl border border-ocean-100 bg-ocean-50/60 p-4 ${className}`}
-      role="note"
-    >
-      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-cream text-ocean-700 shadow-sm">
-        <LockKeyhole className="size-4" aria-hidden="true" />
-      </span>
-      <p className="text-sm leading-6 text-ink-muted">{children}</p>
-    </div>
-  );
-}
-
 export function PrivacyConsent({
   checked,
   onChange,

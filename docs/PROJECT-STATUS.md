@@ -23,8 +23,8 @@ Last reviewed: October 7, 2026
   crowns, and Dental Bonding retired because it is not offered.
   `/dental-bonding/` redirects to the services hub, and the old CEREC URL
   redirects to `/dental-crowns/`. Same-day/CEREC crowns stay unpublished.
-- Custom three-step appointment-request flow with an accessible weekday
-  calendar, saved session draft, live summary, and Formspree delivery states.
+- `/request-appointment/` embeds the practice’s Jarvis scheduler, with office
+  phone and email beside it. The retired on-site request form is gone.
 - Searchable, filterable Google reviews page plus high-homepage rating and
   review-theme proof.
 - Corrected button navigation so normal CTA clicks do not jump visitors to the
@@ -137,22 +137,20 @@ engineering work that is intentionally deferred.
 - Testimonials topic cards use `h3` under their `h2` section.
 - `vercel.json` installs with `npm ci`.
 - Unused exports removed from `src/lib/site.ts`.
-- Lead forms survive blocked or full browser storage (`safeStorage`), both
-  forms use `method="post"` so a pre-hydration submit never puts contact
-  details in a URL, and a restored or expired past/weekend preferred date is
-  rejected.
+- The contact form survives blocked or full browser storage (`safeStorage`)
+  and uses `method="post"` so a pre-hydration submit never puts contact
+  details in a URL.
 - GA automatic hits (e.g. `user_engagement`) now carry only the grouped
   location, fixed title, and empty referrer. The CSP allows GA4 (including
   `www.google.com/g/collect`) and Formspree; verified with zero violations
   against a production build served as `waikikidental.com`.
-- `/request-appointment/` is static (the `?reason=` preselect is read on the
-  client), so every route is prerendered.
+- `/request-appointment/` is static: Jarvis iframe plus office phone/email.
 - Accessibility: visible two-tone focus outline on every control (≥3:1 on
-  cream and navy, survives forced colors); roving-tabindex date grid with
-  valid grid ARIA; per-field `aria-invalid`/`aria-describedby`; error and
-  success focus management on both forms; mobile menu closes on route change
-  and at `lg`, makes the page inert while open; mega-menu Escape returns
-  focus; labelled nav landmarks; new-tab cues; review filter `role="group"`.
+  cream and navy, survives forced colors); per-field `aria-invalid` /
+  `aria-describedby` and error/success focus management on the contact form;
+  mobile menu closes on route change and at `lg`, makes the page inert while
+  open; mega-menu Escape returns focus; labelled nav landmarks; new-tab cues;
+  review filter `role="group"`.
 - Mobile bar says **Request Appointment**; Fraunces italic is loaded (no faux
   italic); review topics read "58 mentions of “Dr. Mike”"; the navigation
   scroll manager no longer leaks its reset flag on query-only links.

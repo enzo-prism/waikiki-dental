@@ -17,7 +17,9 @@ collected.
 - keeps the public `/reviews` aggregate;
 - excludes `/privacy-practices`; and
 - never sends form values, contact details, treatment reasons, UTM values, or
-  click IDs as custom events.
+  click IDs as custom events;
+- allowlists two named clicks from `/request-appointment/` — `Appointment
+  Phone Click` and `Appointment Email Click` — with no properties.
 
 The Vercel project currently has an analytics resource ID, but its Web Analytics
 feature is disabled. Vercel CLI classifies enabling it on this Pro team as a
@@ -68,8 +70,11 @@ If GA or Formspree endpoints change, update the CSP and
 CSP violations in the browser console on `waikikidental.com`.
 
 Do not add form values, names, email addresses, phone numbers, treatment or
-appointment reasons, notes, UTM values, click IDs, user IDs, or custom lead
-events to GA4. Formspree remains the lead source of truth.
+appointment reasons, notes, UTM values, click IDs, or user IDs to GA4. The
+only custom events besides grouped page views are the allowlisted
+`Appointment Phone Click` and `Appointment Email Click` from
+`trackAllowedEvent` in `src/lib/analytics.ts` (event name only, no
+properties). Formspree remains the contact-form source of truth.
 
 The stream's Enhanced Measurement settings were verified on September 1, 2026.
 **Page views** is the only active measurement, and **Page changes based on

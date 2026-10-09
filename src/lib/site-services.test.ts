@@ -4,6 +4,7 @@ import {
   canonicalPageRoutes,
   crownProcess,
   findService,
+  scheduleHref,
   services,
 } from "./site.ts";
 
@@ -43,6 +44,11 @@ describe("practice-confirmed service menu", () => {
       services.some((service) => service.slug === "roseville-cerec-same-day-crowns"),
       false,
     );
+  });
+
+  it("keeps appointment CTAs on the on-site Jarvis page", () => {
+    assert.equal(scheduleHref, "/request-appointment/");
+    assert.equal(canonicalPageRoutes.includes("request-appointment"), true);
   });
 
   it("keeps IV sedation on the public menu", () => {
