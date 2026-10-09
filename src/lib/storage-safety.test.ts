@@ -1,12 +1,6 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
-import {
-  APPOINTMENT_STORAGE_KEY,
-  clearAppointmentDraft,
-  readAppointmentDraft,
-  safeStorage,
-  writeAppointmentDraft,
-} from "./forms.ts";
+import { safeStorage } from "./forms.ts";
 import {
   captureLeadAttribution,
   resetLeadAttributionForTests,
@@ -71,8 +65,6 @@ function installWindow(mode: StorageMode) {
   return { local, session };
 }
 
-const fallback = { step: 0, form: { name: "" } };
-
 afterEach(() => {
   resetLeadAttributionForTests();
 });
@@ -86,19 +78,6 @@ describe("safeStorage", () => {
 });
 
 for (const mode of ["getter-throws", "setItem-throws", "all-throw"] as const) {
-  describe(`appointment draft storage (${mode})`, () => {
-    beforeEach(() => {
-      installWindow(mode);
-    });
-
-    it("never throws while reading, writing, or clearing", () => {
-      assert.doesNotThrow(() => writeAppointmentDraft({ step: 2, form: { name: "Ana" } }));
-      assert.equal(writeAppointmentDraft({ step: 2, form: { name: "Ana" } }), false);
-      assert.deepEqual(readAppointmentDraft(fallback), fallback);
-      assert.doesNotThrow(() => clearAppointmentDraft());
-    });
-  });
-
   describe(`lead attribution storage (${mode})`, () => {
     beforeEach(() => {
       installWindow(mode);
@@ -115,19 +94,7 @@ for (const mode of ["getter-throws", "setItem-throws", "all-throw"] as const) {
   });
 }
 
-describe("appointment draft storage (healthy)", () => {
-  it("round-trips a draft and drops corrupt JSON", () => {
-    const { session } = installWindow("ok");
-    assert.equal(writeAppointmentDraft({ step: 1, form: { name: "Ana" } }), true);
-    assert.deepEqual(readAppointmentDraft(fallback), {
-      step: 1,
-      form: { name: "Ana" },
-    });
-    session.store.set(APPOINTMENT_STORAGE_KEY, "{not json");
-    assert.deepEqual(readAppointmentDraft(fallback), fallback);
-    assert.equal(session.store.has(APPOINTMENT_STORAGE_KEY), false);
-  });
-
+describe("lead attribution storage (healthy)", () => {
   it("falls back to sessionStorage when localStorage setItem throws", () => {
     const { local, session } = installWindow("ok");
     local.setItem = () => {

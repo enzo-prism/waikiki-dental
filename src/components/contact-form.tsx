@@ -59,7 +59,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
   const errorId = useId();
 
   // Move focus to a new error so it is announced and the visitor lands next
-  // to it, matching the appointment scheduler.
+  // to it.
   useEffect(() => {
     if (!error) return;
     errorRef.current?.focus({ preventScroll: false });
@@ -168,7 +168,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
       if (!response.ok) {
         isSubmittingRef.current = false;
         setStatus("idle");
-        showError(formNetworkError(response.status, "contact"));
+        showError(formNetworkError(response.status));
         return;
       }
 

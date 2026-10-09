@@ -10,11 +10,11 @@ alwaysApply: true
 - Imagery is real practice photography or original abstract art only (see `scripts/generate-abstract-art.py`). No AI-generated or stock people, patients, or treatment rooms.
 - Never fabricate review counts, credentials, insurance, or clinical outcomes. `reviewStats` holds verified Google figures dated by `verifiedOn`; re-verify before changing them.
 - Service menu: no dental bonding; crowns are traditional two-visit crowns only. Never advertise same-day/CEREC crowns.
-- Do not submit the live Formspree appointment form unless the user explicitly requests a clinic-approved test.
+- Do not submit the live Formspree contact form unless the user explicitly requests a clinic-approved test.
 - `waikikidental.com` is the live production domain. Verify it after every release; a push alone does not deploy.
 - Aim copy at IV sedation and higher-ticket care, not general-dentistry volume.
-- Coral is reserved for **Request Appointment**, which routes to the custom
-  on-site form at `/request-appointment/`. Secondary is **Call or text**. Do
-  not introduce an external booking-system link or put the contact form on the
-  homepage.
+- Coral is reserved for **Request Appointment**, which routes to
+  `/request-appointment/` (Jarvis embed plus office phone/email). Secondary is
+  **Call or text**. Do not add another booking system or put the contact form
+  on the homepage.
 - This repo is Waikiki Dental only. Sacramento Dental Medicine lives in `enzo-prism/sacramento-dental-medicine-redesign`.

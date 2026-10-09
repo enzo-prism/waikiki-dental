@@ -2,11 +2,8 @@ import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
 import {
   FORMSPREE_ENDPOINT,
-  buildAppointmentFormspreePayload,
   buildContactFormspreePayload,
   isEmail,
-  isSelectableDate,
-  isSelectableIso,
   isUsPhone,
   resolveFormspreeEndpoint,
   submitFormspree,
@@ -56,51 +53,7 @@ describe("contact validation helpers", () => {
   });
 });
 
-describe("preferred date rules", () => {
-  // Thursday, September 24, 2026 (local midnight).
-  const today = new Date(2026, 8, 24);
-
-  it("allows today and later weekdays", () => {
-    assert.equal(isSelectableIso("2026-09-24", today), true);
-    assert.equal(isSelectableIso("2026-09-28", today), true);
-    assert.equal(isSelectableDate(new Date(2026, 9, 1), today), true);
-  });
-
-  it("rejects past days, weekends, and malformed values", () => {
-    assert.equal(isSelectableIso("2026-09-23", today), false);
-    assert.equal(isSelectableIso("2026-09-26", today), false);
-    assert.equal(isSelectableIso("2026-09-27", today), false);
-    assert.equal(isSelectableIso("2026-02-30", today), false);
-    assert.equal(isSelectableIso("next tuesday", today), false);
-    assert.equal(isSelectableIso("", today), false);
-  });
-});
-
 describe("Formspree payload contracts", () => {
-  it("builds a minimal appointment payload with the notification subject field", () => {
-    const payload = buildAppointmentFormspreePayload({
-      patientLabel: "New patient",
-      reasonLabel: "Cleaning or checkup",
-      reasonKey: "cleaning",
-      preferredDate: "2026-09-02",
-      preferredDateLabel: "Wednesday, September 2, 2026",
-      preferredTime: "Anytime",
-      name: " QA Visitor ",
-      phone: "(916) 555-0100",
-      email: "",
-      notes: "",
-      gotcha: "",
-    });
-
-    assert.equal(payload.subject, "Appointment request — Waikiki Dental");
-    assert.equal("_subject" in payload, false);
-    assert.equal(payload.form_type, "appointment_request");
-    assert.equal(payload.name, "QA Visitor");
-    assert.equal("email" in payload, false);
-    assert.equal(payload.privacy_check, "Yes");
-    assert.match(payload.message, /APPOINTMENT REQUEST \(not confirmed\)/);
-  });
-
   it("builds a contact payload with reply routing and no empty optional phone", () => {
     const payload = buildContactFormspreePayload({
       topicLabel: "Office question",
@@ -129,7 +82,7 @@ describe("Formspree transport", () => {
     };
 
     const response = await submitFormspree(
-      { form_type: "appointment_request" },
+      { form_type: "contact_message" },
       "https://formspree.io/f/abcdefgh",
       100,
     );

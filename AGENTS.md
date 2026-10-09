@@ -23,9 +23,10 @@ Sibling practice site: `enzo-prism/sacramento-dental-medicine-redesign`. Do not 
 - Header / footer / mobile Request+Call bar: `src/components/site-chrome.tsx`
 - Desktop mega-menu, current-page state, mobile sheet: `src/components/site-nav.tsx`
 - Wordmark, hibiscus mark, doctor portrait: `src/components/brand.tsx`
-- Appointment form: `src/components/appointment-scheduler.tsx` (Formspree)
+- Appointment booking: Jarvis iframe on `/request-appointment/` (`src/app/request-appointment/page.tsx`)
+- Office phone/email on that page: `src/components/appointment-office-contact.tsx`
 - Contact form: `src/components/contact-form.tsx`
-- Shared Formspree client / endpoint: `src/lib/forms.ts` (`xeajvpnb`)
+- Shared Formspree client / endpoint: `src/lib/forms.ts` (`xeajvpnb`) — contact only
 - First-touch UTM / click ID / `ad_id`: `src/lib/lead-attribution.ts`
 - Form options and privacy copy: `src/lib/site.ts`
 - Operations / launch checklist: `docs/OPERATIONS.md`
@@ -34,7 +35,7 @@ Service menu (confirmed by the practice in the 2026-09-23 sync): dental bonding 
 
 Do not invent Google review counts, credentials, insurance lists, or before/after results. `reviewStats` holds Google figures verified on the date in `verifiedOn`; re-verify on the live listing before changing any number.
 
-Scheduling (also in `AGENTS.local.md`): every appointment CTA stays on-site at `/request-appointment/`. No Jarvis or other third-party booking links. It is an appointment request; the office confirms the time by phone or text.
+Scheduling (also in `AGENTS.local.md`): every appointment CTA stays on-site at `/request-appointment/`, which embeds the practice’s Jarvis scheduler. Phone and email sit beside/below the iframe. Do not add a second booking system or restore the retired on-site request form.
 
 ## Conversion chrome
 
@@ -79,7 +80,7 @@ No local env is required to run the site. `.env.example` documents
 
 - Install is `npm ci`. Dev server is already started in the `dev` terminal on port 3000.
 - After UI or content changes, run `npm run lint` and `npm run build`. Open http://localhost:3000 and click through Home, Services, Doctor, and Request Appointment.
-- Do **not** submit the live Formspree appointment form from cloud unless the user explicitly asks for a clinic-approved test. Verify the page loads and client validation works instead.
+- Do **not** submit the live Formspree contact form from cloud unless the user explicitly asks for a clinic-approved test. On `/request-appointment/`, confirm Jarvis loads and the office phone/email links work; do not complete a Jarvis booking unless asked.
 - Preserve `waikikidental.com` as the canonical production domain and verify it after every release.
 - Positioning: IV sedation and higher-ticket care, not general-dentistry volume. Do not add “new patient specials” or high-volume SEO copy that fights that brief.
 - Secrets belong in the Cloud Agents dashboard, not committed `.env` files. Form IDs in `NEXT_PUBLIC_*` are public; never commit Formspree account tokens.

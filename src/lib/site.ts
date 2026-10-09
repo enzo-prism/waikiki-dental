@@ -2,19 +2,13 @@ import {
   BadgeCheck,
   Building2,
   CalendarClock,
-  CalendarSearch,
-  Clock3,
   Ellipsis,
   HeartPulse,
   MessageCircle,
-  MessageCircleMore,
   ShieldCheck,
   SmilePlus,
   Sparkles,
   Stethoscope,
-  Siren,
-  Sun,
-  Sunrise,
   Syringe,
   WandSparkles,
 } from "lucide-react";
@@ -599,91 +593,8 @@ export const emergency = {
   href: "/dental-emergencies/",
 };
 
-/* Guided appointment-request flow (the on-site scheduler). */
+/* On-site booking page: Jarvis embed plus office phone and email. */
 export const scheduleHref = "/request-appointment/";
-
-export type AppointmentReason = {
-  key: string;
-  label: string;
-  hint: string;
-  icon: ComponentType<{ className?: string }>;
-  tone?: "ocean" | "sunset" | "neutral";
-};
-
-export const patientTypes = [
-  {
-    key: "new" as const,
-    label: "First visit",
-    hint: "I haven’t been to this office",
-  },
-  {
-    key: "returning" as const,
-    label: "Welcome back",
-    hint: "I’m a current or past patient",
-  },
-];
-
-export const appointmentReasons: AppointmentReason[] = [
-  {
-    key: "sedation",
-    label: "IV sedation",
-    hint: "Comfort-focused care",
-    icon: ShieldCheck,
-  },
-  {
-    key: "restorative",
-    label: "Crown, implant, or repair",
-    hint: "Rebuild or replace a tooth",
-    icon: SmilePlus,
-  },
-  {
-    key: "cosmetic",
-    label: "Cosmetic consult",
-    hint: "Whitening, veneers, Invisalign",
-    icon: Sparkles,
-  },
-  {
-    key: "cleaning",
-    label: "Cleaning or checkup",
-    hint: "Routine preventive care",
-    icon: BadgeCheck,
-  },
-  {
-    key: "emergency",
-    label: "Tooth pain or emergency",
-    hint: "Call if you need to be seen today",
-    icon: Siren,
-    tone: "sunset",
-  },
-  {
-    key: "other",
-    label: "Something else",
-    hint: "Tell us in a note on the last step",
-    icon: MessageCircleMore,
-    tone: "neutral",
-  },
-];
-
-export const timeWindows = [
-  {
-    key: "morning",
-    label: "Morning",
-    hint: "Before noon",
-    icon: Sunrise,
-  },
-  {
-    key: "afternoon",
-    label: "Afternoon",
-    hint: "Noon until close",
-    icon: Sun,
-  },
-  {
-    key: "any",
-    label: "Anytime",
-    hint: "We’ll find a fit",
-    icon: Clock3,
-  },
-];
 
 export const contactTopics = [
   {
@@ -719,24 +630,11 @@ export const contactTopics = [
 ];
 
 export const formPrivacy = {
-  requestLine:
-    "Please don’t include symptoms, medical history, insurance IDs, or payment details.",
-  notesPlaceholder:
-    "Best window to call, or a non-medical accessibility request…",
-  requestConsent:
-    "I have not included medical, insurance, or payment details in this request.",
   contactLead:
     "A general question for the team. Please don’t include medical, insurance, or payment details.",
   contactConsent:
     "I have not included medical history, insurance IDs, payment details, or other sensitive information.",
   contactPlaceholder: "How can the team help? Keep this general.",
-};
-
-export const soonestOption = {
-  key: "soonest",
-  label: "Soonest available",
-  hint: "No preferred date. The team will look for the next opening.",
-  icon: CalendarSearch,
 };
 
 export const canonicalPageRoutes = [
