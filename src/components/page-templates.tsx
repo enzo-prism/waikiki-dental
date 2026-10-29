@@ -18,6 +18,7 @@ import {
   findService,
   crownProcess,
   implantProcess,
+  mediCalNotice,
   reviewDistribution,
   reviewStats,
   reviewTopics,
@@ -649,8 +650,8 @@ export function OfficePage() {
 export function NewPatientsPage() {
   const details: Array<[string, string]> = [
     [
-      "Insurance support",
-      "Most dental insurance plans are accepted, and the team will help you understand your benefits and estimated costs before treatment begins.",
+      "Insurance & Medi-Cal",
+      `${mediCalNotice} For other dental plans, contact the office to confirm coverage before your visit.`,
     ],
     [
       "Flexible payment options",
