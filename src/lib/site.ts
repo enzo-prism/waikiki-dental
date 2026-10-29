@@ -578,8 +578,10 @@ export const teamStory = {
 };
 
 /* Insurance & financing trust strip, based on the public new-patient page. */
+export const mediCalNotice = "We do not accept Medi-Cal.";
+
 export const paymentOptions = {
-  insuranceNote: "Most dental insurance plans welcome",
+  insuranceNote: `${mediCalNotice} Contact the office about other dental plans.`,
   items: [
     "CareCredit financing",
     "Major credit & debit cards",
