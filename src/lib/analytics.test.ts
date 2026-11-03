@@ -102,7 +102,7 @@ describe("generate_lead", () => {
     assert.equal(ANALYTICS_EVENTS.generateLead, "generate_lead");
     assert.equal(GENERATE_LEAD_FORM_TYPES.contact, "contact");
     assert.equal(isAllowedAnalyticsEvent(ANALYTICS_EVENTS.generateLead), true);
-    assert.doesNotMatch(ANALYTICS_EVENTS.generateLead, /name|email|phone|message|@|916/i);
+    assert.doesNotMatch(ANALYTICS_EVENTS.generateLead, /name|email|phone|message|@/i);
   });
 
   it("sends form_type and grouped page_path only after a successful contact submit helper call", () => {
@@ -127,7 +127,8 @@ describe("generate_lead", () => {
       form_type: "contact",
       page_path: "/conversion",
     });
-    assert.doesNotMatch(JSON.stringify(params), /hidden@example\.com|name|phone|message|916/i);
+    assert.deepEqual(Object.keys(params as object).sort(), ["form_type", "page_path"]);
+    assert.doesNotMatch(JSON.stringify(params), /utm_|gclid|email|phone|message/i);
   });
 
   it("does not send a lead event on privacy-excluded paths", () => {

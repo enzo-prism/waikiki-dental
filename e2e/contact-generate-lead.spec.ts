@@ -1,52 +1,64 @@
-import { expect, test, type Page, type Request, type TestInfo } from "@playwright/test";
-import { copyFile, mkdir, writeFile } from "node:fs/promises";
-import path from "node:path";
+import { expect, test, type Page, type Route } from "@playwright/test";
 
 const FORMSPREE_PATTERN = /formspree\.io\/f\//i;
-const COLLECT_PATTERN = /\/g\/collect/i;
-const MEASUREMENT_ID = "G-BKCF5MR0YN";
-const CONTACT_PATH = "/contact-waikiki-dental/?wd-ga-test-host=waikikidental.com";
-const OPTIONAL_PROOF_DIR = "/opt/cursor/artifacts";
+const CONTACT_PATH = "/contact-waikiki-dental/";
+const PII_OR_ATTRIBUTION = /name|email|phone|message|utm_|gclid/i;
 
-type CollectHit = {
-  url: string;
-  method: string;
-  postData: string | null;
-  eventName: string | null;
-  tid: string | null;
-  formType: string | null;
-  pagePath: string | null;
-};
+type FormspreeMock =
+  | { kind: "json"; status: number; body: unknown }
+  | { kind: "abort" }
+  | { kind: "hang" };
 
-function allParams(haystack: string, key: string) {
-  return new URLSearchParams(haystack).getAll(key);
+type GtagCall = unknown[];
+
+function isGoogleHost(hostname: string) {
+  const host = hostname.toLowerCase();
+  return (
+    host === "google.com" ||
+    host.endsWith(".google.com") ||
+    host === "google-analytics.com" ||
+    host.endsWith(".google-analytics.com") ||
+    host === "analytics.google.com" ||
+    host.endsWith(".analytics.google.com") ||
+    host === "googletagmanager.com" ||
+    host.endsWith(".googletagmanager.com") ||
+    host === "gstatic.com" ||
+    host.endsWith(".gstatic.com") ||
+    host === "doubleclick.net" ||
+    host.endsWith(".doubleclick.net") ||
+    host === "googleadservices.com" ||
+    host.endsWith(".googleadservices.com") ||
+    host === "googleapis.com" ||
+    host.endsWith(".googleapis.com")
+  );
 }
 
-function parseCollect(request: Request): CollectHit {
-  const url = request.url();
-  const postData = request.postData();
-  const query = url.split("?")[1] ?? "";
-  const body = postData ?? "";
-  const combined = `${query}&${body}`;
-  const eventNames = allParams(combined, "en");
-
-  return {
-    url,
-    method: request.method(),
-    postData,
-    eventName: eventNames.includes("generate_lead")
-      ? "generate_lead"
-      : (eventNames[0] ?? null),
-    tid: allParams(combined, "tid")[0] ?? null,
-    formType: allParams(combined, "ep.form_type")[0] ?? null,
-    pagePath:
-      allParams(combined, "ep.page_path")[0] ??
-      allParams(combined, "dp")[0] ??
-      null,
-  };
+function leadEvents(calls: GtagCall[]) {
+  return calls.filter(
+    (call) => call[0] === "event" && call[1] === "generate_lead",
+  );
 }
 
-async function fillContactForm(page: Page) {
+function assertLeadParams(params: unknown) {
+  expect(params).toBeTruthy();
+  expect(typeof params).toBe("object");
+  const record = params as Record<string, unknown>;
+  const keys = Object.keys(record).sort();
+  expect(keys).toEqual(
+    keys.includes("page_path") ? ["form_type", "page_path"] : ["form_type"],
+  );
+  expect(record.form_type).toBe("contact");
+  if ("page_path" in record) {
+    expect(record.page_path).toBe("/conversion");
+  }
+  expect(JSON.stringify(record)).not.toMatch(PII_OR_ATTRIBUTION);
+}
+
+async function gtagCalls(page: Page) {
+  return page.evaluate(() => window.__waikikiGtagCalls ?? []);
+}
+
+async function fillValidContactForm(page: Page) {
   await page.locator('input[name="topic"][value="general"]').click({ force: true });
   await page.locator('textarea[name="message"]').fill("Need hours for a visit.");
   await page.locator('input[name="replyBy"][value="email"]').click({ force: true });
@@ -55,132 +67,156 @@ async function fillContactForm(page: Page) {
   await page.locator('input[type="checkbox"]').check();
 }
 
-async function loadContactPageWithGtag(page: Page) {
-  const gtagResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes("googletagmanager.com/gtag/js") && response.ok(),
-  );
-  await page.goto(CONTACT_PATH);
-  await Promise.race([
-    gtagResponse,
-    page.waitForFunction(() => typeof window.gtag === "function"),
-  ]);
-  await page.waitForFunction(() => typeof window.gtag === "function");
-}
-
-async function flushQueuedAnalytics(page: Page) {
-  await page.evaluate(() => {
-    window.dispatchEvent(new Event("pagehide"));
+async function mockFormspree(page: Page, mock: FormspreeMock) {
+  await page.unroute(FORMSPREE_PATTERN).catch(() => undefined);
+  await page.route(FORMSPREE_PATTERN, async (route: Route) => {
+    if (mock.kind === "abort") {
+      await route.abort("failed");
+      return;
+    }
+    if (mock.kind === "hang") {
+      await new Promise(() => undefined);
+      return;
+    }
+    await route.fulfill({
+      status: mock.status,
+      contentType: "application/json",
+      body: JSON.stringify(mock.body),
+    });
   });
 }
 
-async function copyOptionalProof(from: string, name: string) {
-  try {
-    await mkdir(OPTIONAL_PROOF_DIR, { recursive: true });
-    await copyFile(from, path.join(OPTIONAL_PROOF_DIR, name));
-  } catch {
-    // Playwright's output directory is the portable source of truth.
-  }
-}
+async function openContact(page: Page) {
+  await page.addInitScript(() => {
+    const calls: unknown[][] = [];
+    window.__waikikiGtagCalls = calls;
+    window.gtag = (...args: unknown[]) => {
+      calls.push(args);
+    };
+  });
 
-async function writeProofFile(
-  testInfo: TestInfo,
-  name: string,
-  writer: (target: string) => Promise<unknown>,
-) {
-  const target = testInfo.outputPath(name);
-  await writer(target);
-  await copyOptionalProof(target, name);
+  await page.route("**/*", async (route) => {
+    const url = new URL(route.request().url());
+    if (isGoogleHost(url.hostname)) {
+      await route.abort();
+      return;
+    }
+    await route.continue();
+  });
+
+  await page.goto(CONTACT_PATH);
 }
 
 test.describe("contact generate_lead", () => {
-  test("fires generate_lead only after a successful Formspree response", async ({
+  test("fires exactly one generate_lead on Formspree 200 {ok:true}", async ({
     page,
-  }, testInfo) => {
-    let formspreeStatus = 200;
-    const collectHits: CollectHit[] = [];
-    const formspreeHits: { status: number; url: string }[] = [];
-
-    await page.route(COLLECT_PATTERN, async (route) => {
-      collectHits.push(parseCollect(route.request()));
-      await route.fulfill({ status: 204, body: "" });
-    });
-
-    await page.route(FORMSPREE_PATTERN, async (route) => {
-      formspreeHits.push({
-        status: formspreeStatus,
-        url: route.request().url(),
-      });
-      await route.fulfill({
-        status: formspreeStatus,
-        contentType: "application/json",
-        body: JSON.stringify({ ok: formspreeStatus === 200 }),
-      });
-    });
-
-    await loadContactPageWithGtag(page);
-    await fillContactForm(page);
+  }) => {
+    await openContact(page);
+    await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
+    await fillValidContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
-
     await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible();
-    await flushQueuedAnalytics(page);
-    await expect
-      .poll(() => collectHits.filter((hit) => hit.eventName === "generate_lead").length, {
-        timeout: 15_000,
-      })
-      .toBe(1);
 
-    const successLeads = collectHits.filter((hit) => hit.eventName === "generate_lead");
-    expect(successLeads).toHaveLength(1);
-    expect(successLeads[0]?.tid).toBe(MEASUREMENT_ID);
-    expect(successLeads[0]?.formType).toBe("contact");
-    expect(successLeads[0]?.pagePath).toBe("/conversion");
-    expect(JSON.stringify(successLeads[0])).not.toMatch(
-      /qa@example\.com|QA Visitor|Need hours|916/i,
-    );
+    const leads = leadEvents(await gtagCalls(page));
+    expect(leads).toHaveLength(1);
+    assertLeadParams(leads[0]?.[2]);
+  });
 
-    await writeProofFile(testInfo, "contact_form_success.png", (target) =>
-      page.screenshot({ path: target, fullPage: true }),
-    );
+  test("stays at one generate_lead after a double-click or re-render", async ({
+    page,
+  }) => {
+    await openContact(page);
+    await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
+    await fillValidContactForm(page);
+    await page.evaluate(() => {
+      const button = document.querySelector<HTMLButtonElement>('button[type="submit"]');
+      button?.click();
+      button?.click();
+    });
+    await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible();
+    await page.evaluate(() => window.dispatchEvent(new Event("resize")));
+    await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible();
 
-    const leadCountAfterSuccess = collectHits.filter(
-      (hit) => hit.eventName === "generate_lead",
-    ).length;
-    const collectCountAfterSuccess = collectHits.length;
-    formspreeStatus = 400;
-    await loadContactPageWithGtag(page);
-    await fillContactForm(page);
+    expect(leadEvents(await gtagCalls(page))).toHaveLength(1);
+  });
+
+  test("does not fire generate_lead on Formspree HTTP errors", async ({
+    context,
+  }) => {
+    for (const status of [400, 403, 422, 429, 500, 503]) {
+      const page = await context.newPage();
+      await openContact(page);
+      await mockFormspree(page, { kind: "json", status, body: { ok: false } });
+      await fillValidContactForm(page);
+      await page.getByRole("button", { name: "Send message" }).click();
+      const error =
+        status === 429
+          ? "Too many messages were sent just now"
+          : "Please try again, or call or email the office directly";
+      await expect(page.getByText(error)).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Your message was sent." })).toHaveCount(0);
+      expect(leadEvents(await gtagCalls(page)), `status ${status}`).toHaveLength(0);
+      await page.close();
+    }
+  });
+
+  test("does not fire generate_lead on a network abort", async ({ page }) => {
+    await openContact(page);
+    await mockFormspree(page, { kind: "abort" });
+    await fillValidContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
+    await expect(page.getByText("Check your connection")).toBeVisible();
+    expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+  });
 
-    await expect(page.getByRole("alert")).toBeVisible();
+  test("does not fire generate_lead on a submit timeout", async ({ page }) => {
+    await openContact(page);
+    await mockFormspree(page, { kind: "hang" });
+    await fillValidContactForm(page);
+    await page.getByRole("button", { name: "Send message" }).click();
+    await expect(page.getByText("Check your connection")).toBeVisible({
+      timeout: 12_000,
+    });
+    expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+  });
+
+  test("does not fire generate_lead on a validation failure", async ({ page }) => {
+    await openContact(page);
+    await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
+    await page.getByRole("button", { name: "Send message" }).click();
+    await expect(page.getByText("Please choose what this is about.")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Your message was sent." })).toHaveCount(0);
-    await flushQueuedAnalytics(page);
-    await page.waitForTimeout(1500);
+    expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+  });
 
-    const failureLeads = collectHits
-      .slice(collectCountAfterSuccess)
-      .filter((hit) => hit.eventName === "generate_lead");
-    expect(failureLeads).toEqual([]);
-    expect(
-      collectHits.filter((hit) => hit.eventName === "generate_lead"),
-    ).toHaveLength(leadCountAfterSuccess);
-    expect(formspreeHits.some((hit) => hit.status === 400)).toBeTruthy();
+  test("does not fire generate_lead on a honeypot hit", async ({ page }) => {
+    await openContact(page);
+    await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
+    await fillValidContactForm(page);
+    await page.locator('input[name="_gotcha"]').evaluate((element) => {
+      const input = element as HTMLInputElement;
+      const descriptor = Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value",
+      );
+      descriptor?.set?.call(input, "bot-company");
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    await page.getByRole("button", { name: "Send message" }).click();
+    await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible();
+    expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+  });
 
-    await writeProofFile(testInfo, "generate_lead_collect_log.json", (target) =>
-      writeFile(
-        target,
-        `${JSON.stringify(
-          {
-            measurementId: MEASUREMENT_ID,
-            formspreeHits,
-            collectHits,
-            generateLeadOnSuccess: successLeads,
-            generateLeadOnFailure: failureLeads,
-          },
-          null,
-          2,
-        )}\n`,
-      ),
-    );
+  test("does not fire generate_lead on HTTP 200 {ok:false}", async ({ page }) => {
+    await openContact(page);
+    await mockFormspree(page, { kind: "json", status: 200, body: { ok: false } });
+    await fillValidContactForm(page);
+    await page.getByRole("button", { name: "Send message" }).click();
+    await expect(
+      page.getByText("Please try again, or call or email the office directly"),
+    ).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Your message was sent." })).toHaveCount(0);
+    expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
   });
 });

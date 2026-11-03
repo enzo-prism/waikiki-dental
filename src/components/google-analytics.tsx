@@ -6,7 +6,7 @@ import { sanitizeAnalyticsPath } from "@/lib/analytics";
 import {
   GOOGLE_ANALYTICS_MEASUREMENT_ID,
   googleAnalyticsPageFields,
-  shouldCollectGoogleAnalytics,
+  isGoogleAnalyticsProductionHostname,
 } from "@/lib/google-analytics";
 
 declare global {
@@ -55,14 +55,7 @@ export function GoogleAnalytics() {
   const lastObservedPath = useRef<string | null>(null);
 
   useEffect(() => {
-    if (
-      !shouldCollectGoogleAnalytics(
-        window.location.hostname,
-        window.location.search,
-      )
-    ) {
-      return;
-    }
+    if (!isGoogleAnalyticsProductionHostname(window.location.hostname)) return;
     if (lastObservedPath.current === pathname) return;
     lastObservedPath.current = pathname;
 
