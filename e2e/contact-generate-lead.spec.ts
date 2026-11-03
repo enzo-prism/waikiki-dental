@@ -1,4 +1,4 @@
-import { expect, test, type Page, type Route } from "@playwright/test";
+import { expect, test, type Page, type Request, type Route } from "@playwright/test";
 import { FORM_SUBMIT_TIMEOUT_MS } from "../src/lib/forms";
 
 const FORMSPREE_PATTERN = /formspree\.io\/f\//i;
@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-function isGoogleHost(hostname: string) {
+function isGoogleOrAdsHost(hostname: string) {
   const host = hostname.toLowerCase();
   return (
     host === "google.com" ||
@@ -37,6 +37,8 @@ function isGoogleHost(hostname: string) {
     host.endsWith(".doubleclick.net") ||
     host === "googleadservices.com" ||
     host.endsWith(".googleadservices.com") ||
+    host === "googlesyndication.com" ||
+    host.endsWith(".googlesyndication.com") ||
     host === "googleapis.com" ||
     host.endsWith(".googleapis.com")
   );
@@ -135,10 +137,26 @@ async function openContact(
     };
   }, throwGtag);
 
+  const context = page.context();
+  const recordGoogleOrAds = (request: Request) => {
+    let hostname = "";
+    try {
+      hostname = new URL(request.url()).hostname;
+    } catch {
+      return;
+    }
+    if (isGoogleOrAdsHost(hostname)) {
+      googleRequests.push(request.url());
+    }
+  };
+  context.on("request", recordGoogleOrAds);
+  page.once("close", () => {
+    context.off("request", recordGoogleOrAds);
+  });
+
   await page.route("**/*", async (route) => {
     const url = new URL(route.request().url());
-    if (isGoogleHost(url.hostname)) {
-      googleRequests.push(route.request().url());
+    if (isGoogleOrAdsHost(url.hostname)) {
       await route.abort("blockedbyclient");
       return;
     }
