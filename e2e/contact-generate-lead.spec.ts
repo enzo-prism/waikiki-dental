@@ -1,11 +1,12 @@
-import { expect, test, type Page, type Request } from "@playwright/test";
-import { mkdir, writeFile } from "node:fs/promises";
+import { expect, test, type Page, type Request, type TestInfo } from "@playwright/test";
+import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const FORMSPREE_PATTERN = /formspree\.io\/f\//i;
 const COLLECT_PATTERN = /\/g\/collect/i;
 const MEASUREMENT_ID = "G-BKCF5MR0YN";
-const ARTIFACT_DIR = "/opt/cursor/artifacts";
+const CONTACT_PATH = "/contact-waikiki-dental/?wd-ga-test-host=waikikidental.com";
+const OPTIONAL_PROOF_DIR = "/opt/cursor/artifacts";
 
 type CollectHit = {
   url: string;
@@ -54,11 +55,16 @@ async function fillContactForm(page: Page) {
   await page.locator('input[type="checkbox"]').check();
 }
 
-async function waitForGtagScript(page: Page) {
-  await page.waitForResponse(
+async function loadContactPageWithGtag(page: Page) {
+  const gtagResponse = page.waitForResponse(
     (response) =>
       response.url().includes("googletagmanager.com/gtag/js") && response.ok(),
   );
+  await page.goto(CONTACT_PATH);
+  await Promise.race([
+    gtagResponse,
+    page.waitForFunction(() => typeof window.gtag === "function"),
+  ]);
   await page.waitForFunction(() => typeof window.gtag === "function");
 }
 
@@ -68,10 +74,29 @@ async function flushQueuedAnalytics(page: Page) {
   });
 }
 
+async function copyOptionalProof(from: string, name: string) {
+  try {
+    await mkdir(OPTIONAL_PROOF_DIR, { recursive: true });
+    await copyFile(from, path.join(OPTIONAL_PROOF_DIR, name));
+  } catch {
+    // Playwright's output directory is the portable source of truth.
+  }
+}
+
+async function writeProofFile(
+  testInfo: TestInfo,
+  name: string,
+  writer: (target: string) => Promise<unknown>,
+) {
+  const target = testInfo.outputPath(name);
+  await writer(target);
+  await copyOptionalProof(target, name);
+}
+
 test.describe("contact generate_lead", () => {
   test("fires generate_lead only after a successful Formspree response", async ({
     page,
-  }) => {
+  }, testInfo) => {
     let formspreeStatus = 200;
     const collectHits: CollectHit[] = [];
     const formspreeHits: { status: number; url: string }[] = [];
@@ -93,8 +118,7 @@ test.describe("contact generate_lead", () => {
       });
     });
 
-    await page.goto("/contact-waikiki-dental/?wd-ga-test-host=waikikidental.com");
-    await waitForGtagScript(page);
+    await loadContactPageWithGtag(page);
     await fillContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
 
@@ -115,19 +139,16 @@ test.describe("contact generate_lead", () => {
       /qa@example\.com|QA Visitor|Need hours|916/i,
     );
 
-    await mkdir(ARTIFACT_DIR, { recursive: true });
-    await page.screenshot({
-      path: path.join(ARTIFACT_DIR, "contact_form_success.png"),
-      fullPage: true,
-    });
+    await writeProofFile(testInfo, "contact_form_success.png", (target) =>
+      page.screenshot({ path: target, fullPage: true }),
+    );
 
     const leadCountAfterSuccess = collectHits.filter(
       (hit) => hit.eventName === "generate_lead",
     ).length;
     const collectCountAfterSuccess = collectHits.length;
     formspreeStatus = 400;
-    await page.goto("/contact-waikiki-dental/?wd-ga-test-host=waikikidental.com");
-    await waitForGtagScript(page);
+    await loadContactPageWithGtag(page);
     await fillContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
 
@@ -145,17 +166,21 @@ test.describe("contact generate_lead", () => {
     ).toHaveLength(leadCountAfterSuccess);
     expect(formspreeHits.some((hit) => hit.status === 400)).toBeTruthy();
 
-    const log = {
-      measurementId: MEASUREMENT_ID,
-      formspreeHits,
-      collectHits,
-      generateLeadOnSuccess: successLeads,
-      generateLeadOnFailure: failureLeads,
-    };
-
-    await writeFile(
-      path.join(ARTIFACT_DIR, "generate_lead_collect_log.json"),
-      `${JSON.stringify(log, null, 2)}\n`,
+    await writeProofFile(testInfo, "generate_lead_collect_log.json", (target) =>
+      writeFile(
+        target,
+        `${JSON.stringify(
+          {
+            measurementId: MEASUREMENT_ID,
+            formspreeHits,
+            collectHits,
+            generateLeadOnSuccess: successLeads,
+            generateLeadOnFailure: failureLeads,
+          },
+          null,
+          2,
+        )}\n`,
+      ),
     );
   });
 });
