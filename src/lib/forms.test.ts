@@ -3,6 +3,7 @@ import { afterEach, describe, it } from "node:test";
 import {
   FORMSPREE_ENDPOINT,
   buildContactFormspreePayload,
+  isAcceptedFormspreeSuccess,
   isEmail,
   isUsPhone,
   resolveFormspreeEndpoint,
@@ -73,6 +74,16 @@ describe("Formspree payload contracts", () => {
   });
 });
 
+describe("Formspree success gate", () => {
+  it("rejects HTTP failures and an explicit ok:false body", () => {
+    assert.equal(isAcceptedFormspreeSuccess({ ok: false }, { ok: true }), false);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, { ok: false }), false);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, { ok: true }), true);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, {}), true);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, null), true);
+  });
+});
+
 describe("Formspree transport", () => {
   it("posts JSON to the resolved endpoint with an abort signal", async () => {
     let observed: { url?: string; init?: RequestInit } = {};
@@ -81,17 +92,54 @@ describe("Formspree transport", () => {
       return new Response(null, { status: 200 });
     };
 
-    const response = await submitFormspree(
+    const { response, body } = await submitFormspree(
       { form_type: "contact_message" },
       "https://formspree.io/f/abcdefgh",
       100,
     );
 
     assert.equal(response.ok, true);
+    assert.equal(body, null);
     assert.equal(observed.url, "https://formspree.io/f/abcdefgh");
     assert.equal(observed.init?.method, "POST");
     assert.equal(observed.init?.headers && (observed.init.headers as Record<string, string>).Accept, "application/json");
     assert.ok(observed.init?.signal instanceof AbortSignal);
+  });
+
+  it("parses a JSON body before the timeout is cleared", async () => {
+    globalThis.fetch = async () =>
+      new Response(JSON.stringify({ ok: false, error: "rejected" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+
+    const { response, body } = await submitFormspree(
+      {},
+      "https://formspree.io/f/abcdefgh",
+      100,
+    );
+
+    assert.equal(response.ok, true);
+    assert.deepEqual(body, { ok: false, error: "rejected" });
+  });
+
+  it("returns a 200 with a stalled body instead of hanging", async () => {
+    globalThis.fetch = async () =>
+      new Response(new ReadableStream({ start() {} }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+
+    const started = Date.now();
+    const { response, body } = await submitFormspree(
+      {},
+      "https://formspree.io/f/abcdefgh",
+      30,
+    );
+
+    assert.equal(response.ok, true);
+    assert.equal(body, null);
+    assert.ok(Date.now() - started < 200);
   });
 
   it("aborts a stalled request", async () => {

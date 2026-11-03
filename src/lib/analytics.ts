@@ -15,7 +15,15 @@ declare global {
 export const ANALYTICS_EVENTS = {
   phoneClick: "Phone Click",
   emailClick: "Email Click",
+  generateLead: "generate_lead",
 } as const;
+
+export const GENERATE_LEAD_FORM_TYPES = {
+  contact: "contact",
+} as const;
+
+export type GenerateLeadFormType =
+  (typeof GENERATE_LEAD_FORM_TYPES)[keyof typeof GENERATE_LEAD_FORM_TYPES];
 
 export type AllowedAnalyticsEvent =
   (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS];
@@ -28,6 +36,7 @@ export type AllowedAnalyticsEvent =
 export const GOOGLE_ANALYTICS_EVENT_NAMES: Record<AllowedAnalyticsEvent, string> = {
   "Phone Click": "phone_click",
   "Email Click": "email_click",
+  generate_lead: "generate_lead",
 };
 
 const allowedAnalyticsEvents = new Set<string>(Object.values(ANALYTICS_EVENTS));
@@ -81,6 +90,42 @@ export function trackContactLinkClick(target: EventTarget | null) {
   if (!name) return null;
   trackAllowedEvent(name);
   return name;
+}
+
+/**
+ * GA4 recommended lead event for a successful contact Formspree response.
+ * Only `form_type` and the grouped `page_path` are sent — never name, email,
+ * phone, message, topic, or attribution fields.
+ */
+export function trackGenerateLead(formType: GenerateLeadFormType) {
+  switch (formType) {
+    case GENERATE_LEAD_FORM_TYPES.contact:
+      break;
+    default: {
+      const _exhaustive: never = formType;
+      void _exhaustive;
+      return false;
+    }
+  }
+
+  if (typeof window === "undefined") return false;
+
+  const pagePath = sanitizeAnalyticsPath(window.location.pathname);
+  if (!pagePath) return false;
+
+  const params = {
+    form_type: formType,
+    page_path: pagePath,
+  };
+
+  try {
+    track(ANALYTICS_EVENTS.generateLead);
+  } catch {
+    // Script may be absent on local or when Web Analytics is off.
+  }
+
+  window.gtag?.("event", ANALYTICS_EVENTS.generateLead, params);
+  return true;
 }
 
 const PRACTICE_PATHS = new Set([

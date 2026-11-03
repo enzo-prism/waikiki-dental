@@ -2,12 +2,14 @@ import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
 import {
   ANALYTICS_EVENTS,
+  GENERATE_LEAD_FORM_TYPES,
   GOOGLE_ANALYTICS_EVENT_NAMES,
   contactLinkEvent,
   isAllowedAnalyticsEvent,
   sanitizeVercelAnalyticsEvent,
   trackAllowedEvent,
   trackContactLinkClick,
+  trackGenerateLead,
 } from "./analytics.ts";
 import { site } from "./site.ts";
 
@@ -103,6 +105,7 @@ describe("phone and email conversion events", () => {
     assert.deepEqual(GOOGLE_ANALYTICS_EVENT_NAMES, {
       "Phone Click": "phone_click",
       "Email Click": "email_click",
+      generate_lead: "generate_lead",
     });
     for (const name of Object.values(GOOGLE_ANALYTICS_EVENT_NAMES)) {
       assert.match(name, /^[a-z][a-z0-9_]{0,39}$/);
@@ -137,5 +140,76 @@ describe("phone and email conversion events", () => {
       ["event", "phone_click"],
       ["event", "email_click"],
     ]);
+  });
+});
+
+describe("generate_lead", () => {
+  afterEach(() => {
+    Reflect.deleteProperty(globalThis, "window");
+  });
+
+  it("allowlists the GA4 lead event without PII in the name", () => {
+    assert.equal(ANALYTICS_EVENTS.generateLead, "generate_lead");
+    assert.equal(GENERATE_LEAD_FORM_TYPES.contact, "contact");
+    assert.equal(isAllowedAnalyticsEvent(ANALYTICS_EVENTS.generateLead), true);
+    assert.doesNotMatch(ANALYTICS_EVENTS.generateLead, /name|email|phone|message|@/i);
+  });
+
+  it("sends form_type and grouped page_path only after a successful contact submit helper call", () => {
+    const calls: unknown[][] = [];
+    Object.defineProperty(globalThis, "window", {
+      configurable: true,
+      value: {
+        location: { pathname: "/contact-waikiki-dental/" },
+        gtag: (...args: unknown[]) => {
+          calls.push(args);
+        },
+      },
+    });
+
+    assert.equal(trackGenerateLead("contact"), true);
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0]?.[0], "event");
+    assert.equal(calls[0]?.[1], "generate_lead");
+
+    const params = calls[0]?.[2];
+    assert.deepEqual(params, {
+      form_type: "contact",
+      page_path: "/conversion",
+    });
+    assert.deepEqual(Object.keys(params as object).sort(), ["form_type", "page_path"]);
+    assert.doesNotMatch(JSON.stringify(params), /utm_|gclid|email|phone|message/i);
+  });
+
+  it("does not send a lead event on privacy-excluded paths", () => {
+    const calls: unknown[][] = [];
+    Object.defineProperty(globalThis, "window", {
+      configurable: true,
+      value: {
+        location: { pathname: "/privacy-practices" },
+        gtag: (...args: unknown[]) => {
+          calls.push(args);
+        },
+      },
+    });
+
+    assert.equal(trackGenerateLead("contact"), false);
+    assert.deepEqual(calls, []);
+  });
+
+  it("does not send a lead event for an unknown form type", () => {
+    const calls: unknown[][] = [];
+    Object.defineProperty(globalThis, "window", {
+      configurable: true,
+      value: {
+        location: { pathname: "/contact-waikiki-dental/" },
+        gtag: (...args: unknown[]) => {
+          calls.push(args);
+        },
+      },
+    });
+
+    assert.equal(trackGenerateLead("newsletter" as never), false);
+    assert.deepEqual(calls, []);
   });
 });
