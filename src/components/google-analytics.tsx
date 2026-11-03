@@ -62,7 +62,20 @@ export function GoogleAnalytics() {
     const safePath = sanitizeAnalyticsPath(pathname);
     if (!safePath) return;
 
-    const pageFields = googleAnalyticsPageFields(window.location.origin, safePath);
+    // The first hit of a page load is the landing hit: GA4 attributes the
+    // session from its campaign parameters and referrer.
+    const landing = !window.__waikikiGoogleAnalyticsInitialized;
+    const pageFields = googleAnalyticsPageFields(
+      window.location.origin,
+      safePath,
+      landing
+        ? {
+            search: window.location.search,
+            referrer: document.referrer,
+            hostname: window.location.hostname,
+          }
+        : undefined,
+    );
     initializeGoogleAnalytics(pageFields);
     // `set` applies to every later hit, including automatic engagement hits.
     window.gtag?.("set", pageFields);

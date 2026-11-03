@@ -15,6 +15,7 @@ import {
   findService,
   pageRoutes,
   reviewStats,
+  serviceSeo,
   site,
 } from "@/lib/site";
 
@@ -64,44 +65,6 @@ const staticPages: Record<
   },
 };
 
-const serviceMetadata: Record<string, { title: string; description: string }> = {
-  "roseville-invisalign": {
-    title: "Invisalign in Roseville, CA",
-    description:
-      "Explore clear, removable Invisalign aligners in Roseville. See whether aligners fit your smile and bite, and request a consultation at Waikiki Dental.",
-  },
-  "iv-sedation": {
-    title: "IV Sedation Dentistry in Roseville, CA",
-    description:
-      "Ask about monitored IV sedation dentistry in Roseville for dental anxiety, a strong gag reflex, or longer treatment visits at Waikiki Dental.",
-  },
-  "dental-emergencies": {
-    title: "Emergency Dentist in Roseville, CA",
-    description:
-      "Call Waikiki Dental for urgent tooth pain, swelling, a broken tooth, or a lost filling or crown. The Roseville team will guide your next step.",
-  },
-  "digital-x-ray": {
-    title: "Dental X-Rays in Roseville, CA",
-    description:
-      "Digital dental X-rays in Roseville help identify decay, root concerns, and bone changes that a visual exam cannot show. Learn what to expect.",
-  },
-  "teeth-whitening": {
-    title: "Professional Teeth Whitening in Roseville, CA",
-    description:
-      "Brighten deep, set-in stains with professional teeth whitening planned around your smile, sensitivity, and goals at Waikiki Dental in Roseville.",
-  },
-  "dental-crowns": {
-    title: "Dental Crowns in Roseville, CA",
-    description:
-      "Traditional lab-made dental crowns in Roseville for cracked, worn, or weakened teeth. See how the two-visit process works and request an appointment at Waikiki Dental.",
-  },
-  "roseville-dental-implants": {
-    title: "Dental Implants in Roseville, CA",
-    description:
-      "Explore dental implants in Roseville for replacing one or more missing teeth with a stable, natural-looking restoration at Waikiki Dental.",
-  },
-};
-
 // Routes that have their own dedicated folder (e.g. /request-appointment/)
 // must be excluded here so the catch-all doesn't claim the same path.
 const reservedRoutes = new Set(["request-appointment"]);
@@ -120,15 +83,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const page = staticPages[slug];
   const service = findService(slug);
-  const serviceSeo = serviceMetadata[slug];
+  const listing = serviceSeo[slug];
 
   const title =
     page?.title ??
-    serviceSeo?.title ??
+    listing?.title ??
     (service ? `${service.title} in Roseville, CA` : "Roseville Dental Care");
   const description =
     page?.description ??
-    serviceSeo?.description ??
+    listing?.description ??
     (service
       ? `${service.summary} Care is available at Waikiki Dental in Roseville, CA.`
       : site.description);

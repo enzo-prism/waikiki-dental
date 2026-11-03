@@ -598,6 +598,52 @@ export const emergency = {
 /* On-site booking page: Jarvis embed plus office phone and email. */
 export const scheduleHref = "/request-appointment/";
 
+const googleRating = `${reviewStats.rating.toFixed(1)} stars from ${reviewStats.count} Google reviews`;
+
+/**
+ * Search listing copy (title + meta description) for service pages. Titles
+ * get " | Waikiki Dental" from the root layout, so keep them to 43 characters
+ * (60 rendered); keep descriptions to 155. The November 2026 plan rewrote the
+ * emergency, Invisalign, crowns, and IV sedation listings to answer what
+ * searchers ask: how soon, what it costs, and whether this office fits. Use
+ * only facts held in this file (hours, phone, `paymentOptions`,
+ * `reviewStats`, the service copy): no prices, offers, or guarantees.
+ */
+export const serviceSeo: Record<string, { title: string; description: string }> = {
+  "roseville-invisalign": {
+    title: "Invisalign Dentist in Roseville, CA",
+    description: `Clear, removable aligners, digitally planned so you see where your smile is headed. CareCredit financing. ${googleRating}. Book online.`,
+  },
+  "iv-sedation": {
+    title: "IV Sedation Dentist in Roseville, CA",
+    description:
+      "Dental fear or a gag reflex? Dr. Narodovich has focused sedation training: rest, monitored throughout, with more done per visit. CareCredit financing.",
+  },
+  "dental-emergencies": {
+    title: "Emergency Dentist in Roseville: Call Now",
+    description: `Tooth pain, swelling, or a broken tooth? Call ${site.phone}. The team makes every effort to see urgent cases fast, Monday to Friday. CareCredit accepted.`,
+  },
+  "digital-x-ray": {
+    title: "Dental X-Rays in Roseville, CA",
+    description:
+      "Digital dental X-rays in Roseville help identify decay, root concerns, and bone changes that a visual exam cannot show. Learn what to expect.",
+  },
+  "teeth-whitening": {
+    title: "Professional Teeth Whitening in Roseville, CA",
+    description:
+      "Brighten deep, set-in stains with professional teeth whitening planned around your smile, sensitivity, and goals at Waikiki Dental in Roseville.",
+  },
+  "dental-crowns": {
+    title: "Dental Crowns in Roseville, CA: Two Visits",
+    description: `Cracked or worn tooth? A custom lab-made crown in two visits, with a temporary in between. CareCredit financing. ${googleRating}.`,
+  },
+  "roseville-dental-implants": {
+    title: "Dental Implants in Roseville, CA",
+    description:
+      "Explore dental implants in Roseville for replacing one or more missing teeth with a stable, natural-looking restoration at Waikiki Dental.",
+  },
+};
+
 export const contactTopics = [
   {
     key: "general",

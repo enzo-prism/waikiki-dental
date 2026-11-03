@@ -116,7 +116,9 @@ engineering work that is intentionally deferred.
    apply the trailing-slash redirect first. The only remaining fix is
    `skipTrailingSlashRedirect` plus slash handling in a proxy, which would put
    a function in front of every request on an otherwise fully static site;
-   not worth it, since search engines follow both 308s.
+   not worth it, since search engines follow both 308s. The same applies to
+   slashless old `www` URLs; with a slash they now resolve in one hop
+   (`ANALYTICS-SEARCH.md`, "Old www addresses").
 
 ### Fixed in the September 24, 2026 audit pass
 
