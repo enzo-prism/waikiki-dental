@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope } from "next/font/google";
+import { ContactClickTracker } from "@/components/contact-click-tracker";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import { LeadAttributionCapture } from "@/components/lead-attribution-capture";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
@@ -105,6 +106,7 @@ export default function RootLayout({
         <SiteFooter />
         <MobileCtaBar />
         <GoogleAnalytics />
+        <ContactClickTracker />
         <SeasonalFavicon />
         {analyticsEnabled ? <SiteAnalytics /> : null}
       </body>

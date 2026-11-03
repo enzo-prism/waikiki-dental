@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 /** The only host that should be indexed; every other host gets noindex. */
 export const productionHost = "waikikidental.com";
 
+/** Host values in `has`/`missing` are anchored regexes; escape the dots. */
+const escapeHost = (host: string) => host.replace(/\./g, "\\.");
+
 /**
  * Production Content-Security-Policy. The site is fully static, so there are
  * no per-request nonces: Next's inline bootstrap scripts and the inline
@@ -52,6 +55,132 @@ export const securityHeaders = [
   },
 ];
 
+type LegacyRedirect = {
+  source: string;
+  destination: string;
+} & ({ permanent: true } | { statusCode: 301 });
+
+/** Origin every old host and path should land on, in a single hop. */
+export const canonicalOrigin = `https://${productionHost}`;
+
+/** The pre-redesign site lived on www; Google still holds some of its URLs. */
+export const legacyWwwHost = `www.${productionHost}`;
+
+/**
+ * Old URLs and retired pages. Every destination must be a live canonical page,
+ * never another redirect source, so each old URL resolves in one hop.
+ */
+export const legacyRedirects: LegacyRedirect[] = [
+  { source: "/cosmetic-dentistry/", destination: "/smile-makeover/", permanent: true },
+  { source: "/roseville-family-dentist/", destination: "/cleanings-exams/", permanent: true },
+  { source: "/family-dentistry/", destination: "/cleanings-exams/", permanent: true },
+  {
+    source: "/dental-blog/2746154-say-goodbye-to-dental-anxiety-with-iv-sedation/",
+    destination: "/iv-sedation/",
+    permanent: true,
+  },
+  { source: "/iv-sedation-roseville/", destination: "/iv-sedation/", permanent: true },
+  { source: "/orthodontist-roseville/", destination: "/orthodontics/", permanent: true },
+  { source: "/roseville-dental-emergencies/", destination: "/dental-emergencies/", permanent: true },
+  { source: "/roseville-teeth-whitening/", destination: "/teeth-whitening/", permanent: true },
+  { source: "/roseville-veneers/", destination: "/veneers/", permanent: true },
+  { source: "/appointments/", destination: "/request-appointment/", permanent: true },
+  // Conversion URL: extra segments (ads, relative links, index.html) must
+  // land on the real form. :path+ requires at least one extra segment so
+  // /request-appointment/ itself is not redirected. Query strings pass through.
+  { source: "/request-appointment/:path+", destination: "/request-appointment/", permanent: true },
+  { source: "/request-appointment/:path+/", destination: "/request-appointment/", permanent: true },
+  // Same-day/CEREC crowns are not offered; traditional crowns are.
+  {
+    source: "/roseville-cerec-same-day-crowns/",
+    destination: "/dental-crowns/",
+    statusCode: 301,
+  },
+  // Bonding is not offered, so the retired page goes to the services hub.
+  { source: "/dental-bonding/", destination: "/roseville-dental-care/", permanent: true },
+  { source: "/dental-implants/", destination: "/roseville-dental-implants/", permanent: true },
+  { source: "/invisalign/", destination: "/roseville-invisalign/", permanent: true },
+  { source: "/meet-our-doctors/", destination: "/michael-narodovich-dmd/", permanent: true },
+  { source: "/michael-narodovich-dds/", destination: "/michael-narodovich-dmd/", permanent: true },
+  { source: "/privacy-policy/", destination: "/privacy-practices/", permanent: true },
+  { source: "/our-practice/", destination: "/waikiki-dental-roseville/", permanent: true },
+  { source: "/contact/", destination: "/contact-waikiki-dental/", permanent: true },
+  { source: "/our-practice/testimonials/", destination: "/patient-testimonials/", permanent: true },
+  { source: "/patient-reviews/", destination: "/patient-testimonials/", permanent: true },
+  { source: "/procedures/restorations/dental-implants/", destination: "/roseville-dental-implants/", permanent: true },
+  { source: "/dental-implants/full-arch-replacement/", destination: "/roseville-dental-implants/", permanent: true },
+  { source: "/procedures/dental-anxiety-and-fear/", destination: "/iv-sedation/", permanent: true },
+  { source: "/six-month-smiles/", destination: "/orthodontics/", permanent: true },
+  { source: "/dental-blog/", destination: "/iv-sedation/", permanent: true },
+  {
+    source: "/dental-blog/2758117-relaxation-dentist-sedation-roseville-ca/",
+    destination: "/iv-sedation/",
+    permanent: true,
+  },
+  {
+    source: "/dental-blog/2758118-the-benefits-of-iv-sedation/",
+    destination: "/iv-sedation/",
+    permanent: true,
+  },
+  {
+    source: "/dental-blog/2758133-sedation-dentistry-in-roseville-ca/",
+    destination: "/iv-sedation/",
+    permanent: true,
+  },
+  { source: "/dental-blog/archive-202508/", destination: "/iv-sedation/", permanent: true },
+  { source: "/dental-blog/archive-202606/", destination: "/iv-sedation/", permanent: true },
+  { source: "/dental-blog/archive-202607/", destination: "/iv-sedation/", permanent: true },
+  {
+    source: "/dental-blog/category/sedation-dentistry/",
+    destination: "/iv-sedation/",
+    permanent: true,
+  },
+];
+
+/**
+ * Host-matched twins of `legacyRedirects` for the old www host, so
+ * `www.waikikidental.com/invisalign/` goes straight to
+ * `https://waikikidental.com/roseville-invisalign/` instead of hopping to the
+ * apex first. They run before the www catch-alls, which keep the path (and
+ * the trailing slash pages are served at) for every other URL. Only effective
+ * while the www domain is served by this deployment rather than redirected by
+ * a Vercel domain setting (see docs/ANALYTICS-SEARCH.md, "Old www addresses").
+ */
+export function siteRedirects() {
+  const www = [{ type: "host" as const, value: escapeHost(legacyWwwHost) }];
+  return [
+    ...legacyRedirects.map((rule) => ({
+      ...rule,
+      has: www,
+      destination: `${canonicalOrigin}${rule.destination}`,
+    })),
+    // Every other www URL keeps its path, in one hop. Files and
+    // /.well-known/ keep their exact path; pages always get the trailing
+    // slash the apex serves them at (Next may match without it, so a plain
+    // `/:path*` would land on /iv-sedation and take a second hop).
+    {
+      source: "/.well-known/:path*",
+      has: www,
+      destination: `${canonicalOrigin}/.well-known/:path*`,
+      permanent: true,
+    },
+    {
+      source: "/:file((?:[^/]+/)*[^/]+\\.\\w+)",
+      has: www,
+      destination: `${canonicalOrigin}/:file`,
+      permanent: true,
+    },
+    {
+      source: "/:path+",
+      has: www,
+      destination: `${canonicalOrigin}/:path+/`,
+      permanent: true,
+    },
+    { source: "/", has: www, destination: `${canonicalOrigin}/`, permanent: true },
+    ...legacyRedirects,
+  ];
+}
+
 const nextConfig: NextConfig = {
   trailingSlash: true,
   poweredByHeader: false,
@@ -75,85 +204,14 @@ const nextConfig: NextConfig = {
         // Preview/*.vercel.app hosts must never be indexed. Host values are
         // anchored regexes matched against the port-less hostname.
         source: "/:path*",
-        missing: [{ type: "host", value: productionHost.replace(/\./g, "\\.") }],
+        missing: [{ type: "host", value: escapeHost(productionHost) }],
         headers: [{ key: "X-Robots-Tag", value: "noindex" }],
       },
     ];
   },
   // Imagery is self-hosted in /public/media, so no remote patterns are needed.
   async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "www.waikikidental.com" }],
-        destination: "https://waikikidental.com/:path*",
-        permanent: true,
-      },
-      { source: "/cosmetic-dentistry/", destination: "/smile-makeover/", permanent: true },
-      { source: "/roseville-family-dentist/", destination: "/cleanings-exams/", permanent: true },
-      { source: "/family-dentistry/", destination: "/cleanings-exams/", permanent: true },
-      {
-        source: "/dental-blog/2746154-say-goodbye-to-dental-anxiety-with-iv-sedation/",
-        destination: "/iv-sedation/",
-        permanent: true,
-      },
-      { source: "/iv-sedation-roseville/", destination: "/iv-sedation/", permanent: true },
-      { source: "/orthodontist-roseville/", destination: "/orthodontics/", permanent: true },
-      { source: "/roseville-dental-emergencies/", destination: "/dental-emergencies/", permanent: true },
-      { source: "/roseville-teeth-whitening/", destination: "/teeth-whitening/", permanent: true },
-      { source: "/roseville-veneers/", destination: "/veneers/", permanent: true },
-      { source: "/appointments/", destination: "/request-appointment/", permanent: true },
-      // Conversion URL: extra segments (ads, relative links, index.html) must
-      // land on the real form. :path+ requires at least one extra segment so
-      // /request-appointment/ itself is not redirected. Query strings pass through.
-      { source: "/request-appointment/:path+", destination: "/request-appointment/", permanent: true },
-      { source: "/request-appointment/:path+/", destination: "/request-appointment/", permanent: true },
-      // Same-day/CEREC crowns are not offered; traditional crowns are.
-      {
-        source: "/roseville-cerec-same-day-crowns/",
-        destination: "/dental-crowns/",
-        statusCode: 301,
-      },
-      // Bonding is not offered, so the retired page goes to the services hub.
-      { source: "/dental-bonding/", destination: "/roseville-dental-care/", permanent: true },
-      { source: "/dental-implants/", destination: "/roseville-dental-implants/", permanent: true },
-      { source: "/invisalign/", destination: "/roseville-invisalign/", permanent: true },
-      { source: "/meet-our-doctors/", destination: "/michael-narodovich-dmd/", permanent: true },
-      { source: "/michael-narodovich-dds/", destination: "/michael-narodovich-dmd/", permanent: true },
-      { source: "/privacy-policy/", destination: "/privacy-practices/", permanent: true },
-      { source: "/our-practice/", destination: "/waikiki-dental-roseville/", permanent: true },
-      { source: "/contact/", destination: "/contact-waikiki-dental/", permanent: true },
-      { source: "/our-practice/testimonials/", destination: "/patient-testimonials/", permanent: true },
-      { source: "/patient-reviews/", destination: "/patient-testimonials/", permanent: true },
-      { source: "/procedures/restorations/dental-implants/", destination: "/roseville-dental-implants/", permanent: true },
-      { source: "/dental-implants/full-arch-replacement/", destination: "/roseville-dental-implants/", permanent: true },
-      { source: "/procedures/dental-anxiety-and-fear/", destination: "/iv-sedation/", permanent: true },
-      { source: "/six-month-smiles/", destination: "/orthodontics/", permanent: true },
-      { source: "/dental-blog/", destination: "/iv-sedation/", permanent: true },
-      {
-        source: "/dental-blog/2758117-relaxation-dentist-sedation-roseville-ca/",
-        destination: "/iv-sedation/",
-        permanent: true,
-      },
-      {
-        source: "/dental-blog/2758118-the-benefits-of-iv-sedation/",
-        destination: "/iv-sedation/",
-        permanent: true,
-      },
-      {
-        source: "/dental-blog/2758133-sedation-dentistry-in-roseville-ca/",
-        destination: "/iv-sedation/",
-        permanent: true,
-      },
-      { source: "/dental-blog/archive-202508/", destination: "/iv-sedation/", permanent: true },
-      { source: "/dental-blog/archive-202606/", destination: "/iv-sedation/", permanent: true },
-      { source: "/dental-blog/archive-202607/", destination: "/iv-sedation/", permanent: true },
-      {
-        source: "/dental-blog/category/sedation-dentistry/",
-        destination: "/iv-sedation/",
-        permanent: true,
-      },
-    ];
+    return siteRedirects();
   },
 };
 

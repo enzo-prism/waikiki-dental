@@ -1,7 +1,4 @@
-"use client";
-
 import { Mail, Phone } from "lucide-react";
-import { ANALYTICS_EVENTS, trackAllowedEvent } from "@/lib/analytics";
 import { site } from "@/lib/site";
 
 export function AppointmentOfficeContact() {
@@ -13,23 +10,11 @@ export function AppointmentOfficeContact() {
         way.
       </p>
       <div className="mt-6 flex flex-col gap-3">
-        <a
-          href={site.phoneHref}
-          className="btn btn-outline w-full"
-          onClick={() =>
-            trackAllowedEvent(ANALYTICS_EVENTS.appointmentPhoneClick)
-          }
-        >
+        <a href={site.phoneHref} className="btn btn-outline w-full">
           <Phone className="size-4" aria-hidden="true" />
           {site.phone}
         </a>
-        <a
-          href={site.emailHref}
-          className="btn btn-outline w-full"
-          onClick={() =>
-            trackAllowedEvent(ANALYTICS_EVENTS.appointmentEmailClick)
-          }
-        >
+        <a href={site.emailHref} className="btn btn-outline w-full">
           <Mail className="size-4" aria-hidden="true" />
           {site.email}
         </a>

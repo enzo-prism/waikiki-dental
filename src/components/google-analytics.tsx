@@ -62,12 +62,26 @@ export function GoogleAnalytics() {
     const safePath = sanitizeAnalyticsPath(pathname);
     if (!safePath) return;
 
+    // Persistent fields (config and set) never carry landing attribution, so
+    // later hits such as phone_click or user_engagement keep an empty
+    // referrer and no query string.
     const pageFields = googleAnalyticsPageFields(window.location.origin, safePath);
+    // The first hit of a page load is the landing hit: GA4 attributes the
+    // session from its campaign parameters and referrer, which go on that one
+    // page_view event only.
+    const landing = !window.__waikikiGoogleAnalyticsInitialized;
+    const hitFields = landing
+      ? googleAnalyticsPageFields(window.location.origin, safePath, {
+          search: window.location.search,
+          referrer: document.referrer,
+          hostname: window.location.hostname,
+        })
+      : pageFields;
     initializeGoogleAnalytics(pageFields);
     // `set` applies to every later hit, including automatic engagement hits.
     window.gtag?.("set", pageFields);
     window.gtag?.("event", "page_view", {
-      ...pageFields,
+      ...hitFields,
       page_path: safePath,
       send_to: GOOGLE_ANALYTICS_MEASUREMENT_ID,
     });

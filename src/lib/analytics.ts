@@ -7,10 +7,14 @@ declare global {
   }
 }
 
-/** Named conversion events only. Never attach phone, email, or other PII. */
+/**
+ * Named conversion clicks only. Never attach phone, email, or other PII.
+ * Sent from every `tel:` and `mailto:` link on the site (header, mobile bar,
+ * heroes, footer, appointment page) by `ContactClickTracker`.
+ */
 export const ANALYTICS_EVENTS = {
-  appointmentPhoneClick: "Appointment Phone Click",
-  appointmentEmailClick: "Appointment Email Click",
+  phoneClick: "Phone Click",
+  emailClick: "Email Click",
   generateLead: "generate_lead",
 } as const;
 
@@ -23,6 +27,17 @@ export type GenerateLeadFormType =
 
 export type AllowedAnalyticsEvent =
   (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS];
+
+/**
+ * GA4 names for the same clicks. GA4 event names may only use letters,
+ * digits, and underscores, so Vercel's display names are not reused. Mark
+ * both as Key Events in the GA4 property to count them as conversions.
+ */
+export const GOOGLE_ANALYTICS_EVENT_NAMES: Record<AllowedAnalyticsEvent, string> = {
+  "Phone Click": "phone_click",
+  "Email Click": "email_click",
+  generate_lead: "generate_lead",
+};
 
 const allowedAnalyticsEvents = new Set<string>(Object.values(ANALYTICS_EVENTS));
 
@@ -44,9 +59,37 @@ export function trackAllowedEvent(name: string) {
     // Script may be absent on local or when Web Analytics is off.
   }
   if (typeof window !== "undefined") {
-    window.gtag?.("event", name);
+    window.gtag?.("event", GOOGLE_ANALYTICS_EVENT_NAMES[name]);
   }
   return true;
+}
+
+/** The conversion a link's href represents: a call or an email, else null. */
+export function contactLinkEvent(
+  href: string | null | undefined,
+): AllowedAnalyticsEvent | null {
+  const value = href?.trim().toLowerCase() ?? "";
+  if (value.startsWith("tel:")) return ANALYTICS_EVENTS.phoneClick;
+  if (value.startsWith("mailto:")) return ANALYTICS_EVENTS.emailClick;
+  return null;
+}
+
+type ClosestCapable = {
+  closest: (selector: string) => { getAttribute: (name: string) => string | null } | null;
+};
+
+/**
+ * Document-level click handler body: finds the clicked link, and if it is a
+ * `tel:` or `mailto:` link, records the matching conversion (name only).
+ */
+export function trackContactLinkClick(target: EventTarget | null) {
+  const element = target as Partial<ClosestCapable> | null;
+  if (typeof element?.closest !== "function") return null;
+  const link = element.closest("a[href]");
+  const name = contactLinkEvent(link?.getAttribute("href"));
+  if (!name) return null;
+  trackAllowedEvent(name);
+  return name;
 }
 
 /**
