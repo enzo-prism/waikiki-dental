@@ -65,10 +65,12 @@ privacy-reduced manual page view on each public route change. It:
 - sends the referring site's **origin only** (for example
   `https://www.google.com/`) on the landing hit, and an empty referrer on
   later route changes and for internal or `www`/apex self-referrals;
-- sets the same grouped `page_location`, fixed `page_title`, and referrer in
-  `gtag("config")` and with `gtag("set")` before every page view, so gtag's
-  automatic hits (such as `user_engagement`) never carry the raw URL, other
-  query parameters, or treatment page titles; and
+- sets the grouped `page_location`, fixed `page_title`, and an empty referrer
+  in `gtag("config")` and with `gtag("set")` before every page view, so gtag's
+  automatic hits (such as `user_engagement`) and custom events never carry the
+  raw URL, query parameters, the landing referrer, or treatment page titles.
+  The campaign parameters and referrer origin go only on the landing
+  `page_view` event itself; and
 - disables Google Signals and ad-personalization signals.
 
 ### Why GA4 reported almost every visit as Direct
