@@ -118,15 +118,50 @@ export function isAcceptedFormspreeSuccess(
   return true;
 }
 
+export type FormspreeSubmitResult = {
+  response: Response;
+  body: unknown;
+};
+
+function abortError(signal: AbortSignal) {
+  return signal.reason instanceof Error
+    ? signal.reason
+    : new DOMException("The operation was aborted.", "AbortError");
+}
+
+/**
+ * JSON parse stays on the same abort signal as fetch. A 200 whose body
+ * stalls or is unreadable resolves as `body: null` instead of hanging
+ * after the timeout is cleared.
+ */
+async function readJsonUntilAbort(response: Response, signal: AbortSignal) {
+  if (signal.aborted) return null;
+
+  let onAbort: (() => void) | undefined;
+  try {
+    return await Promise.race([
+      response.json(),
+      new Promise<never>((_resolve, reject) => {
+        onAbort = () => reject(abortError(signal));
+        signal.addEventListener("abort", onAbort, { once: true });
+      }),
+    ]);
+  } catch {
+    return null;
+  } finally {
+    if (onAbort) signal.removeEventListener("abort", onAbort);
+  }
+}
+
 export async function submitFormspree(
   payload: Record<string, unknown>,
   endpoint = FORMSPREE_ENDPOINT,
   timeoutMs = FORM_SUBMIT_TIMEOUT_MS,
-) {
+): Promise<FormspreeSubmitResult> {
   const controller = new AbortController();
   const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
   try {
-    return await fetch(resolveFormspreeEndpoint(endpoint), {
+    const response = await fetch(resolveFormspreeEndpoint(endpoint), {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -135,6 +170,8 @@ export async function submitFormspree(
       body: JSON.stringify(payload),
       signal: controller.signal,
     });
+    const body = await readJsonUntilAbort(response, controller.signal);
+    return { response, body };
   } finally {
     window.clearTimeout(timeout);
   }

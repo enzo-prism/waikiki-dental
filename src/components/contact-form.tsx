@@ -151,7 +151,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
     const topic = contactTopics.find((item) => item.key === form.topic);
 
     try {
-      const response = await submitFormspree(
+      const { response, body } = await submitFormspree(
         withLeadAttribution(
           buildContactFormspreePayload({
             topicLabel: topic?.label ?? form.topic,
@@ -172,13 +172,6 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         setStatus("idle");
         showError(formNetworkError(response.status));
         return;
-      }
-
-      let body: unknown = null;
-      try {
-        body = await response.json();
-      } catch {
-        body = null;
       }
 
       if (!isAcceptedFormspreeSuccess(response, body)) {

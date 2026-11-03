@@ -1,15 +1,24 @@
 import { expect, test, type Page, type Route } from "@playwright/test";
+import { FORM_SUBMIT_TIMEOUT_MS } from "../src/lib/forms";
 
 const FORMSPREE_PATTERN = /formspree\.io\/f\//i;
 const CONTACT_PATH = "/contact-waikiki-dental/";
 const PII_OR_ATTRIBUTION = /name|email|phone|message|utm_|gclid/i;
+const LEAD_PARAM_KEYS = ["form_type", "page_path"] as const;
 
 type FormspreeMock =
   | { kind: "json"; status: number; body: unknown }
   | { kind: "abort" }
-  | { kind: "hang" };
+  | { kind: "hang" }
+  | { kind: "stalled-body" };
 
 type GtagCall = unknown[];
+
+declare global {
+  interface Window {
+    __waikikiGtagCalls?: unknown[][];
+  }
+}
 
 function isGoogleHost(hostname: string) {
   const host = hostname.toLowerCase();
@@ -43,15 +52,14 @@ function assertLeadParams(params: unknown) {
   expect(params).toBeTruthy();
   expect(typeof params).toBe("object");
   const record = params as Record<string, unknown>;
-  const keys = Object.keys(record).sort();
-  expect(keys).toEqual(
-    keys.includes("page_path") ? ["form_type", "page_path"] : ["form_type"],
-  );
+  expect(Object.keys(record).sort()).toEqual([...LEAD_PARAM_KEYS]);
   expect(record.form_type).toBe("contact");
-  if ("page_path" in record) {
-    expect(record.page_path).toBe("/conversion");
-  }
+  expect(record.page_path).toBe("/conversion");
   expect(JSON.stringify(record)).not.toMatch(PII_OR_ATTRIBUTION);
+}
+
+function assertNoGoogleRequests(googleRequests: string[]) {
+  expect(googleRequests, googleRequests.join("\n")).toEqual([]);
 }
 
 async function gtagCalls(page: Page) {
@@ -74,7 +82,7 @@ async function mockFormspree(page: Page, mock: FormspreeMock) {
       await route.abort("failed");
       return;
     }
-    if (mock.kind === "hang") {
+    if (mock.kind === "hang" || mock.kind === "stalled-body") {
       await new Promise(() => undefined);
       return;
     }
@@ -84,34 +92,68 @@ async function mockFormspree(page: Page, mock: FormspreeMock) {
       body: JSON.stringify(mock.body),
     });
   });
+
+  if (mock.kind !== "stalled-body") return;
+
+  await page.evaluate(() => {
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = async (input, init) => {
+      const url =
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.href
+            : input instanceof Request
+              ? input.url
+              : String(input);
+      if (/formspree\.io\/f\//i.test(url)) {
+        return new Response(new ReadableStream({ start() {} }), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
+      return originalFetch(input, init);
+    };
+  });
 }
 
-async function openContact(page: Page) {
-  await page.addInitScript(() => {
+async function openContact(
+  page: Page,
+  options: { throwGtag?: boolean } = {},
+) {
+  const googleRequests: string[] = [];
+  const throwGtag = Boolean(options.throwGtag);
+
+  await page.addInitScript((shouldThrow: boolean) => {
     const calls: unknown[][] = [];
     window.__waikikiGtagCalls = calls;
     window.gtag = (...args: unknown[]) => {
       calls.push(args);
+      if (shouldThrow) {
+        throw new Error("gtag failed");
+      }
     };
-  });
+  }, throwGtag);
 
   await page.route("**/*", async (route) => {
     const url = new URL(route.request().url());
     if (isGoogleHost(url.hostname)) {
-      await route.abort();
+      googleRequests.push(route.request().url());
+      await route.abort("blockedbyclient");
       return;
     }
     await route.continue();
   });
 
   await page.goto(CONTACT_PATH);
+  return googleRequests;
 }
 
 test.describe("contact generate_lead", () => {
   test("fires exactly one generate_lead on Formspree 200 {ok:true}", async ({
     page,
   }) => {
-    await openContact(page);
+    const googleRequests = await openContact(page);
     await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
     await fillValidContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
@@ -120,12 +162,13 @@ test.describe("contact generate_lead", () => {
     const leads = leadEvents(await gtagCalls(page));
     expect(leads).toHaveLength(1);
     assertLeadParams(leads[0]?.[2]);
+    assertNoGoogleRequests(googleRequests);
   });
 
   test("stays at one generate_lead after a double-click or re-render", async ({
     page,
   }) => {
-    await openContact(page);
+    const googleRequests = await openContact(page);
     await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
     await fillValidContactForm(page);
     await page.evaluate(() => {
@@ -138,6 +181,7 @@ test.describe("contact generate_lead", () => {
     await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible();
 
     expect(leadEvents(await gtagCalls(page))).toHaveLength(1);
+    assertNoGoogleRequests(googleRequests);
   });
 
   test("does not fire generate_lead on Formspree HTTP errors", async ({
@@ -145,7 +189,7 @@ test.describe("contact generate_lead", () => {
   }) => {
     for (const status of [400, 403, 422, 429, 500, 503]) {
       const page = await context.newPage();
-      await openContact(page);
+      const googleRequests = await openContact(page);
       await mockFormspree(page, { kind: "json", status, body: { ok: false } });
       await fillValidContactForm(page);
       await page.getByRole("button", { name: "Send message" }).click();
@@ -156,41 +200,45 @@ test.describe("contact generate_lead", () => {
       await expect(page.getByText(error)).toBeVisible();
       await expect(page.getByRole("heading", { name: "Your message was sent." })).toHaveCount(0);
       expect(leadEvents(await gtagCalls(page)), `status ${status}`).toHaveLength(0);
+      assertNoGoogleRequests(googleRequests);
       await page.close();
     }
   });
 
   test("does not fire generate_lead on a network abort", async ({ page }) => {
-    await openContact(page);
+    const googleRequests = await openContact(page);
     await mockFormspree(page, { kind: "abort" });
     await fillValidContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
     await expect(page.getByText("Check your connection")).toBeVisible();
     expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+    assertNoGoogleRequests(googleRequests);
   });
 
   test("does not fire generate_lead on a submit timeout", async ({ page }) => {
-    await openContact(page);
+    const googleRequests = await openContact(page);
     await mockFormspree(page, { kind: "hang" });
     await fillValidContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
     await expect(page.getByText("Check your connection")).toBeVisible({
-      timeout: 12_000,
+      timeout: FORM_SUBMIT_TIMEOUT_MS + 4_000,
     });
     expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+    assertNoGoogleRequests(googleRequests);
   });
 
   test("does not fire generate_lead on a validation failure", async ({ page }) => {
-    await openContact(page);
+    const googleRequests = await openContact(page);
     await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
     await page.getByRole("button", { name: "Send message" }).click();
     await expect(page.getByText("Please choose what this is about.")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Your message was sent." })).toHaveCount(0);
     expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+    assertNoGoogleRequests(googleRequests);
   });
 
   test("does not fire generate_lead on a honeypot hit", async ({ page }) => {
-    await openContact(page);
+    const googleRequests = await openContact(page);
     await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
     await fillValidContactForm(page);
     await page.locator('input[name="_gotcha"]').evaluate((element) => {
@@ -206,10 +254,11 @@ test.describe("contact generate_lead", () => {
     await page.getByRole("button", { name: "Send message" }).click();
     await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible();
     expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+    assertNoGoogleRequests(googleRequests);
   });
 
   test("does not fire generate_lead on HTTP 200 {ok:false}", async ({ page }) => {
-    await openContact(page);
+    const googleRequests = await openContact(page);
     await mockFormspree(page, { kind: "json", status: 200, body: { ok: false } });
     await fillValidContactForm(page);
     await page.getByRole("button", { name: "Send message" }).click();
@@ -218,5 +267,42 @@ test.describe("contact generate_lead", () => {
     ).toBeVisible();
     await expect(page.getByRole("heading", { name: "Your message was sent." })).toHaveCount(0);
     expect(leadEvents(await gtagCalls(page))).toHaveLength(0);
+    assertNoGoogleRequests(googleRequests);
+  });
+
+  test("reaches sent on a stalled-body 200 within the submit timeout", async ({
+    page,
+  }) => {
+    const googleRequests = await openContact(page);
+    await mockFormspree(page, { kind: "stalled-body" });
+    await fillValidContactForm(page);
+    const started = Date.now();
+    await page.getByRole("button", { name: "Send message" }).click();
+    await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible({
+      timeout: FORM_SUBMIT_TIMEOUT_MS + 1_500,
+    });
+    expect(Date.now() - started).toBeLessThan(FORM_SUBMIT_TIMEOUT_MS + 1_500);
+
+    const leads = leadEvents(await gtagCalls(page));
+    expect(leads).toHaveLength(1);
+    assertLeadParams(leads[0]?.[2]);
+    assertNoGoogleRequests(googleRequests);
+  });
+
+  test("keeps the sent confirmation when gtag throws", async ({ page }) => {
+    const googleRequests = await openContact(page, { throwGtag: true });
+    await mockFormspree(page, { kind: "json", status: 200, body: { ok: true } });
+    await fillValidContactForm(page);
+    await page.getByRole("button", { name: "Send message" }).click();
+    await expect(page.getByRole("heading", { name: "Your message was sent." })).toBeVisible();
+    await expect(page.getByText("Check your connection")).toHaveCount(0);
+    await expect(
+      page.getByText("Please try again, or call or email the office directly"),
+    ).toHaveCount(0);
+
+    const leads = leadEvents(await gtagCalls(page));
+    expect(leads).toHaveLength(1);
+    assertLeadParams(leads[0]?.[2]);
+    assertNoGoogleRequests(googleRequests);
   });
 });
