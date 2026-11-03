@@ -13,7 +13,7 @@ export default defineConfig({
   webServer: {
     command: `npx next start -p ${port}`,
     url: `http://127.0.0.1:${port}/contact-waikiki-dental/`,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });
