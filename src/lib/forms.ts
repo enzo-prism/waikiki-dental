@@ -103,6 +103,21 @@ export function formNetworkError(status: number) {
   return "We couldn’t send your message. Please try again, or call or email the office directly.";
 }
 
+/**
+ * HTTP 200 is not enough: Formspree can still return `{ ok: false }`.
+ * Missing `ok` is accepted so a well-formed 200 is not dropped.
+ */
+export function isAcceptedFormspreeSuccess(
+  response: { ok: boolean },
+  body: unknown,
+) {
+  if (!response.ok) return false;
+  if (body && typeof body === "object" && "ok" in body) {
+    return body.ok !== false;
+  }
+  return true;
+}
+
 export async function submitFormspree(
   payload: Record<string, unknown>,
   endpoint = FORMSPREE_ENDPOINT,

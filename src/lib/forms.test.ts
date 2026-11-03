@@ -3,6 +3,7 @@ import { afterEach, describe, it } from "node:test";
 import {
   FORMSPREE_ENDPOINT,
   buildContactFormspreePayload,
+  isAcceptedFormspreeSuccess,
   isEmail,
   isUsPhone,
   resolveFormspreeEndpoint,
@@ -70,6 +71,16 @@ describe("Formspree payload contracts", () => {
     assert.equal(payload.email, "qa@example.com");
     assert.equal("phone" in payload, false);
     assert.equal(payload.reply_preference, "Email");
+  });
+});
+
+describe("Formspree success gate", () => {
+  it("rejects HTTP failures and an explicit ok:false body", () => {
+    assert.equal(isAcceptedFormspreeSuccess({ ok: false }, { ok: true }), false);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, { ok: false }), false);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, { ok: true }), true);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, {}), true);
+    assert.equal(isAcceptedFormspreeSuccess({ ok: true }, null), true);
   });
 });
 

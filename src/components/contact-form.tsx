@@ -5,10 +5,12 @@ import { Loader2, Mail, Phone, Send } from "lucide-react";
 import { ChoiceChip } from "@/components/forms/choice-chip";
 import { Honeypot, PrivacyConsent } from "@/components/forms/privacy-note";
 import { RequestSuccess } from "@/components/forms/request-success";
+import { trackGenerateLead } from "@/lib/analytics";
 import {
   buildContactFormspreePayload,
   FORMSPREE_ENDPOINT,
   formNetworkError,
+  isAcceptedFormspreeSuccess,
   isEmail,
   isUsPhone,
   resolveFormspreeEndpoint,
@@ -172,7 +174,26 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         return;
       }
 
+      let body: unknown = null;
+      try {
+        body = await response.json();
+      } catch {
+        body = null;
+      }
+
+      if (!isAcceptedFormspreeSuccess(response, body)) {
+        isSubmittingRef.current = false;
+        setStatus("idle");
+        showError(formNetworkError(response.status));
+        return;
+      }
+
       setStatus("sent");
+      try {
+        trackGenerateLead("contact");
+      } catch {
+        // Tracking must not replace the success confirmation.
+      }
     } catch {
       isSubmittingRef.current = false;
       setStatus("idle");
