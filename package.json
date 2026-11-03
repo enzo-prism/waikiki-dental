@@ -10,7 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test src/lib/next-config-redirects.test.ts src/lib/next-config-headers.test.ts src/lib/site-services.test.ts src/lib/seasonal.test.ts src/lib/forms.test.ts src/lib/lead-attribution.test.ts src/lib/analytics.test.ts src/lib/google-analytics.test.ts src/lib/storage-safety.test.ts"
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test src/lib/next-config-redirects.test.ts src/lib/next-config-headers.test.ts src/lib/site-services.test.ts src/lib/seasonal.test.ts src/lib/forms.test.ts src/lib/lead-attribution.test.ts src/lib/analytics.test.ts src/lib/google-analytics.test.ts src/lib/storage-safety.test.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -20,6 +22,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19.2.18",

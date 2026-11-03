@@ -74,7 +74,9 @@ appointment reasons, notes, UTM values, click IDs, or user IDs to GA4. The
 only custom events besides grouped page views are the allowlisted
 `Appointment Phone Click` and `Appointment Email Click` from
 `trackAllowedEvent` in `src/lib/analytics.ts` (event name only, no
-properties). Formspree remains the contact-form source of truth.
+properties), and `generate_lead` from `trackGenerateLead` after a successful
+contact Formspree response (`form_type: "contact"` and the grouped
+`page_path` only). Formspree remains the contact-form source of truth.
 
 The stream's Enhanced Measurement settings were verified on September 1, 2026.
 **Page views** is the only active measurement, and **Page changes based on

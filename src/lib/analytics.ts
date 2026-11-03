@@ -7,11 +7,19 @@ declare global {
   }
 }
 
-/** Named conversion clicks only. Never attach phone, email, or other PII. */
+/** Named conversion events only. Never attach phone, email, or other PII. */
 export const ANALYTICS_EVENTS = {
   appointmentPhoneClick: "Appointment Phone Click",
   appointmentEmailClick: "Appointment Email Click",
+  generateLead: "generate_lead",
 } as const;
+
+export const GENERATE_LEAD_FORM_TYPES = {
+  contact: "contact",
+} as const;
+
+export type GenerateLeadFormType =
+  (typeof GENERATE_LEAD_FORM_TYPES)[keyof typeof GENERATE_LEAD_FORM_TYPES];
 
 export type AllowedAnalyticsEvent =
   (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS];
@@ -38,6 +46,42 @@ export function trackAllowedEvent(name: string) {
   if (typeof window !== "undefined") {
     window.gtag?.("event", name);
   }
+  return true;
+}
+
+/**
+ * GA4 recommended lead event for a successful contact Formspree response.
+ * Only `form_type` and the grouped `page_path` are sent — never name, email,
+ * phone, message, topic, or attribution fields.
+ */
+export function trackGenerateLead(formType: GenerateLeadFormType) {
+  switch (formType) {
+    case GENERATE_LEAD_FORM_TYPES.contact:
+      break;
+    default: {
+      const _exhaustive: never = formType;
+      void _exhaustive;
+      return false;
+    }
+  }
+
+  if (typeof window === "undefined") return false;
+
+  const pagePath = sanitizeAnalyticsPath(window.location.pathname);
+  if (!pagePath) return false;
+
+  const params = {
+    form_type: formType,
+    page_path: pagePath,
+  };
+
+  try {
+    track(ANALYTICS_EVENTS.generateLead);
+  } catch {
+    // Script may be absent on local or when Web Analytics is off.
+  }
+
+  window.gtag?.("event", ANALYTICS_EVENTS.generateLead, params);
   return true;
 }
 

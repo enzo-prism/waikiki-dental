@@ -5,6 +5,7 @@ import { Loader2, Mail, Phone, Send } from "lucide-react";
 import { ChoiceChip } from "@/components/forms/choice-chip";
 import { Honeypot, PrivacyConsent } from "@/components/forms/privacy-note";
 import { RequestSuccess } from "@/components/forms/request-success";
+import { trackGenerateLead } from "@/lib/analytics";
 import {
   buildContactFormspreePayload,
   FORMSPREE_ENDPOINT,
@@ -172,6 +173,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         return;
       }
 
+      trackGenerateLead("contact");
       setStatus("sent");
     } catch {
       isSubmittingRef.current = false;
