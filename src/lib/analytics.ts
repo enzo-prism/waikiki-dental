@@ -16,6 +16,8 @@ export const ANALYTICS_EVENTS = {
   phoneClick: "Phone Click",
   emailClick: "Email Click",
   generateLead: "generate_lead",
+  schedulerLinkClick: "scheduler_link_click",
+  jarvisBookingStart: "jarvis_booking_start",
 } as const;
 
 export const GENERATE_LEAD_FORM_TYPES = {
@@ -37,6 +39,8 @@ export const GOOGLE_ANALYTICS_EVENT_NAMES: Record<AllowedAnalyticsEvent, string>
   "Phone Click": "phone_click",
   "Email Click": "email_click",
   generate_lead: "generate_lead",
+  scheduler_link_click: "scheduler_link_click",
+  jarvis_booking_start: "jarvis_booking_start",
 };
 
 const allowedAnalyticsEvents = new Set<string>(Object.values(ANALYTICS_EVENTS));
@@ -87,7 +91,10 @@ export function trackContactLinkClick(target: EventTarget | null) {
   if (typeof element?.closest !== "function") return null;
   const link = element.closest("a[href]");
   const name = contactLinkEvent(link?.getAttribute("href"));
-  if (!name) return null;
+  if (!name) {
+    trackSchedulerLinkClick(link?.getAttribute("href"));
+    return null;
+  }
   trackAllowedEvent(name);
   return name;
 }
@@ -179,4 +186,20 @@ export function sanitizeVercelAnalyticsEvent(
   } catch {
     return null;
   }
+}
+
+/** Counts an on-site scheduler link click without sending its URL or query. */
+export function trackSchedulerLinkClick(href: string | null | undefined) {
+  if (!href || typeof window === "undefined") return false;
+  try {
+    const target = new URL(href, window.location.href);
+    if (
+      target.origin !== window.location.origin ||
+      target.pathname.replace(/\/+$/, "") !== "/request-appointment" ||
+      window.location.pathname.replace(/\/+$/, "") === "/request-appointment"
+    ) return false;
+  } catch {
+    return false;
+  }
+  return trackAllowedEvent(ANALYTICS_EVENTS.schedulerLinkClick);
 }

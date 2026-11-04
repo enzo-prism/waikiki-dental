@@ -338,7 +338,7 @@ export const services: Service[] = [
     summary:
       "Deep, monitored relaxation — so years of put-off dentistry can be finished in calm, comfortable visits.",
     description:
-      "This is the heart of the practice: patients who've avoided the dentist for years — fearful, or fighting a strong gag reflex — finally getting healthy in comfort. Dr. Narodovich's focused sedation training lets you rest, monitored throughout, while the work gets done.",
+      "If dental anxiety or a strong gag reflex has kept you away from the dentist, ask Dr. Narodovich about monitored IV sedation in Roseville. At the consultation, the team reviews your health and planned treatment and explains what to expect before, during, and after the visit.",
     highlights: [
       "Designed for dental fear and anxiety",
       "Helpful for strong gag reflexes",
@@ -617,7 +617,7 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   "iv-sedation": {
     title: "IV Sedation Dentist in Roseville, CA",
     description:
-      "Dental fear or a gag reflex? Dr. Narodovich has focused sedation training: rest, monitored throughout, with more done per visit. CareCredit financing.",
+      "Ask about monitored IV sedation in Roseville for dental anxiety or a strong gag reflex. Learn how the team plans your visit and what to expect."
   },
   "dental-emergencies": {
     title: "Emergency Dentist in Roseville: Call Now",

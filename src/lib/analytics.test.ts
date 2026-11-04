@@ -106,6 +106,8 @@ describe("phone and email conversion events", () => {
       "Phone Click": "phone_click",
       "Email Click": "email_click",
       generate_lead: "generate_lead",
+      scheduler_link_click: "scheduler_link_click",
+      jarvis_booking_start: "jarvis_booking_start",
     });
     for (const name of Object.values(GOOGLE_ANALYTICS_EVENT_NAMES)) {
       assert.match(name, /^[a-z][a-z0-9_]{0,39}$/);
