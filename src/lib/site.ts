@@ -253,7 +253,7 @@ export const services: Service[] = [
     summary:
       "Professional whitening that lifts years of coffee, tea, and time — safely and evenly.",
     description:
-      "Professional whitening reaches the deeper discoloration that drugstore strips leave behind, brightening your smile evenly with a plan matched to your teeth and your timeline.",
+      "Looking for professional teeth whitening in Roseville? At a visit, talk through your current shade, the stains you want to address, and any tooth sensitivity. The team can explain what whitening may achieve and help you plan it around your goals and timing.",
     highlights: [
       "Lifts deep, set-in stains",
       "Even, natural-looking brightness",
@@ -631,7 +631,7 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   "teeth-whitening": {
     title: "Professional Teeth Whitening in Roseville, CA",
     description:
-      "Brighten deep, set-in stains with professional teeth whitening planned around your smile, sensitivity, and goals at Waikiki Dental in Roseville.",
+      "Ask about professional teeth whitening in Roseville. Discuss stains, tooth sensitivity, and what to expect at a visit with Waikiki Dental.",
   },
   "dental-crowns": {
     title: "Dental Crowns in Roseville, CA: Two Visits",
