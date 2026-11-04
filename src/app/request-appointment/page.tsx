@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AppointmentOfficeContact } from "@/components/appointment-office-contact";
+import { JarvisBookingTracker } from "@/components/jarvis-booking-tracker";
 import { JsonLd } from "@/components/page-templates";
 import { createPageMetadata } from "@/lib/metadata";
 
@@ -19,10 +20,12 @@ export default function RequestAppointmentPage() {
   return (
     <>
       <JsonLd />
+      <JarvisBookingTracker />
       <section className="overflow-x-clip bg-surface-alt">
         <h1 className="sr-only">Request a dental appointment</h1>
         <div className="wrap-wide grid gap-8 py-10 sm:py-16 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:items-start lg:gap-10 lg:py-20">
           <iframe
+            data-jarvis-scheduler
             src={jarvisScheduleSrc}
             title="Book an appointment at Waikiki Dental"
             loading="lazy"

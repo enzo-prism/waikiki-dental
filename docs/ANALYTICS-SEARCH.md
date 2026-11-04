@@ -91,6 +91,11 @@ event names cannot contain spaces, so the Vercel display names are not
 reused), with no parameters. They count as conversions only after they are
 marked as **Key Events** in the GA4 property.
 
+The `scheduler_link_click` event measures clicks to the appointment page from
+elsewhere on the site. `jarvis_booking_start` measures the first focus into the
+Jarvis frame during that page visit. These name-only events are funnel signals.
+Use the office's phone system for answered calls and Jarvis for accepted bookings.
+
 Online bookings happen inside the Jarvis iframe on
 `schedule.jarvisanalytics.com`. The site cannot see a completed booking in a
 cross-origin frame, and Jarvis has not documented a booking-complete
