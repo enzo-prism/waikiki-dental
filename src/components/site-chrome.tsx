@@ -104,6 +104,8 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+            <li><Link href="/waikiki-dental-roseville/" className="text-cream/75 transition hover:text-cream">Our Roseville office</Link></li>
+            <li><Link href="/orthodontics/" className="text-cream/75 transition hover:text-cream">Orthodontic options</Link></li>
             <li>
               <Link
                 href={scheduleHref}

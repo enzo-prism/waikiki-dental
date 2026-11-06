@@ -40,6 +40,7 @@ import { AmbientVideo } from "./ambient-video";
 import { DoctorPortrait } from "./brand";
 import { ReviewExplorer } from "./review-explorer";
 import { SeasonalNotFoundArt } from "./seasonal";
+import { CareGuide } from "./care-guide";
 
 export function JsonLd() {
   return (
@@ -297,6 +298,8 @@ function SedationServicePage({ service }: { service: Service }) {
           </ul>
         </div>
       </section>
+      <CareGuide slug={service.slug} />
+      <RelatedCare excludeSlug={service.slug} />
       <BookStrip />
     </>
   );
@@ -374,6 +377,7 @@ function ProcessServicePage({
           </ul>
         </div>
       </section>
+      <CareGuide slug={service.slug} />
       <RelatedCare excludeSlug={service.slug} />
       <BookStrip />
     </>
@@ -518,9 +522,21 @@ export function OrthodonticsPage() {
 }
 
 export function DoctorPage() {
+  const profileUrl = absoluteUrl("/michael-narodovich-dmd/");
+  const personId = profileUrl + "#person";
   return (
     <>
       <JsonLd />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+          { "@type": "ProfilePage", "@id": profileUrl + "#webpage", url: profileUrl, name: doctor.name, mainEntity: { "@id": personId } },
+          { "@type": "Person", "@id": personId, name: "Michael Narodovich", honorificPrefix: "Dr.", honorificSuffix: "DMD", jobTitle: "Dentist",
+            url: profileUrl, image: absoluteUrl("/media/dr-narodovich-hd.jpg"), worksFor: { "@id": dentistId },
+            alumniOf: [{ "@type": "CollegeOrUniversity", name: "The Ohio State University" }, { "@type": "CollegeOrUniversity", name: "Temple University" }],
+            sameAs: ["https://sacramentodentalmedicine.com/meet-dr-narodovich#person"] },
+        ],
+      }).replace(/</g, "\\u003c") }} />
       <section className="bg-background py-16 sm:py-20">
         <div className="wrap grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
           <div>
@@ -551,6 +567,14 @@ export function DoctorPage() {
                 </span>
               ))}
             </div>
+            <p className="mt-6 text-sm leading-7 text-ink-muted">
+              Planning a visit? Read about <Link className="underline" href="/iv-sedation/">IV sedation</Link>,
+              {" "}<Link className="underline" href="/roseville-dental-implants/">dental implants</Link>, and
+              {" "}<Link className="underline" href="/waikiki-dental-roseville/">the Roseville office</Link>.
+              {" "}For current professional license information, use the{" "}
+              <a className="underline" href="https://search.dca.ca.gov/">California Department of Consumer Affairs license search</a>.
+              Ask the office about qualifications for your specific treatment.
+            </p>
           </div>
 
           <div className="relative mx-auto w-full max-w-[275px] lg:mx-0 lg:justify-self-end">

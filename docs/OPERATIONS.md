@@ -152,3 +152,12 @@ As of September 23, 2026, the service-menu release (traditional crowns at
 verified production baseline. The public-domain launch baseline was `6772636`
 (September 1, 2026). For each release, record the exact deployed SHA in the task handoff
 and repeat the production checks above; do not assume this baseline is current.
+
+
+## November 6, 2026 search release
+
+Care guides are maintained in `src/lib/care-guides.ts` and rendered by `src/components/care-guide.tsx`. Use only verified practice facts; clinician review and permit details cannot be inferred from general ADA references. The new QA contract is `e2e/care-pages.spec.ts`. Profile JSON-LD in `DoctorPage` must retain the same actual clinician identity across the two practices.
+
+Search Console Owner access and GA4 key events were verified/configured November 6; see ANALYTICS-SEARCH.md. Following merge, verify the exact main SHA on the Ready production deployment, crawl the public routes, check noindex/canonical/redirect behavior and resubmit the canonical sitemap. Record deployed SHAs and remaining external dependencies in the client audit.
+
+The browser CI runner is pinned to Ubuntu 24.04: the installed Playwright version cannot install its dependencies on the newly selected Ubuntu 26.04 `ubuntu-latest` image. Keep the supported OS explicit when updating browser tooling.

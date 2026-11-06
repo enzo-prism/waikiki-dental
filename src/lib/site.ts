@@ -326,7 +326,7 @@ export const services: Service[] = [
       "Looks and chews like a natural tooth",
       "Helps protect jawbone health",
       "Supports one tooth or several",
-      "A permanent, confident fix",
+      "Long-term tooth replacement with ongoing care",
     ],
     icon: SmilePlus,
   },
@@ -705,7 +705,7 @@ export const canonicalPageRoutes = [
 export const pageRoutes = canonicalPageRoutes;
 
 /** Last substantive site update (ISO date), used for sitemap `lastModified`. */
-export const siteLastUpdated = "2026-09-24";
+export const siteLastUpdated = "2026-11-06";
 
 /* ------------------------------------------------------------------ *
  * Imagery — self-hosted in /public/media for fast, reliable LCP.
