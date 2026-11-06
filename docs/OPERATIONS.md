@@ -159,3 +159,5 @@ Care guides are maintained in `src/lib/care-guides.ts` and rendered by `src/comp
 Search Console Owner access and GA4 key events were verified/configured November 6; see ANALYTICS-SEARCH.md. Following merge, verify the exact main SHA on the Ready production deployment, crawl the public routes, check noindex/canonical/redirect behavior and resubmit the canonical sitemap. Record deployed SHAs and remaining external dependencies in the client audit.
 
 The browser CI runner is pinned to Ubuntu 24.04: the installed Playwright version cannot install its dependencies on the newly selected Ubuntu 26.04 `ubuntu-latest` image. Keep the supported OS explicit when updating browser tooling.
+
+Official licensing data now lives in `doctor.licenseRecords` and `doctor.licenseRecordsChecked` in site.ts. Recheck each DCA link before updating status/date. The visible record list and Person.hasCredential derive from that same data. Credentials do not establish that every permitted service is offered at each location or that the holder administers every visit.

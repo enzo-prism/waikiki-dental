@@ -6,7 +6,7 @@ Last reviewed: November 6, 2026
 
 - Production: <https://waikikidental.com/>
 - Source of truth: GitHub `main`
-- Current production baseline: November 6, 2026 SEO/AEO release (PR #22), verified Ready on the public domain.
+- Current production baseline: November 6, 2026 SEO/AEO and official-credential release (PRs #22–23), verified Ready on the public domain.
 - Earlier seasonal release: October 7, 2026 (PR #8 `d31ed92`)
 - Earlier releases: lab-made crown copy and service-menu guard test (PR #7
   `cdc35c0`, October 6); audit fixes (`43dfcbe`, September 24); service-menu
@@ -101,8 +101,7 @@ engineering work that is intentionally deferred.
 2. **No website privacy policy** covering GA cookies, attribution storage,
    and Formspree. Also confirm with the practice whether Formspree needs a
    BAA / HIPAA review for appointment requests.
-3. **Sedation wording.** "Deep, monitored relaxation" for IV sedation should
-   be checked against the doctor's sedation permit.
+3. **Resolved November 6: sedation wording and permit evidence.** The service-card phrase now describes monitored IV sedation without implying deep sedation. DCA Moderate Sedation Permit #44 was directly verified; patient-specific administration/monitoring details still require confirmation.
 4. **Practice sign-offs still pending:** the clinic-approved Formspree live
    delivery test and approval of the social images (see "Remaining
    operational gates" above).
@@ -176,3 +175,5 @@ Validation: ESLint, TypeScript, 75 unit tests, production build and 13 browser t
 Native Search Console Owner access is now verified. October 7–November 3 baseline: 101 clicks and 6,017 impressions; `/iv-sedation/` is indexed with the intended canonical. GA4 key events were configured and read back (see ANALYTICS-SEARCH.md). Account verification supersedes the older ownership gap; paid Vercel analytics remains separately held.
 
 External follow-up remains: clinical confirmation of IV sedation administration/monitoring and permit details, approved original procedure/office media, Google Business Profile reconciliation through an authorized account, and completed-booking reporting from Jarvis. Do not describe contact intent or iframe engagement as a completed appointment. Evaluate AI citation and answer accuracy using dated prompts and source URLs.
+
+Official DCA records were directly verified November 6: dentist license 57101, Moderate Sedation Permit 44, and Adult Oral Conscious Sedation Certificate 1628 all showed current-active status, with September 30, 2028 expiration. The profile and Person graph now link those records; the sedation page links Permit 44. License/permit verification is resolved. The clinician responsible for each planned visit and the specific service offering still require office confirmation. No private address-of-record details were copied.

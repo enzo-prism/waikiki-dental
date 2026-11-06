@@ -35,6 +35,7 @@ export function CareGuide({ slug }: { slug: string }) {
         <p className="mt-8 text-sm leading-7 text-ink-muted">
           Visit Waikiki Dental at {site.address}. Call <a className="underline" href={site.phoneHref}>{site.phone}</a> to ask about availability.
         </p>
+        {guide.professionalRecord ? <p className="mt-4 text-sm leading-7 text-ink-muted">Professional verification: <a className="underline" href={guide.professionalRecord.href}>{guide.professionalRecord.label}</a>. The Board record showed current-active status when checked {guide.professionalRecord.checked}. Discuss the clinician, monitoring and your individual plan at the consultation.</p> : null}
         <p className="mt-4 text-sm leading-7 text-ink-muted">
           Patient education: <a className="underline underline-offset-4" href={guide.source.href}>{guide.source.label}</a>.
           {" "}General information; your dentist provides recommendations after an examination.
