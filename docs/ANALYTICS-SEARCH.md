@@ -1,5 +1,14 @@
 # Analytics and search operations
 
+## November 6, 2026 verified account update
+
+Native Google API access is working for `enzo@design-prism.com`, with Owner access to `sc-domain:waikikidental.com`. This supersedes older access limitations below. URL Inspection reports `/iv-sedation/` indexed with the intended canonical. Resubmit and read back `https://waikikidental.com/sitemap.xml` after release; monitor canonical migration from legacy http/www URLs without changing established relevant redirects. October 7–November 3: 101 clicks and 6,017 impressions. These pre-release data do not establish uplift.
+
+GA4 property `552428635`: `phone_click`, `email_click`, and `generate_lead` were created and read back as key events with ONCE_PER_EVENT counting and no revenue values. Existing purchase/qualification events were preserved. The additional placement-specific contact events and `jarvis_booking_start` were not marked as key events. A phone/email click is contact intent, a successful accepted request is a lead, and scheduler engagement is not a completed booking. Completed appointments require Jarvis reporting. No Ads import or bidding setting was changed.
+
+The historical implementation notes below remain useful; the dated update above controls where account access differs.
+
+
 Last verified: September 1, 2026 (attribution and conversion changes:
 November 3, 2026, pending account-side setup below)
 

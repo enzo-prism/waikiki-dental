@@ -1,6 +1,6 @@
 # Project status
 
-Last reviewed: October 7, 2026
+Last reviewed: November 6, 2026
 
 ## Current production baseline
 
@@ -87,8 +87,7 @@ plus a versioned `public/seasonal/<id>/` folder.
 2. Run one clinic-approved, non-sensitive Formspree delivery test and verify the
    real inbox, recipients, Reply-To behavior, and spam/domain controls.
 3. Re-run the form delivery check after any Formspree endpoint or recipient change.
-4. Complete the paid Vercel Web Analytics enablement and live data readback and
-   Search Console ownership in `ANALYTICS-SEARCH.md`.
+4. Paid Vercel Web Analytics remains held pending its separate spending approval. Search Console Owner access was verified November 6; see `ANALYTICS-SEARCH.md`.
 
 ## Known open issues (audit of September 23, 2026)
 
@@ -164,3 +163,16 @@ reception, a treatment room, and a natural team welcome. Obtain written website
 and advertising usage approval from every recognizable person, retain the
 original master outside the repo, and publish an optimized poster plus muted,
 captioned web encodes rather than embedding a social-media player.
+
+
+## November 6 SEO/AEO release
+
+IV sedation and implant pages now have substantial server-rendered decision guides, native question/answer disclosures, practical consultation and estimate questions, ADA sources and provider/visit links. Content is maintained in `src/lib/care-guides.ts` alongside the existing practice source `src/lib/site.ts`; `CareGuide` renders it. No medication, permit, fee or outcome was invented. Implant copy describes long-term replacement with ongoing care rather than a permanent result.
+
+The doctor page includes linked ProfilePage/Person schema, verified Ohio State/Temple education, and identity linkage to the same clinician at Sacramento Dental Medicine. Office and orthodontic hubs are now reachable through the footer. Patient appointment CTAs retain the single on-site Jarvis destination.
+
+Validation: ESLint, TypeScript, 75 unit tests, production build and 13 browser tests passed. Browser checks include 390px/1280px care pages, native FAQ behavior, overflow, no-JavaScript HTML and profile graph. General contact delivery/error/timeout tests use intercepted requests. No live request was sent.
+
+Native Search Console Owner access is now verified. October 7–November 3 baseline: 101 clicks and 6,017 impressions; `/iv-sedation/` is indexed with the intended canonical. GA4 key events were configured and read back (see ANALYTICS-SEARCH.md). Account verification supersedes the older ownership gap; paid Vercel analytics remains separately held.
+
+External follow-up remains: clinical confirmation of IV sedation administration/monitoring and permit details, approved original procedure/office media, Google Business Profile reconciliation through an authorized account, and completed-booking reporting from Jarvis. Do not describe contact intent or iframe engagement as a completed appointment. Evaluate AI citation and answer accuracy using dated prompts and source URLs.
