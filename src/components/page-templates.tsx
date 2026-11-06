@@ -582,7 +582,7 @@ export function DoctorPage() {
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[275px] lg:mx-0 lg:justify-self-end">
+          <div className="relative mx-auto w-full max-w-[275px] lg:mx-0 lg:mt-12 lg:self-start lg:justify-self-end">
             <div className="relative aspect-[275/412] overflow-hidden rounded-3xl border border-line shadow-soft">
               <DoctorPortrait priority />
             </div>
