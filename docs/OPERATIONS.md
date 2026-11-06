@@ -147,9 +147,7 @@ read back through the API.
 
 ## Current release baseline
 
-As of September 23, 2026, the service-menu release (traditional crowns at
-`/dental-crowns/`, dental bonding retired, feature commit `932e7ef`) is the
-verified production baseline. The public-domain launch baseline was `6772636`
+The November 6, 2026 SEO/AEO release (PR #22) is verified on the public production domain. The September 23 service-menu release (traditional crowns at `/dental-crowns/`, dental bonding retired, feature commit `932e7ef`) is an earlier baseline. The public-domain launch baseline was `6772636`
 (September 1, 2026). For each release, record the exact deployed SHA in the task handoff
 and repeat the production checks above; do not assume this baseline is current.
 

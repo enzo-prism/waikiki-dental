@@ -6,8 +6,8 @@ Last reviewed: November 6, 2026
 
 - Production: <https://waikikidental.com/>
 - Source of truth: GitHub `main`
-- Current production baseline: October seasonal layer, October 7, 2026
-  (PR #8 `d31ed92`)
+- Current production baseline: November 6, 2026 SEO/AEO release (PR #22), verified Ready on the public domain.
+- Earlier seasonal release: October 7, 2026 (PR #8 `d31ed92`)
 - Earlier releases: lab-made crown copy and service-menu guard test (PR #7
   `cdc35c0`, October 6); audit fixes (`43dfcbe`, September 24); service-menu
   release (`932e7ef`, September 23)
