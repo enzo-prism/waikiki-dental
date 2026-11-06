@@ -17,6 +17,8 @@ for (const width of [390, 1280]) {
     await page.locator("main a[href='/michael-narodovich-dmd/']").click();
     await expect(page).toHaveURL(/\/michael-narodovich-dmd\/$/);
     await expect(page.getByRole("link", { name: "the Roseville office" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Verified licensing records" }).getByRole("link", { name: "Moderate Sedation Permit #44", exact: true })).toHaveAttribute("href", "https://search.dca.ca.gov/profile/440/4417/44/MS");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   });
 }
 

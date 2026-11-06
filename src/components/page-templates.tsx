@@ -534,7 +534,8 @@ export function DoctorPage() {
           { "@type": "Person", "@id": personId, name: "Michael Narodovich", honorificPrefix: "Dr.", honorificSuffix: "DMD", jobTitle: "Dentist",
             url: profileUrl, image: absoluteUrl("/media/dr-narodovich-hd.jpg"), worksFor: { "@id": dentistId },
             alumniOf: [{ "@type": "CollegeOrUniversity", name: "The Ohio State University" }, { "@type": "CollegeOrUniversity", name: "Temple University" }],
-            sameAs: ["https://sacramentodentalmedicine.com/meet-dr-narodovich#person"] },
+            sameAs: ["https://sacramentodentalmedicine.com/meet-dr-narodovich#person"],
+            hasCredential: doctor.licenseRecords.map((record) => ({ "@type": "EducationalOccupationalCredential", name: record.name, credentialCategory: record.category, identifier: record.identifier, url: record.url, recognizedBy: { "@type": "Organization", name: "Dental Board of California", url: "https://www.dbc.ca.gov/" } })) },
         ],
       }).replace(/</g, "\\u003c") }} />
       <section className="bg-background py-16 sm:py-20">
@@ -567,17 +568,21 @@ export function DoctorPage() {
                 </span>
               ))}
             </div>
+            <section aria-label="Verified licensing records" className="mt-8 border-t border-line pt-6">
+              <h2 className="font-serif text-2xl font-medium text-ink">Licensing you can verify.</h2>
+              <ul className="mt-4 grid gap-3 text-sm leading-7 text-ocean-700">
+                {doctor.licenseRecords.map((record) => <li key={record.identifier}><a className="underline underline-offset-4" href={record.url}>{record.name}</a></li>)}
+              </ul>
+              <p className="mt-3 text-sm leading-7 text-ink-muted">The Dental Board of California records showed current-active status when checked {doctor.licenseRecordsChecked}. Follow the official links for current details. Your consultation confirms who will administer and monitor your care.</p>
+            </section>
             <p className="mt-6 text-sm leading-7 text-ink-muted">
               Planning a visit? Read about <Link className="underline" href="/iv-sedation/">IV sedation</Link>,
               {" "}<Link className="underline" href="/roseville-dental-implants/">dental implants</Link>, and
               {" "}<Link className="underline" href="/waikiki-dental-roseville/">the Roseville office</Link>.
-              {" "}For current professional license information, use the{" "}
-              <a className="underline" href="https://search.dca.ca.gov/">California Department of Consumer Affairs license search</a>.
-              Ask the office about qualifications for your specific treatment.
             </p>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[275px] lg:mx-0 lg:justify-self-end">
+          <div className="relative mx-auto w-full max-w-[275px] lg:mx-0 lg:mt-12 lg:self-start lg:justify-self-end">
             <div className="relative aspect-[275/412] overflow-hidden rounded-3xl border border-line shadow-soft">
               <DoctorPortrait priority />
             </div>

@@ -147,9 +147,7 @@ read back through the API.
 
 ## Current release baseline
 
-As of September 23, 2026, the service-menu release (traditional crowns at
-`/dental-crowns/`, dental bonding retired, feature commit `932e7ef`) is the
-verified production baseline. The public-domain launch baseline was `6772636`
+The November 6, 2026 SEO/AEO release (PR #22) is verified on the public production domain. The September 23 service-menu release (traditional crowns at `/dental-crowns/`, dental bonding retired, feature commit `932e7ef`) is an earlier baseline. The public-domain launch baseline was `6772636`
 (September 1, 2026). For each release, record the exact deployed SHA in the task handoff
 and repeat the production checks above; do not assume this baseline is current.
 
@@ -161,3 +159,5 @@ Care guides are maintained in `src/lib/care-guides.ts` and rendered by `src/comp
 Search Console Owner access and GA4 key events were verified/configured November 6; see ANALYTICS-SEARCH.md. Following merge, verify the exact main SHA on the Ready production deployment, crawl the public routes, check noindex/canonical/redirect behavior and resubmit the canonical sitemap. Record deployed SHAs and remaining external dependencies in the client audit.
 
 The browser CI runner is pinned to Ubuntu 24.04: the installed Playwright version cannot install its dependencies on the newly selected Ubuntu 26.04 `ubuntu-latest` image. Keep the supported OS explicit when updating browser tooling.
+
+Official licensing data now lives in `doctor.licenseRecords` and `doctor.licenseRecordsChecked` in site.ts. Recheck each DCA link before updating status/date. The visible record list and Person.hasCredential derive from that same data. Credentials do not establish that every permitted service is offered at each location or that the holder administers every visit.

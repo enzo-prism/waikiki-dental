@@ -71,6 +71,27 @@ export const hours = [
  * Previously duplicated across DoctorSpotlight and DoctorPage.
  * ------------------------------------------------------------------ */
 export const doctor = {
+  licenseRecords: [
+  {
+    "name": "California dentist license #57101",
+    "identifier": "57101",
+    "category": "Professional license",
+    "url": "https://search.dca.ca.gov/profile/440/4401/57101/DDS"
+  },
+  {
+    "name": "Moderate Sedation Permit #44",
+    "identifier": "44",
+    "category": "Permit",
+    "url": "https://search.dca.ca.gov/profile/440/4417/44/MS"
+  },
+  {
+    "name": "Adult Oral Conscious Sedation Certificate #1628",
+    "identifier": "1628",
+    "category": "Certificate",
+    "url": "https://search.dca.ca.gov/profile/440/4406/1628/OCS"
+  }
+],
+  licenseRecordsChecked: "November 6, 2026",
   name: "Michael Narodovich, DMD",
   role: "Owner · Dentist",
   initials: "MN",
@@ -336,7 +357,7 @@ export const services: Service[] = [
     eyebrow: "Anxiety-friendly care",
     category: "sedation",
     summary:
-      "Deep, monitored relaxation — so years of put-off dentistry can be finished in calm, comfortable visits.",
+      "Monitored IV sedation to help anxious patients plan and complete dental care more comfortably.",
     description:
       "If dental anxiety or a strong gag reflex has kept you away from the dentist, ask Dr. Narodovich about monitored IV sedation in Roseville. At the consultation, the team reviews your health and planned treatment and explains what to expect before, during, and after the visit.",
     highlights: [

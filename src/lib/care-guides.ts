@@ -6,10 +6,12 @@ export type CareGuide = {
   questions: { question: string; answer: string }[];
   links: { href: string; label: string }[];
   source: { href: string; label: string };
+  professionalRecord?: { href: string; label: string; checked: string };
 };
 
 export const careGuides: Record<string, CareGuide> = {
   "iv-sedation": {
+    professionalRecord: { href: "https://search.dca.ca.gov/profile/440/4417/44/MS", label: "Dr. Narodovich’s Moderate Sedation Permit #44", checked: "November 6, 2026" },
     sections: [
       {
         heading: "Start with a conversation about dental anxiety",
