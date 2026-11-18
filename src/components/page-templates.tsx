@@ -237,12 +237,12 @@ function SedationServicePage({ service }: { service: Service }) {
   return (
     <>
       <ServiceJsonLd service={service} />
-      <section className="relative isolate flex flex-col-reverse overflow-hidden bg-deep text-cream lg:block">
-        <div className="wrap relative z-10 -mt-10 pb-20 sm:-mt-16 sm:pb-28 lg:mt-0 lg:py-28">
+      <section className="relative isolate flex flex-col overflow-hidden bg-deep text-cream lg:block">
+        <div className="wrap relative z-10 py-10 sm:py-14 lg:py-28">
           <ServiceBreadcrumbs service={service} tone="dark" />
           <Eyebrow className="text-gold-soft">{service.eyebrow}</Eyebrow>
           <h1 className="mt-5 max-w-2xl text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-cream sm:text-6xl">
-            IV sedation dentistry for calmer care in Roseville.
+            IV sedation dentistry in Roseville
           </h1>
           <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-cream/75">
             {service.description}
@@ -250,37 +250,45 @@ function SedationServicePage({ service }: { service: Service }) {
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link href={scheduleHref} className="btn btn-sunset">
               <CalendarCheck className="size-4" aria-hidden="true" />
-              Request Appointment
+              Request a sedation consultation
             </Link>
             <a href={site.phoneHref} className="btn btn-ghost-light" aria-label={`Call or text ${site.phone}`}>
               <Phone className="size-4" aria-hidden="true" />
-              Call or text
+              {site.phone}
             </a>
           </div>
+          <a href="#sedation-cost" className="mt-5 inline-block text-cream underline underline-offset-4">
+            What goes into my estimate?
+          </a>
         </div>
         <div
-          className="relative aspect-[16/10] w-full [mask-image:linear-gradient(to_bottom,transparent,black_35%,black_80%,transparent)] sm:aspect-[16/7] lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[60%] lg:[mask-image:linear-gradient(to_right,transparent,black_45%)]"
+          className="relative aspect-[4/1] w-full [mask-image:linear-gradient(to_bottom,transparent,black_35%,black_80%,transparent)] sm:aspect-[5/1] lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[60%] lg:[mask-image:linear-gradient(to_right,transparent,black_45%)]"
         >
           <AmbientVideo
             artwork={artwork.tideNight}
             sizes="(max-width: 1024px) 100vw, 60vw"
             tone="dark"
-            controlClassName="right-4 top-[26%] lg:top-auto lg:bottom-6 lg:right-6"
+            controlClassName="right-4 bottom-4 lg:bottom-6 lg:right-6"
           />
         </div>
       </section>
 
       <section className="bg-background py-20">
         <div className="wrap grid gap-12 lg:grid-cols-2">
-          <div>
+          <div id="sedation-cost" className="scroll-mt-28">
             <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
-              Who this is for
+              How much does IV sedation cost in Roseville?
             </h2>
             <p className="mt-4 text-lg leading-8 text-ink-muted">
-              IV sedation is the heart of the practice: patients who are fearful,
-              fighting a strong gag reflex, or who simply need more treatment
-              done with less stress.
+              Your estimate depends on the dental work you need and which visits
+              will involve sedation. At your consultation, ask for the sedation
+              fee and the dental treatment fees separately, including any imaging
+              or follow-up visits. If you have insurance, ask what your plan
+              covers and what you would pay yourself.
             </p>
+            <Link href="/roseville-dental-implants/" className="mt-4 inline-block font-semibold text-ocean-700 underline underline-offset-4">
+              Planning an implant? See the stages and estimate.
+            </Link>
           </div>
           <ul className="grid gap-4">
             {service.highlights.map((highlight) => (
@@ -331,7 +339,7 @@ function ProcessServicePage({
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link href={scheduleHref} className="btn btn-sunset">
               <CalendarCheck className="size-4" aria-hidden="true" />
-              Request Appointment
+              {service.slug === "roseville-dental-implants" ? "Request an implant consultation" : "Request Appointment"}
             </Link>
             <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
               <Phone className="size-4" aria-hidden="true" />
