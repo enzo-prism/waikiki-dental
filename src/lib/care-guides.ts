@@ -25,10 +25,6 @@ export const careGuides: Record<string, CareGuide> = {
         heading: "Prepare for the consultation",
         body: "Bring a current medication list and explain your health history, allergies, previous experiences with anesthesia, and questions. The team will tell you what information they need before recommending care. Ask for your own written preparation, transportation, and recovery instructions; do not change medications or follow another patient's instructions.",
       },
-      {
-        heading: "Discuss the treatment and estimate together",
-        body: "If you are considering implants or other restorative treatment, ask which visits may involve sedation and how the work will be sequenced. Request an estimate that explains the proposed dental treatment, sedation, and any separate services. The office can discuss current payment arrangements before you decide.",
-      },
     ],
     questions: [
       { question: "Will I be completely asleep?", answer: "Do not assume IV sedation means general anesthesia. Ask the dentist what level of awareness is intended for your plan and how you will be monitored. The appropriate approach depends on your health and the procedure." },

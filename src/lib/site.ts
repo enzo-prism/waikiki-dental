@@ -342,7 +342,7 @@ export const services: Service[] = [
     summary:
       "The closest thing to a new tooth: a titanium root and custom crown that look, feel, and chew like the real thing.",
     description:
-      "An implant replaces the whole tooth, root included — a titanium post, an abutment, and a custom crown that behaves like it grew there. One tooth, several, or a more extensive restoration: the plan is built around you.",
+      "Missing a tooth or several teeth? At your Roseville consultation, discuss whether implants fit your needs, compare other options, and ask for the timing and cost of each stage before deciding.",
     highlights: [
       "Looks and chews like a natural tooth",
       "Helps protect jawbone health",
@@ -359,11 +359,11 @@ export const services: Service[] = [
     summary:
       "Monitored IV sedation to help anxious patients plan and complete dental care more comfortably.",
     description:
-      "If dental anxiety or a strong gag reflex has kept you away from the dentist, ask Dr. Narodovich about monitored IV sedation in Roseville. At the consultation, the team reviews your health and planned treatment and explains what to expect before, during, and after the visit.",
+      "If anxiety has kept you from the dentist, start with a consultation. Dr. Narodovich and the Roseville team can discuss your dental work, whether monitored IV sedation fits your needs, and what it may cost.",
     highlights: [
       "Designed for dental fear and anxiety",
       "Helpful for strong gag reflexes",
-      "More treatment in fewer visits",
+      "A visit plan tailored to your dental work",
       "Monitored continuously throughout",
     ],
     icon: Syringe,
@@ -638,7 +638,7 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   "iv-sedation": {
     title: "IV Sedation Dentist in Roseville, CA",
     description:
-      "Ask about monitored IV sedation in Roseville for dental anxiety or a strong gag reflex. Learn how the team plans your visit and what to expect."
+      "Considering IV sedation in Roseville? See what affects your cost, meet Dr. Narodovich, and request a consultation to discuss your care and estimate."
   },
   "dental-emergencies": {
     title: "Emergency Dentist in Roseville: Call Now",
@@ -661,7 +661,7 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   "roseville-dental-implants": {
     title: "Dental Implants in Roseville, CA",
     description:
-      "Explore dental implants in Roseville for replacing one or more missing teeth with a stable, natural-looking restoration at Waikiki Dental.",
+      "Compare options for missing teeth in Roseville. Learn what an implant estimate includes and request a consultation at Waikiki Dental.",
   },
 };
 
