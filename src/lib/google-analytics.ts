@@ -70,6 +70,41 @@ export function googleAnalyticsReferrer(referrer: string, currentHostname: strin
   }
 }
 
+/** Canonical AI referral hosts. Values are host labels only — never paths or queries. */
+const AI_REFERRER_HOSTS = new Map([
+  ["chatgpt.com", "chatgpt.com"],
+  ["www.chatgpt.com", "chatgpt.com"],
+  ["chat.openai.com", "chatgpt.com"],
+  ["perplexity.ai", "perplexity.ai"],
+  ["www.perplexity.ai", "perplexity.ai"],
+  ["gemini.google.com", "gemini.google.com"],
+  ["copilot.microsoft.com", "copilot.microsoft.com"],
+  ["claude.ai", "claude.ai"],
+  ["www.claude.ai", "claude.ai"],
+  ["you.com", "you.com"],
+  ["www.you.com", "you.com"],
+]);
+
+/**
+ * Fixed `ai_referrer` label from `document.referrer`'s host, or "".
+ * Paths, queries, credentials, and unknown hosts are dropped.
+ */
+export function aiReferrerFromReferrer(referrer: string) {
+  try {
+    const url = new URL(referrer);
+    if (
+      (url.protocol !== "https:" && url.protocol !== "http:") ||
+      url.username ||
+      url.password
+    ) {
+      return "";
+    }
+    return AI_REFERRER_HOSTS.get(url.hostname.toLowerCase()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 export type GoogleAnalyticsLanding = {
   /** `window.location.search` of the page the visit started on. */
   search: string;
@@ -95,6 +130,7 @@ export function googleAnalyticsPageFields(
   safePath: string,
   landing?: GoogleAnalyticsLanding,
 ) {
+  const aiReferrer = landing ? aiReferrerFromReferrer(landing.referrer) : "";
   return {
     page_location: `${origin}${safePath}${
       landing ? googleAnalyticsCampaignQuery(landing.search) : ""
@@ -103,5 +139,6 @@ export function googleAnalyticsPageFields(
       ? googleAnalyticsReferrer(landing.referrer, landing.hostname)
       : "",
     page_title: GOOGLE_ANALYTICS_PAGE_TITLE,
+    ...(aiReferrer ? { ai_referrer: aiReferrer } : {}),
   };
 }

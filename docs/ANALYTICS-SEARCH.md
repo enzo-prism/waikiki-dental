@@ -59,6 +59,15 @@ The authorized GA4 property is `552428635`; its production web stream is
 only on `waikikidental.com` and `www.waikikidental.com`, so local, preview, and
 generated Vercel URLs cannot contaminate production data.
 
+The landing `page_view` sets a fixed `ai_referrer` event parameter when
+`document.referrer`'s host is one of `chatgpt.com` (including `chat.openai.com`),
+`perplexity.ai`, `gemini.google.com`, `copilot.microsoft.com`, `claude.ai`, or
+`you.com`. The value is the canonical host label only — never a path or query.
+Route-change hits and tag-wide `config`/`set` fields do not include it. Creating
+a GA4 custom channel group named **AI referrals** that matches those sources is
+an account-side step; the website cannot create it.
+
+
 The implementation disables GA's automatic initial page view and sends a
 privacy-reduced manual page view on each public route change. It:
 

@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { sanitizeAnalyticsPath } from "./analytics.ts";
 import {
   GOOGLE_ANALYTICS_MEASUREMENT_ID,
+  aiReferrerFromReferrer,
   googleAnalyticsCampaignQuery,
   googleAnalyticsPageFields,
   googleAnalyticsReferrer,
@@ -114,5 +115,36 @@ describe("Google Analytics configuration", () => {
       hostname: "waikikidental.com",
     });
     assert.doesNotMatch(JSON.stringify(fields), /sedation|dental-emergencies|search\?q/);
+  });
+
+  it("labels known AI referrer hosts without paths, queries, or credentials", () => {
+    const expected: Record<string, string> = {
+      "https://chatgpt.com/c/private-chat": "chatgpt.com",
+      "https://www.chatgpt.com/": "chatgpt.com",
+      "https://chat.openai.com/chat/private": "chatgpt.com",
+      "https://www.perplexity.ai/search?q=private": "perplexity.ai",
+      "https://gemini.google.com/app": "gemini.google.com",
+      "https://copilot.microsoft.com/chats/private": "copilot.microsoft.com",
+      "https://claude.ai/chat/private": "claude.ai",
+      "https://www.you.com/search?q=private": "you.com",
+    };
+    for (const [referrer, label] of Object.entries(expected)) {
+      assert.equal(aiReferrerFromReferrer(referrer), label);
+    }
+    for (const referrer of ["", "https://www.google.com/", "javascript:alert(1)", "https://user:pass@chatgpt.com/", "https://chatgpt.com.evil.com/"]) {
+      assert.equal(aiReferrerFromReferrer(referrer), "");
+    }
+  });
+
+  it("adds ai_referrer only on the landing hit, never on later route-change fields", () => {
+    const landing = googleAnalyticsPageFields("https://waikikidental.com", "/services", {
+      search: "",
+      referrer: "https://claude.ai/chat/private-thread",
+      hostname: "waikikidental.com",
+    });
+    assert.equal(landing.ai_referrer, "claude.ai");
+    assert.doesNotMatch(JSON.stringify(landing), /private-thread/);
+    const later = googleAnalyticsPageFields("https://waikikidental.com", "/conversion");
+    assert.equal("ai_referrer" in later, false);
   });
 });
