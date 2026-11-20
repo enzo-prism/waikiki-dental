@@ -725,7 +725,7 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   "composite-fillings": {
     title: "Tooth-Colored Fillings in Roseville, CA",
     description:
-      "Composite fillings shaded to match your enamel repair decay and small fractures conservatively. Comfort-first visits at Waikiki Dental in Roseville.",
+      "Composite fillings, shaded to match your enamel, repair decay and small fractures conservatively. Comfort-first visits at Waikiki Dental in Roseville.",
   },
   "early-dental-care": {
     title: "Kids' First Dental Visits in Roseville, CA",
