@@ -610,6 +610,50 @@ export const paymentOptions = {
   ],
 };
 
+/** Dr. Narodovich's profile page and the Person node id it publishes. */
+export const doctorProfilePath = "/michael-narodovich-dmd/";
+
+/* Answers to the practical questions patients (and AI assistants) ask most.
+ * Every answer is built from facts held in this file. */
+export const officeHoursSummary = hours
+  .map(([day, range]) => `${day} ${range}`)
+  .join("; ");
+
+export const newPatientQuestions = [
+  {
+    question: "Is Waikiki Dental accepting new patients?",
+    answer: `Yes. Request an appointment online or call ${site.phone}. If dental anxiety has kept you away, say so and the team can plan your first visit around it.`,
+  },
+  {
+    question: "Does Waikiki Dental accept Medi-Cal?",
+    answer: `No. ${mediCalNotice} CareCredit financing, cash, checks, and major credit and debit cards are accepted.`,
+  },
+  {
+    question: "Does Waikiki Dental take dental insurance?",
+    answer: `Contact the office at ${site.phone} or ${site.email} before your visit so the team can confirm coverage for your plan.`,
+  },
+  {
+    question: "What payment options are available?",
+    answer: "Cash, checks, debit, and major credit cards, with payment due at the time of treatment. CareCredit financing can spread out-of-pocket costs into monthly payments.",
+  },
+  {
+    question: "How do I fill out new-patient forms?",
+    answer: "Registration forms arrive through the office's secure email or text platform, so you can finish them before you arrive.",
+  },
+  {
+    question: "What are the office hours?",
+    answer: `${officeHoursSummary}.`,
+  },
+  {
+    question: "Where is Waikiki Dental?",
+    answer: `${site.address}. Dr. Michael Narodovich and the team see patients from Roseville, Granite Bay, Rocklin, and Lincoln.`,
+  },
+  {
+    question: "Can I be sedated if I am nervous about the dentist?",
+    answer: "Waikiki Dental offers monitored IV sedation. Start with a consultation, where the dentist reviews your health and the planned treatment before deciding whether sedation is appropriate.",
+  },
+];
+
 /* Emergency fast-path — surfaced in the header utility bar. */
 export const emergency = {
   label: "Dental emergency?",
@@ -657,6 +701,36 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   "dental-crowns": {
     title: "Dental Crowns in Roseville, CA: Two Visits",
     description: `Cracked or worn tooth? A custom lab-made crown in two visits, with a temporary in between. CareCredit financing. ${googleRating}.`,
+  },
+  veneers: {
+    title: "Porcelain Veneers in Roseville, CA",
+    description:
+      "Porcelain veneers in Roseville for chipped, stained, or uneven teeth. Learn who is a good candidate and what to ask before you commit at Waikiki Dental.",
+  },
+  "smile-makeover": {
+    title: "Smile Makeover in Roseville, CA",
+    description:
+      "Plan whitening, veneers, crowns, alignment, or implants as one sequence. See what a Roseville smile makeover can include and how to phase it.",
+  },
+  "traditional-braces": {
+    title: "Traditional Braces in Roseville, CA",
+    description:
+      "Brackets and wires for crowding, spacing, and bite problems that need precise control. Compare braces with Invisalign at Waikiki Dental in Roseville.",
+  },
+  "cleanings-exams": {
+    title: "Dental Cleanings & Exams in Roseville, CA",
+    description:
+      "An unhurried cleaning and exam with gum checks, oral cancer screening, and X-rays only when needed. Now accepting new patients in Roseville.",
+  },
+  "composite-fillings": {
+    title: "Tooth-Colored Fillings in Roseville, CA",
+    description:
+      "Composite fillings shaded to match your enamel repair decay and small fractures conservatively. Comfort-first visits at Waikiki Dental in Roseville.",
+  },
+  "early-dental-care": {
+    title: "Kids' First Dental Visits in Roseville, CA",
+    description:
+      "Gentle, unrushed first visits that build healthy habits and confidence for young smiles. Family-centered care at Waikiki Dental in Roseville.",
   },
   "roseville-dental-implants": {
     title: "Dental Implants in Roseville, CA",
@@ -783,6 +857,10 @@ function to24Hour(time: string) {
 
 /** Stable node id so Service JSON-LD can reference the practice as provider. */
 export const dentistId = `${site.baseUrl}/#dentist`;
+export const websiteId = `${site.baseUrl}/#website`;
+/** Published in full on the doctor page; referenced by id everywhere else. */
+export const doctorPersonId = `${site.baseUrl}${doctorProfilePath}#person`;
+export const serviceNodeId = (slug: string) => `${site.baseUrl}/${slug}/#service`;
 
 /*
  * No aggregateRating: Google's review-snippet policy disallows self-serving
@@ -794,8 +872,11 @@ export const dentistJsonLd = {
   "@type": "Dentist",
   "@id": dentistId,
   name: `${site.name} - Roseville`,
-  url: site.baseUrl,
+  alternateName: site.name,
+  description: site.description,
+  url: `${site.baseUrl}/`,
   image: absoluteUrl(teamStory.groupImage),
+  logo: absoluteUrl(brandAssets.logo),
   telephone: site.phone,
   email: site.email,
   address: {
@@ -811,7 +892,28 @@ export const dentistJsonLd = {
     latitude: site.geo.latitude,
     longitude: site.geo.longitude,
   },
+  hasMap: site.mapsHref,
   medicalSpecialty: "Dentistry",
+  /* heroFacts: "Now accepting new patients". */
+  isAcceptingNewPatients: true,
+  currenciesAccepted: "USD",
+  /* `paymentOptions`; Medi-Cal is not accepted. */
+  paymentAccepted: "Cash, Check, Credit Card, Debit Card, CareCredit",
+  employee: { "@id": doctorPersonId },
+  knowsAbout: services.map((service) => service.title),
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Dental services in Roseville, CA",
+    itemListElement: services.map((service) => ({
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        "@id": serviceNodeId(service.slug),
+        name: service.title,
+        url: absoluteUrl(`/${service.slug}/`),
+      },
+    })),
+  },
   openingHoursSpecification: hours
     .filter(([, range]) => range.includes("-"))
     .map(([day, range]) => {
@@ -825,6 +927,16 @@ export const dentistJsonLd = {
     }),
   areaServed: ["Roseville", "Granite Bay", "Rocklin", "Lincoln"],
   sameAs: [teamStory.socialHref, reviewStats.href],
+};
+
+export const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": websiteId,
+  url: `${site.baseUrl}/`,
+  name: site.name,
+  inLanguage: "en-US",
+  publisher: { "@id": dentistId },
 };
 
 export function findService(slug: string) {

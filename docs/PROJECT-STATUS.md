@@ -16,6 +16,27 @@ Last reviewed: November 6, 2026
 - Scheduling: every appointment CTA remains on-site at
   `/request-appointment/`; no legacy booking-system links are permitted
 
+## November 20, 2026 SEO/AEO pass (branch `seo-aeo/nov20-answers-entity-graph`, not yet released)
+
+- Answer-first care guides (3 sections, 4 questions, ADA MouthHealthy source) on
+  dental crowns, dental emergencies, Invisalign, veneers, teeth whitening, and
+  smile makeover, in `src/lib/care-guides.ts`. Those pages went from about 155 to
+  480–620 words. The crowns guide answers "same-day crowns?" with "No".
+- `FAQPage` JSON-LD (`src/components/faq.tsx`) for every visible question set:
+  the eight guides, `/orthodontics/`, and a new "New patient questions" block on
+  `/new-patients/` (accepting new patients, Medi-Cal, insurance, payment, forms,
+  hours, location, sedation), all built from `site.ts` facts.
+- Practice entity graph: the `Dentist` node now carries `logo`, `hasMap`,
+  `isAcceptingNewPatients`, `paymentAccepted`, `employee` (Dr. Narodovich's
+  `Person` id), `knowsAbout`, and an `OfferCatalog` whose services share `@id`s
+  with each page's `Service` node; a `WebSite` node is added.
+- `/llms.txt`, generated from `site.ts` and `care-guides.ts`, including a
+  "Not offered" list (same-day crowns, bonding, Medi-Cal).
+- Specific search listings replace the generic template for veneers, smile
+  makeover, braces, cleanings, fillings, and early dental care.
+- Guard tests: `src/lib/care-guides.test.ts` and the extended
+  `service-seo.test.ts`.
+
 ## Shipped experience
 
 - Service menu corrected with the practice (2026-09-23 sync with Dr. Mike and
