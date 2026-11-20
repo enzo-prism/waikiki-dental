@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { careGuides } from "@/lib/care-guides";
 import { site } from "@/lib/site";
+import { FaqJsonLd, FaqList } from "./faq";
 
 export function CareGuide({ slug }: { slug: string }) {
   const guide = careGuides[slug];
@@ -8,9 +9,10 @@ export function CareGuide({ slug }: { slug: string }) {
 
   return (
     <section className="bg-surface-alt py-16 sm:py-24" aria-labelledby="care-guide-title">
+      <FaqJsonLd path={`/${slug}/`} questions={guide.questions} />
       <div className="wrap max-w-4xl">
         <h2 id="care-guide-title" className="font-serif text-3xl font-medium text-ink sm:text-4xl">
-          Answers before you choose your care.
+          {guide.title ?? "Answers before you choose your care."}
         </h2>
         <div className="mt-10 grid gap-10">
           {guide.sections.map(({ heading, body }) => (
@@ -21,13 +23,8 @@ export function CareGuide({ slug }: { slug: string }) {
           ))}
         </div>
         <h2 className="mt-14 font-serif text-3xl font-medium text-ink">Common questions</h2>
-        <div className="mt-6 divide-y divide-line">
-          {guide.questions.map(({ question, answer }) => (
-            <details className="py-5" key={question}>
-              <summary className="cursor-pointer font-semibold leading-7 text-ink">{question}</summary>
-              <p className="mt-3 leading-8 text-ink-muted">{answer}</p>
-            </details>
-          ))}
+        <div className="mt-6">
+          <FaqList questions={guide.questions} />
         </div>
         <nav aria-label="Explore your care" className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-ocean-700">
           {guide.links.map(({ href, label }) => <Link className="underline underline-offset-4" key={href} href={href}>{label}</Link>)}

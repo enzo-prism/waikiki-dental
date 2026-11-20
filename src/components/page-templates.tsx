@@ -14,6 +14,11 @@ import {
   dentistId,
   dentistJsonLd,
   doctor,
+  doctorPersonId,
+  doctorProfilePath,
+  newPatientQuestions,
+  serviceNodeId,
+  websiteJsonLd,
   featuredServices,
   findService,
   crownProcess,
@@ -41,12 +46,14 @@ import { DoctorPortrait } from "./brand";
 import { ReviewExplorer } from "./review-explorer";
 import { SeasonalNotFoundArt } from "./seasonal";
 import { CareGuide } from "./care-guide";
+import { FaqJsonLd, FaqList } from "./faq";
+import { orthodonticsQuestions } from "@/lib/care-guides";
 
 export function JsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(dentistJsonLd) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify([dentistJsonLd, websiteJsonLd]) }}
     />
   );
 }
@@ -58,7 +65,9 @@ function ServiceJsonLd({ service }: { service: Service }) {
     {
       "@context": "https://schema.org",
       "@type": "Service",
+      "@id": serviceNodeId(service.slug),
       name: service.title,
+      serviceType: service.title,
       description: service.description,
       url,
       areaServed: "Roseville, CA",
@@ -227,6 +236,7 @@ function DefaultServicePage({ service }: { service: Service }) {
           </div>
         </div>
       </section>
+      <CareGuide slug={service.slug} />
       <RelatedCare excludeSlug={service.slug} />
       <BookStrip />
     </>
@@ -454,7 +464,9 @@ export function OrthodonticsPage() {
     {
       "@context": "https://schema.org",
       "@type": "Service",
+      "@id": serviceNodeId("orthodontics"),
       name: "Orthodontics and Invisalign",
+      serviceType: "Orthodontics",
       description:
         "Invisalign clear aligners and traditional braces planned around alignment, bite, and daily life in Roseville, CA.",
       url,
@@ -478,6 +490,7 @@ export function OrthodonticsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <FaqJsonLd path="/orthodontics/" questions={orthodonticsQuestions} />
       <section className="bg-surface-alt py-16 sm:py-20">
         <div className="wrap">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm text-ink-muted">
@@ -512,11 +525,7 @@ export function OrthodonticsPage() {
 
       <section className="bg-surface-alt py-16 sm:py-20">
         <div className="wrap grid gap-8 lg:grid-cols-3">
-          {[
-            ["What does the first visit cover?", "The dentist reviews alignment, spacing, crowding, bite, oral health, and what you want to change."],
-            ["Is Invisalign right for every case?", "No. Some tooth movements and bite concerns need the control of braces. An evaluation makes that distinction clear."],
-            ["Can adults have orthodontic treatment?", "Yes. Adults can be evaluated for clear aligners or braces as long as their teeth and supporting tissues are healthy enough for movement."],
-          ].map(([question, answer]) => (
+          {orthodonticsQuestions.map(({ question, answer }) => (
             <article key={question} className="card p-7">
               <h2 className="font-serif text-2xl font-medium text-ink">{question}</h2>
               <p className="mt-3 text-sm leading-7 text-ink-muted">{answer}</p>
@@ -530,8 +539,8 @@ export function OrthodonticsPage() {
 }
 
 export function DoctorPage() {
-  const profileUrl = absoluteUrl("/michael-narodovich-dmd/");
-  const personId = profileUrl + "#person";
+  const profileUrl = absoluteUrl(doctorProfilePath);
+  const personId = doctorPersonId;
   return (
     <>
       <JsonLd />
@@ -541,6 +550,7 @@ export function DoctorPage() {
           { "@type": "ProfilePage", "@id": profileUrl + "#webpage", url: profileUrl, name: doctor.name, mainEntity: { "@id": personId } },
           { "@type": "Person", "@id": personId, name: "Michael Narodovich", honorificPrefix: "Dr.", honorificSuffix: "DMD", jobTitle: "Dentist",
             url: profileUrl, image: absoluteUrl("/media/dr-narodovich-hd.jpg"), worksFor: { "@id": dentistId },
+            knowsAbout: ["Sedation dentistry", "IV sedation", "Dental anxiety", "Dental implants", "Dental crowns", "Restorative dentistry"],
             alumniOf: [{ "@type": "CollegeOrUniversity", name: "The Ohio State University" }, { "@type": "CollegeOrUniversity", name: "Temple University" }],
             sameAs: ["https://sacramentodentalmedicine.com/meet-dr-narodovich#person"],
             hasCredential: doctor.licenseRecords.map((record) => ({ "@type": "EducationalOccupationalCredential", name: record.name, credentialCategory: record.category, identifier: record.identifier, url: record.url, recognizedBy: { "@type": "Organization", name: "Dental Board of California", url: "https://www.dbc.ca.gov/" } })) },
@@ -731,6 +741,17 @@ export function NewPatientsPage() {
           <div className="mt-10 rounded-2xl border border-line bg-cream p-6 sm:p-7">
             <p className="eyebrow mb-3">Insurance &amp; financing</p>
             <PaymentStrip />
+          </div>
+        </div>
+      </section>
+      <section className="bg-background py-16 sm:py-20" aria-labelledby="new-patient-questions">
+        <FaqJsonLd path="/new-patients/" questions={newPatientQuestions} />
+        <div className="wrap max-w-4xl">
+          <h2 id="new-patient-questions" className="font-serif text-3xl font-medium text-ink sm:text-4xl">
+            New patient questions, answered.
+          </h2>
+          <div className="mt-6">
+            <FaqList questions={newPatientQuestions} />
           </div>
         </div>
       </section>

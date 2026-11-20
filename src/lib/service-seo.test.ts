@@ -18,6 +18,16 @@ const rewritten = [
   "iv-sedation",
 ] as const;
 
+/** Listings added November 20, 2026 to replace the generic template copy. */
+const added = [
+  "veneers",
+  "smile-makeover",
+  "traditional-braces",
+  "cleanings-exams",
+  "composite-fillings",
+  "early-dental-care",
+] as const;
+
 /** The root layout's title template appends this to every page title. */
 const renderedTitle = (title: string) => `${title} | ${site.name}`;
 
@@ -29,11 +39,11 @@ describe("service search listings", () => {
         `${slug} is a live service`,
       );
     }
-    for (const slug of rewritten) assert.ok(serviceSeo[slug], slug);
+    for (const slug of [...rewritten, ...added]) assert.ok(serviceSeo[slug], slug);
   });
 
   it("fits Google's title and description display widths", () => {
-    for (const slug of rewritten) {
+    for (const slug of [...rewritten, ...added]) {
       const { title, description } = serviceSeo[slug];
       assert.ok(
         renderedTitle(title).length <= 60,
@@ -47,14 +57,14 @@ describe("service search listings", () => {
   });
 
   it("uses no dashes as punctuation", () => {
-    for (const slug of rewritten) {
+    for (const slug of [...rewritten, ...added]) {
       const { title, description } = serviceSeo[slug];
       assert.doesNotMatch(`${title} ${description}`, /[–—]| - /, slug);
     }
   });
 
   it("makes no price, offer, or guarantee claims", () => {
-    for (const slug of rewritten) {
+    for (const slug of [...rewritten, ...added]) {
       const { title, description } = serviceSeo[slug];
       assert.doesNotMatch(
         `${title} ${description}`,
