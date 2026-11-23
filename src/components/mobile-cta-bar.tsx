@@ -11,6 +11,9 @@ export function MobileCtaBar() {
 
   const isSedation = pathname.replace(/\/$/, "") === "/iv-sedation";
 
+  // Native fragment navigation reveals and focuses the contact section.
+  const AppointmentLink = isSedation ? "a" : Link;
+
   if (pathname.startsWith("/request-appointment")) return null;
 
   return (
@@ -24,7 +27,7 @@ export function MobileCtaBar() {
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] gap-2 px-4 py-2.5">
-          <Link
+          <AppointmentLink
             href={isSedation ? sedationConsultHref : scheduleHref}
             className="btn btn-sunset btn-sm min-h-11 min-w-0 gap-1.5 px-3 tracking-normal"
           >
@@ -33,7 +36,7 @@ export function MobileCtaBar() {
               aria-hidden="true"
             />
             <span className="whitespace-nowrap">Request Appointment</span>
-          </Link>
+          </AppointmentLink>
           <a
             href={site.phoneHref}
             className="btn btn-outline btn-sm min-h-11 min-w-0 gap-1.5 bg-cream px-3 tracking-normal"

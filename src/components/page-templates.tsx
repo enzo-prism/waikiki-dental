@@ -260,7 +260,7 @@ function SedationServicePage({ service }: { service: Service }) {
             {service.description}
           </p>
           <div className="mt-10 flex max-w-2xl flex-wrap gap-3">
-            <Link href={sedationConsultHref} className="btn btn-sunset">Request Appointment</Link>
+            <a href={sedationConsultHref} className="btn btn-sunset">Request Appointment</a>
             <SedationContactActions dark />
           </div>
           <p className="mt-3 text-sm text-cream/80">The Roseville office arranges IV sedation consultations by phone or text.</p>
@@ -319,7 +319,7 @@ function SedationServicePage({ service }: { service: Service }) {
         <div className="wrap py-12">
           <h2 className="font-serif text-3xl text-ink">Arrange your sedation consultation</h2>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href={sedationConsultHref} className="btn btn-sunset">Request Appointment</Link>
+            <a href={sedationConsultHref} className="btn btn-sunset">Request Appointment</a>
             <SedationContactActions />
           </div>
           <Link href={scheduleHref} className="mt-5 inline-block underline underline-offset-4">Book a routine dental visit online</Link>
