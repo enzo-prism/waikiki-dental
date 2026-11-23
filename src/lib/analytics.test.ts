@@ -104,6 +104,7 @@ describe("phone and email conversion events", () => {
   it("uses GA4-valid event names", () => {
     assert.deepEqual(GOOGLE_ANALYTICS_EVENT_NAMES, {
       "Phone Click": "phone_click",
+      "SMS Click": "sms_click",
       "Email Click": "email_click",
       generate_lead: "generate_lead",
       scheduler_link_click: "scheduler_link_click",
@@ -122,6 +123,7 @@ describe("phone and email conversion events", () => {
   });
 
   it("maps the site's tel: and mailto: links to conversions", () => {
+    assert.equal(contactLinkEvent(site.smsHref), ANALYTICS_EVENTS.smsClick);
     assert.equal(contactLinkEvent(site.phoneHref), ANALYTICS_EVENTS.phoneClick);
     assert.equal(contactLinkEvent(site.emailHref), ANALYTICS_EVENTS.emailClick);
     assert.equal(contactLinkEvent(" TEL:+19167726248"), ANALYTICS_EVENTS.phoneClick);

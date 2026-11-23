@@ -43,6 +43,7 @@ export const site = {
   name: "Waikiki Dental",
   phone: "(916) 772-6248",
   phoneHref: "tel:+19167726248",
+  smsHref: "sms:+19167726248",
   email: "office@waikikidental.com",
   emailHref: "mailto:office@waikikidental.com",
   address: `${addressParts.street} ${addressParts.suite}, ${addressParts.locality}, ${addressParts.region} ${addressParts.postalCode}`,
@@ -662,6 +663,8 @@ export const emergency = {
 
 /* On-site booking page: Jarvis embed plus office phone and email. */
 export const scheduleHref = "/request-appointment/";
+export const sedationContactId = "sedation-consultation";
+export const sedationConsultHref = scheduleHref + "#" + sedationContactId;
 
 const googleRating = `${reviewStats.rating.toFixed(1)} stars from ${reviewStats.count} Google reviews`;
 

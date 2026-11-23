@@ -3,11 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CalendarCheck, Phone } from "lucide-react";
-import { scheduleHref, site } from "@/lib/site";
+import { scheduleHref, sedationConsultHref, site } from "@/lib/site";
 
 /** Site-wide mobile conversion bar. The appointment flow supplies its own actions. */
 export function MobileCtaBar() {
   const pathname = usePathname();
+
+  const isSedation = pathname.replace(/\/$/, "") === "/iv-sedation";
+
+  // Native fragment navigation reveals and focuses the contact section.
+  const AppointmentLink = isSedation ? "a" : Link;
 
   if (pathname.startsWith("/request-appointment")) return null;
 
@@ -22,8 +27,8 @@ export function MobileCtaBar() {
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] gap-2 px-4 py-2.5">
-          <Link
-            href={scheduleHref}
+          <AppointmentLink
+            href={isSedation ? sedationConsultHref : scheduleHref}
             className="btn btn-sunset btn-sm min-h-11 min-w-0 gap-1.5 px-3 tracking-normal"
           >
             <CalendarCheck
@@ -31,17 +36,17 @@ export function MobileCtaBar() {
               aria-hidden="true"
             />
             <span className="whitespace-nowrap">Request Appointment</span>
-          </Link>
+          </AppointmentLink>
           <a
             href={site.phoneHref}
             className="btn btn-outline btn-sm min-h-11 min-w-0 gap-1.5 bg-cream px-3 tracking-normal"
-            aria-label={`Call or text ${site.phone}`}
+            aria-label={isSedation ? `Call the office at ${site.phone}` : `Call or text ${site.phone}`}
           >
             <Phone
               className="size-4 shrink-0 max-[359px]:hidden"
               aria-hidden="true"
             />
-            <span className="whitespace-nowrap">Call or text</span>
+            <span className="whitespace-nowrap">{isSedation ? "Call the office" : "Call or text"}</span>
           </a>
         </div>
       </div>
