@@ -39,7 +39,7 @@ export const careGuides: Record<string, CareGuide> = {
       { question: "Will I be completely asleep?", answer: "Do not assume IV sedation means general anesthesia. Ask the dentist what level of awareness is intended for your plan and how you will be monitored. The appropriate approach depends on your health and the procedure." },
       { question: "Is IV sedation right for everyone?", answer: "No. The dentist must assess your health, medications, and planned treatment before recommending it. Tell the team about anxiety when you contact the office so the consultation can address your concerns." },
       { question: "Can I finish all my dental work in one visit?", answer: "The number of visits depends on the treatment and your individual plan. Some care needs separate stages or healing time. Ask what can be combined safely and what will require follow-up." },
-      { question: "How do I arrange a sedation consultation?", answer: "Request an appointment online or call the Roseville office at (916) 772-6248. Tell the team you would like to discuss IV sedation. The team will confirm availability and the next step." },
+      { question: "How do I arrange a sedation consultation?", answer: "Call or text the Roseville office at (916) 772-6248 and ask for an IV sedation consultation. The team will confirm availability and the next step." },
     ],
     links: [
       { href: "/michael-narodovich-dmd/", label: "Meet Dr. Michael Narodovich" },

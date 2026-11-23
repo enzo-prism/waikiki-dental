@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CalendarCheck, Phone } from "lucide-react";
+import { SedationContactActions } from "./sedation-contact-actions";
 import { scheduleHref, site } from "@/lib/site";
 
 /** Site-wide mobile conversion bar. The appointment flow supplies its own actions. */
@@ -22,6 +23,7 @@ export function MobileCtaBar() {
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] gap-2 px-4 py-2.5">
+          {pathname.replace(/\/$/, "") === "/iv-sedation" ? <SedationContactActions compact /> : (<>
           <Link
             href={scheduleHref}
             className="btn btn-sunset btn-sm min-h-11 min-w-0 gap-1.5 px-3 tracking-normal"
@@ -43,6 +45,7 @@ export function MobileCtaBar() {
             />
             <span className="whitespace-nowrap">Call or text</span>
           </a>
+          </>)}
         </div>
       </div>
     </>

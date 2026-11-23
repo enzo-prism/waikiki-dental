@@ -43,6 +43,7 @@ export const site = {
   name: "Waikiki Dental",
   phone: "(916) 772-6248",
   phoneHref: "tel:+19167726248",
+  smsHref: "sms:+19167726248",
   email: "office@waikikidental.com",
   emailHref: "mailto:office@waikikidental.com",
   address: `${addressParts.street} ${addressParts.suite}, ${addressParts.locality}, ${addressParts.region} ${addressParts.postalCode}`,

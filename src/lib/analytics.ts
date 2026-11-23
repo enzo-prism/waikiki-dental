@@ -14,6 +14,7 @@ declare global {
  */
 export const ANALYTICS_EVENTS = {
   phoneClick: "Phone Click",
+  smsClick: "SMS Click",
   emailClick: "Email Click",
   generateLead: "generate_lead",
   schedulerLinkClick: "scheduler_link_click",
@@ -37,6 +38,7 @@ export type AllowedAnalyticsEvent =
  */
 export const GOOGLE_ANALYTICS_EVENT_NAMES: Record<AllowedAnalyticsEvent, string> = {
   "Phone Click": "phone_click",
+  "SMS Click": "sms_click",
   "Email Click": "email_click",
   generate_lead: "generate_lead",
   scheduler_link_click: "scheduler_link_click",
@@ -73,6 +75,7 @@ export function contactLinkEvent(
   href: string | null | undefined,
 ): AllowedAnalyticsEvent | null {
   const value = href?.trim().toLowerCase() ?? "";
+  if (value.startsWith("sms:")) return ANALYTICS_EVENTS.smsClick;
   if (value.startsWith("tel:")) return ANALYTICS_EVENTS.phoneClick;
   if (value.startsWith("mailto:")) return ANALYTICS_EVENTS.emailClick;
   return null;

@@ -7,6 +7,12 @@ for (const width of [390, 1280]) {
     for (const path of ["/iv-sedation/", "/roseville-dental-implants/"]) {
       await page.goto(path);
       await expect(page.locator("main h1")).toHaveCount(1);
+      if (path === "/iv-sedation/") {
+        const hero = page.locator("main section").first();
+        await expect(hero.getByRole("link", { name: /Call .* for a sedation consultation/ })).toHaveAttribute("href", "tel:+19167726248");
+        await expect(hero.getByRole("link", { name: /Text the Roseville office/ })).toHaveAttribute("href", "sms:+19167726248");
+        await expect(page.getByRole("link", { name: "Book a routine dental visit online" })).toHaveAttribute("href", "/request-appointment/");
+      }
       await expect(page.getByRole("heading", { name: "Answers before you choose your care." })).toBeVisible();
       const question = page.locator("details").first();
       await question.locator("summary").click();

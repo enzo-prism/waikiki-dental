@@ -45,6 +45,7 @@ import { AmbientVideo } from "./ambient-video";
 import { DoctorPortrait } from "./brand";
 import { ReviewExplorer } from "./review-explorer";
 import { SeasonalNotFoundArt } from "./seasonal";
+import { SedationContactActions } from "./sedation-contact-actions";
 import { CareGuide } from "./care-guide";
 import { FaqJsonLd, FaqList } from "./faq";
 import { orthodonticsQuestions } from "@/lib/care-guides";
@@ -258,15 +259,9 @@ function SedationServicePage({ service }: { service: Service }) {
             {service.description}
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Link href={scheduleHref} className="btn btn-sunset">
-              <CalendarCheck className="size-4" aria-hidden="true" />
-              Request a sedation consultation
-            </Link>
-            <a href={site.phoneHref} className="btn btn-ghost-light" aria-label={`Call or text ${site.phone}`}>
-              <Phone className="size-4" aria-hidden="true" />
-              {site.phone}
-            </a>
+            <SedationContactActions dark />
           </div>
+          <p className="mt-3 text-sm text-cream/80">Reach the Roseville team at {site.phone}. Ask for an IV sedation consultation.</p>
           <a href="#sedation-cost" className="mt-5 inline-block text-cream underline underline-offset-4">
             What goes into my estimate?
           </a>
@@ -318,7 +313,13 @@ function SedationServicePage({ service }: { service: Service }) {
       </section>
       <CareGuide slug={service.slug} />
       <RelatedCare excludeSlug={service.slug} />
-      <BookStrip />
+      <section className="border-t border-line bg-cream">
+        <div className="wrap py-12">
+          <h2 className="font-serif text-3xl text-ink">Arrange your sedation consultation</h2>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row"><SedationContactActions /></div>
+          <Link href={scheduleHref} className="mt-5 inline-block underline underline-offset-4">Book a routine dental visit online</Link>
+        </div>
+      </section>
     </>
   );
 }
