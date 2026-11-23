@@ -663,6 +663,8 @@ export const emergency = {
 
 /* On-site booking page: Jarvis embed plus office phone and email. */
 export const scheduleHref = "/request-appointment/";
+export const sedationContactId = "sedation-consultation";
+export const sedationConsultHref = scheduleHref + "#" + sedationContactId;
 
 const googleRating = `${reviewStats.rating.toFixed(1)} stars from ${reviewStats.count} Google reviews`;
 

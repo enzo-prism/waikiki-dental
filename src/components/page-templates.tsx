@@ -28,6 +28,7 @@ import {
   reviewStats,
   reviewTopics,
   scheduleHref,
+  sedationConsultHref,
   servicesByCategory,
   site,
   teamStory,
@@ -258,10 +259,11 @@ function SedationServicePage({ service }: { service: Service }) {
           <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-cream/75">
             {service.description}
           </p>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-10 flex max-w-2xl flex-wrap gap-3">
+            <Link href={sedationConsultHref} className="btn btn-sunset">Request Appointment</Link>
             <SedationContactActions dark />
           </div>
-          <p className="mt-3 text-sm text-cream/80">Reach the Roseville team at {site.phone}. Ask for an IV sedation consultation.</p>
+          <p className="mt-3 text-sm text-cream/80">The Roseville office arranges IV sedation consultations by phone or text.</p>
           <a href="#sedation-cost" className="mt-5 inline-block text-cream underline underline-offset-4">
             What goes into my estimate?
           </a>
@@ -316,7 +318,10 @@ function SedationServicePage({ service }: { service: Service }) {
       <section className="border-t border-line bg-cream">
         <div className="wrap py-12">
           <h2 className="font-serif text-3xl text-ink">Arrange your sedation consultation</h2>
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row"><SedationContactActions /></div>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <Link href={sedationConsultHref} className="btn btn-sunset">Request Appointment</Link>
+            <SedationContactActions />
+          </div>
           <Link href={scheduleHref} className="mt-5 inline-block underline underline-offset-4">Book a routine dental visit online</Link>
         </div>
       </section>

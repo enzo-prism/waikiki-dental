@@ -1,3 +1,5 @@
+import { SedationContactActions } from "@/components/sedation-contact-actions";
+import { sedationContactId } from "@/lib/site";
 import type { Metadata } from "next";
 import { AppointmentOfficeContact } from "@/components/appointment-office-contact";
 import { JarvisBookingTracker } from "@/components/jarvis-booking-tracker";
@@ -23,7 +25,15 @@ export default function RequestAppointmentPage() {
       <JarvisBookingTracker />
       <section className="overflow-x-clip bg-surface-alt">
         <h1 className="sr-only">Request a dental appointment</h1>
-        <div className="wrap-wide grid gap-8 py-10 sm:py-16 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:items-start lg:gap-10 lg:py-20">
+        <section id={sedationContactId} tabIndex={-1} aria-labelledby="consultation-heading" className="wrap-wide hidden scroll-mt-24 py-10 target:block">
+          <h2 id="consultation-heading" className="font-serif text-3xl text-ink">Arrange an IV sedation consultation</h2>
+          <p className="mt-4 max-w-xl leading-7 text-ink-muted">
+            Call or text the Roseville office and ask for an IV sedation consultation. The team will help you choose a time.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3"><SedationContactActions /></div>
+          <a href="#routine-booking" className="mt-5 inline-block underline underline-offset-4">Book a routine visit online</a>
+        </section>
+        <div id="routine-booking" className="wrap-wide scroll-mt-24 grid gap-8 py-10 sm:py-16 lg:grid-cols-[minmax(0,1.35fr)_minmax(16rem,0.65fr)] lg:items-start lg:gap-10 lg:py-20">
           <iframe
             data-jarvis-scheduler
             src={jarvisScheduleSrc}

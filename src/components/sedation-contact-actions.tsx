@@ -1,15 +1,15 @@
 import { MessageSquare, Phone } from "lucide-react";
 import { site } from "@/lib/site";
 
-export function SedationContactActions({ compact = false, dark = false }: { compact?: boolean; dark?: boolean }) {
-  const size = compact ? "btn-sm min-h-11 min-w-0 px-2" : "";
+export function SedationContactActions({ dark = false }: { dark?: boolean }) {
+  const buttonClass = dark ? "btn btn-ghost-light" : "btn btn-outline";
   return (
     <>
-      <a href={site.phoneHref} className={`btn btn-sunset ${size}`} aria-label={`Call ${site.phone} for a sedation consultation`}>
+      <a href={site.phoneHref} className={buttonClass} aria-label={`Call ${site.phone} for a sedation consultation`}>
         <Phone className="size-4 shrink-0" aria-hidden="true" />
-        {compact ? "Call for a consult" : "Call for a sedation consultation"}
+        Call {site.phone}
       </a>
-      <a href={site.smsHref} className={`btn ${dark ? "btn-ghost-light" : "btn-outline"} ${size}`} aria-label={`Text the Roseville office at ${site.phone}`}>
+      <a href={site.smsHref} className={buttonClass} aria-label={`Text the office at ${site.phone}`}>
         <MessageSquare className="size-4 shrink-0" aria-hidden="true" />
         Text the office
       </a>

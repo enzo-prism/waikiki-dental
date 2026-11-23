@@ -198,6 +198,7 @@ export function trackSchedulerLinkClick(href: string | null | undefined) {
     const target = new URL(href, window.location.href);
     if (
       target.origin !== window.location.origin ||
+      (target.hash && target.hash !== "#routine-booking") ||
       target.pathname.replace(/\/+$/, "") !== "/request-appointment" ||
       window.location.pathname.replace(/\/+$/, "") === "/request-appointment"
     ) return false;
