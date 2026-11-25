@@ -73,7 +73,7 @@ function ServiceJsonLd({ service }: { service: Service }) {
       serviceType: service.title,
       description: service.description,
       url,
-      areaServed: "Roseville, CA",
+      areaServed: ["Roseville, CA", "Granite Bay, CA", "Rocklin, CA", "Lincoln, CA"],
       provider: { "@id": dentistId },
     },
     {
@@ -201,7 +201,9 @@ function DefaultServicePage({ service }: { service: Service }) {
             <ServiceBreadcrumbs service={service} />
             <Eyebrow>{service.eyebrow}</Eyebrow>
             <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
-              {service.title} in Roseville
+              {service.slug === "dental-emergencies"
+                ? "Emergency Dentist in Roseville"
+                : `${service.title} in Roseville`}
             </h1>
             <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
               {service.description}
@@ -442,9 +444,9 @@ export function ServicesHubPage() {
       <section className="bg-surface-alt py-16 sm:py-20">
         <div className="wrap">
           <PageHeader
-            eyebrow="Dental care in Roseville"
-            title="Thoughtful care for every stage of your smile."
-            body="From monitored IV sedation and dental implants to routine cleanings, lab-made crowns, veneers, and orthodontics, every service here moves at a calm, unhurried pace."
+            eyebrow="Dental care in Roseville, CA"
+            title="Dental services in Roseville, built around your comfort."
+            body="From monitored IV sedation dentistry and dental implants to two-visit lab crowns, Invisalign, porcelain veneers, teeth whitening, family cleanings, and emergency dental care, we serve patients across Roseville, Granite Bay, Rocklin, and Lincoln at an unhurried pace."
           />
         </div>
       </section>
@@ -488,7 +490,7 @@ export function OrthodonticsPage() {
       description:
         "Invisalign clear aligners and traditional braces planned around alignment, bite, and daily life in Roseville, CA.",
       url,
-      areaServed: "Roseville, CA",
+      areaServed: ["Roseville, CA", "Granite Bay, CA", "Rocklin, CA", "Lincoln, CA"],
       provider: { "@id": dentistId },
     },
     {
@@ -691,8 +693,8 @@ export function OfficePage() {
         <div className="wrap">
           <PageHeader
             eyebrow="Our Roseville office"
-            title="Careful dentistry with a genuinely calmer touch."
-            body="Our Roseville office brings together restorative, implant, cosmetic, and family dentistry with strict safety standards and a welcoming neighborhood pace."
+            title="A calmer Roseville dental office on Pleasant Grove Blvd."
+            body="Serving Roseville, Granite Bay, Rocklin, and Lincoln, our office combines monitored IV sedation, dental implants, restorative, cosmetic, and family dentistry with strict safety standards and welcoming neighborhood hospitality."
           />
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {pillars.map(([title, body]) => (
@@ -705,6 +707,25 @@ export function OfficePage() {
               </article>
             ))}
           </div>
+          <p className="mt-8 text-sm leading-7 text-ink-muted">
+            Explore our{" "}
+            <Link className="font-semibold text-ocean-700 underline underline-offset-4" href="/iv-sedation/">
+              IV sedation dentistry
+            </Link>
+            ,{" "}
+            <Link className="font-semibold text-ocean-700 underline underline-offset-4" href="/roseville-dental-implants/">
+              dental implants
+            </Link>
+            ,{" "}
+            <Link className="font-semibold text-ocean-700 underline underline-offset-4" href="/roseville-dental-care/">
+              full Roseville service menu
+            </Link>
+            , or{" "}
+            <Link className="font-semibold text-ocean-700 underline underline-offset-4" href="/new-patients/">
+              new-patient insurance and CareCredit guide
+            </Link>
+            .
+          </p>
         </div>
       </section>
       <VisitPanel />
@@ -739,9 +760,9 @@ export function NewPatientsPage() {
         <div className="wrap">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <PageHeader
-              eyebrow="New patients"
-              title="Practical details, settled before you arrive."
-              body="Insurance questions, payment options, CareCredit financing, and digital forms are easy to sort out ahead of time so your first visit stays focused on you."
+              eyebrow="New patients in Roseville"
+              title="Welcoming new dental patients in Roseville."
+              body="Insurance questions, payment options, CareCredit financing, and paperless intake forms are easy to sort out ahead of time so your first visit stays calm and focused on you."
             />
             <div className="grid gap-4">
               {details.map(([title, body]) => (

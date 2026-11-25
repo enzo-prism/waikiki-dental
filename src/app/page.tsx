@@ -49,7 +49,7 @@ export default function Home() {
                 className="h-auto w-6 shrink-0"
               />
               <span className="min-w-0">
-                Roseville, CA · IV sedation &amp; restorative care
+                Roseville, CA Dentist · IV Sedation &amp; Dental Implants
               </span>
             </span>
             <h1 className="mt-6 text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-ink season:text-cream sm:text-6xl lg:text-[4.25rem]">
@@ -60,10 +60,11 @@ export default function Home() {
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted season:text-cream/80">
-              Dr. Michael Narodovich built our Roseville practice for people who
-              dread the dental chair. From monitored IV sedation to dental
-              implants and restorative care, every visit moves at your pace with
-              clear answers and zero judgment.
+              Roseville dentist Dr. Michael Narodovich built our practice for
+              people who dread the dental chair. From monitored IV sedation
+              dentistry to dental implants, lab-made crowns, and family care,
+              every visit moves at your pace with clear answers and zero
+              judgment.
             </p>
             <div className="mt-9 hidden flex-wrap items-center gap-3 lg:flex">
               <Link href={scheduleHref} className="btn btn-sunset">

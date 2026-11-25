@@ -31,37 +31,37 @@ const staticPages: Record<
   }
 > = {
   "michael-narodovich-dmd": {
-    title: "Meet Dr. Michael Narodovich, DMD",
+    title: "Dr. Michael Narodovich, DMD in Roseville",
     description:
-      "Meet Dr. Michael Narodovich, DMD, a Roseville dentist with active California sedation permits and a calm, unhurried approach to patient care.",
+      "Meet Dr. Michael Narodovich, DMD, a Roseville sedation dentist with active California sedation permits and a calm, unhurried approach to dental care.",
   },
   "roseville-dental-care": {
     title: "Dental Services in Roseville, CA",
     description:
-      "Browse dental care at Waikiki Dental in Roseville: monitored IV sedation, dental implants, lab-made crowns, Invisalign, veneers, and preventive exams.",
+      "Explore dental care in Roseville, CA: monitored IV sedation, dental implants, two-visit lab crowns, Invisalign, porcelain veneers, and family exams.",
   },
   "waikiki-dental-roseville": {
-    title: "Our Roseville Dental Office",
+    title: "Roseville Dental Office on Pleasant Grove",
     description:
-      "Step inside Waikiki Dental in Roseville, CA. Clinical rigor, prevention-focused exams, strict safety standards, and calm neighborhood hospitality.",
+      "Visit Waikiki Dental at 1271 Pleasant Grove Blvd in Roseville, CA for IV sedation, implants, and family care serving Granite Bay, Rocklin, and Lincoln.",
   },
   "new-patients": {
-    title: "New Dental Patients in Roseville, CA",
+    title: "New Patients in Roseville: Plans & Forms",
     description:
-      "Preparing for your first visit to Waikiki Dental in Roseville? Review insurance questions, payment options, CareCredit financing, and paperless forms.",
+      "Welcoming new dental patients in Roseville, CA. Check dental insurance, CareCredit financing, paperless forms, and weekday hours before your first visit.",
   },
   "patient-testimonials": {
-    title: "Patient Reviews in Roseville, CA",
-    description: `See what Roseville patients say about Dr. Michael Narodovich and our team across ${reviewStats.count} verified Google reviews, or open Google Maps to read every review.`,
+    title: `Roseville Dentist Reviews (${reviewStats.rating.toFixed(1)} Stars)`,
+    description: `See why Roseville patients rate Dr. Michael Narodovich ${reviewStats.rating.toFixed(1)} stars across ${reviewStats.count} verified Google reviews, or open Google Maps to read every review.`,
   },
   "contact-waikiki-dental": {
-    title: "Contact Waikiki Dental in Roseville",
-    description: `Reach Waikiki Dental in Roseville, CA. Book online, call or text ${site.phone}, send a general message, or visit us on ${site.addressParts.street}`,
+    title: "Contact Waikiki Dental in Roseville, CA",
+    description: `Contact Waikiki Dental at 1271 Pleasant Grove Blvd in Roseville, CA. Call or text ${site.phone}, book online, or check Monday to Friday office hours.`,
   },
   orthodontics: {
     title: "Orthodontics & Invisalign in Roseville",
     description:
-      "Compare Invisalign clear aligners and traditional braces at Waikiki Dental in Roseville, with an honest exam and a plan built around your bite.",
+      "Compare Invisalign clear aligners and traditional braces in Roseville, CA. Get an honest bite evaluation, written estimate, and CareCredit options.",
   },
 };
 

@@ -54,7 +54,7 @@ export const site = {
     "https://www.google.com/maps/search/?api=1&query=Waikiki+Dental+Roseville+CA&query_place_id=ChIJmbGEGJUhm4AR7RCJgmMeb1U",
   baseUrl: resolveSiteUrl(),
   description:
-    "IV sedation, dental implants, and unhurried restorative care in Roseville, CA. Dr. Michael Narodovich helps anxious patients feel genuinely at ease.",
+    "Roseville dentist Dr. Michael Narodovich offers monitored IV sedation, dental implants, lab-made crowns, and calm restorative care in Roseville, CA.",
 };
 
 export const hours = [
@@ -168,17 +168,17 @@ export const services: Service[] = [
   {
     title: "Cleanings & Exams",
     slug: "cleanings-exams",
-    eyebrow: "Preventive care",
+    eyebrow: "Preventive & family care",
     category: "preventive",
     summary:
-      "An unhurried cleaning, a thorough exam, and plain-language answers about what is healthy and what needs attention.",
+      "An unhurried dental cleaning, a thorough exam, and plain-language answers from your Roseville family dentist.",
     description:
-      "Lasting dental health comes from quiet, consistent maintenance. At our Roseville office, routine exams and cleanings give us time to care for your gums, screen for oral cancer, take X-rays only when clinically helpful, and catch small changes long before they become urgent.",
+      "Lasting dental health starts with consistent, judgment-free preventive care. As a family dentist in Roseville, CA, we take time during routine cleanings and exams to protect your gums, screen for oral cancer, take digital X-rays only when clinically helpful, and catch small issues long before they hurt.",
     highlights: [
-      "Thorough exams with clear, honest explanations",
+      "Comprehensive dental exams with clear, honest explanations",
       "Digital X-rays taken only when clinically needed",
       "Routine gum health and oral cancer screenings",
-      "Gentle cleanings paced around your comfort",
+      "Gentle family cleanings paced around your comfort",
     ],
     icon: Stethoscope,
   },
@@ -358,13 +358,13 @@ export const services: Service[] = [
     eyebrow: "Sedation dentistry",
     category: "sedation",
     summary:
-      "Monitored IV sedation that helps anxious Roseville patients move through dental care calmly and comfortably.",
+      "Monitored IV sedation dentistry that helps anxious Roseville patients complete dental care calmly and comfortably.",
     description:
-      "If fear, a strong gag reflex, or a difficult past experience has kept you out of the dental chair, you do not have to push through it alone. Start with a relaxed consultation at our Roseville office where Dr. Narodovich listens to your concerns, reviews your health history, and explains whether monitored IV sedation fits your care and budget.",
+      "If dental fear, a strong gag reflex, or a difficult past experience has kept you out of the chair, sedation dentistry in Roseville can help you move forward comfortably. Start with an unhurried consultation where Dr. Narodovich listens to your goals, reviews your health history, and explains whether monitored IV sedation fits your treatment and budget.",
     highlights: [
-      "Built for patients who feel anxious or avoid the dentist",
-      "Helps ease strong gag reflexes and longer procedures",
-      "Continuous monitoring paired with an individualized plan",
+      "Tailored for dental anxiety, fear, and years away from care",
+      "Helps ease strong gag reflexes and longer restorative visits",
+      "Continuous monitoring paired with an individualized comfort plan",
       "Starts with a calm consultation and a clear written estimate",
     ],
     icon: Syringe,
@@ -375,13 +375,13 @@ export const services: Service[] = [
     eyebrow: "Urgent dental care",
     category: "emergency",
     summary:
-      "Sudden tooth pain, swelling, or a broken tooth? Call our Roseville office for prompt help.",
+      "Sudden tooth pain, swelling, or a broken tooth? Call our Roseville emergency dentist for prompt guidance.",
     description:
-      "Tooth pain, swelling, a broken tooth, or a lost crown can derail your whole day. Call our Roseville office right away so we can guide you on what to do next and make every effort to see you as quickly as possible.",
+      "A severe toothache, facial swelling, broken tooth, or lost crown cannot wait. Call our Roseville emergency dentist Monday to Friday so we can guide you on immediate next steps and make every effort to see you as quickly as possible.",
     highlights: [
-      "Sudden or severe toothaches and facial swelling",
+      "Severe toothaches, sensitivity, and facial or gum swelling",
       "Chipped, cracked, loosened, or knocked-out teeth",
-      "Lost fillings, crowns, or damaged restorations",
+      "Lost fillings, temporary crowns, or damaged restorations",
       "Direct phone guidance from our Roseville team Monday to Friday",
     ],
     icon: HeartPulse,
@@ -677,66 +677,66 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   "roseville-invisalign": {
     title: "Roseville Invisalign: Cost & Consultation",
     description:
-      "Compare Invisalign and braces in Roseville with Dr. Narodovich. Get a written estimate covering aligners, refinements, and retainers, plus CareCredit.",
+      "Straighten teeth discreetly with Invisalign in Roseville, CA. Compare clear aligners and braces, get a written estimate with retainers, and CareCredit.",
   },
   "iv-sedation": {
     title: "IV Sedation Dentist in Roseville, CA",
     description:
-      "Nervous about dental care? Meet Dr. Narodovich in Roseville for monitored IV sedation, clear treatment plans, and honest answers on what shapes cost.",
+      "Sedation dentistry in Roseville with Dr. Narodovich. Monitored IV sedation for dental anxiety, strong gag reflexes, implants, and restorative care.",
   },
   "dental-emergencies": {
     title: "Emergency Dentist in Roseville: Call Now",
-    description: `Tooth pain, swelling, or a broken tooth? Call ${site.phone} Monday to Friday. Our Roseville team makes every effort to see urgent dental cases fast.`,
+    description: `Emergency dentist in Roseville: call ${site.phone} Monday to Friday for tooth pain, swelling, or a broken tooth. We make every effort to see you fast.`,
   },
   "digital-x-ray": {
     title: "Digital Dental X-Rays in Roseville, CA",
     description:
-      "Digital dental X-rays at Waikiki Dental in Roseville spot hidden decay, root concerns, and bone changes early so treatment stays simpler and clearer.",
+      "Low-dose digital dental X-rays in Roseville reveal hidden cavities, root concerns, and bone changes early. Learn how often X-rays are needed and why.",
   },
   "teeth-whitening": {
     title: "Teeth Whitening in Roseville, CA",
     description:
-      "Professional teeth whitening in Roseville with Dr. Narodovich. Discuss stains, tooth sensitivity, and realistic results before brightening your smile.",
+      "Professional teeth whitening in Roseville, CA with Dr. Narodovich. Lift coffee, tea, and age stains safely with guidance for sensitive teeth and shade.",
   },
   "dental-crowns": {
     title: "Dental Crowns in Roseville: Two Visits",
     description:
-      "Repair a cracked or weakened tooth with a custom lab-made crown in Roseville. Two visits with a temporary crown, a written estimate, and CareCredit.",
+      "Cracked or weakened tooth? Get a custom lab-made crown in Roseville over two visits with a temporary crown, a clear written estimate, and CareCredit.",
   },
   veneers: {
     title: "Porcelain Veneers in Roseville, CA",
     description:
-      "Custom porcelain veneers in Roseville for chipped, worn, or stained teeth. Learn how veneers work, who is a good fit, and how we plan natural results.",
+      "Custom porcelain veneers in Roseville for chipped, worn, gapped, or stained teeth. Compare veneers vs. crowns and plan natural cosmetic results with us.",
   },
   "smile-makeover": {
     title: "Smile Makeover in Roseville, CA",
     description:
-      "Combine whitening, veneers, crowns, alignment, or implants in one coordinated Roseville plan. Phase your care around your goals, timeline, and budget.",
+      "Cosmetic dentistry and smile makeovers in Roseville, CA. Combine whitening, veneers, crowns, Invisalign, or implants in phases built around your budget.",
   },
   "traditional-braces": {
     title: "Traditional Braces in Roseville, CA",
     description:
-      "Dependable braces in Roseville for crowding, spacing, and bite correction. Compare brackets and wires with clear aligners at Waikiki Dental.",
+      "Traditional braces in Roseville for teens and adults with crowding, spacing, or bite issues. Compare braces and Invisalign at Waikiki Dental.",
   },
   "cleanings-exams": {
-    title: "Dental Cleanings & Exams in Roseville, CA",
+    title: "Family Dentist & Cleanings in Roseville",
     description:
-      "Unhurried dental cleanings and exams in Roseville with gum checks, oral cancer screenings, and X-rays only when needed. Welcoming new patients.",
+      "Looking for a family dentist in Roseville, CA? Unhurried cleanings, thorough exams, gum checks, and oral cancer screenings. Welcoming new patients.",
   },
   "composite-fillings": {
     title: "Tooth-Colored Fillings in Roseville, CA",
     description:
-      "Natural-looking composite fillings in Roseville repair decay and small chips conservatively, shaded to match your enamel in a calm, unhurried visit.",
+      "Tooth-colored composite fillings in Roseville repair cavities and small chips conservatively, shaded to match your enamel in a calm, unhurried visit.",
   },
   "early-dental-care": {
     title: "Kids' First Dental Visits in Roseville",
     description:
-      "Gentle, patient first dental visits in Roseville that build healthy brushing habits and lasting confidence for young smiles at Waikiki Dental.",
+      "Gentle, patient kids' dental visits in Roseville, CA. Learn when children should first see a dentist and how we build healthy brushing habits early.",
   },
   "roseville-dental-implants": {
     title: "Dental Implants in Roseville, CA",
     description:
-      "Replace a missing tooth in Roseville with a custom implant plan. Review stages, compare options, and get a clear written estimate at Waikiki Dental.",
+      "Single or multiple dental implants in Roseville, CA. Compare implants vs. bridges, review treatment stages and cost factors, and get a written estimate.",
   },
 };
 
@@ -901,7 +901,14 @@ export const dentistJsonLd = {
   /* `paymentOptions`; Medi-Cal is not accepted. */
   paymentAccepted: "Cash, Check, Credit Card, Debit Card, CareCredit",
   employee: { "@id": doctorPersonId },
-  knowsAbout: services.map((service) => service.title),
+  knowsAbout: [
+    "Sedation Dentistry",
+    "Family Dentistry",
+    "Cosmetic Dentistry",
+    "Restorative Dentistry",
+    "Emergency Dentistry",
+    ...services.map((service) => service.title),
+  ],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Dental services in Roseville, CA",

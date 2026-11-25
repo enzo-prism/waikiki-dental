@@ -225,16 +225,31 @@ export function FlagshipServices() {
       <div className="wrap">
         <SectionHeader
           eyebrow="What we are known for"
-          title="Monitored IV sedation and dental implants."
-          body="Calm, carefully planned care for anxious patients and tooth replacement, backed by comprehensive dentistry under one Roseville roof."
+          title="IV sedation dentistry and dental implants in Roseville."
+          body="Calm, carefully planned care for anxious patients and lasting tooth replacement, backed by full restorative, cosmetic, orthodontic, and family dentistry under one roof."
         />
-        <Link
-          href="/roseville-dental-care/"
-          className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ocean-700 transition hover:text-ocean-800"
-        >
-          Explore all services
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </Link>
+        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-muted">
+          <Link
+            href="/roseville-dental-care/"
+            className="inline-flex items-center gap-1.5 font-semibold text-ocean-700 transition hover:text-ocean-800"
+          >
+            Explore all Roseville services
+            <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+          <span className="text-line-strong" aria-hidden="true">·</span>
+          <Link href="/dental-crowns/" className="underline decoration-ocean-200 underline-offset-4 transition hover:text-ocean-700">
+            Lab-made crowns
+          </Link>
+          <Link href="/roseville-invisalign/" className="underline decoration-ocean-200 underline-offset-4 transition hover:text-ocean-700">
+            Invisalign
+          </Link>
+          <Link href="/veneers/" className="underline decoration-ocean-200 underline-offset-4 transition hover:text-ocean-700">
+            Porcelain veneers
+          </Link>
+          <Link href="/dental-emergencies/" className="underline decoration-ocean-200 underline-offset-4 transition hover:text-ocean-700">
+            Emergency dentist
+          </Link>
+        </div>
 
         <div className="mt-10 grid gap-5 lg:grid-cols-2">
           {sedation ? <ServiceCard service={sedation} featured /> : null}
@@ -431,7 +446,7 @@ export function DoctorSpotlight() {
         <div>
           <Eyebrow>Meet Dr. Mike</Eyebrow>
           <h2 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-[2.75rem] sm:leading-[1.08]">
-            The dentist nervous patients recommend to their friends.
+            The Roseville sedation dentist nervous patients recommend.
           </h2>
           <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
             {doctor.bio.map((paragraph) => (
@@ -476,8 +491,8 @@ export function VisitPanel({
             title="Starting is simpler than you think."
             body={
               showForm
-                ? "Schedule online, call or text our front desk, or send a quick note below. You will find us on Pleasant Grove Boulevard in Roseville."
-                : "Schedule your visit online, or call and text our front desk directly. You will find us on Pleasant Grove Boulevard in Roseville."
+                ? "Schedule online, call or text our front desk, or send a quick note below. You will find us on Pleasant Grove Boulevard in Roseville, serving Granite Bay, Rocklin, and Lincoln."
+                : "Schedule your visit online, or call and text our front desk directly. You will find us on Pleasant Grove Boulevard in Roseville, minutes from Granite Bay, Rocklin, and Lincoln."
             }
             headingLevel={headingLevel}
           />
