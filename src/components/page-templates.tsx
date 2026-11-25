@@ -208,7 +208,7 @@ function DefaultServicePage({ service }: { service: Service }) {
             </p>
             {service.slug === "dental-emergencies" ? (
               <div className="mt-6">
-                <a href={site.phoneHref} className="btn btn-sunset">
+                <a href={site.phoneHref} className="btn btn-outline border-ocean-600">
                   <Phone className="size-4" aria-hidden="true" />
                   Call {site.phone}
                 </a>

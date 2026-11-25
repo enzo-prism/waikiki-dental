@@ -31,11 +31,11 @@ export function MobileCtaBar() {
         <div className="grid grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] gap-2 px-4 py-2.5">
           {isEmergency ? (
             <>
-              <a href={site.phoneHref} className="btn btn-sunset btn-sm min-h-11 min-w-0 gap-1.5 px-3 tracking-normal">
+              <a href={site.phoneHref} className="btn btn-outline btn-sm border-ocean-600 min-h-11 min-w-0 gap-1.5 px-3 tracking-normal">
                 <Phone className="size-4 shrink-0 max-[359px]:hidden" aria-hidden="true" />
                 Call the office
               </a>
-              <Link href={scheduleHref} className="btn btn-outline btn-sm min-h-11 min-w-0 bg-cream px-3 tracking-normal">
+              <Link href={scheduleHref} className="btn btn-sm min-h-11 min-w-0 px-3 tracking-normal underline underline-offset-4">
                 Routine visit
               </Link>
             </>
