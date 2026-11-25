@@ -178,8 +178,8 @@ function RelatedCare({ excludeSlug }: { excludeSlug?: string }) {
     <section className="bg-background py-20 sm:py-24">
       <div className="wrap">
         <SectionHeader
-          eyebrow="Also in this office"
-          title="Related flagship care."
+          eyebrow="Flagship care in Roseville"
+          title="Other ways we can help."
         />
         <div className="mt-10">
           <ServicesGrid items={items} />
@@ -233,7 +233,7 @@ function DefaultServicePage({ service }: { service: Service }) {
               <Icon className="size-6" aria-hidden="true" />
             </span>
             <h2 className="mt-6 font-serif text-2xl font-medium text-ink">
-              What this visit can do for you
+              What to expect from this visit
             </h2>
             <ul className="mt-5 grid gap-3">
               {service.highlights.map((highlight) => (
@@ -274,9 +274,9 @@ function SedationServicePage({ service }: { service: Service }) {
             <a href={sedationConsultHref} className="btn btn-sunset">Request Appointment</a>
             <SedationContactActions dark />
           </div>
-          <p className="mt-3 text-sm text-cream/80">The Roseville office arranges IV sedation consultations by phone or text.</p>
+          <p className="mt-3 text-sm text-cream/80">Prefer to talk it through first? Our Roseville team arranges IV sedation consultations by phone or text.</p>
           <a href="#sedation-cost" className="mt-5 inline-block text-cream underline underline-offset-4">
-            What goes into my estimate?
+            See what shapes your sedation estimate
           </a>
         </div>
         <div
@@ -298,14 +298,15 @@ function SedationServicePage({ service }: { service: Service }) {
               How much does IV sedation cost in Roseville?
             </h2>
             <p className="mt-4 text-lg leading-8 text-ink-muted">
-              Your estimate depends on the dental work you need and which visits
-              will involve sedation. At your consultation, ask for the sedation
-              fee and the dental treatment fees separately, including any imaging
-              or follow-up visits. If you have insurance, ask what your plan
-              covers and what you would pay yourself.
+              Every sedation estimate reflects two parts: the dental care you
+              need and the sedation planned for those visits. During your
+              consultation, we break out the sedation fee and dental treatment
+              fees separately, along with any imaging or follow-up visits, and
+              check what your insurance covers so you know your expected cost
+              upfront.
             </p>
             <Link href="/roseville-dental-implants/" className="mt-4 inline-block font-semibold text-ocean-700 underline underline-offset-4">
-              Planning an implant? See the stages and estimate.
+              Considering dental implants? Review the stages and estimate.
             </Link>
           </div>
           <ul className="grid gap-4">
@@ -328,7 +329,7 @@ function SedationServicePage({ service }: { service: Service }) {
       <RelatedCare excludeSlug={service.slug} />
       <section className="border-t border-line bg-cream">
         <div className="wrap py-12">
-          <h2 className="font-serif text-3xl text-ink">Arrange your sedation consultation</h2>
+          <h2 className="font-serif text-3xl text-ink">Ready to talk through IV sedation?</h2>
           <div className="mt-5 flex flex-wrap gap-3">
             <a href={sedationConsultHref} className="btn btn-sunset">Request Appointment</a>
             <SedationContactActions />
@@ -379,7 +380,7 @@ function ProcessServicePage({
       <section className="bg-surface-alt py-20">
         <div className="wrap">
           <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
-            How a visit unfolds
+            How your care unfolds
           </h2>
           <ol className={`mt-10 grid gap-8 sm:grid-cols-2 ${columns}`}>
             {steps.map((step, index) => (
@@ -441,9 +442,9 @@ export function ServicesHubPage() {
       <section className="bg-surface-alt py-16 sm:py-20">
         <div className="wrap">
           <PageHeader
-            eyebrow="Roseville dental care"
-            title="One office for every stage of your smile."
-            body="Preventive cleanings, cosmetic refinements, implants, orthodontics, and IV sedation — a complete menu, delivered at a calmer pace."
+            eyebrow="Dental care in Roseville"
+            title="Thoughtful care for every stage of your smile."
+            body="From monitored IV sedation and dental implants to routine cleanings, lab-made crowns, veneers, and orthodontics, every service here moves at a calm, unhurried pace."
           />
         </div>
       </section>
@@ -521,8 +522,8 @@ export function OrthodonticsPage() {
           </nav>
           <PageHeader
             eyebrow="Orthodontics in Roseville"
-            title="A straighter smile, planned around real life."
-            body="Compare clear, removable Invisalign aligners with the precise control of traditional braces. The right route depends on your alignment, bite, goals, and daily routine."
+            title="Straighter teeth, planned around your life."
+            body="Compare clear, removable Invisalign aligners with the precise control of traditional braces. We help you choose the path that matches your bite, goals, and daily routine."
           />
         </div>
       </section>
@@ -530,9 +531,9 @@ export function OrthodonticsPage() {
       <section className="bg-background py-16 sm:py-20">
         <div className="wrap">
           <SectionHeader
-            eyebrow="Two proven approaches"
-            title="Clear aligners or traditional braces?"
-            body="Start with an evaluation, then choose the approach that fits the movement your teeth need and the way you want treatment to fit your day."
+            eyebrow="Two proven options"
+            title="Invisalign or traditional braces?"
+            body="Every orthodontic plan starts with an honest exam so you know which option moves your teeth best and fits smoothly into your day."
           />
           <div className="mt-10">
             <ServicesGrid items={items} />
@@ -578,7 +579,7 @@ export function DoctorPage() {
           <div>
             <Eyebrow>{doctor.name}</Eyebrow>
             <h1 className="mt-4 text-balance font-serif text-[2.6rem] font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl">
-              A Roseville dentist who leads with listening.
+              A Roseville dentist who takes time to listen.
             </h1>
             <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
               {doctor.bio.map((paragraph) => (
@@ -604,14 +605,14 @@ export function DoctorPage() {
               ))}
             </div>
             <section aria-label="Verified licensing records" className="mt-8 border-t border-line pt-6">
-              <h2 className="font-serif text-2xl font-medium text-ink">Licensing you can verify.</h2>
+              <h2 className="font-serif text-2xl font-medium text-ink">Active California licenses you can verify.</h2>
               <ul className="mt-4 grid gap-3 text-sm leading-7 text-ocean-700">
                 {doctor.licenseRecords.map((record) => <li key={record.identifier}><a className="underline underline-offset-4" href={record.url}>{record.name}</a></li>)}
               </ul>
-              <p className="mt-3 text-sm leading-7 text-ink-muted">The Dental Board of California records showed current-active status when checked {doctor.licenseRecordsChecked}. Follow the official links for current details. Your consultation confirms who will administer and monitor your care.</p>
+              <p className="mt-3 text-sm leading-7 text-ink-muted">These Dental Board of California records showed current-active status when we checked them on {doctor.licenseRecordsChecked}. Follow any link above to view the live state record. During your consultation, we confirm who will administer and monitor your care.</p>
             </section>
             <p className="mt-6 text-sm leading-7 text-ink-muted">
-              Planning a visit? Read about <Link className="underline" href="/iv-sedation/">IV sedation</Link>,
+              Exploring care options? Read about <Link className="underline" href="/iv-sedation/">IV sedation</Link>,
               {" "}<Link className="underline" href="/roseville-dental-implants/">dental implants</Link>, and
               {" "}<Link className="underline" href="/waikiki-dental-roseville/">the Roseville office</Link>.
             </p>
@@ -640,20 +641,20 @@ export function DoctorPage() {
               />
             </div>
             <figcaption className="mt-3 text-sm text-ink-soft">
-              Dr. Mike and the team in front of the office&rsquo;s hand-painted
-              hibiscus mural.
+              Dr. Mike and our Roseville team in front of the office&rsquo;s
+              hand-painted hibiscus mural.
             </figcaption>
           </figure>
           <div>
-            <Eyebrow>In the office</Eyebrow>
+            <Eyebrow>How we practice</Eyebrow>
             <h2 className="mt-4 text-balance font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-              Care that starts with a real conversation.
+              Clear answers before any treatment begins.
             </h2>
             <p className="mt-4 text-pretty text-lg leading-8 text-ink-muted">
-              Every visit begins with listening. Dr. Narodovich walks patients
-              through what he sees, what the options are, and what he
-              recommends — so decisions about your smile always feel informed
-              and unhurried.
+              Before picking up an instrument, Dr. Narodovich sits down to hear
+              what brought you in and what has made past dental visits hard. He
+              shows you what he sees, lays out your options in plain language,
+              and gives you space to decide without pressure.
             </p>
           </div>
         </div>
@@ -666,20 +667,20 @@ export function DoctorPage() {
 export function OfficePage() {
   const pillars: Array<[string, string]> = [
     [
-      "High standards",
-      "Comprehensive treatment planning, restorative care, and cosmetic dentistry — held to the standard we'd want for our own families.",
+      "Clinical rigor",
+      "From preventive exams to dental implants and lab-made crowns, we plan every detail carefully and recommend only the care your teeth genuinely need.",
     ],
     [
-      "Education & prevention",
-      "Exams, oral cancer screenings, X-rays, cleanings, sealants, fluoride, and practical coaching — because the easiest dental problem is the one that never happens.",
+      "Prevention that lasts",
+      "Thorough cleanings, oral cancer screenings, targeted digital X-rays, sealants, fluoride, and practical home-care coaching help keep natural teeth healthy for the long haul.",
     ],
     [
-      "Uncompromising safety",
-      "Sterilization and infection-control protocols that protect every patient and every team member, at every visit.",
+      "Strict safety standards",
+      "Consistent sterilization and infection-control protocols protect every patient and every team member across every appointment.",
     ],
     [
-      "A positive experience",
-      "You're a person here, not a chart number. Expect a relaxed, respectful visit that earns trust the old-fashioned way.",
+      "Unhurried hospitality",
+      "We leave room for questions, respect your comfort level, and focus on earning your trust one straightforward visit at a time.",
     ],
   ];
 
@@ -689,9 +690,9 @@ export function OfficePage() {
       <section className="bg-surface-alt py-16 sm:py-20">
         <div className="wrap">
           <PageHeader
-            eyebrow="Waikiki Dental Roseville"
-            title="High standards of care, with a genuinely lighter touch."
-            body="The Roseville practice is devoted to restoring and enhancing natural smiles — family, cosmetic, and implant dentistry with prevention, safety, and hospitality at the center."
+            eyebrow="Our Roseville office"
+            title="Careful dentistry with a genuinely calmer touch."
+            body="Our Roseville office brings together restorative, implant, cosmetic, and family dentistry with strict safety standards and a welcoming neighborhood pace."
           />
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {pillars.map(([title, body]) => (
@@ -715,19 +716,19 @@ export function NewPatientsPage() {
   const details: Array<[string, string]> = [
     [
       "Insurance & Medi-Cal",
-      `${mediCalNotice} For other dental plans, contact the office to confirm coverage before your visit.`,
+      `${mediCalNotice} If you carry another dental plan, reach out before your visit and our front desk will check your coverage.`,
     ],
     [
-      "Flexible payment options",
-      "Cash, checks, debit, and major credit cards are all welcome; payment is due at the time of treatment.",
+      "Straightforward payment",
+      "We accept cash, checks, debit, and major credit cards, with payment due at the time of treatment.",
     ],
     [
       "CareCredit financing",
-      "CareCredit spreads out-of-pocket costs into manageable payments, so needed treatment doesn't have to wait.",
+      "Spread out-of-pocket costs into manageable monthly payments with CareCredit so important care fits comfortably in your budget.",
     ],
     [
-      "Patient forms",
-      "Registration paperwork arrives through the office's secure email or text platform — finish it from your couch before you arrive.",
+      "Paperless intake forms",
+      "We send your secure registration paperwork by email or text before your appointment, so you can fill it out at home in a few minutes.",
     ],
   ];
 
@@ -739,8 +740,8 @@ export function NewPatientsPage() {
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
             <PageHeader
               eyebrow="New patients"
-              title="Everything sorted before your first visit."
-              body="Insurance, payment, financing, forms — here's how the team makes the practical part painless, so your first appointment is just about you."
+              title="Practical details, settled before you arrive."
+              body="Insurance questions, payment options, CareCredit financing, and digital forms are easy to sort out ahead of time so your first visit stays focused on you."
             />
             <div className="grid gap-4">
               {details.map(([title, body]) => (
@@ -765,12 +766,12 @@ export function NewPatientsPage() {
         <FaqJsonLd path="/new-patients/" questions={newPatientQuestions} />
         <div className="wrap max-w-4xl">
           <h2 id="new-patient-questions" className="font-serif text-3xl font-medium text-ink sm:text-4xl">
-            New patient questions, answered.
+            Common new-patient questions.
           </h2>
           <div className="mt-6">
             <FaqList questions={newPatientQuestions} />
             <Link href="/iv-sedation/#sedation-cost" className="mt-4 inline-flex font-semibold text-ocean-700 underline">
-              What goes into an IV sedation estimate?
+              See what shapes an IV sedation estimate
             </Link>
           </div>
         </div>
@@ -790,23 +791,23 @@ export function TestimonialsPage() {
   const corpusStats = [
     {
       value: reviewStats.count,
-      label: "Public reviews read",
-      detail: "The complete Google review record",
+      label: "Public Google reviews",
+      detail: "Our full public Google listing",
     },
     {
       value: reviewStats.writtenReviewCount,
-      label: "Written experiences",
-      detail: "Every available comment included in the analysis",
+      label: "Written patient stories",
+      detail: "Every written review read and tallied",
     },
     {
       value: reviewStats.ratingOnlyCount,
-      label: "Rating-only reviews",
-      detail: "Included in the rating distribution",
+      label: "Star-only ratings",
+      detail: "Included in our overall breakdown",
     },
     {
       value: reviewStats.fourOrFiveStarCount,
-      label: "Four- or five-star",
-      detail: `${fourOrFiveStarShare}% of the full public review record`,
+      label: "Four- and five-star ratings",
+      detail: `${fourOrFiveStarShare}% of all public reviews`,
     },
   ];
 
@@ -818,11 +819,11 @@ export function TestimonialsPage() {
           <div>
             <Eyebrow className="text-gold-soft">Patient reviews</Eyebrow>
             <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-cream sm:text-6xl">
-              {reviewStats.count} Google reviews through {reviewStats.verifiedOn}.
+              {reviewStats.count} Google reviews, verified {reviewStats.verifiedOn}.
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
-              Every public rating and all {reviewStats.writtenReviewCount} written experiences were reviewed,
-              then organized here into the patterns that matter most to patients.
+              We read every public rating and all {reviewStats.writtenReviewCount} written patient reviews on Google,
+              then gathered the themes people bring up most often.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
@@ -831,7 +832,7 @@ export function TestimonialsPage() {
                 rel="noreferrer"
                 className="btn btn-light"
               >
-                Read the latest Google reviews
+                Read live Google reviews
                 <ArrowUpRight className="size-4" aria-hidden="true" />
               </a>
               <Link href={scheduleHref} className="btn btn-sunset">
@@ -879,7 +880,7 @@ export function TestimonialsPage() {
               ))}
             </div>
             <p className="mt-6 text-xs leading-5 text-cream/50">
-              Rating and counts verified on {reviewStats.verifiedOn}. Google reviews can change over time.
+              Verified on {reviewStats.verifiedOn}. Live Google ratings and review counts update over time.
             </p>
           </div>
         </div>
@@ -889,16 +890,16 @@ export function TestimonialsPage() {
         <div className="wrap">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <p className="eyebrow">Full-record analysis</p>
+              <p className="eyebrow">Every review counted</p>
               <h2 className="mt-4 text-balance font-serif text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-                No cherry-picking. Every public rating counts.
+                The complete picture, nothing hidden.
               </h2>
             </div>
             <p className="max-w-xl text-pretty leading-7 text-ink-muted">
-              Google prevents its review panel from being embedded on another
-              website. The summaries below cover the full record, and the direct
-              link opens every original review in Google&apos;s public panel with no
-              Business Profile access required.
+              Rather than hand-picking only a few quotes, the numbers below
+              reflect our complete public Google review listing as of{" "}
+              {reviewStats.verifiedOn}. You can also open Google Maps anytime to
+              read every original review yourself.
             </p>
           </div>
 
@@ -920,7 +921,7 @@ export function TestimonialsPage() {
             rel="noreferrer"
             className="mt-7 inline-flex min-h-11 items-center gap-2 font-semibold text-ocean-700 underline decoration-ocean-200 underline-offset-4 transition hover:text-ocean-900"
           >
-            Read the complete public review history
+            Read every review on Google Maps
             <ArrowUpRight className="size-4" aria-hidden="true" />
           </a>
         </div>
@@ -929,9 +930,9 @@ export function TestimonialsPage() {
       <section className="bg-surface-alt py-20 sm:py-24">
         <div className="wrap">
           <SectionHeader
-            eyebrow="What patients mention most"
-            title="The strongest themes are human, not clinical."
-            body="Google's topic summary across the full review record points to the same experience again and again: a friendly team, caring attention, and an office that lowers the temperature of a dental visit."
+            eyebrow="What patients talk about most"
+            title="Warmth and comfort come up more than anything else."
+            body="Across hundreds of Google reviews, patients keep pointing to the same things: a welcoming, attentive team, clear communication from Dr. Mike, and a calmer visit than they expected."
           />
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -975,13 +976,13 @@ export function TestimonialsPage() {
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <SectionHeader
               eyebrow="In patients' own words"
-              title="Find the experience that matters to you."
-              body="Use the filters to explore short, verified excerpts about comfort, the team, Dr. Mike, and sedation."
+              title="Read the stories closest to what you are looking for."
+              body="Filter verified Google review excerpts by comfort, sedation, Dr. Mike, or our Roseville team."
             />
             <div className="rounded-2xl border border-line bg-cream p-5 text-sm leading-6 text-ink-muted lg:justify-self-end lg:max-w-md">
-              Excerpts are shortened for readability and attributed with reviewer initials.
-              The rating, distribution, and topic counts above were captured from Google
-              on {reviewStats.verifiedOn}.
+              Excerpts are shortened only for readability and credited with reviewer initials.
+              All ratings, counts, and topic totals reflect Google&apos;s public listing on{" "}
+              {reviewStats.verifiedOn}.
             </div>
           </div>
           <div className="mt-10">
@@ -994,7 +995,7 @@ export function TestimonialsPage() {
               rel="noreferrer"
               className="btn btn-outline"
             >
-              Open every Google review
+              Read all reviews on Google
               <ArrowUpRight className="size-4" aria-hidden="true" />
             </a>
           </div>
@@ -1021,18 +1022,18 @@ export function NotFoundMarketing() {
         <SeasonalNotFoundArt />
         <Eyebrow className="justify-center">404 · Page not found</Eyebrow>
         <h1 className="mt-4 text-balance font-serif text-5xl font-medium tracking-tight text-ink">
-          Let’s get you back to your smile.
+          This page isn&rsquo;t here, but we are.
         </h1>
         <p className="mt-5 text-lg leading-8 text-ink-muted">
-          The page you’re looking for has moved or never existed — but
-          everything else is right where it should be.
+          The link you followed may have moved or expired. Head back to our
+          homepage or explore our Roseville dental services below.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Link href="/" className="btn btn-dark">
-            Back to Home
+            Return Home
           </Link>
           <Link href="/roseville-dental-care/" className="btn btn-outline">
-            View Services
+            Browse Services
           </Link>
         </div>
       </div>

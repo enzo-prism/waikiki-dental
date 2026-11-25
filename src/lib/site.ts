@@ -54,7 +54,7 @@ export const site = {
     "https://www.google.com/maps/search/?api=1&query=Waikiki+Dental+Roseville+CA&query_place_id=ChIJmbGEGJUhm4AR7RCJgmMeb1U",
   baseUrl: resolveSiteUrl(),
   description:
-    "Roseville dentist Dr. Michael Narodovich offers IV sedation, dental implants, and unhurried care for patients who want less dental anxiety.",
+    "IV sedation, dental implants, and unhurried restorative care in Roseville, CA. Dr. Michael Narodovich helps anxious patients feel genuinely at ease.",
 };
 
 export const hours = [
@@ -97,13 +97,13 @@ export const doctor = {
   role: "Owner · Dentist",
   initials: "MN",
   credentials: [
-    "The Ohio State University, BS",
-    "Temple University, DMD",
-    "Sedation-focused training",
+    "BS, The Ohio State University",
+    "DMD, Temple University",
+    "Advanced sedation dentistry training",
   ],
   bio: [
-    "Dr. Mike grew up in Cleveland, Ohio, earned his Bachelor of Science at The Ohio State University, and trained in dentistry at Temple University in Philadelphia before making Northern California home.",
-    "Watching fearful patients put off care for years drew him to sedation dentistry — and shaped a practice built around helping people get the treatment they need with less stress and more confidence. Away from the office, you'll find him out enjoying Northern California, happiest when fresh snow lands on Lake Tahoe.",
+    "Originally from Cleveland, Ohio, Dr. Mike earned his Bachelor of Science from The Ohio State University and his Doctor of Dental Medicine from Temple University in Philadelphia before putting down roots in Northern California.",
+    "Seeing how many people avoid the dentist for years out of fear led him to focus on sedation dentistry and build an office where nobody feels rushed or judged. Away from the practice, he spends as much time as he can outdoors in Northern California, especially when fresh snow lands on Lake Tahoe.",
   ],
 };
 
@@ -124,32 +124,32 @@ export const serviceCategories: {
   {
     key: "preventive",
     label: "Preventive & Family",
-    description: "Exams, cleanings, and healthy habits for every age in the house.",
+    description: "Unhurried exams, thorough cleanings, and clear guidance for every age.",
   },
   {
     key: "cosmetic",
     label: "Cosmetic",
-    description: "Small refinements or a whole new smile — your call.",
+    description: "Thoughtful refinements or a coordinated smile plan, paced around your goals.",
   },
   {
     key: "restorative",
     label: "Restorative & Implants",
-    description: "Repair, rebuild, or replace a tooth with a plan built around you.",
+    description: "Strong, natural-looking repairs and tooth replacement built around your bite.",
   },
   {
     key: "orthodontics",
     label: "Orthodontics",
-    description: "Straighter teeth, with or without the brackets.",
+    description: "Clear aligners and traditional braces matched to how your teeth need to move.",
   },
   {
     key: "sedation",
     label: "Sedation & Comfort",
-    description: "Real relaxation for people who dread the chair.",
+    description: "Monitored IV sedation for patients who feel anxious in the dental chair.",
   },
   {
     key: "emergency",
     label: "Emergency",
-    description: "Prompt care for pain, breaks, and urgent concerns.",
+    description: "Prompt Roseville care when tooth pain, swelling, or a break cannot wait.",
   },
 ];
 
@@ -171,65 +171,65 @@ export const services: Service[] = [
     eyebrow: "Preventive care",
     category: "preventive",
     summary:
-      "The unhurried checkup: a careful cleaning, a thorough exam, and straight answers about what we see.",
+      "An unhurried cleaning, a thorough exam, and plain-language answers about what is healthy and what needs attention.",
     description:
-      "Great dentistry is mostly quiet maintenance. Routine exams and cleanings at the Roseville office help you keep your natural teeth, watch gum health closely, screen for oral cancer, and catch small problems while they're still small.",
+      "Lasting dental health comes from quiet, consistent maintenance. At our Roseville office, routine exams and cleanings give us time to care for your gums, screen for oral cancer, take X-rays only when clinically helpful, and catch small changes long before they become urgent.",
     highlights: [
-      "Comprehensive exams with honest findings",
-      "Diagnostic X-rays only when needed",
-      "Oral cancer and gum health screenings",
-      "Cleanings paced around your comfort",
+      "Thorough exams with clear, honest explanations",
+      "Digital X-rays taken only when clinically needed",
+      "Routine gum health and oral cancer screenings",
+      "Gentle cleanings paced around your comfort",
     ],
     icon: Stethoscope,
   },
   {
     title: "Composite Fillings",
     slug: "composite-fillings",
-    eyebrow: "Natural-looking repair",
+    eyebrow: "Tooth-colored repair",
     category: "restorative",
     summary:
-      "Tooth-colored fillings that erase decay and blend in so well you'll forget which tooth it was.",
+      "Enamel-matched fillings that repair decay or small chips while preserving as much natural tooth as possible.",
     description:
-      "When decay or a small fracture needs repair, a composite filling restores the tooth's strength with material shaded to match your enamel — conservative, comfortable, and invisible in a smile.",
+      "When a cavity or minor fracture shows up, a tooth-colored composite filling restores strength without drawing attention to the repair. We shade the material to blend with your natural enamel and keep as much healthy tooth structure intact as possible.",
     highlights: [
-      "Shaded to match your natural teeth",
-      "Conservative, tooth-preserving repair",
-      "Comfort-first visits",
-      "Durable protection for everyday chewing",
+      "Custom-shaded to blend with your natural enamel",
+      "Conservative repair that preserves healthy tooth structure",
+      "Calm, well-numbed appointments at your pace",
+      "Strong, smooth support for everyday chewing",
     ],
     icon: SmilePlus,
   },
   {
     title: "Dental Crowns",
     slug: "dental-crowns",
-    eyebrow: "Traditional lab crowns",
+    eyebrow: "Two-visit lab crowns",
     category: "restorative",
     summary:
-      "A custom lab-made crown that covers and protects a cracked, worn, or weakened tooth — so it can keep doing its job.",
+      "Custom lab-made crowns placed over two visits to protect cracked, worn, or weakened teeth.",
     description:
-      "When a tooth is too damaged for a filling, a crown restores its shape and strength. Waikiki Dental provides traditional lab crowns: the tooth is prepared and protected with a temporary crown, and a dental lab fabricates your custom crown for a follow-up visit.",
+      "When a tooth is too fractured, worn, or weakened for a filling, a custom crown restores both shape and chewing strength. We provide traditional lab-made crowns over two visits: we prepare the tooth and place a protective temporary crown first, then fit and cement your finished crown once our dental lab crafts it to your bite.",
     highlights: [
-      "Protects cracked or weakened teeth",
-      "Restores shape and chewing strength",
-      "Fabricated by a dental lab to fit your bite",
-      "A temporary crown protects the tooth between visits",
+      "Reinforces cracked, heavily filled, or weakened teeth",
+      "Restores natural contours and comfortable chewing",
+      "Crafted by a dental lab to fit your exact bite",
+      "Protected by a temporary crown between your two visits",
     ],
     icon: ShieldCheck,
   },
   {
     title: "Digital X-Ray",
     slug: "digital-x-ray",
-    eyebrow: "Sharper diagnostics",
+    eyebrow: "Clearer diagnostics",
     category: "preventive",
     summary:
-      "Clear digital imaging that shows what a visual exam can't — roots, bone, and problems still hiding.",
+      "Detailed digital imaging that reveals decay, roots, and bone health beneath the surface.",
     description:
-      "Digital X-rays let the team see below the surface: early decay between teeth, bone changes, root position, cysts, and trouble brewing under older dental work. Better images mean earlier, simpler treatment.",
+      "A visual check only tells part of the story. Digital X-rays let us look between teeth, around roots, beneath older dental work, and into supporting bone so we can spot issues early and plan treatment with accuracy.",
     highlights: [
-      "Finds decay before it hurts",
-      "Reveals root and bone health",
-      "Supports precise treatment planning",
-      "A cornerstone of every thorough exam",
+      "Detects early decay between teeth before pain starts",
+      "Evaluates tooth roots, bone levels, and older restorations",
+      "Sharp digital images ready to review with you chairside",
+      "Guides accurate, conservative treatment planning",
     ],
     icon: BadgeCheck,
   },
@@ -239,48 +239,48 @@ export const services: Service[] = [
     eyebrow: "Kids & first visits",
     category: "preventive",
     summary:
-      "First visits that feel like a win — so kids grow up thinking the dentist is no big deal.",
+      "Calm, encouraging first visits that help children feel comfortable at the dentist from the start.",
     description:
-      "The best gift you can give a young smile is a calm start. Early visits at Waikiki Dental stay gentle and pressure-free, teaching habits that stick while confidence builds one easy appointment at a time.",
+      "Early appointments shape how a child feels about dental care for years to come. We keep kids' visits gentle, patient, and low-pressure, explaining each step simply so young smiles build healthy brushing habits and lasting confidence.",
     highlights: [
-      "Gentle, unrushed first appointments",
-      "Prevention and brushing coaching",
-      "Family-centered communication",
-      "Healthy habits that last a lifetime",
+      "Patient, low-pressure first dental appointments",
+      "Age-appropriate brushing and prevention coaching",
+      "Clear, supportive communication for parents",
+      "Positive early habits that grow with your child",
     ],
     icon: HeartPulse,
   },
   {
     title: "Smile Makeover",
     slug: "smile-makeover",
-    eyebrow: "Cosmetic planning",
+    eyebrow: "Coordinated cosmetic care",
     category: "cosmetic",
     summary:
-      "Whitening, veneers, crowns, alignment — combined into one plan built around the smile you actually want.",
+      "A tailored sequence of whitening, veneers, crowns, alignment, or implants designed around the smile you want.",
     description:
-      "A smile makeover isn't one procedure; it's a plan. Dr. Narodovich blends whitening, veneers, crowns, orthodontics, or implants into a sequence designed around your goals and your timeline.",
+      "When you want to change more than one thing about your smile, order and planning matter. Dr. Narodovich works with you to combine whitening, porcelain veneers, crowns, orthodontics, or implants into a step-by-step plan matched to your health, timeline, and budget.",
     highlights: [
-      "One roadmap, tailored to you",
-      "Addresses color, shape, and alignment",
-      "Sequenced at your pace",
-      "Designed for a natural result",
+      "A step-by-step plan built around your exact goals",
+      "Coordinates tooth color, shape, alignment, and replacement",
+      "Paced in clear phases to fit your calendar and budget",
+      "Focused on balanced, natural-looking results",
     ],
     icon: Sparkles,
   },
   {
     title: "Teeth Whitening",
     slug: "teeth-whitening",
-    eyebrow: "Brighter, evenly",
+    eyebrow: "Professional brightening",
     category: "cosmetic",
     summary:
-      "Professional whitening that lifts years of coffee, tea, and time — safely and evenly.",
+      "Dentist-guided whitening that safely lifts years of coffee, tea, and everyday staining.",
     description:
-      "Looking for professional teeth whitening in Roseville? At a visit, talk through your current shade, the stains you want to address, and any tooth sensitivity. The team can explain what whitening may achieve and help you plan it around your goals and timing.",
+      "If everyday stains or dullness have dimmed your smile, professional whitening at our Roseville office starts with an exam and a candid conversation. We evaluate your natural shade, talk through tooth sensitivity or existing front-tooth dental work, and map out a realistic plan for brighter, even results.",
     highlights: [
-      "Lifts deep, set-in stains",
-      "Even, natural-looking brightness",
-      "Professional guidance start to finish",
-      "Pairs well with a smile makeover",
+      "Targets deeper coffee, tea, wine, and age-related stains",
+      "Planned around tooth sensitivity and existing dental work",
+      "Consistent, natural-looking brightness under dentist guidance",
+      "Easy to sequence ahead of veneers or crowns",
     ],
     icon: Sparkles,
   },
@@ -290,14 +290,14 @@ export const services: Service[] = [
     eyebrow: "Porcelain veneers",
     category: "cosmetic",
     summary:
-      "Fine porcelain shells that redesign the shape, color, and balance of your smile — tooth by tooth.",
+      "Thin, custom porcelain shells crafted to refine chipped, worn, stained, or uneven front teeth.",
     description:
-      "Veneers dress the visible surface of a tooth in polished porcelain, correcting chips, stains, wear, and unevenness in one elegant move. Done well, nobody can tell — they just notice the smile.",
+      "Porcelain veneers cover the front surface of teeth to address chips, deep discoloration, worn edges, and slight spacing with natural translucency. Dr. Narodovich plans the shape, proportion, and shade carefully with you so the finished smile looks refined and authentically yours.",
     highlights: [
-      "Corrects chips, stains, and wear",
-      "Custom shape and shade per tooth",
-      "Polished, natural-looking porcelain",
-      "A long-term cosmetic upgrade",
+      "Refines chips, worn edges, deep stains, and uneven spacing",
+      "Individually shaped and shaded for a natural appearance",
+      "Durable, lifelike porcelain tailored to your features",
+      "Planned conservatively around your bite and long-term health",
     ],
     icon: WandSparkles,
   },
@@ -307,14 +307,14 @@ export const services: Service[] = [
     eyebrow: "Clear aligners",
     category: "orthodontics",
     summary:
-      "Straighter teeth with clear, removable aligners — no brackets, no wires, no obvious “braces phase.”",
+      "Discreet, removable aligners that straighten teeth without brackets or wires.",
     description:
-      "Invisalign moves teeth with a series of nearly invisible aligners you can remove for meals, brushing, and big moments. At your Roseville consultation, compare aligners with braces and ask for a written estimate that includes retainers.",
+      "Invisalign shifts teeth gradually with custom clear aligners you remove for meals, brushing, and flossing. During your Roseville consultation, we evaluate your bite, compare clear aligners honestly against braces, and provide a written estimate that includes retainers.",
     highlights: [
-      "Nearly invisible in daily life",
-      "Removable for eating and brushing",
-      "Digitally planned tooth movement",
-      "A comfortable alternative to braces",
+      "Discreet clear trays that blend into daily life",
+      "Removable for eating, brushing, and normal flossing",
+      "Planned step by step around your bite and alignment",
+      "Clear written estimate including checkups and retainers",
     ],
     icon: ShieldCheck,
   },
@@ -324,14 +324,14 @@ export const services: Service[] = [
     eyebrow: "Orthodontics",
     category: "orthodontics",
     summary:
-      "The workhorse of orthodontics — precise, dependable alignment for bites that need real control.",
+      "Dependable bracket-and-wire alignment built for complex crowding, spacing, and bite correction.",
     description:
-      "Some smiles need the control only brackets and wires provide. Traditional braces remain the most dependable way to correct complex alignment and bite issues, with predictable, lasting results.",
+      "When teeth need rotational control or broader bite correction, traditional braces remain the most reliable tool in orthodontics. We plan treatment carefully around both function and appearance for steady, predictable alignment.",
     highlights: [
-      "Handles complex alignment needs",
-      "Precise control of tooth movement",
-      "Improves bite function and comfort",
-      "Proven, time-tested results",
+      "Reliable control for complex crowding and bite issues",
+      "Steady, precise tooth movement from start to finish",
+      "Improves both smile alignment and everyday bite comfort",
+      "Time-tested option for teens and adults alike",
     ],
     icon: ShieldCheck,
   },
@@ -341,48 +341,48 @@ export const services: Service[] = [
     eyebrow: "Tooth replacement",
     category: "restorative",
     summary:
-      "The closest thing to a new tooth: a titanium root and custom crown that look, feel, and chew like the real thing.",
+      "A titanium root and custom crown designed to look, feel, and chew like a natural tooth.",
     description:
-      "Missing a tooth or several teeth? At your Roseville consultation, discuss whether implants fit your needs, compare other options, and ask for the timing and cost of each stage before deciding.",
+      "Replacing a missing tooth starts with a thorough exam and clear choices. At our Roseville office, we review whether a dental implant fits your health and bite, compare bridges or removable alternatives honestly, and lay out the stages, timeline, and written estimate before you decide.",
     highlights: [
-      "Looks and chews like a natural tooth",
-      "Helps protect jawbone health",
-      "Supports one tooth or several",
-      "Long-term tooth replacement with ongoing care",
+      "Custom-matched to look and chew like a natural tooth",
+      "Helps preserve surrounding jawbone structure",
+      "Versatile support for a single tooth or multiple teeth",
+      "Long-term tooth replacement backed by ongoing maintenance",
     ],
     icon: SmilePlus,
   },
   {
     title: "IV Sedation",
     slug: "iv-sedation",
-    eyebrow: "Anxiety-friendly care",
+    eyebrow: "Sedation dentistry",
     category: "sedation",
     summary:
-      "Monitored IV sedation to help anxious patients plan and complete dental care more comfortably.",
+      "Monitored IV sedation that helps anxious Roseville patients move through dental care calmly and comfortably.",
     description:
-      "If anxiety has kept you from the dentist, start with a consultation. Dr. Narodovich and the Roseville team can discuss your dental work, whether monitored IV sedation fits your needs, and what it may cost.",
+      "If fear, a strong gag reflex, or a difficult past experience has kept you out of the dental chair, you do not have to push through it alone. Start with a relaxed consultation at our Roseville office where Dr. Narodovich listens to your concerns, reviews your health history, and explains whether monitored IV sedation fits your care and budget.",
     highlights: [
-      "Designed for dental fear and anxiety",
-      "Helpful for strong gag reflexes",
-      "A visit plan tailored to your dental work",
-      "Monitored continuously throughout",
+      "Built for patients who feel anxious or avoid the dentist",
+      "Helps ease strong gag reflexes and longer procedures",
+      "Continuous monitoring paired with an individualized plan",
+      "Starts with a calm consultation and a clear written estimate",
     ],
     icon: Syringe,
   },
   {
     title: "Dental Emergencies",
     slug: "dental-emergencies",
-    eyebrow: "Urgent care",
+    eyebrow: "Urgent dental care",
     category: "emergency",
     summary:
-      "Tooth pain, a break, a lost crown — call now, and the team will make every effort to see you fast.",
+      "Sudden tooth pain, swelling, or a broken tooth? Call our Roseville office for prompt help.",
     description:
-      "Tooth pain, swelling or a broken tooth? Call the Roseville office to check availability. The team makes every effort to see urgent cases as quickly as possible.",
+      "Tooth pain, swelling, a broken tooth, or a lost crown can derail your whole day. Call our Roseville office right away so we can guide you on what to do next and make every effort to see you as quickly as possible.",
     highlights: [
-      "Tooth pain and swelling",
-      "Chipped, cracked, or broken teeth",
-      "Lost fillings, crowns, or restorations",
-      "Call the office for urgent guidance",
+      "Sudden or severe toothaches and facial swelling",
+      "Chipped, cracked, loosened, or knocked-out teeth",
+      "Lost fillings, crowns, or damaged restorations",
+      "Direct phone guidance from our Roseville team Monday to Friday",
     ],
     icon: HeartPulse,
   },
@@ -399,39 +399,39 @@ export const featuredServices = featuredServiceSlugs
   .filter((service): service is Service => Boolean(service));
 
 export const heroFacts = [
-  "IV sedation for anxious patients",
-  "Dental implants and restorative care",
-  "Now accepting new patients",
+  "Monitored IV sedation for anxious patients",
+  "Dental implants & restorative dentistry",
+  "Welcoming new patients in Roseville",
 ];
 
 export const implantProcess = [
   {
     title: "Plan",
-    body: "The restoration is planned around the tooth — or teeth — you’re replacing.",
+    body: "We examine the space, review your bite and imaging, and walk you through each stage, provider role, and written estimate.",
   },
   {
-    title: "Root",
-    body: "A titanium post is placed as a new root, helping protect jawbone health.",
+    title: "Place & Heal",
+    body: "A titanium implant post serves as a new root, followed by healing time so the surrounding jawbone stabilizes around it.",
   },
   {
     title: "Restore",
-    body: "An abutment and custom crown complete a tooth that looks and chews like the real thing.",
+    body: "An abutment and custom-shaded crown complete the restoration so your replacement tooth looks and chews naturally.",
   },
 ];
 
 /* Traditional (two-visit) crowns only — same-day/CEREC crowns are not offered. */
 export const crownProcess = [
   {
-    title: "Exam",
-    body: "Dr. Narodovich checks the tooth and explains whether a crown is the right repair.",
+    title: "Examine",
+    body: "Dr. Narodovich evaluates the tooth, explains whether a crown is the best fit, and walks you through your written estimate.",
   },
   {
     title: "Prepare",
-    body: "The tooth is shaped and a temporary crown protects it while a dental lab makes your custom crown.",
+    body: "At your first visit, we gently shape the tooth, take detailed records for our dental lab, and place a temporary crown to protect it.",
   },
   {
-    title: "Place",
-    body: "At a follow-up visit, the lab-made crown is fitted, adjusted to your bite, and cemented.",
+    title: "Fit & Cement",
+    body: "At your second visit, we try in your lab-made crown, fine-tune the fit against your bite, and cement it securely in place.",
   },
 ];
 
@@ -586,7 +586,7 @@ export const teamStory = {
       image: "/media/team-jessica.webp",
       alt: "Jessica, RDA manager at Waikiki Dental",
       summary:
-        "A nearly ten-year team member who keeps the office organized and helps patients feel known and cared for.",
+        "With nearly a decade at Waikiki Dental, Jessica keeps every day running smoothly and makes sure patients feel remembered the moment they arrive.",
     },
     {
       name: "Nayeli",
@@ -594,7 +594,7 @@ export const teamStory = {
       image: "/media/team-nayeli.webp",
       alt: "Nayeli, roving dental assistant at Waikiki Dental",
       summary:
-        "A friendly, flexible presence who steps between reception and chairside support wherever the day needs her.",
+        "Whether greeting you at reception or supporting Dr. Mike chairside, Nayeli brings calm, adaptable warmth wherever the day needs her.",
     },
   ],
 };
@@ -603,7 +603,7 @@ export const teamStory = {
 export const mediCalNotice = "We do not accept Medi-Cal.";
 
 export const paymentOptions = {
-  insuranceNote: `${mediCalNotice} Contact the office about other dental plans.`,
+  insuranceNote: `${mediCalNotice} Call or email us to check other dental plans.`,
   items: [
     "CareCredit financing",
     "Major credit & debit cards",
@@ -622,36 +622,36 @@ export const officeHoursSummary = hours
 
 export const newPatientQuestions = [
   {
-    question: "Is Waikiki Dental accepting new patients?",
-    answer: `Yes. Request an appointment online or call ${site.phone}. If dental anxiety has kept you away, say so and the team can plan your first visit around it.`,
+    question: "Are you accepting new patients?",
+    answer: `Yes. We welcome new patients from Roseville and nearby communities. Book online or call ${site.phone}, and let us know if dental anxiety has kept you away so we can plan an easier first visit.`,
   },
   {
     question: "Does Waikiki Dental accept Medi-Cal?",
-    answer: `No. ${mediCalNotice} CareCredit financing, cash, checks, and major credit and debit cards are accepted.`,
+    answer: `No. ${mediCalNotice} We accept CareCredit financing, major credit and debit cards, cash, and checks.`,
   },
   {
-    question: "Does Waikiki Dental take dental insurance?",
-    answer: `Contact the office at ${site.phone} or ${site.email} before your visit so the team can confirm coverage for your plan.`,
+    question: "Do you accept my dental insurance?",
+    answer: `Call us at ${site.phone} or email ${site.email} before your appointment and our front desk will check what your specific plan covers.`,
   },
   {
-    question: "What payment options are available?",
-    answer: "Cash, checks, debit, and major credit cards, with payment due at the time of treatment. CareCredit financing can spread out-of-pocket costs into monthly payments.",
+    question: "What payment and financing options do you accept?",
+    answer: "We accept cash, checks, debit, and major credit cards, with payment due at the time of treatment. CareCredit financing is also available if you prefer to spread out-of-pocket costs over monthly payments.",
   },
   {
-    question: "How do I fill out new-patient forms?",
-    answer: "Registration forms arrive through the office's secure email or text platform, so you can finish them before you arrive.",
+    question: "How do I complete new-patient forms?",
+    answer: "We send registration paperwork securely by email or text before your visit, so you can fill it out comfortably at home instead of in the waiting room.",
   },
   {
-    question: "What are the office hours?",
-    answer: `${officeHoursSummary}.`,
+    question: "What are your office hours?",
+    answer: `Our Roseville office hours are ${officeHoursSummary}.`,
   },
   {
-    question: "Where is Waikiki Dental?",
-    answer: `${site.address}. Dr. Michael Narodovich and the team see patients from Roseville, Granite Bay, Rocklin, and Lincoln.`,
+    question: "Where is Waikiki Dental located?",
+    answer: `We are located at ${site.address}, serving patients from Roseville, Granite Bay, Rocklin, and Lincoln.`,
   },
   {
-    question: "Can I be sedated if I am nervous about the dentist?",
-    answer: "Waikiki Dental offers monitored IV sedation. Start with a consultation, where the dentist reviews your health and the planned treatment before deciding whether sedation is appropriate.",
+    question: "Can I request IV sedation if I am nervous about the dentist?",
+    answer: "Yes. We offer monitored IV sedation for eligible patients. We always start with a consultation so Dr. Narodovich can review your medical history and planned care before recommending the right comfort option.",
   },
 ];
 
@@ -669,74 +669,74 @@ export const sedationConsultHref = scheduleHref + "#" + sedationContactId;
 /**
  * Search listing copy (title + meta description) for service pages. Titles
  * get " | Waikiki Dental" from the root layout, so keep them to 43 characters
- * (60 rendered); keep descriptions to 155. The November 2026 plan rewrote the
- * emergency, Invisalign, crowns, and IV sedation listings to answer what
- * searchers ask: how soon, what it costs, and whether this office fits. Use
- * only facts held in this file (hours, phone, `paymentOptions`,
- * `reviewStats`, the service copy): no prices, offers, or guarantees.
+ * (60 rendered); keep descriptions to 155. Use only facts held in this file
+ * (hours, phone, `paymentOptions`, `reviewStats`, the service copy): no
+ * prices, offers, or guarantees.
  */
 export const serviceSeo: Record<string, { title: string; description: string }> = {
   "roseville-invisalign": {
     title: "Roseville Invisalign: Cost & Consultation",
-    description: "Compare Invisalign and braces with a Roseville dentist. Ask for a written estimate covering aligners, refinements and retainers, and explore CareCredit.",
+    description:
+      "Compare Invisalign and braces in Roseville with Dr. Narodovich. Get a written estimate covering aligners, refinements, and retainers, plus CareCredit.",
   },
   "iv-sedation": {
     title: "IV Sedation Dentist in Roseville, CA",
     description:
-      "Considering IV sedation in Roseville? See what affects your cost, meet Dr. Narodovich, and request a consultation to discuss your care and estimate."
+      "Nervous about dental care? Meet Dr. Narodovich in Roseville for monitored IV sedation, clear treatment plans, and honest answers on what shapes cost.",
   },
   "dental-emergencies": {
     title: "Emergency Dentist in Roseville: Call Now",
-    description: `Tooth pain, swelling, or a broken tooth? Call ${site.phone}. The team makes every effort to see urgent cases fast, Monday to Friday. CareCredit accepted.`,
+    description: `Tooth pain, swelling, or a broken tooth? Call ${site.phone} Monday to Friday. Our Roseville team makes every effort to see urgent dental cases fast.`,
   },
   "digital-x-ray": {
-    title: "Dental X-Rays in Roseville, CA",
+    title: "Digital Dental X-Rays in Roseville, CA",
     description:
-      "Digital dental X-rays in Roseville help identify decay, root concerns, and bone changes that a visual exam cannot show. Learn what to expect.",
+      "Digital dental X-rays at Waikiki Dental in Roseville spot hidden decay, root concerns, and bone changes early so treatment stays simpler and clearer.",
   },
   "teeth-whitening": {
-    title: "Professional Teeth Whitening in Roseville, CA",
+    title: "Teeth Whitening in Roseville, CA",
     description:
-      "Ask about professional teeth whitening in Roseville. Discuss stains, tooth sensitivity, and what to expect at a visit with Waikiki Dental.",
+      "Professional teeth whitening in Roseville with Dr. Narodovich. Discuss stains, tooth sensitivity, and realistic results before brightening your smile.",
   },
   "dental-crowns": {
-    title: "Dental Crowns in Roseville, CA: Two Visits",
-    description: "Cracked or worn tooth? Get a temporary crown at the first visit and a lab-made crown at the next. Ask about a written estimate and CareCredit in Roseville.",
+    title: "Dental Crowns in Roseville: Two Visits",
+    description:
+      "Repair a cracked or weakened tooth with a custom lab-made crown in Roseville. Two visits with a temporary crown, a written estimate, and CareCredit.",
   },
   veneers: {
     title: "Porcelain Veneers in Roseville, CA",
     description:
-      "Porcelain veneers in Roseville for chipped, stained, or uneven teeth. Learn who is a good candidate and what to ask before you commit at Waikiki Dental.",
+      "Custom porcelain veneers in Roseville for chipped, worn, or stained teeth. Learn how veneers work, who is a good fit, and how we plan natural results.",
   },
   "smile-makeover": {
     title: "Smile Makeover in Roseville, CA",
     description:
-      "Plan whitening, veneers, crowns, alignment, or implants as one sequence. See what a Roseville smile makeover can include and how to phase it.",
+      "Combine whitening, veneers, crowns, alignment, or implants in one coordinated Roseville plan. Phase your care around your goals, timeline, and budget.",
   },
   "traditional-braces": {
     title: "Traditional Braces in Roseville, CA",
     description:
-      "Brackets and wires for crowding, spacing, and bite problems that need precise control. Compare braces with Invisalign at Waikiki Dental in Roseville.",
+      "Dependable braces in Roseville for crowding, spacing, and bite correction. Compare brackets and wires with clear aligners at Waikiki Dental.",
   },
   "cleanings-exams": {
     title: "Dental Cleanings & Exams in Roseville, CA",
     description:
-      "An unhurried cleaning and exam with gum checks, oral cancer screening, and X-rays only when needed. Now accepting new patients in Roseville.",
+      "Unhurried dental cleanings and exams in Roseville with gum checks, oral cancer screenings, and X-rays only when needed. Welcoming new patients.",
   },
   "composite-fillings": {
     title: "Tooth-Colored Fillings in Roseville, CA",
     description:
-      "Composite fillings, shaded to match your enamel, repair decay and small fractures conservatively. Comfort-first visits at Waikiki Dental in Roseville.",
+      "Natural-looking composite fillings in Roseville repair decay and small chips conservatively, shaded to match your enamel in a calm, unhurried visit.",
   },
   "early-dental-care": {
-    title: "Kids' First Dental Visits in Roseville, CA",
+    title: "Kids' First Dental Visits in Roseville",
     description:
-      "Gentle, unrushed first visits that build healthy habits and confidence for young smiles. Family-centered care at Waikiki Dental in Roseville.",
+      "Gentle, patient first dental visits in Roseville that build healthy brushing habits and lasting confidence for young smiles at Waikiki Dental.",
   },
   "roseville-dental-implants": {
     title: "Dental Implants in Roseville, CA",
     description:
-      "Compare options for missing teeth in Roseville. Learn what an implant estimate includes and request a consultation at Waikiki Dental.",
+      "Replace a missing tooth in Roseville with a custom implant plan. Review stages, compare options, and get a clear written estimate at Waikiki Dental.",
   },
 };
 
@@ -744,41 +744,41 @@ export const contactTopics = [
   {
     key: "general",
     label: "General question",
-    hint: "Hours, location, a quick note",
+    hint: "Hours, directions, or a quick note",
     icon: MessageCircle,
   },
   {
     key: "new-patient",
     label: "New patient",
-    hint: "Getting started",
+    hint: "First visit or insurance questions",
     icon: Sparkles,
   },
   {
     key: "existing-appointment",
-    label: "An existing visit",
-    hint: "A change or question about a time",
+    label: "Existing visit",
+    hint: "Rescheduling or timing details",
     icon: CalendarClock,
   },
   {
     key: "office",
-    label: "Office question",
-    hint: "We’ll call you back — no account numbers",
+    label: "Office or billing",
+    hint: "We will call you back (no account numbers)",
     icon: Building2,
   },
   {
     key: "other",
     label: "Something else",
-    hint: "Short and non-medical",
+    hint: "Brief and non-medical",
     icon: Ellipsis,
   },
 ];
 
 export const formPrivacy = {
   contactLead:
-    "A general question for the team. Please don’t include medical, insurance, or payment details.",
+    "Have a general question for our Roseville front desk? Send a short note below. Please leave out medical history, insurance IDs, and payment details.",
   contactConsent:
-    "I have not included medical history, insurance IDs, payment details, or other sensitive information.",
-  contactPlaceholder: "How can the team help? Keep this general.",
+    "I confirm this note does not include medical history, insurance IDs, payment details, or other sensitive information.",
+  contactPlaceholder: "How can our team help? Please keep your message general.",
 };
 
 export const canonicalPageRoutes = [
@@ -801,7 +801,7 @@ export const canonicalPageRoutes = [
 export const pageRoutes = canonicalPageRoutes;
 
 /** Last substantive site update (ISO date), used for sitemap `lastModified`. */
-export const siteLastUpdated = "2026-11-06";
+export const siteLastUpdated = "2026-11-24";
 
 /* ------------------------------------------------------------------ *
  * Imagery — self-hosted in /public/media for fast, reliable LCP.

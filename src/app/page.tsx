@@ -35,7 +35,7 @@ export default function Home() {
             <div className="wd-season-only mb-6">
               <p className="inline-flex items-center gap-2 rounded-full border border-cream/20 bg-cream/[0.07] py-1.5 pl-2 pr-4 text-[13px] font-medium text-cream/90">
                 <PumpkinGlyph className="size-5 shrink-0" />
-                Happy Halloween · no tricks, just gentle care
+                Happy Halloween · calm, gentle care all season
               </p>
             </div>
             <span className="inline-flex max-w-full flex-nowrap items-center gap-2.5 font-sans text-[10px] font-semibold uppercase leading-[1.45] tracking-[0.12em] text-ocean-600 season:text-gold-soft sm:text-[11px] sm:tracking-[0.24em]">
@@ -49,20 +49,21 @@ export default function Home() {
                 className="h-auto w-6 shrink-0"
               />
               <span className="min-w-0">
-                Roseville · IV sedation &amp; restorative care
+                Roseville, CA · IV sedation &amp; restorative care
               </span>
             </span>
             <h1 className="mt-6 text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-ink season:text-cream sm:text-6xl lg:text-[4.25rem]">
-              Dentistry that feels like{" "}
+              Dental care that lets you{" "}
               <span className="relative inline-block italic text-ocean-700 season:text-gold-soft">
-                a deep breath.
+                breathe easy.
                 <WaveUnderline className="wd-hero-wave pointer-events-none absolute -bottom-1 left-0 h-2.5 w-full text-sunset-500 sm:-bottom-3 sm:h-3" />
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-pretty text-lg leading-8 text-ink-muted season:text-cream/80">
-              Dr. Michael Narodovich built this practice for people who have put
-              care off — monitored IV sedation and dental implants, delivered
-              without rush or judgment.
+              Dr. Michael Narodovich built our Roseville practice for people who
+              dread the dental chair. From monitored IV sedation to dental
+              implants and restorative care, every visit moves at your pace with
+              clear answers and zero judgment.
             </p>
             <div className="mt-9 hidden flex-wrap items-center gap-3 lg:flex">
               <Link href={scheduleHref} className="btn btn-sunset">
@@ -117,7 +118,7 @@ export default function Home() {
                   {doctor.name}
                 </span>
                 <span className="mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.18em] text-ocean-600">
-                  Your dentist · Roseville
+                  Your Roseville dentist
                 </span>
                 <span className="mt-1.5 flex items-center gap-1.5 text-xs text-ink-muted">
                   <Star className="size-3.5 fill-gold text-gold" aria-hidden="true" />

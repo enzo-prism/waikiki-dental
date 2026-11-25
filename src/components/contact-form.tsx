@@ -209,7 +209,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
     return (
       <RequestSuccess
         title="Your message was sent."
-        body={`Thanks — the team will reply by ${form.replyBy === "email" ? "email" : "phone"} during office hours. For anything urgent, please call.`}
+        body={`Thank you for reaching out. Our Roseville team will reply by ${form.replyBy === "email" ? "email" : "phone"} during office hours. For urgent dental needs, please call us directly.`}
         recap={[]}
         onReset={reset}
         resetLabel="Send another message"
@@ -408,7 +408,7 @@ export function ContactForm({ compact = false }: { compact?: boolean }) {
         )}
       </button>
       <p className="text-center text-xs leading-5 text-ink-soft">
-        The team replies during office hours — usually within one business day.
+        Our Roseville team replies during office hours, usually within one business day.
       </p>
     </form>
   );

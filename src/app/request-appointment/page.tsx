@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/page-templates";
 import { createPageMetadata } from "@/lib/metadata";
 
 const description =
-  "Book an appointment at Waikiki Dental in Roseville, or call, text, or email the office.";
+  "Schedule your dental visit online at Waikiki Dental in Roseville, CA, or call, text, or email our front desk directly.";
 
 const jarvisScheduleSrc =
   "https://schedule.jarvisanalytics.com/frame?eoid=9251&elid=9000000000335";
@@ -28,7 +28,9 @@ export default function RequestAppointmentPage() {
         <section id={sedationContactId} tabIndex={-1} aria-labelledby="consultation-heading" className="wrap-wide hidden scroll-mt-24 py-10 target:block">
           <h2 id="consultation-heading" className="font-serif text-3xl text-ink">Arrange an IV sedation consultation</h2>
           <p className="mt-4 max-w-xl leading-7 text-ink-muted">
-            Call or text the Roseville office and ask for an IV sedation consultation. The team will help you choose a time.
+            Call or text our Roseville front desk and let us know you would like
+            an IV sedation consultation. We will answer your questions and find
+            a calm time to come in.
           </p>
           <div className="mt-6 flex flex-wrap gap-3"><SedationContactActions /></div>
           <a href="#routine-booking" className="mt-5 inline-block underline underline-offset-4">Book a routine visit online</a>

@@ -5,7 +5,7 @@ import { createPageMetadata } from "@/lib/metadata";
 const baseMetadata = createPageMetadata({
   title: "Notice of Privacy Practices",
   description:
-    "Read or download the Notice of Privacy Practices linked by the practice.",
+    "Review or download the Notice of Privacy Practices linked by Waikiki Dental in Roseville, CA.",
   path: "/privacy-practices/",
 });
 
@@ -29,11 +29,11 @@ export default function PrivacyPracticesPage() {
             Notice of Privacy Practices
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-8 text-ink/75">
-            This notice explains how medical information may be used and
-            disclosed, and how patients can access that information. The PDF
-            below is the exact notice that was linked by the practice before
-            this website transition. Contact the office if you need to confirm
-            which notice applies to your care.
+            This notice outlines how your health information may be used and
+            shared, along with your rights to review and manage your records.
+            Open the PDF below to read our linked notice, or contact our
+            Roseville office if you need to confirm which notice applies to your
+            care.
           </p>
           <a
             href="/privacy-practices.pdf"
@@ -41,7 +41,7 @@ export default function PrivacyPracticesPage() {
             rel="noopener noreferrer"
             className="mt-8 inline-flex items-center gap-2 rounded-full bg-deep px-6 py-3 text-sm font-semibold text-cream transition hover:bg-deep/90"
           >
-            Open privacy notice (PDF)
+            Open Privacy Notice (PDF)
             <ArrowUpRight aria-hidden="true" className="size-4" />
           </a>
         </div>

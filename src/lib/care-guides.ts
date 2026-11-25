@@ -13,174 +13,408 @@ export type CareGuide = {
 
 /** Visible on /orthodontics/ and marked up as FAQPage there. */
 export const orthodonticsQuestions = [
-  { question: "What does the first visit cover?", answer: "The dentist reviews alignment, spacing, crowding, bite, oral health, and what you want to change." },
-  { question: "Is Invisalign right for every case?", answer: "No. Some tooth movements and bite concerns need the control of braces. An evaluation makes that distinction clear." },
-  { question: "Can adults have orthodontic treatment?", answer: "Yes. Adults can be evaluated for clear aligners or braces as long as their teeth and supporting tissues are healthy enough for movement." },
+  {
+    question: "What happens during an orthodontic consultation?",
+    answer:
+      "We examine your alignment, spacing, crowding, bite, and overall gum and tooth health, then talk through what you want to change so we can recommend the right path.",
+  },
+  {
+    question: "Is Invisalign the right choice for every smile?",
+    answer:
+      "Not always. Clear aligners work well for many alignment concerns, while certain bite or rotational movements respond better to traditional braces. An exam makes that difference clear.",
+  },
+  {
+    question: "Can adults start orthodontic treatment?",
+    answer:
+      "Yes. Healthy teeth can be moved at any age, so adults are routinely candidates for either clear aligners or braces once gums and teeth are in good shape.",
+  },
 ];
 
 export const careGuides: Record<string, CareGuide> = {
   "iv-sedation": {
-    professionalRecord: { href: "https://search.dca.ca.gov/profile/440/4417/44/MS", label: "Dr. Narodovich’s Moderate Sedation Permit #44", checked: "November 6, 2026" },
+    professionalRecord: {
+      href: "https://search.dca.ca.gov/profile/440/4417/44/MS",
+      label: "Dr. Narodovich’s Moderate Sedation Permit #44",
+      checked: "November 6, 2026",
+    },
     sections: [
       {
         heading: "Start with a conversation about dental anxiety",
-        body: "Waikiki Dental offers monitored IV sedation in Roseville. Tell the team if fear, a strong gag reflex, or a difficult past visit has kept you from care. Your consultation is the place to discuss the treatment you need, the comfort options available, and whether IV sedation fits your health and goals.",
+        body: "At our Roseville office, monitored IV sedation starts with simply talking. Tell us if fear, a strong gag reflex, or a rough past appointment has kept you away from care. Your consultation gives us time to hear your story, understand the treatment you need, and decide together whether IV sedation fits your health and comfort goals.",
       },
       {
-        heading: "Understand your individual sedation plan",
-        body: "Sedation and local anesthesia have different roles. Ask how awareness and discomfort will be managed, who will administer and monitor your care, and what qualifications support that plan. The type of treatment, your health, allergies, and anxiety all matter. A consultation does not commit you to sedation or treatment.",
+        heading: "A clear, personalized comfort plan",
+        body: "Sedation helps you relax deeply while local anesthesia keeps the treatment area numb. Before you agree to anything, we explain the level of relaxation planned for your visit, who will administer and monitor your sedation, and how your medical history, allergies, and procedure shape that plan. Coming in to talk never commits you to treatment.",
       },
       {
-        heading: "Prepare for the consultation",
-        body: "Bring a current medication list and explain your health history, allergies, previous experiences with anesthesia, and questions. The team will tell you what information they need before recommending care. Ask for your own written preparation, transportation, and recovery instructions; do not change medications or follow another patient's instructions.",
+        heading: "How to prepare for your consultation",
+        body: "Bring an up-to-date list of your medications and let us know about any health conditions, allergies, or past experiences with anesthesia. We review everything carefully before recommending sedation and give you written preparation, escort, and recovery instructions tailored to your appointment.",
       },
     ],
     questions: [
-      { question: "Will I be completely asleep?", answer: "Do not assume IV sedation means general anesthesia. Ask the dentist what level of awareness is intended for your plan and how you will be monitored. The appropriate approach depends on your health and the procedure." },
-      { question: "Is IV sedation right for everyone?", answer: "No. The dentist must assess your health, medications, and planned treatment before recommending it. Tell the team about anxiety when you contact the office so the consultation can address your concerns." },
-      { question: "Can I finish all my dental work in one visit?", answer: "The number of visits depends on the treatment and your individual plan. Some care needs separate stages or healing time. Ask what can be combined safely and what will require follow-up." },
-      { question: "How do I arrange a sedation consultation?", answer: "Call or text the Roseville office at (916) 772-6248 and ask for an IV sedation consultation. The team will confirm availability and the next step." },
+      {
+        question: "Will I be completely asleep during IV sedation?",
+        answer:
+          "IV sedation is designed for deep relaxation rather than general anesthesia. During your consultation, Dr. Narodovich explains the exact level of awareness intended for your plan and how you will be monitored throughout the visit.",
+      },
+      {
+        question: "Is IV sedation safe and appropriate for everyone?",
+        answer:
+          "Not everyone is a candidate. We review your medical history, current medications, and planned procedures first to confirm whether monitored IV sedation is a safe match for you.",
+      },
+      {
+        question: "Can we combine multiple dental treatments into one visit?",
+        answer:
+          "Sometimes, depending on the procedures involved and whether healing time is needed between stages. We map out what can be completed together safely and what works best across separate visits.",
+      },
+      {
+        question: "How do I schedule an IV sedation consultation?",
+        answer:
+          "Call or text our Roseville office at (916) 772-6248 and let us know you would like an IV sedation consultation. Our team will walk you through availability and the next step.",
+      },
     ],
     links: [
       { href: "/michael-narodovich-dmd/", label: "Meet Dr. Michael Narodovich" },
       { href: "/roseville-dental-implants/", label: "Explore dental implant planning" },
-      { href: "/new-patients/", label: "First-visit and payment information" },
+      { href: "/new-patients/", label: "First-visit and payment details" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/anesthesia-and-sedation", label: "American Dental Association: anesthesia and sedation" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/anesthesia-and-sedation",
+      label: "American Dental Association: anesthesia and sedation",
+    },
   },
   "roseville-dental-implants": {
     sections: [
-      { heading: "Begin with the tooth you want to replace", body: "An implant consultation starts with your missing tooth or teeth, oral health, and goals. At Waikiki Dental in Roseville, ask how an implant-supported restoration would compare with a bridge or removable option. An examination is needed before the dentist can recommend a particular treatment." },
-      { heading: "Get a clear plan for each stage", body: "Implant treatment generally involves placement, a period of healing, and a replacement tooth or teeth. At your Roseville visit, ask for a plan that names the clinician and location for placement, the final crown, and follow-up. If a specialist is recommended, ask which step they will handle and when to return to Waikiki Dental for the next visit." },
-      { heading: "Know what your estimate includes", body: "Ask for an estimate that separates the implant, the connector and replacement tooth, and any other recommended services. Discuss whether imaging, grafting, temporary teeth, sedation, or follow-up would add to the plan. The team can explain current payment arrangements; the final estimate follows an examination." },
-      { heading: "Plan for care after the restoration", body: "Implants are a long-term treatment option, with results that depend on the individual case and ongoing care. Ask how to clean around your restoration, when to return for checks, and which changes should prompt a call. A durable result still needs maintenance." },
+      {
+        heading: "Begin with the tooth you want to replace",
+        body: "Every implant plan starts with an exam of the missing space, your bite, and your long-term goals. At our Roseville office, we compare dental implants honestly against bridges or removable alternatives so you can weigh how each choice looks, feels, and holds up before deciding.",
+      },
+      {
+        heading: "Know every stage and who handles it",
+        body: "Implant care typically moves through three stages: placing the titanium root, giving the bone time to heal around it, and crafting your final replacement tooth. During your consultation, we lay out who handles each step, where each appointment takes place, and when you return to Waikiki Dental if a surgical specialist is part of your plan.",
+      },
+      {
+        heading: "A clear breakdown of your estimate",
+        body: "After your exam, we provide a written estimate that separates the implant, the connector, and the final crown, along with any imaging, bone grafting, temporary tooth, or sedation your case calls for. We also check dental insurance benefits and walk through CareCredit options upfront.",
+      },
+      {
+        heading: "Caring for your implant over the long haul",
+        body: "Dental implants are a long-term tooth replacement whose durability depends on your overall health and consistent upkeep. We show you how to clean around the restoration at home, set up regular checkups, and let you know what signs should prompt a call.",
+      },
     ],
     questions: [
-      { question: "Can implants replace more than one tooth?", answer: "Implants can support replacement of one or more teeth. The appropriate number of implants and type of restoration depend on your examination and treatment plan. Ask the dentist to compare the suitable options." },
-      { question: "Will I need a bone graft?", answer: "That cannot be determined from a website. Ask the dentist how your supporting bone will be evaluated and whether any additional treatment is needed before placement." },
-      { question: "Can I ask about IV sedation for implant treatment?", answer: "Yes. Waikiki Dental offers IV sedation consultations. The dentist must review your health and the proposed procedure before deciding whether sedation is appropriate and explaining the plan." },
-      { question: "How long will treatment take?", answer: "Placement, healing, and restoration may happen at different visits. Ask for a timeline for your case, including any preliminary treatment, temporary restoration, and follow-up." },
+      {
+        question: "Can dental implants replace more than one missing tooth?",
+        answer:
+          "Yes. Implants can support a single crown, multiple teeth, or a larger restoration depending on your exam and bite. We review your options together so you can see what fits best.",
+      },
+      {
+        question: "Will I need a bone graft first?",
+        answer:
+          "We evaluate your supporting jawbone with imaging during your exam to find out. If bone grafting would help create a stronger foundation, we explain why and include it clearly in your plan.",
+      },
+      {
+        question: "Can I use IV sedation for implant care?",
+        answer:
+          "Yes, you can ask about monitored IV sedation during your consultation. Dr. Narodovich reviews your health history and planned stages first to confirm whether sedation is appropriate.",
+      },
+      {
+        question: "How long does the full implant process take?",
+        answer:
+          "Because placement, healing, and final crown delivery happen in stages, total timing varies from person to person. After your exam, we give you a clear timeline including any temporary restoration and follow-up visits.",
+      },
     ],
     links: [
-      { href: "/iv-sedation/", label: "Ask about IV sedation" },
-      { href: "/michael-narodovich-dmd/", label: "Meet your Roseville dentist" },
-      { href: "/dental-crowns/", label: "How dental crowns restore teeth" },
+      { href: "/iv-sedation/", label: "Learn about IV sedation" },
+      { href: "/michael-narodovich-dmd/", label: "Meet Dr. Narodovich" },
+      { href: "/dental-crowns/", label: "How lab-made crowns restore teeth" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/implants", label: "American Dental Association: dental implants" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/implants",
+      label: "American Dental Association: dental implants",
+    },
   },
   "dental-crowns": {
     sections: [
-      { heading: "When a crown is the right repair", body: "A crown covers the whole visible part of a tooth to restore its shape, size, and strength. Dentists recommend one when a tooth is cracked, badly worn, weakened by a large filling, or no longer has enough structure to hold a filling. A crown can also cover a dental implant. Dr. Narodovich examines the tooth first and explains whether a crown, a filling, or another option makes more sense." },
-      { heading: "Two visits, with a lab-made crown", body: "Waikiki Dental provides traditional crowns. At the first visit the tooth is shaped and protected with a temporary crown, and a dental lab makes your permanent crown to fit your bite. At the second visit the lab-made crown is fitted, adjusted, and cemented. Same-day crowns are not offered at this office." },
-      { heading: "Know what your estimate includes", body: "Ask for an estimate that lists the crown and any other recommended care, such as imaging or treatment the tooth needs first. If you have dental insurance, ask the office to check what your plan may cover. CareCredit financing, major credit and debit cards, cash, and checks are accepted. Medi-Cal is not accepted." },
+      {
+        heading: "When a crown makes more sense than a filling",
+        body: "A crown fits over the entire visible portion of a tooth to restore its shape, comfort, and chewing strength. We typically recommend one when a tooth is cracked, heavily worn, or weakened by a large older filling, or when completing a dental implant. Dr. Narodovich examines the tooth first and explains plainly whether a crown, a filling, or another repair is the smartest choice.",
+      },
+      {
+        heading: "Two calm visits with a lab-made crown",
+        body: "We provide traditional crowns crafted by a dental lab rather than same-day milled crowns. At your first Roseville visit, we shape the tooth, take precise records for the lab, and fit a temporary crown to keep you comfortable. At your second visit, we try in the finished lab-made crown, adjust it to your bite, and cement it securely.",
+      },
+      {
+        heading: "Transparent estimates and payment options",
+        body: "Before we start, we give you a written estimate covering the crown and any supporting care the tooth needs, such as X-rays or buildup. If you have dental insurance, our front desk checks what your plan may contribute. We accept CareCredit financing, major credit and debit cards, cash, and checks. Medi-Cal is not accepted.",
+      },
     ],
     questions: [
-      { question: "Does Waikiki Dental offer same-day crowns?", answer: "No. Waikiki Dental provides traditional lab-made crowns in two visits, with a temporary crown protecting the tooth in between." },
-      { question: "Does getting a crown hurt?", answer: "The tooth is numbed before it is shaped, and the team paces the visit around your comfort. If dental anxiety is the bigger obstacle, ask about an IV sedation consultation." },
-      { question: "How do I care for a temporary crown?", answer: "Chew on the other side when you can, avoid sticky or very hard foods, and clean the area gently. If the temporary crown comes off or feels loose, call the office at (916) 772-6248." },
-      { question: "How long does a dental crown last?", answer: "It depends on the tooth, your bite, and your home care. Grinding, chewing ice or hard objects, and skipped cleanings shorten a crown's life. Ask the dentist what to watch for at your follow-up visits." },
+      {
+        question: "Does Waikiki Dental offer same-day crowns?",
+        answer:
+          "No. We place traditional lab-made crowns across two visits, with a protective temporary crown in between so our dental lab can tailor the fit and shade to your bite.",
+      },
+      {
+        question: "Will getting a crown be uncomfortable?",
+        answer:
+          "We numb the tooth thoroughly before shaping it and check in with you throughout the visit. If dental anxiety makes longer appointments tough, ask us about an IV sedation consultation.",
+      },
+      {
+        question: "How should I treat my temporary crown between visits?",
+        answer:
+          "Chew on the opposite side when you can, steer clear of sticky or very hard foods, and brush and floss gently around it. If the temporary feels loose or comes off, call us at (916) 772-6248 so we can help.",
+      },
+      {
+        question: "How long can a dental crown last?",
+        answer:
+          "Longevity depends on the underlying tooth, your bite, and everyday habits. Clenching, chewing ice, or skipping cleanings can shorten a crown's lifespan, so we check its fit and edges at every routine exam.",
+      },
     ],
     links: [
-      { href: "/roseville-dental-implants/", label: "Replacing a missing tooth instead" },
-      { href: "/iv-sedation/", label: "Ask about IV sedation" },
+      { href: "/roseville-dental-implants/", label: "Replacing a missing tooth with an implant" },
+      { href: "/iv-sedation/", label: "Explore IV sedation" },
       { href: "/new-patients/", label: "Insurance and payment options" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/crowns", label: "American Dental Association: crowns" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/crowns",
+      label: "American Dental Association: crowns",
+    },
   },
   "dental-emergencies": {
     title: "What to do in a dental emergency.",
     sections: [
-      { heading: "Call the office first", body: "Call Waikiki Dental at (916) 772-6248 and describe what happened, where it hurts, and whether there is swelling or bleeding. The Roseville office is open Monday to Friday, and the team makes every effort to see urgent cases as quickly as possible." },
-      { heading: "What to do on the way", body: "For a knocked-out adult tooth, hold it by the crown, not the root, and keep it moist: place it back in the socket if you can, or keep it between your cheek and gum or in milk, and come in right away. For a cracked tooth, rinse with warm water and use a cold compress on your face. For a toothache, rinse with warm water and floss gently to remove trapped food. Do not put aspirin on the tooth or gums." },
-      { heading: "When to go to an emergency room instead", body: "Go to an emergency room or call 911 if facial swelling makes it hard to breathe or swallow, if bleeding will not stop, or if you have a possible jaw fracture or head injury. If the office is closed and symptoms are severe, do not wait for office hours." },
+      {
+        heading: "Call our Roseville office first",
+        body: "Reach us at (916) 772-6248 and tell us what happened, where the pain is, and whether you notice swelling or bleeding. We are open Monday to Friday and make every effort to get urgent patients in as quickly as our schedule allows.",
+      },
+      {
+        heading: "First steps while you head in",
+        body: "If an adult tooth is knocked out, pick it up by the crown rather than the root and keep it moist: gently place it back into the socket if you can, or hold it between your cheek and gum or in a small container of milk, and come in right away. For a cracked tooth, rinse gently with warm water and place a cold compress against your cheek. For a toothache, rinse with warm water and floss gently around the area, and never place aspirin directly against the tooth or gums.",
+      },
+      {
+        heading: "When to go straight to an emergency room",
+        body: "Call 911 or head to the nearest emergency room right away if facial swelling affects your breathing or swallowing, if heavy bleeding will not stop, or if you suspect a jaw fracture or head injury. Do not wait for office hours if symptoms are severe.",
+      },
     ],
     questions: [
-      { question: "What counts as a dental emergency?", answer: "Severe tooth pain, facial swelling, a knocked-out or loosened adult tooth, a cracked or broken tooth, and a lost crown or filling that leaves the tooth sharp or sensitive are all reasons to call the office promptly." },
-      { question: "Can I be seen today?", answer: "Call as early in the day as you can. The team makes every effort to see urgent cases quickly, and availability depends on the day's schedule. The office is open Monday to Friday." },
-      { question: "What should I do with a knocked-out tooth?", answer: "Pick it up by the crown, keep it moist, and come in right away. Try to place it back in the socket without touching the root; if you cannot, keep it between your cheek and gum or in milk." },
-      { question: "How much does an emergency visit cost?", answer: "It depends on the exam, any X-rays, and the treatment the tooth needs. Ask the team for an estimate before treatment. CareCredit, major credit and debit cards, cash, and checks are accepted; Medi-Cal is not." },
+      {
+        question: "What counts as an urgent dental problem?",
+        answer:
+          "Severe or worsening tooth pain, facial or gum swelling, a knocked-out or loosened adult tooth, a cracked or broken tooth, or a lost crown or filling that leaves the tooth sharp or sensitive are all good reasons to call right away.",
+      },
+      {
+        question: "Can you see me today?",
+        answer:
+          "Call us as early in the day as possible, Monday to Friday. We make every effort to fit urgent cases in quickly, depending on the day's schedule.",
+      },
+      {
+        question: "What should I do if a permanent tooth is knocked out?",
+        answer:
+          "Handle the tooth only by the white crown, never the root, and keep it moist. Place it back in the socket if it slides in gently; otherwise keep it in milk or inside your cheek and call us immediately.",
+      },
+      {
+        question: "How much does an emergency dental visit cost?",
+        answer:
+          "Cost depends on the exam, any needed X-rays, and the treatment required to stabilize the tooth. We walk you through a clear estimate before treatment begins. We accept CareCredit, major credit and debit cards, cash, and checks; Medi-Cal is not accepted.",
+      },
     ],
     links: [
-      { href: "/dental-crowns/", label: "Repairing a broken tooth with a crown" },
-      { href: "/iv-sedation/", label: "Anxious about treatment? IV sedation" },
-      { href: "/contact-waikiki-dental/", label: "Directions and office hours" },
+      { href: "/dental-crowns/", label: "Restoring a broken tooth with a crown" },
+      { href: "/iv-sedation/", label: "Nervous about treatment? Learn about IV sedation" },
+      { href: "/contact-waikiki-dental/", label: "Office hours and directions" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/dental-emergencies", label: "American Dental Association: dental emergencies" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/dental-emergencies",
+      label: "American Dental Association: dental emergencies",
+    },
   },
   "roseville-invisalign": {
     sections: [
-      { heading: "Start with an orthodontic evaluation", body: "Clear aligners work well for many crowding, spacing, and mild bite concerns, but not every tooth movement. At Waikiki Dental in Roseville, the dentist reviews your alignment, bite, gum health, and goals, then explains whether Invisalign or traditional braces fits the movement your teeth need." },
-      { heading: "How treatment works day to day", body: "Invisalign uses a series of custom clear aligners, each moving the teeth a small step. You remove them to eat, drink anything but water, and brush, then put them straight back in. Aligners only move teeth while you wear them, so your dentist will give you a daily wear schedule and check progress at regular visits." },
-      { heading: "Plan for cost and retention", body: "Ask for an estimate that includes the aligners, check-ups, any refinement aligners, and retainers. If you have dental insurance, ask the office whether your plan includes orthodontic coverage. CareCredit financing is available. After treatment, retainers hold teeth in their new position." },
+      {
+        heading: "Start with an honest orthodontic evaluation",
+        body: "Clear aligners straighten many crowding, spacing, and mild bite concerns discreetly, though they are not the ideal tool for every movement. At our Roseville office, we check your bite, gum health, and alignment first, then explain clearly whether Invisalign or traditional braces will give you the strongest result.",
+      },
+      {
+        heading: "Living with clear aligners day to day",
+        body: "Invisalign uses a sequence of custom clear trays, each nudging your teeth a small step closer to their target position. You take them out to eat, drink anything besides water, and brush, then pop them right back in. Consistent daily wear keeps treatment moving on schedule, backed by regular checkups at our office.",
+      },
+      {
+        heading: "Plan ahead for cost and retainers",
+        body: "At your consultation, we provide a written estimate that lays out the aligners, progress visits, any refinement trays, and your retainers afterward. Our front desk can check whether your dental insurance includes orthodontic benefits, and CareCredit financing is available if you want monthly payments.",
+      },
     ],
     questions: [
-      { question: "Is Invisalign better than braces?", answer: "Neither is better for everyone. Aligners are nearly invisible and removable; braces give more control for complex alignment and bite problems. An evaluation tells you which one suits your case." },
-      { question: "Can adults get Invisalign?", answer: "Yes. Healthy teeth can be moved at any age. Gum disease or decay needs treatment first." },
-      { question: "Will I need a retainer after Invisalign?", answer: "Yes. Teeth can drift after any orthodontic treatment, so plan on a retainer and ask how often to wear it." },
-      { question: "How long does Invisalign take?", answer: "It depends on how far your teeth need to move and how consistently you wear the aligners. The dentist can give you an estimated timeline after the evaluation." },
+      {
+        question: "Is Invisalign better than traditional braces?",
+        answer:
+          "It depends on how your teeth need to move. Clear aligners are removable and discreet, while braces provide tighter control for complex bite or rotational shifts. We help you compare both honestly after an exam.",
+      },
+      {
+        question: "Can adults straighten their teeth with Invisalign?",
+        answer:
+          "Yes. Adults do very well with clear aligners as long as teeth and gums are healthy first. If any decay or gum inflammation is present, we address that before starting alignment.",
+      },
+      {
+        question: "Will I need to wear a retainer after Invisalign?",
+        answer:
+          "Yes. Teeth naturally try to drift back after orthodontic treatment, so retainers are essential for protecting your results. We include retention planning in your estimate and explain your wear schedule.",
+      },
+      {
+        question: "How long does Invisalign treatment take?",
+        answer:
+          "Treatment length depends on how much movement your smile needs and how consistently you wear each tray. We give you a personalized estimated timeline during your Roseville evaluation.",
+      },
     ],
     links: [
       { href: "/orthodontics/", label: "Compare Invisalign and braces" },
-      { href: "/traditional-braces/", label: "Traditional braces" },
-      { href: "/new-patients/", label: "Insurance and CareCredit" },
+      { href: "/traditional-braces/", label: "Learn about traditional braces" },
+      { href: "/new-patients/", label: "Insurance and CareCredit options" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/braces", label: "American Dental Association: braces and aligners" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/braces",
+      label: "American Dental Association: braces and aligners",
+    },
   },
   veneers: {
     sections: [
-      { heading: "What veneers can change", body: "Porcelain veneers are thin, custom-made shells bonded to the front of the teeth. They can improve teeth that are chipped, stained, worn, uneven, or slightly gapped. Unlike a crown, a veneer covers only the front surface of the tooth." },
-      { heading: "Know before you commit", body: "Veneers are not reversible: a thin layer of enamel is usually removed so they sit naturally. Decay and gum disease need treatment first. If you clench or grind, or have a deep overbite, veneers may not be the best choice, so tell the dentist. Veneers are usually considered cosmetic and may not be covered by insurance." },
-      { heading: "Plan the shape and shade together", body: "At Waikiki Dental in Roseville, start by describing what you want to change. Dr. Narodovich can explain which teeth would need veneers, whether whitening first would help the shade match, and how veneers fit into a larger smile makeover. CareCredit financing is available." },
+      {
+        heading: "What porcelain veneers can refine",
+        body: "Porcelain veneers are thin, custom-crafted shells fitted to the front surface of teeth to improve chips, deep stains, worn edges, uneven shape, or small gaps. Unlike a crown, which wraps the entire tooth for structural reinforcement, a veneer focuses on the visible front surface.",
+      },
+      {
+        heading: "What to weigh before choosing veneers",
+        body: "Placing veneers is an irreversible step because a thin layer of enamel is typically shaped so the porcelain sits smoothly and naturally. Any underlying decay or gum disease comes first. If you clench, grind, or have a heavy bite, tell us early so we can advise whether veneers or another option will serve you better. Because veneers are usually cosmetic, dental insurance rarely covers them.",
+      },
+      {
+        heading: "Designing shape and shade together",
+        body: "At our Roseville office, we start by listening to what you want your smile to look like. Dr. Narodovich walks you through which teeth are involved, whether brightening surrounding teeth first makes sense for shade matching, and how veneers can stand alone or anchor a broader smile makeover. CareCredit financing is available.",
+      },
     ],
     questions: [
-      { question: "Are veneers permanent?", answer: "The change to your teeth is. Enamel is removed to place them, so a tooth that has had a veneer will always need one. A veneer can chip, wear, or loosen over time and may need repair or replacement." },
-      { question: "Veneers or crowns: what is the difference?", answer: "A veneer covers the front surface of a healthy tooth for appearance. A crown covers the whole tooth and is used when it needs strength as well as shape." },
-      { question: "Does insurance pay for veneers?", answer: "Usually not, because veneers are considered cosmetic unless a dentist finds them medically necessary. Ask the office to check your plan." },
-      { question: "Can I whiten my teeth after veneers?", answer: "Whitening does not change the color of porcelain. If you want brighter teeth overall, whiten first so the veneers can be matched to the new shade." },
+      {
+        question: "Are porcelain veneers permanent?",
+        answer:
+          "The preparation to the tooth is permanent because a thin layer of enamel is shaped to seat the porcelain cleanly. Over the years, a veneer can wear, chip, or loosen and eventually need repair or replacement.",
+      },
+      {
+        question: "What is the difference between veneers and crowns?",
+        answer:
+          "A veneer refines the front surface of a structurally sound tooth for appearance, while a crown covers the entire tooth when it needs added strength as well as a renewed look.",
+      },
+      {
+        question: "Does dental insurance cover porcelain veneers?",
+        answer:
+          "Usually not, since veneers are typically classified as cosmetic care. Our front desk is always happy to check your specific plan and walk through CareCredit options.",
+      },
+      {
+        question: "Can I whiten my teeth after getting veneers?",
+        answer:
+          "Whitening brightens natural enamel but does not lighten porcelain. If you want an overall brighter shade, we recommend whitening first so your veneers can be matched cleanly to your new color.",
+      },
     ],
     links: [
-      { href: "/smile-makeover/", label: "Plan a full smile makeover" },
+      { href: "/smile-makeover/", label: "Plan a coordinated smile makeover" },
       { href: "/teeth-whitening/", label: "Professional teeth whitening" },
-      { href: "/dental-crowns/", label: "When a crown is the better fit" },
+      { href: "/dental-crowns/", label: "When a dental crown is the better fit" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/veneers", label: "American Dental Association: veneers" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/veneers",
+      label: "American Dental Association: veneers",
+    },
   },
   "teeth-whitening": {
     sections: [
-      { heading: "Why teeth change color", body: "Coffee, tea, red wine, and tobacco stain the enamel surface. With age, enamel thins and more of the yellower layer beneath shows through. An injury or some medications can also darken a tooth. Knowing the cause helps the dentist tell you what whitening can realistically change." },
-      { heading: "What whitening can and cannot change", body: "Whitening lightens natural tooth enamel. It does not change the color of crowns, veneers, or fillings, so tell the team about any dental work on your front teeth. Sensitivity during or after whitening is common and usually temporary; mention any sensitivity you already have." },
-      { heading: "Start with an exam", body: "A dentist can check whether a stain or sensitivity has a cause that needs treatment first, such as decay or a worn filling. At Waikiki Dental in Roseville, ask what whitening may achieve for your shade and how to plan it around an event or other cosmetic work." },
+      {
+        heading: "Why teeth darken over time",
+        body: "Coffee, tea, red wine, and tobacco gradually stain outer enamel, while natural aging thins enamel slightly and lets warmer tones beneath show through. Past tooth injuries or certain medications can also affect shade. Pinpointing the cause lets us tell you honestly what whitening can achieve.",
+      },
+      {
+        heading: "What whitening can and cannot lighten",
+        body: "Professional whitening lightens natural tooth enamel, not porcelain crowns, veneers, or tooth-colored fillings. Letting us know about any front-tooth restorations helps us avoid uneven color. Mild, temporary sensitivity is common, so tell us if your teeth already feel sensitive.",
+      },
+      {
+        heading: "Why starting with an exam helps",
+        body: "A quick exam makes sure discoloration or sensitivity is not hiding decay or a worn filling that should be treated first. At our Roseville office, we talk through realistic shade goals and help time whitening cleanly around big events or upcoming cosmetic work.",
+      },
     ],
     questions: [
-      { question: "Will whitening work on my crowns or fillings?", answer: "No. Whitening only lightens natural enamel. Existing crowns, veneers, and fillings keep their color and may need replacing to match newly whitened teeth." },
-      { question: "Does teeth whitening cause sensitivity?", answer: "Some people feel temporary sensitivity. Tell the dentist if your teeth are already sensitive so the plan can account for it." },
-      { question: "Should I whiten before getting veneers or crowns?", answer: "Usually, yes. Restorations are matched to the shade of the teeth around them, so whitening first lets new work match your brighter smile." },
-      { question: "How long do whitening results last?", answer: "It depends on your habits. Coffee, tea, red wine, and tobacco bring stains back sooner. Ask the team about touch-ups." },
+      {
+        question: "Will whitening lighten my crowns or fillings?",
+        answer:
+          "No. Whitening gel works only on natural tooth enamel, so existing crowns, veneers, and fillings keep their original shade and may need updating to match brighter neighboring teeth.",
+      },
+      {
+        question: "Does professional teeth whitening cause sensitivity?",
+        answer:
+          "Some patients notice temporary sensitivity to cold or air. Let us know ahead of time if your teeth are already sensitive so we can adjust your approach for comfort.",
+      },
+      {
+        question: "Should I whiten before getting veneers or a crown?",
+        answer:
+          "Usually yes. Because we match new crowns and veneers to the teeth around them, whitening first ensures your new dental work blends seamlessly with your brighter shade.",
+      },
+      {
+        question: "How long do whitening results last?",
+        answer:
+          "Results depend heavily on daily habits such as coffee, tea, red wine, or tobacco use. Good brushing, routine cleanings, and occasional touch-ups help keep your smile bright.",
+      },
     ],
     links: [
-      { href: "/veneers/", label: "Porcelain veneers" },
+      { href: "/veneers/", label: "Explore porcelain veneers" },
       { href: "/smile-makeover/", label: "Plan a smile makeover" },
-      { href: "/cleanings-exams/", label: "Cleanings and exams" },
+      { href: "/cleanings-exams/", label: "Routine cleanings and exams" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/teeth-whitening", label: "American Dental Association: teeth whitening" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/teeth-whitening",
+      label: "American Dental Association: teeth whitening",
+    },
   },
   "smile-makeover": {
     sections: [
-      { heading: "Start with what you want to change", body: "A smile makeover is a plan, not a single procedure. Tell the dentist what bothers you about your smile: color, chips, gaps, crowding, worn or missing teeth. Dr. Narodovich can explain which combination of whitening, veneers, crowns, orthodontics, or implants could address it." },
-      { heading: "The order matters", body: "Healthy teeth and gums come first, so decay or gum disease is treated before cosmetic work. Alignment usually comes next, then whitening, then veneers or crowns matched to the final shade. Implants that replace missing teeth need healing time, which shapes the timeline." },
-      { heading: "Phase it around your budget and calendar", body: "Ask for an estimate for each phase so you can decide what to do now and what can wait. CareCredit financing is available, and insurance may cover restorative parts of a plan but rarely purely cosmetic ones. If long or multiple visits make you anxious, ask whether IV sedation fits your plan." },
+      {
+        heading: "Start with what you want to change",
+        body: "Every smile makeover begins with your priorities: brighter color, smoother edges, closed gaps, straighter alignment, or replacing worn and missing teeth. Dr. Narodovich listens closely and explains which mix of whitening, veneers, crowns, orthodontics, or implants best fits your smile.",
+      },
+      {
+        heading: "Getting the sequence right",
+        body: "Order matters for lasting results. We address tooth health and gums first, handle any orthodontic alignment next, brighten natural enamel with whitening, and finish with shade-matched veneers or crowns. When dental implants are part of the plan, we build healing time smoothly into the schedule.",
+      },
+      {
+        heading: "Phased around your calendar and budget",
+        body: "You do not have to tackle everything at once. We break out a written estimate for each phase so you can see what comes first and what can wait. Dental insurance may contribute toward restorative steps like crowns or implants while rarely covering purely cosmetic care, and CareCredit financing is available. If longer visits make you anxious, we can also discuss monitored IV sedation.",
+      },
     ],
     questions: [
-      { question: "What can a smile makeover include?", answer: "Any combination of whitening, porcelain veneers, crowns, Invisalign or braces, and dental implants, chosen around your goals and the health of your teeth." },
-      { question: "Can a smile makeover be done in stages?", answer: "Yes. Many patients phase treatment over months. Ask the dentist which steps need to happen first and which can wait." },
-      { question: "Is IV sedation available for a smile makeover?", answer: "Waikiki Dental offers IV sedation consultations. The dentist reviews your health and the planned treatment before deciding whether sedation is appropriate." },
-      { question: "Will insurance cover a smile makeover?", answer: "Insurance may help with restorative work such as crowns or implants, but purely cosmetic treatment is usually not covered. Ask the office to check your plan." },
+      {
+        question: "What treatments can be part of a smile makeover?",
+        answer:
+          "Depending on your goals and oral health, a plan can combine professional whitening, porcelain veneers, lab-made crowns, Invisalign or braces, and dental implants.",
+      },
+      {
+        question: "Can we complete a smile makeover in stages?",
+        answer:
+          "Yes. Many patients spread treatment out over several months. We map out the clinical order so you know which steps come first and which ones can comfortably wait.",
+      },
+      {
+        question: "Can I request IV sedation during a smile makeover?",
+        answer:
+          "Yes. We offer IV sedation consultations where Dr. Narodovich reviews your health history and planned appointments to confirm whether monitored sedation is a good fit.",
+      },
+      {
+        question: "Does insurance help cover a smile makeover?",
+        answer:
+          "Dental plans sometimes help pay for restorative portions such as crowns or implants, though purely cosmetic treatments are generally out of pocket. We check your benefits before you commit.",
+      },
     ],
     links: [
       { href: "/veneers/", label: "Porcelain veneers" },
       { href: "/roseville-invisalign/", label: "Invisalign clear aligners" },
       { href: "/iv-sedation/", label: "IV sedation for longer visits" },
     ],
-    source: { href: "https://www.mouthhealthy.org/all-topics-a-z/veneers", label: "American Dental Association: veneers" },
+    source: {
+      href: "https://www.mouthhealthy.org/all-topics-a-z/veneers",
+      label: "American Dental Association: veneers",
+    },
   },
 };

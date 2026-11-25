@@ -71,8 +71,8 @@ export function SiteFooter() {
             </span>
           </Link>
           <p className="mt-5 max-w-md text-sm leading-7 text-cream/70">
-            IV sedation, dental implants, and unhurried family care from
-            Dr. Michael Narodovich in Roseville.
+            Monitored IV sedation, dental implants, and unhurried dental care
+            from Dr. Michael Narodovich in Roseville.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href={scheduleHref} className="btn btn-sunset btn-sm">

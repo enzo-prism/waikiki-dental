@@ -35,7 +35,7 @@ export function EmergencyOfficeHours() {
           ))}
         </dl>
       </details>
-      <p>Call before coming in. Holiday hours and urgent appointment availability may vary.</p>
+      <p>Please call before coming in. Holiday schedules and urgent opening times can vary.</p>
     </div>
   );
 }

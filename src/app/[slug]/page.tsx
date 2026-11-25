@@ -14,6 +14,7 @@ import { createPageMetadata } from "@/lib/metadata";
 import {
   findService,
   pageRoutes,
+  reviewStats,
   serviceSeo,
   site,
 } from "@/lib/site";
@@ -30,37 +31,37 @@ const staticPages: Record<
   }
 > = {
   "michael-narodovich-dmd": {
-    title: "Meet Michael Narodovich, DMD",
+    title: "Meet Dr. Michael Narodovich, DMD",
     description:
-      "Meet Dr. Michael Narodovich, DMD — a Roseville dentist who leads with listening, with focused training in sedation dentistry for anxious patients.",
+      "Meet Dr. Michael Narodovich, DMD, a Roseville dentist with active California sedation permits and a calm, unhurried approach to patient care.",
   },
   "roseville-dental-care": {
     title: "Dental Services in Roseville, CA",
     description:
-      "Explore Waikiki Dental's full menu of Roseville dental care: cleanings, cosmetic dentistry, Invisalign, crowns, implants, and IV sedation.",
+      "Browse dental care at Waikiki Dental in Roseville: monitored IV sedation, dental implants, lab-made crowns, Invisalign, veneers, and preventive exams.",
   },
   "waikiki-dental-roseville": {
     title: "Our Roseville Dental Office",
     description:
-      "Get to know Waikiki Dental's Roseville office — high standards, prevention-first care, uncompromising safety, and a genuinely relaxed patient experience.",
+      "Step inside Waikiki Dental in Roseville, CA. Clinical rigor, prevention-focused exams, strict safety standards, and calm neighborhood hospitality.",
   },
   "new-patients": {
-    title: "New Dental Patients in Roseville",
+    title: "New Dental Patients in Roseville, CA",
     description:
-      "New to Waikiki Dental? Insurance, payment options, CareCredit financing, and online forms — everything sorted before your first Roseville visit.",
+      "Preparing for your first visit to Waikiki Dental in Roseville? Review insurance questions, payment options, CareCredit financing, and paperless forms.",
   },
   "patient-testimonials": {
-    title: "Waikiki Dental Patient Reviews in Roseville",
-    description: "Read what Roseville patients say about Waikiki Dental, explore themes from our dated review analysis, and open the latest reviews on Google.",
+    title: "Patient Reviews in Roseville, CA",
+    description: `See what Roseville patients say about Dr. Michael Narodovich and our team across ${reviewStats.count} verified Google reviews, or open Google Maps to read every review.`,
   },
   "contact-waikiki-dental": {
-    title: "Contact Our Roseville Dental Office",
-    description: `Contact Waikiki Dental in Roseville, CA — request an appointment online, call or text ${site.phone}, send a message, or stop by ${site.addressParts.street}`,
+    title: "Contact Waikiki Dental in Roseville",
+    description: `Reach Waikiki Dental in Roseville, CA. Book online, call or text ${site.phone}, send a general message, or visit us on ${site.addressParts.street}`,
   },
   orthodontics: {
-    title: "Orthodontics & Invisalign in Roseville, CA",
+    title: "Orthodontics & Invisalign in Roseville",
     description:
-      "Compare Invisalign clear aligners and traditional braces at Waikiki Dental in Roseville, with a plan built around your smile, bite, and daily routine.",
+      "Compare Invisalign clear aligners and traditional braces at Waikiki Dental in Roseville, with an honest exam and a plan built around your bite.",
   },
 };
 

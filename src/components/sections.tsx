@@ -224,15 +224,15 @@ export function FlagshipServices() {
     <section className="reveal bg-background py-20 sm:py-24">
       <div className="wrap">
         <SectionHeader
-          eyebrow="The work we are known for"
-          title="IV sedation and dental implants."
-          body="Higher-stakes care, delivered at a calmer pace — with the rest of the menu under one roof."
+          eyebrow="What we are known for"
+          title="Monitored IV sedation and dental implants."
+          body="Calm, carefully planned care for anxious patients and tooth replacement, backed by comprehensive dentistry under one Roseville roof."
         />
         <Link
           href="/roseville-dental-care/"
           className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-ocean-700 transition hover:text-ocean-800"
         >
-          All services
+          Explore all services
           <ArrowRight className="size-4" aria-hidden="true" />
         </Link>
 
@@ -268,14 +268,14 @@ export function PaymentStrip({ className = "" }: { className?: string }) {
 }
 
 export function HomeReviewProof() {
-  const quote = reviewExcerpts[2] ?? reviewExcerpts[0];
+  const quote = reviewExcerpts[1] ?? reviewExcerpts[0];
   const featuredTopics = reviewTopics.slice(0, 3);
 
   return (
     <section className="bg-deep text-cream">
       <div className="wrap grid gap-10 py-14 sm:py-16 lg:grid-cols-[0.72fr_1.28fr] lg:items-center lg:gap-16">
         <div className="rounded-3xl border border-cream/15 bg-cream/[0.055] p-6 sm:p-8">
-          <p className="eyebrow text-gold-soft">Google reviews</p>
+          <p className="eyebrow text-gold-soft">Verified Google reviews</p>
           <div className="mt-4 flex items-end gap-3">
             <span className="font-serif text-6xl font-medium leading-none text-cream sm:text-7xl">
               {reviewStats.rating.toFixed(1)}
@@ -293,9 +293,9 @@ export function HomeReviewProof() {
         </div>
 
         <div>
-          <p className="eyebrow text-gold-soft">The pattern is the proof</p>
+          <p className="eyebrow text-gold-soft">Why patients stay</p>
           <h2 className="mt-4 max-w-2xl text-balance font-serif text-3xl font-medium leading-tight tracking-tight text-cream sm:text-4xl">
-            Patients keep describing care that feels warm, capable, and genuinely calm.
+            A warm team, clear answers, and visits that feel genuinely calm.
           </h2>
           <div className="mt-6 flex flex-wrap gap-2">
             {featuredTopics.map((topic) => (
@@ -321,7 +321,7 @@ export function HomeReviewProof() {
             href="/patient-testimonials/"
             className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-cream underline-offset-4 hover:underline"
           >
-            Explore what patients are saying
+            Read all patient reviews
             <ArrowUpRight className="size-4" aria-hidden="true" />
           </Link>
         </div>
@@ -345,19 +345,19 @@ export function TeamWelcome() {
             />
           </div>
           <p className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/20 bg-deep/90 px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-cream shadow-soft backdrop-blur-sm sm:inset-x-auto sm:left-5 sm:px-5">
-            The Waikiki Dental team · Roseville
+            Our Roseville team · Waikiki Dental
           </p>
         </div>
 
         <div>
-          <Eyebrow>Before your first hello</Eyebrow>
+          <Eyebrow>Before your first visit</Eyebrow>
           <h2 className="mt-4 text-balance font-serif text-4xl font-medium leading-[1.08] tracking-tight text-ink sm:text-[2.9rem]">
-            Come in already knowing a few friendly faces.
+            Walk in already knowing the people who will greet you.
           </h2>
           <p className="mt-6 text-pretty text-lg leading-8 text-ink-muted">
-            This is the real Roseville team, photographed inside Waikiki Dental.
-            Meet two of the people who help the office feel organized, familiar,
-            and welcoming from your first conversation onward.
+            Stepping into a new dental office feels easier when the faces are
+            already familiar. Meet two of the Roseville team members who help
+            every visit feel organized, unhurried, and genuinely welcoming.
           </p>
 
           <div className="mt-8 grid gap-3">
@@ -403,7 +403,7 @@ export function TeamWelcome() {
               rel="noreferrer"
               className="btn btn-outline"
             >
-              More from the team
+              Follow our team on Facebook
               <ArrowUpRight className="size-4" aria-hidden="true" />
               <span className="sr-only">(opens in a new tab)</span>
             </a>
@@ -429,9 +429,9 @@ export function DoctorSpotlight() {
         </div>
 
         <div>
-          <Eyebrow>Meet the dentist</Eyebrow>
+          <Eyebrow>Meet Dr. Mike</Eyebrow>
           <h2 className="mt-4 text-balance font-serif text-4xl font-medium tracking-tight text-ink sm:text-[2.75rem] sm:leading-[1.08]">
-            The dentist people send their nervous friends to.
+            The dentist nervous patients recommend to their friends.
           </h2>
           <div className="mt-6 grid gap-4 text-lg leading-8 text-ink-muted">
             {doctor.bio.map((paragraph) => (
@@ -472,12 +472,12 @@ export function VisitPanel({
       <div className="wrap grid gap-12 lg:grid-cols-[0.95fr_1.05fr]">
         <div>
           <SectionHeader
-            eyebrow="Visit Waikiki Dental"
-            title="Getting started is the easy part."
+            eyebrow="Visit our Roseville office"
+            title="Starting is simpler than you think."
             body={
               showForm
-                ? "Request an appointment, call or text the front desk, or send a quick note. The office is on Pleasant Grove Boulevard in Roseville."
-                : "Request a preferred day and time, or call or text the front desk. The office is on Pleasant Grove Boulevard in Roseville."
+                ? "Schedule online, call or text our front desk, or send a quick note below. You will find us on Pleasant Grove Boulevard in Roseville."
+                : "Schedule your visit online, or call and text our front desk directly. You will find us on Pleasant Grove Boulevard in Roseville."
             }
             headingLevel={headingLevel}
           />
@@ -496,7 +496,7 @@ export function VisitPanel({
                   {site.address}
                 </span>
                 <span className="mt-1 block text-sm text-ink-muted">
-                  Open directions in Google Maps
+                  Get directions in Google Maps
                 </span>
               </span>
             </a>
@@ -513,7 +513,7 @@ export function VisitPanel({
                   {site.phone}
                 </span>
                 <span className="mt-1 block text-sm text-ink-muted">
-                  Call or text Waikiki Dental
+                  Call or text our Roseville front desk
                 </span>
               </span>
             </a>
@@ -543,7 +543,7 @@ export function VisitPanel({
 
           {showForm ? (
             <p className="mt-6 text-sm text-ink-muted">
-              Ready to plan a visit?{" "}
+              Ready to book your visit?{" "}
               <Link
                 href={scheduleHref}
                 className="font-semibold text-ocean-700 underline-offset-4 hover:underline"
@@ -558,7 +558,7 @@ export function VisitPanel({
         {showForm ? (
           <div className="rounded-[1.75rem] border border-line bg-cream p-7 shadow-soft sm:p-9">
             <FormHeading className="font-serif text-2xl text-ink">
-              Send a message
+              Send us a note
             </FormHeading>
             <p className="mt-2 text-sm leading-7 text-ink-muted">
               {formPrivacy.contactLead}
@@ -570,13 +570,14 @@ export function VisitPanel({
         ) : (
           <div className="flex flex-col justify-between rounded-[1.75rem] bg-deep p-8 text-cream sm:p-10">
             <div>
-              <p className="eyebrow text-gold-soft">Book a visit</p>
+              <p className="eyebrow text-gold-soft">Schedule your visit</p>
               <h3 className="mt-4 font-serif text-3xl font-medium tracking-tight text-cream">
-                The next step is a conversation.
+                Start with a simple conversation.
               </h3>
               <p className="mt-4 max-w-md text-pretty leading-8 text-cream/75">
-                Book a time online, or call or text the Roseville office. The
-                team will confirm the final slot.
+                Choose a time online, or call and text our Roseville office
+                directly. Our team will confirm your appointment and answer any
+                questions ahead of your visit.
               </p>
             </div>
             <div className="mt-8 flex flex-col gap-3">
@@ -603,11 +604,11 @@ export function BookStrip() {
       <div className="wrap flex flex-col gap-6 py-12 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="font-serif text-3xl font-medium tracking-tight text-ink">
-            Ready when you are.
+            Whenever you are ready.
           </h2>
           <p className="mt-2 max-w-xl text-ink-muted">
-            Request a preferred day and time in a couple of minutes, or call or
-            text the Roseville office.
+            Book your visit online or call and text our Roseville front desk. No
+            pressure, no rush.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">

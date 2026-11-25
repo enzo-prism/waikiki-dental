@@ -27,7 +27,7 @@ function buildLlmsTxt() {
   push(
     `# ${site.name}`,
     "",
-    `> ${site.name} is a dental practice in Roseville, California, led by Dr. Michael Narodovich, DMD. It focuses on comfortable care for anxious patients, monitored IV sedation, dental implants, and restorative and cosmetic dentistry.`,
+    `> ${site.name} is a dental practice in Roseville, California, led by Dr. Michael Narodovich, DMD. The practice focuses on monitored IV sedation for anxious patients, dental implants, traditional lab-made crowns, and calm, unhurried restorative, cosmetic, and family dental care.`,
     "",
     "## Practice facts",
     "",
