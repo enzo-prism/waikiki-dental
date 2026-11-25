@@ -1,12 +1,12 @@
 # Project status
 
-Last reviewed: November 6, 2026
+Last reviewed: November 24, 2026
 
 ## Current production baseline
 
 - Production: <https://waikikidental.com/>
 - Source of truth: GitHub `main`
-- Current production baseline: November 6, 2026 SEO/AEO and official-credential release (PRs #22–23), verified Ready on the public domain.
+- November 23 baseline: IV sedation consultation requests use the Roseville office phone/text route (PR #27). PRs #24–26 added service guides, estimates, FAQ markup and search attribution.
 - Earlier seasonal release: October 7, 2026 (PR #8 `d31ed92`)
 - Earlier releases: lab-made crown copy and service-menu guard test (PR #7
   `cdc35c0`, October 6); audit fixes (`43dfcbe`, September 24); service-menu
@@ -16,7 +16,15 @@ Last reviewed: November 6, 2026
 - Scheduling: every appointment CTA remains on-site at
   `/request-appointment/`; no legacy booking-system links are permitted
 
-## November 20, 2026 SEO/AEO pass (branch `seo-aeo/nov20-answers-entity-graph`, not yet released)
+## November 24, 2026 organic search release
+
+- The emergency service page and its fixed mobile bar lead with a call to the office. Regular hours use the Roseville weekday. The full schedule also works without JavaScript. Holiday hours and urgent-call coverage need office confirmation.
+- Invisalign search copy and the page introduction cover consultations and estimates. Crown listings describe the temporary crown and second visit. The implant guide explains how to identify the clinician and location for each stage and clarify referrals at consultation. The office has yet to confirm a publishable placement/restoration split.
+- New patients can go directly to the current sedation cost section. Existing permanent redirects route former service pages and sedation articles to their matching treatment pages. The sitemap records substantive page changes, including the November 23 sedation booking changes.
+- Directions and Dentist markup identify Waikiki Dental’s Google Maps place. The dated August review analysis remains available with an outbound link to current Google reviews.
+- The Next.js runtime and matching ESLint configuration are pinned to 16.4.6. See [analytics and search operations](ANALYTICS-SEARCH.md) for the release baseline and office outcome definitions.
+
+## November 20, 2026 SEO/AEO pass (PR #26)
 
 - Answer-first care guides (3 sections, 4 questions, ADA MouthHealthy source) on
   dental crowns, dental emergencies, Invisalign, veneers, teeth whitening, and

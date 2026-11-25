@@ -1,5 +1,24 @@
 # Analytics and search operations
 
+## November 24, 2026 Roseville organic search baseline
+
+Final Google Web Search data for October 26–November 22 recorded 83 clicks from 5,508 impressions (1.51% CTR). September 28–October 25 recorded 107 clicks from 7,422 impressions (1.44% CTR). Exact page rows for the later period:
+
+| Landing page | Clicks | Impressions | Average position |
+| --- | ---: | ---: | ---: |
+| `/roseville-invisalign/` | 0 | 611 | 7.9 |
+| `/dental-crowns/` | 1 | 425 | 7.8 |
+| `/iv-sedation/` | 0 | 189 | 43.1 |
+| `/iv-sedation-roseville/` (legacy) | 0 | 965 | 27.5 |
+| `/roseville-dental-implants/` | 0 | 264 | 20.3 |
+| `/dental-emergencies/` | 0 | 535 | 16.7 |
+
+Use the existing Waikiki practice dashboard for the December 2 check. Record the first Google crawl of each updated page, then compare 28 full days after that crawl with the preceding 28. Check clicks and CTR for the same nonbranded page/query pairs at comparable positions, including “invisalign roseville,” “sedation dentistry roseville,” “roseville dental implants” and “emergency dentist roseville.” Page/query impressions can overlap between old and new URLs.
+
+GA4 Organic Search recorded 12 Jarvis starts, 5 phone taps and 1 accepted contact form over the baseline. The front desk arranges sedation by phone/text. Reconcile those inquiries against accepted and attended consultations using aggregate office counts. Keep unknown sources unassigned. The dashboard already distinguishes website contact activity from office-confirmed outcomes.
+
+On November 24 the managed Business Profile showed matching regular hours, address and phone, a direct Jarvis booking link, and a website link to the old HTTP www address. A canonical HTTPS homepage link tagged `utm_source=google&utm_medium=organic&utm_campaign=gbp` was submitted for review. The service editor showed the corrected two-visit crown entry after saving. Google displayed 4.9 from 444 reviews. The site's August 24 analysis covers the 426 reviews available on that date. Thanksgiving hours, urgent-call routing and case-specific implant referral roles await office confirmation.
+
 ## November 6, 2026 verified account update
 
 Native Google API access is working for `enzo@design-prism.com`, with Owner access to `sc-domain:waikikidental.com`. This supersedes older access limitations below. URL Inspection reports `/iv-sedation/` indexed with the intended canonical. Resubmit and read back `https://waikikidental.com/sitemap.xml` after release; monitor canonical migration from legacy http/www URLs without changing established relevant redirects. October 7–November 3: 101 clicks and 6,017 impressions. These pre-release data do not establish uplift.

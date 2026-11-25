@@ -14,7 +14,6 @@ import { createPageMetadata } from "@/lib/metadata";
 import {
   findService,
   pageRoutes,
-  reviewStats,
   serviceSeo,
   site,
 } from "@/lib/site";
@@ -51,8 +50,8 @@ const staticPages: Record<
       "New to Waikiki Dental? Insurance, payment options, CareCredit financing, and online forms — everything sorted before your first Roseville visit.",
   },
   "patient-testimonials": {
-    title: `${reviewStats.rating.toFixed(1)}-Star Google Reviews`,
-    description: `Explore Waikiki Dental's ${reviewStats.rating.toFixed(1)}-star Google rating, ${reviewStats.count} patient reviews, recurring themes, and verified review highlights from Roseville patients.`,
+    title: "Waikiki Dental Patient Reviews in Roseville",
+    description: "Read what Roseville patients say about Waikiki Dental, explore themes from our dated review analysis, and open the latest reviews on Google.",
   },
   "contact-waikiki-dental": {
     title: "Contact Our Roseville Dental Office",

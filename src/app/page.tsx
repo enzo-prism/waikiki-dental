@@ -123,7 +123,7 @@ export default function Home() {
                   <Star className="size-3.5 fill-gold text-gold" aria-hidden="true" />
                   <span>
                     <strong className="font-semibold text-ink">{reviewStats.rating}</strong>{" "}
-                    on {reviewStats.source} · {reviewStats.count} reviews
+                    on {reviewStats.source} · {reviewStats.verifiedOn}
                   </span>
                 </span>
               </span>
