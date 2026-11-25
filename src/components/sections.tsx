@@ -120,7 +120,7 @@ export function AggregateRating({
         }`}
       >
         {hasCount
-          ? `${reviewStats.count} ${reviewStats.source} reviews`
+          ? `${reviewStats.count} ${reviewStats.source} reviews as of ${reviewStats.verifiedOn}`
           : `Read our ${reviewStats.source} reviews`}
         <span className="sr-only"> (opens in a new tab)</span>
       </a>

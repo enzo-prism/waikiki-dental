@@ -104,6 +104,13 @@ describe("service search listings", () => {
     );
   });
 
+  it("keeps treatment estimates in the Invisalign and crown listings", () => {
+    for (const slug of ["roseville-invisalign", "dental-crowns"]) {
+      assert.match(serviceSeo[slug].description, /written estimate/);
+      assert.doesNotMatch(serviceSeo[slug].description, /Google reviews/);
+    }
+  });
+
   it("keeps crowns traditional: two visits, lab-made", () => {
     const { title, description } = serviceSeo["dental-crowns"];
     assert.match(title, /Two Visits/);
@@ -113,7 +120,7 @@ describe("service search listings", () => {
 
   it("keeps each listing aimed at the query it ranks for", () => {
     assert.match(serviceSeo["dental-emergencies"].title, /^Emergency Dentist in Roseville/);
-    assert.match(serviceSeo["roseville-invisalign"].title, /^Invisalign Dentist in Roseville/);
+    assert.match(serviceSeo["roseville-invisalign"].title, /^Roseville Invisalign.*Cost/);
     assert.match(serviceSeo["dental-crowns"].title, /^Dental Crowns in Roseville/);
     assert.match(serviceSeo["iv-sedation"].title, /^IV Sedation Dentist in Roseville/);
   });

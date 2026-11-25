@@ -51,7 +51,7 @@ export const site = {
   /** Office coordinates, matching the Google Maps listing in `reviewStats.href`. */
   geo: { latitude: 38.7717804, longitude: -121.3154872 },
   mapsHref:
-    "https://www.google.com/maps/search/?api=1&query=1271%20Pleasant%20Grove%20Blvd%20Suite%20100%20Roseville%20CA%2095747",
+    "https://www.google.com/maps/search/?api=1&query=Waikiki+Dental+Roseville+CA&query_place_id=ChIJmbGEGJUhm4AR7RCJgmMeb1U",
   baseUrl: resolveSiteUrl(),
   description:
     "Roseville dentist Dr. Michael Narodovich offers IV sedation, dental implants, and unhurried care for patients who want less dental anxiety.",
@@ -309,7 +309,7 @@ export const services: Service[] = [
     summary:
       "Straighter teeth with clear, removable aligners — no brackets, no wires, no obvious “braces phase.”",
     description:
-      "Invisalign moves teeth with a series of nearly invisible aligners you can remove for meals, brushing, and big moments. Digital treatment planning shows where your smile is headed before you begin.",
+      "Invisalign moves teeth with a series of nearly invisible aligners you can remove for meals, brushing, and big moments. At your Roseville consultation, compare aligners with braces and ask for a written estimate that includes retainers.",
     highlights: [
       "Nearly invisible in daily life",
       "Removable for eating and brushing",
@@ -377,7 +377,7 @@ export const services: Service[] = [
     summary:
       "Tooth pain, a break, a lost crown — call now, and the team will make every effort to see you fast.",
     description:
-      "Dental emergencies don't check your calendar first. If you're in pain or something broke, call the Roseville office — Waikiki Dental makes every effort to see and care for urgent cases as quickly as possible.",
+      "Tooth pain, swelling or a broken tooth? Call the Roseville office to check availability. The team makes every effort to see urgent cases as quickly as possible.",
     highlights: [
       "Tooth pain and swelling",
       "Chipped, cracked, or broken teeth",
@@ -666,8 +666,6 @@ export const scheduleHref = "/request-appointment/";
 export const sedationContactId = "sedation-consultation";
 export const sedationConsultHref = scheduleHref + "#" + sedationContactId;
 
-const googleRating = `${reviewStats.rating.toFixed(1)} stars from ${reviewStats.count} Google reviews`;
-
 /**
  * Search listing copy (title + meta description) for service pages. Titles
  * get " | Waikiki Dental" from the root layout, so keep them to 43 characters
@@ -679,8 +677,8 @@ const googleRating = `${reviewStats.rating.toFixed(1)} stars from ${reviewStats.
  */
 export const serviceSeo: Record<string, { title: string; description: string }> = {
   "roseville-invisalign": {
-    title: "Invisalign Dentist in Roseville, CA",
-    description: `Clear, removable aligners, digitally planned so you see where your smile is headed. CareCredit financing. ${googleRating}. Book online.`,
+    title: "Roseville Invisalign: Cost & Consultation",
+    description: "Compare Invisalign and braces with a Roseville dentist. Ask for a written estimate covering aligners, refinements and retainers, and explore CareCredit.",
   },
   "iv-sedation": {
     title: "IV Sedation Dentist in Roseville, CA",
@@ -703,7 +701,7 @@ export const serviceSeo: Record<string, { title: string; description: string }> 
   },
   "dental-crowns": {
     title: "Dental Crowns in Roseville, CA: Two Visits",
-    description: `Cracked or worn tooth? A custom lab-made crown in two visits, with a temporary in between. CareCredit financing. ${googleRating}.`,
+    description: "Cracked or worn tooth? Get a temporary crown at the first visit and a lab-made crown at the next. Ask about a written estimate and CareCredit in Roseville.",
   },
   veneers: {
     title: "Porcelain Veneers in Roseville, CA",

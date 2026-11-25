@@ -53,3 +53,20 @@ test("essential care answers and professional identity are available without Jav
   expect(html).toContain('"@type":"Person"');
   await context.close();
 });
+
+test("urgent visits lead with a phone call and show the Roseville day", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  // Already Wednesday in UTC, still Tuesday at the practice.
+  await page.clock.install({ time: new Date("2026-11-25T04:00:00Z") });
+  await page.goto("/dental-emergencies/");
+  const hero = page.locator("main section").first();
+  await expect(hero.getByRole("link", { name: "Call (916) 772-6248" })).toHaveAttribute("href", "tel:+19167726248");
+  const hours = hero.locator("summary");
+  await expect(hours).toContainText("Regular Tuesday hours in Roseville: 9:00 AM - 6:00 PM");
+  await hours.click();
+  await expect(hero.getByText("Saturday", { exact: true })).toBeVisible();
+  const bar = page.locator(".fixed.inset-x-0.bottom-0");
+  await expect(bar.getByRole("link").first()).toHaveAttribute("href", "tel:+19167726248");
+  await expect(bar.getByRole("link", { name: "Routine visit" })).toHaveAttribute("href", "/request-appointment/");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});

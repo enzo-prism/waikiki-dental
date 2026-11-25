@@ -46,6 +46,7 @@ import { AmbientVideo } from "./ambient-video";
 import { DoctorPortrait } from "./brand";
 import { ReviewExplorer } from "./review-explorer";
 import { SeasonalNotFoundArt } from "./seasonal";
+import { EmergencyOfficeHours } from "./emergency-office-hours";
 import { SedationContactActions } from "./sedation-contact-actions";
 import { CareGuide } from "./care-guide";
 import { FaqJsonLd, FaqList } from "./faq";
@@ -205,16 +206,26 @@ function DefaultServicePage({ service }: { service: Service }) {
             <p className="mt-6 max-w-xl text-pretty text-lg leading-8 text-ink-muted">
               {service.description}
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link href={scheduleHref} className="btn btn-sunset">
-                <CalendarCheck className="size-4" aria-hidden="true" />
-                Request Appointment
-              </Link>
-              <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
-                <Phone className="size-4" aria-hidden="true" />
-                Call or text
-              </a>
-            </div>
+            {service.slug === "dental-emergencies" ? (
+              <div className="mt-6">
+                <a href={site.phoneHref} className="btn btn-sunset">
+                  <Phone className="size-4" aria-hidden="true" />
+                  Call {site.phone}
+                </a>
+                <EmergencyOfficeHours />
+              </div>
+            ) : (
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link href={scheduleHref} className="btn btn-sunset">
+                  <CalendarCheck className="size-4" aria-hidden="true" />
+                  Request Appointment
+                </Link>
+                <a href={site.phoneHref} className="btn btn-outline" aria-label={`Call or text ${site.phone}`}>
+                  <Phone className="size-4" aria-hidden="true" />
+                  Call or text
+                </a>
+              </div>
+            )}
           </div>
 
           <div className="rounded-3xl border border-line bg-cream p-7 sm:p-8">
@@ -758,6 +769,9 @@ export function NewPatientsPage() {
           </h2>
           <div className="mt-6">
             <FaqList questions={newPatientQuestions} />
+            <Link href="/iv-sedation/#sedation-cost" className="mt-4 inline-flex font-semibold text-ocean-700 underline">
+              What goes into an IV sedation estimate?
+            </Link>
           </div>
         </div>
       </section>
@@ -804,7 +818,7 @@ export function TestimonialsPage() {
           <div>
             <Eyebrow className="text-gold-soft">Patient reviews</Eyebrow>
             <h1 className="mt-5 max-w-3xl text-balance font-serif text-[2.7rem] font-medium leading-[1.04] tracking-tight text-cream sm:text-6xl">
-              {reviewStats.count} reviews. We read the entire public record.
+              {reviewStats.count} Google reviews through {reviewStats.verifiedOn}.
             </h1>
             <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-cream/75">
               Every public rating and all {reviewStats.writtenReviewCount} written experiences were reviewed,
@@ -817,7 +831,7 @@ export function TestimonialsPage() {
                 rel="noreferrer"
                 className="btn btn-light"
               >
-                Open all {reviewStats.count} Google reviews
+                Read the latest Google reviews
                 <ArrowUpRight className="size-4" aria-hidden="true" />
               </a>
               <Link href={scheduleHref} className="btn btn-sunset">
